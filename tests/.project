@@ -3,6 +3,7 @@
 	<name>tests</name>
 	<comment></comment>
 	<projects>
+		<project>helloworld</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

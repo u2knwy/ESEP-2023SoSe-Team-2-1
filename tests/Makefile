@@ -20,6 +20,7 @@ LD = $(CXX)
 
 #INCLUDES += -I/path/to/my/lib/include
 #INCLUDES += -I../mylib/public
+INCLUDES += -I../helloworld/src
 
 #LIBS += -L/path/to/my/lib/$(PLATFORM)/usr/lib -lmylib
 #LIBS += -L../mylib/$(OUTPUT_DIR) -lmylib
@@ -48,8 +49,11 @@ rwildcard = $(wildcard $(addprefix $1/*.,$2)) $(foreach d,$(wildcard $1/*),$(cal
 #Source list
 SRCS = $(call rwildcard, src, c cpp)
 
+#Source list of "main project" with the "code under test" - TODO: Replace helloworld with real project name
+MAIN_SRCS = $(call rwildcard, ../helloworld/src, c cpp)
+
 #Object files list
-OBJS = $(addprefix $(OUTPUT_DIR)/,$(addsuffix .o, $(basename $(SRCS))))
+OBJS = $(addprefix $(OUTPUT_DIR)/,$(addsuffix .o, $(basename $(SRCS) $(MAIN_SRCS))))
 
 #Compiling rule
 $(OUTPUT_DIR)/%.o: %.c
