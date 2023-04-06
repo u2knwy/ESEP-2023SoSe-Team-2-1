@@ -1,3 +1,4 @@
 .metadata/
 192.168.*/
 **/build/
+**/__pycache__/

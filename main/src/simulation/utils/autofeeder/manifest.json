@@ -1,0 +1,17 @@
+{
+    "load": [
+       {"distance": 0, "kind": "flat", "flip": false, "sticky": false},
+       {"distance": 40, "kind": "metalup", "flip": false, "sticky": false},
+       {"distance": 80, "kind": "metaldown", "flip": false, "sticky": false},
+       {"distance": 120, "kind": "holeup", "flip": false, "sticky": false},
+       {"distance": 800, "kind": "holedown", "flip": false, "sticky": false},
+       {"distance": 0, "kind": "code0", "flip": false, "sticky": false},
+       {"distance": 0, "kind": "code1", "flip": false, "sticky": false},
+       {"distance": 0, "kind": "code2", "flip": false, "sticky": false},
+       {"distance": 0, "kind": "code3", "flip": false, "sticky": false},
+       {"distance": 0, "kind": "code4", "flip": false, "sticky": false},
+       {"distance": 0, "kind": "code5", "flip": false, "sticky": false},
+       {"distance": 0, "kind": "code6", "flip": false, "sticky": false}, 
+       {"distance": 0, "kind": "code7", "flip": false, "sticky": false}
+    ]
+}
