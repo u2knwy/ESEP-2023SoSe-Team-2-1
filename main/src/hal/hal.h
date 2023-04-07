@@ -19,31 +19,17 @@
 #include <thread>
 #include <chrono>
 
-// For ADC
-#include "adc/ADC.h"
-#define ADC_BASE 0x44E0D000
-#define ADC_LENGTH 0x2000
+/* Helper macros */
+#define BIT_MASK(x) (1 << (x))
 
-/* Code configuration */
-#define DEMO true         // true for demo time, false to spin forever.
-#define DEMO_DURATION 120 // Duration of demo time in minutes.
-/* Varialbes */
-//bool receivingRunning = false;
-
-/* TSC_ADC register offsets (spruh73l.pdf S.1747) */
-#define ADC_IRQ_ENABLE_SET 0x2c
-#define ADC_IRQ_ENABLE_CLR 0x30
-#define ADC_IRQ_STATUS 0x28
-#define ADC_CTRL 0x40
-#define ADC_DATA 0x100
-
-/* ADC irq pin mask */
-#define ADC_IRQ_PIN_MASK 0x2
-
-/* My pulse codes */
-#define PULSE_STOP_THREAD _PULSE_CODE_MINAVAIL + 1
+// My pulse codes
+#define PULSE_STOP_THREAD 		_PULSE_CODE_MINAVAIL + 1
 #define PULSE_ADC_SAMPLING_DONE _PULSE_CODE_MINAVAIL + 2
+#define PULSE_INTR_ON_PORT0 	_PULSE_CODE_MINAVAIL + 3
 
+/*---------------------------------------------------------------------------
+   GPIO CONFIGURATION
+----------------------------------------------------------------------------- */
 #define GPIO_SIZE 			0x1000
 #define GPIO_BANK_0 		0x44E07000
 #define GPIO_BANK_1 		0x4804C000
@@ -51,7 +37,7 @@
 #define GPIO_BANK_3 		0x481AE000
 #define GPIO_CLEARDATAOUT 	0x190
 #define GPIO_SETDATAOUT 	0x194
-
+#define GPIO_DATAIN			0x138
 
 /* GPIO0 PINS -> INPUTS */
 #define LB_START_PIN		(1 << 2)	// Werkstück im Einlauf = low when true
@@ -83,6 +69,38 @@
 #define LED_Q1_PIN 			(1 << 4)	// Signalleuchte Q1
 #define LED_Q2_PIN 			(1 << 5)	// Signalleuchte Q2
 
+/* Interrupt numbers  (spruh73l.pdf S.465 ff.) */
+#define INTR_GPIO_PORT0 		97
+#define INTR_GPIO_PORT1 		99
+#define INTR_GPIO_PORT2 		33
+
+/* GPIO register offsets (spruh73l.pdf S.4877) */
+#define GPIO_LEVELDETECT0 		0x140
+#define GPIO_LEVELDETECT1 		0x144
+#define GPIO_RISINGDETECT 		0x148
+#define GPIO_FALLINGDETECT 		0x14C
+
+#define GPIO_IRQSTATUS_0 		0x2C
+#define GPIO_IRQSTATUS_1 		0x30
+#define GPIO_IRQSTATUS_SET_0 	0x34
+#define GPIO_IRQSTATUS_SET_1 	0x38
+
+/*---------------------------------------------------------------------------
+   ADC CONFIGURATION
+----------------------------------------------------------------------------- */
+#include "adc/ADC.h"
+#define ADC_BASE 0x44E0D000
+#define ADC_LENGTH 0x2000
+
+// TSC_ADC register offsets (spruh73l.pdf S.1747)
+#define ADC_IRQ_ENABLE_SET 0x2c
+#define ADC_IRQ_ENABLE_CLR 0x30
+#define ADC_IRQ_STATUS 0x28
+#define ADC_CTRL 0x40
+#define ADC_DATA 0x100
+
+// ADC IRQ pin mask
+#define ADC_IRQ_PIN_MASK 0x2
 
 class HAL {
 public:
@@ -109,12 +127,17 @@ public:
 	void motorStop();
 	void openSwitch();
 	void closeSwitch();
-	void measureHeight();
-	void heightReceivingRoutine(int channelID);
+	void handleGpioInterrupt();
+	void adcDemo();
+	void receivingRoutine();
+	void gpioDemo();
 private:
 	uintptr_t gpio_bank_0;
 	uintptr_t gpio_bank_1;
 	uintptr_t gpio_bank_2;
 	ADC* adc;
 	bool receivingRunning{false};
+	int interruptID;
+	int chanID;
+	void initInterrupts();
 };

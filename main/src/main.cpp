@@ -1,4 +1,5 @@
 #include <iostream>
+#include <thread>
 #include "hal/hal.h"
 
 using namespace std;
@@ -55,6 +56,12 @@ int main() {
 	hal->motorSlow();
 	hal->motorLeft();
     this_thread::sleep_for(chrono::seconds(5));
+
+    cout << "Starting ADC demo" << endl;
+    hal->adcDemo();
+
+    cout << "Starting GPIO demo" << endl;
+    hal->gpioDemo();
 
 	return 0;
 }
