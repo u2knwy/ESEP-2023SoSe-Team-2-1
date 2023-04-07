@@ -9,8 +9,9 @@
 #include <string>
 
 HAL::HAL() {
-	std::cout << "Create HAL" << std::endl;
-	gpio_bank_1 = mmap_device_io(SIZE, (uint64_t) GPIO_BANK_1);
+	gpio_bank_0 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_0);
+	gpio_bank_1 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_1);
+	gpio_bank_2 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_2);
 
 	TSCADC tsc;
 	adc = new ADC(tsc);
@@ -19,8 +20,9 @@ HAL::HAL() {
 }
 
 HAL::~HAL() {
-	std::cout << "Destroy HAL" << std::endl;
-	munmap_device_io(gpio_bank_1, SIZE);
+	munmap_device_io(gpio_bank_0, GPIO_SIZE);
+	munmap_device_io(gpio_bank_1, GPIO_SIZE);
+	munmap_device_io(gpio_bank_2, GPIO_SIZE);
 
 	delete adc;
 }
@@ -33,22 +35,86 @@ void HAL::GreenLampOff() {
 	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), LAMP_GREEN_PIN); // clear register
 }
 
+void HAL::YellowLampOn() {
+	out32((uintptr_t) (gpio_bank_1 + GPIO_SETDATAOUT), LAMP_YELLOW_PIN);
+}
+
+void HAL::YellowLampOff() {
+	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), LAMP_YELLOW_PIN);
+}
+
+void HAL::RedLampOn() {
+	out32((uintptr_t) (gpio_bank_1 + GPIO_SETDATAOUT), LAMP_RED_PIN);
+}
+
+void HAL::RedLampOff() {
+	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), LAMP_RED_PIN);
+}
+
+void HAL::StartLedOn() {
+	out32((uintptr_t) (gpio_bank_2 + GPIO_SETDATAOUT), LED_START_PIN);
+}
+
+void HAL::StartLedOff() {
+	out32((uintptr_t) (gpio_bank_2 + GPIO_CLEARDATAOUT), LED_START_PIN);
+}
+
+void HAL::ResetLedOn() {
+	out32((uintptr_t) (gpio_bank_2 + GPIO_SETDATAOUT), LED_RESET_PIN);
+}
+
+void HAL::ResetLedOff() {
+	out32((uintptr_t) (gpio_bank_2 + GPIO_CLEARDATAOUT), LED_RESET_PIN);
+}
+
+void HAL::Q1LedOn() {
+	out32((uintptr_t) (gpio_bank_2 + GPIO_SETDATAOUT), LED_Q1_PIN);
+}
+
+void HAL::Q1LedOff() {
+	out32((uintptr_t) (gpio_bank_2 + GPIO_CLEARDATAOUT), LED_Q1_PIN);
+}
+
+void HAL::Q2LedOn() {
+	out32((uintptr_t) (gpio_bank_2 + GPIO_SETDATAOUT), LED_Q2_PIN);
+}
+
+void HAL::Q2LedOff() {
+	out32((uintptr_t) (gpio_bank_2 + GPIO_CLEARDATAOUT), LED_Q2_PIN);
+}
+
 void HAL::motorSlow() {
-	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), MOTOR_LEFT_PIN);
-	out32((uintptr_t) (gpio_bank_1 + GPIO_SETDATAOUT), MOTOR_RIGHT_PIN);
 	out32((uintptr_t) (gpio_bank_1 + GPIO_SETDATAOUT), MOTOR_SLOW_PIN);
 }
 
 void HAL::motorFast() {
+	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), MOTOR_SLOW_PIN);
+}
+
+void HAL::motorRight() {
+	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), MOTOR_STOP_PIN);
 	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), MOTOR_LEFT_PIN);
 	out32((uintptr_t) (gpio_bank_1 + GPIO_SETDATAOUT), MOTOR_RIGHT_PIN);
-	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), MOTOR_SLOW_PIN);
+}
+
+void HAL::motorLeft() {
+	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), MOTOR_STOP_PIN);
+	out32((uintptr_t) (gpio_bank_1 + GPIO_SETDATAOUT), MOTOR_LEFT_PIN);
+	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), MOTOR_RIGHT_PIN);
 }
 
 void HAL::motorStop() {
 	out32((uintptr_t) (gpio_bank_1 + GPIO_SETDATAOUT), MOTOR_STOP_PIN);
 	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), MOTOR_LEFT_PIN);
 	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), MOTOR_RIGHT_PIN);
+}
+
+void HAL::openSwitch() {
+	out32((uintptr_t) (gpio_bank_1 + GPIO_SETDATAOUT), SWITCH_PIN);
+}
+
+void HAL::closeSwitch() {
+	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), SWITCH_PIN);
 }
 
 void HAL::heightReceivingRoutine(int channelID) {

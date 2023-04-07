@@ -11,12 +11,12 @@
 
 HAL::HAL() {
 	std::cout << "Create HAL" << std::endl;
-	gpio_bank_1 = mmap_device_io(SIZE, (uint64_t) GPIO_BANK_1);
+	gpio_bank_1 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_1);
 }
 
 HAL::~HAL() {
 	std::cout << "Destroy HAL" << std::endl;
-	munmap_device_io(gpio_bank_1, SIZE);
+	munmap_device_io(gpio_bank_1, GPIO_SIZE);
 }
 
 void HAL::GreenLampOn() {

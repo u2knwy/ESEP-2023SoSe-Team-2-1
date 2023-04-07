@@ -13,7 +13,7 @@
 
 #include <iostream>
 
-#define SIZE 				0x1000 // s. data sheet
+#define GPIO_SIZE 				0x1000 // s. data sheet
 #define GPIO_BANK_1 		0x4804C000 // spruh73l.pdf page 4877
 #define GPIO_CLEARDATAOUT 	0x190
 #define GPIO_SETDATAOUT 	0x194
