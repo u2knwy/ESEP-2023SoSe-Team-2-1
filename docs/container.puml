@@ -1,0 +1,31 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+
+Person(user, "User")
+
+System_Boundary(system, "Sorting Machine"){
+  Container_Boundary(master, "Master"){
+    Container(config, "Config", $descr="System Configuration")
+    Container(logic, "Logic", $descr="FSMs for handling logic")
+    Container(disp, "EventManager", $descr="Receives and forwards events to subscribers.")
+    Container(wd, "Watchdog", $descr="Checks health of other system by sending/receiving Heartbeats")
+    Container(hal, "HAL", $descr="Generates sensor events, handles actuator commands")
+    Container(logger, "Logger", $descr="Logs Events to console")
+    Rel(config, logic, "Set order of workpieces")
+    Rel(logic, logger, "logs actions using")
+    Rel(disp, logger, "logs events using")
+    Rel(disp, logic, "forwards events to")
+    Rel(hal, disp, "Sends sensor events to")
+    Rel(logic, hal, "Switch actuators using")
+  }
+  Container(gns, "GNS", "QNX", "GNS by QNX OS")
+  Rel(disp, wd, "receives heartbeats from")
+  Rel(disp, gns, "sends/receives events to/from other machine using")
+}
+
+Rel(user, config, "configures system using config file")
+
+
+@enduml
