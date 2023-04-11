@@ -1,0 +1,771 @@
+\hypertarget{tscadc__hw_8h_source}{}\doxysection{tscadc\+\_\+hw.\+h}
+\label{tscadc__hw_8h_source}\index{C:/Users/Maik/01\_MyProjects/01\_HAW/esep/ESEP-\/2023SoSe-\/Team-\/2-\/1/main/src/hal/adc/tscadc\_hw.h@{C:/Users/Maik/01\_MyProjects/01\_HAW/esep/ESEP-\/2023SoSe-\/Team-\/2-\/1/main/src/hal/adc/tscadc\_hw.h}}
+\mbox{\hyperlink{tscadc__hw_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00046\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00047\ \textcolor{comment}{*\ Copyright\ (C)\ 2010\ Texas\ Instruments\ Incorporated\ -\/\ http://www.ti.com/}}
+\DoxyCodeLine{00048\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00049\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00050\ \textcolor{comment}{*\ \ Redistribution\ and\ use\ in\ source\ and\ binary\ forms,\ with\ or\ without}}
+\DoxyCodeLine{00051\ \textcolor{comment}{*\ \ modification,\ are\ permitted\ provided\ that\ the\ following\ conditions}}
+\DoxyCodeLine{00052\ \textcolor{comment}{*\ \ are\ met:}}
+\DoxyCodeLine{00053\ \textcolor{comment}{*}}
+\DoxyCodeLine{00054\ \textcolor{comment}{*\ \ \ \ Redistributions\ of\ source\ code\ must\ retain\ the\ above\ copyright}}
+\DoxyCodeLine{00055\ \textcolor{comment}{*\ \ \ \ notice,\ this\ list\ of\ conditions\ and\ the\ following\ disclaimer.}}
+\DoxyCodeLine{00056\ \textcolor{comment}{*}}
+\DoxyCodeLine{00057\ \textcolor{comment}{*\ \ \ \ Redistributions\ in\ binary\ form\ must\ reproduce\ the\ above\ copyright}}
+\DoxyCodeLine{00058\ \textcolor{comment}{*\ \ \ \ notice,\ this\ list\ of\ conditions\ and\ the\ following\ disclaimer\ in\ the}}
+\DoxyCodeLine{00059\ \textcolor{comment}{*\ \ \ \ documentation\ and/or\ other\ materials\ provided\ with\ the}}
+\DoxyCodeLine{00060\ \textcolor{comment}{*\ \ \ \ distribution.}}
+\DoxyCodeLine{00061\ \textcolor{comment}{*}}
+\DoxyCodeLine{00062\ \textcolor{comment}{*\ \ \ \ Neither\ the\ name\ of\ Texas\ Instruments\ Incorporated\ nor\ the\ names\ of}}
+\DoxyCodeLine{00063\ \textcolor{comment}{*\ \ \ \ its\ contributors\ may\ be\ used\ to\ endorse\ or\ promote\ products\ derived}}
+\DoxyCodeLine{00064\ \textcolor{comment}{*\ \ \ \ from\ this\ software\ without\ specific\ prior\ written\ permission.}}
+\DoxyCodeLine{00065\ \textcolor{comment}{*}}
+\DoxyCodeLine{00066\ \textcolor{comment}{*\ \ THIS\ SOFTWARE\ IS\ PROVIDED\ BY\ THE\ COPYRIGHT\ HOLDERS\ AND\ CONTRIBUTORS}}
+\DoxyCodeLine{00067\ \textcolor{comment}{*\ \ "{}AS\ IS"{}\ AND\ ANY\ EXPRESS\ OR\ IMPLIED\ WARRANTIES,\ INCLUDING,\ BUT\ NOT}}
+\DoxyCodeLine{00068\ \textcolor{comment}{*\ \ LIMITED\ TO,\ THE\ IMPLIED\ WARRANTIES\ OF\ MERCHANTABILITY\ AND\ FITNESS\ FOR}}
+\DoxyCodeLine{00069\ \textcolor{comment}{*\ \ A\ PARTICULAR\ PURPOSE\ ARE\ DISCLAIMED.\ IN\ NO\ EVENT\ SHALL\ THE\ COPYRIGHT}}
+\DoxyCodeLine{00070\ \textcolor{comment}{*\ \ OWNER\ OR\ CONTRIBUTORS\ BE\ LIABLE\ FOR\ ANY\ DIRECT,\ INDIRECT,\ INCIDENTAL,}}
+\DoxyCodeLine{00071\ \textcolor{comment}{*\ \ SPECIAL,\ EXEMPLARY,\ OR\ CONSEQUENTIAL\ DAMAGES\ (INCLUDING,\ BUT\ NOT}}
+\DoxyCodeLine{00072\ \textcolor{comment}{*\ \ LIMITED\ TO,\ PROCUREMENT\ OF\ SUBSTITUTE\ GOODS\ OR\ SERVICES;\ LOSS\ OF\ USE,}}
+\DoxyCodeLine{00073\ \textcolor{comment}{*\ \ DATA,\ OR\ PROFITS;\ OR\ BUSINESS\ INTERRUPTION)\ HOWEVER\ CAUSED\ AND\ ON\ ANY}}
+\DoxyCodeLine{00074\ \textcolor{comment}{*\ \ THEORY\ OF\ LIABILITY,\ WHETHER\ IN\ CONTRACT,\ STRICT\ LIABILITY,\ OR\ TORT}}
+\DoxyCodeLine{00075\ \textcolor{comment}{*\ \ (INCLUDING\ NEGLIGENCE\ OR\ OTHERWISE)\ ARISING\ IN\ ANY\ WAY\ OUT\ OF\ THE\ USE}}
+\DoxyCodeLine{00076\ \textcolor{comment}{*\ \ OF\ THIS\ SOFTWARE,\ EVEN\ IF\ ADVISED\ OF\ THE\ POSSIBILITY\ OF\ SUCH\ DAMAGE.}}
+\DoxyCodeLine{00077\ \textcolor{comment}{*}}
+\DoxyCodeLine{00078\ \textcolor{comment}{*/}}
+\DoxyCodeLine{00079\ }
+\DoxyCodeLine{00080\ }
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \textcolor{preprocessor}{\#ifndef\ TSCADC\_HW\_H\_}}
+\DoxyCodeLine{00083\ \textcolor{preprocessor}{\#define\ TSCADC\_HW\_H\_}}
+\DoxyCodeLine{00084\ }
+\DoxyCodeLine{00085\ \textcolor{keyword}{enum}\ Fifo\ :\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ \{}
+\DoxyCodeLine{00086\ \ \ \ \ FIFO\_0\ \ =\ 0,}
+\DoxyCodeLine{00087\ \ \ \ \ FIFO\_1\ \ \ =\ 1}
+\DoxyCodeLine{00088\ \};}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ BASE\ =\ 0x44E0D000;}
+\DoxyCodeLine{00091\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ SIZE\ =\ 0x00002000;}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00093\ }
+\DoxyCodeLine{00094\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ REVISION\ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x0;}
+\DoxyCodeLine{00095\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ SYSCONFIG\ \ \ \ \ \ \ \ \ \ \ \ =\ 0x10;}
+\DoxyCodeLine{00096\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQ\_EOI\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x20;}
+\DoxyCodeLine{00097\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\ \ \ \ \ \ \ \ =\ 0x24;}
+\DoxyCodeLine{00098\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\ \ \ \ \ \ \ \ \ \ \ \ =\ 0x28;}
+\DoxyCodeLine{00099\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\ \ \ \ \ \ \ \ =\ 0x2c;}
+\DoxyCodeLine{00100\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\ \ \ \ \ \ \ \ =\ 0x30;}
+\DoxyCodeLine{00101\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQWAKEUP\ \ \ \ \ \ \ \ \ \ \ \ =\ 0x34;}
+\DoxyCodeLine{00102\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ DMAENABLE\_SET\ \ \ \ \ \ \ \ =\ 0x38;}
+\DoxyCodeLine{00103\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ DMAENABLE\_CLR\ \ \ \ \ \ \ \ =\ 0x3c;}
+\DoxyCodeLine{00104\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x40;}
+\DoxyCodeLine{00105\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCSTAT\ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x44;}
+\DoxyCodeLine{00106\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCRANGE\ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x48;}
+\DoxyCodeLine{00107\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADC\_CLKDIV\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x4c;}
+\DoxyCodeLine{00108\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADC\_MISC\ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x50;}
+\DoxyCodeLine{00109\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x54;}
+\DoxyCodeLine{00110\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x58;}
+\DoxyCodeLine{00111\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\ =\ 0x5c;}
+\DoxyCodeLine{00112\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_DELAY\ \ \ \ \ \ \ \ \ \ =\ 0x60;}
+\DoxyCodeLine{00113\ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPCONFIG(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ n)\{\textcolor{keywordflow}{return}(\ 0x64\ +\ (n\ *\ 0x008));\ \};}
+\DoxyCodeLine{00114\ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPDELAY(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ n)\{\ \textcolor{keywordflow}{return}(\ 0x68\ +\ (n\ *\ 0x008));\ \};}
+\DoxyCodeLine{00115\ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ FIFOCOUNT(Fifo\ n)\{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}(\ 0xe4\ +\ (n\ *\ 0x00c));\ \ \ \};}
+\DoxyCodeLine{00116\ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ FIFOTHRESHOLD(Fifo\ n)\{\ \ \ \ \textcolor{keywordflow}{return}(\ 0xe8\ +\ (n\ *\ 0x00c));\ \ \ \};}
+\DoxyCodeLine{00117\ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ DMAREQ(Fifo\ n)\{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}(\ 0xec\ +\ (n\ *\ 0x00c));\ \ \ \};}
+\DoxyCodeLine{00118\ \textcolor{keyword}{inline}\ \textcolor{keyword}{constexpr}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ FIFODATA(Fifo\ n)\{\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}(0x100\ +\ (n\ *\ 0x100));\ \};}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \textcolor{comment}{/**************************************************************************\(\backslash\)}}
+\DoxyCodeLine{00121\ \textcolor{comment}{\ *\ Field\ Definition\ Macros}}
+\DoxyCodeLine{00122\ \textcolor{comment}{\(\backslash\)**************************************************************************/}}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \textcolor{comment}{/*\ REVISION\ */}}
+\DoxyCodeLine{00125\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ REVISION\_CUSTOM\ \ \ \ \ \ =\ 0x000000C0u;}
+\DoxyCodeLine{00126\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ REVISION\_CUSTOM\_SHIFT\ \ \ \ =\ 0x00000006u;}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00128\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ REVISION\_FUNC\ \ \ \ \ \ \ \ =\ 0x0FFF0000u;}
+\DoxyCodeLine{00129\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ REVISION\_FUNC\_SHIFT\ \ =\ 0x00000010u;}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ REVISION\_R\_RTL\ \ \ \ \ \ \ \ \ \ \ =\ 0x0000F800u;}
+\DoxyCodeLine{00132\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ REVISION\_R\_RTL\_SHIFT\ \ =\ 0x0000000Bu;}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ REVISION\_SCHEME\ \ \ \ \ \ =\ 0xC0000000u;}
+\DoxyCodeLine{00135\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ REVISION\_SCHEME\_SHIFT\ \ \ \ =\ 0x0000001Eu;}
+\DoxyCodeLine{00136\ }
+\DoxyCodeLine{00137\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ REVISION\_X\_MAJOR\ \ \ \ \ \ \ \ \ =\ 0x00000700u;}
+\DoxyCodeLine{00138\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ REVISION\_X\_MAJOR\_SHIFT\ \ \ =\ 0x00000008u;}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00140\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ REVISION\_Y\_MINOR\ \ \ \ \ \ \ \ \ =\ 0x0000003Fu;}
+\DoxyCodeLine{00141\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ REVISION\_Y\_MINOR\_SHIFT\ \ \ =\ 0x00000000u;}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ }
+\DoxyCodeLine{00144\ \textcolor{comment}{/*\ SYSCONFIG\ */}}
+\DoxyCodeLine{00145\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ SYSCONFIG\_IDLEMODE\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x0000000Cu;}
+\DoxyCodeLine{00146\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ SYSCONFIG\_IDLEMODE\_SHIFT\ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000002u;}
+\DoxyCodeLine{00147\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ SYSCONFIG\_IDLEMODE\_FORCE\ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x0;}
+\DoxyCodeLine{00148\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ SYSCONFIG\_IDLEMODE\_NO\_IDLE\ \ \ \ \ \ \ \ \ \ \ =\ 0x1;}
+\DoxyCodeLine{00149\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ SYSCONFIG\_IDLEMODE\_SMART\_IDLE\ \ \ \ \ \ \ \ =\ 0x2;}
+\DoxyCodeLine{00150\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ SYSCONFIG\_IDLEMODE\_SMART\_IDLE\_WAKEUP\ =\ 0x3;}
+\DoxyCodeLine{00151\ }
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00153\ \textcolor{comment}{/*\ IRQ\_EOI\ */}}
+\DoxyCodeLine{00154\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQ\_EOI\_LINE\_NUMBER\ \ \ \ \ \ =\ 0x00000001u;}
+\DoxyCodeLine{00155\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQ\_EOI\_LINE\_NUMBER\_SHIFT\ \ \ \ =\ 0x00000000u;}
+\DoxyCodeLine{00156\ }
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ \textcolor{comment}{/*\ IRQSTATUS\_RAW\ */}}
+\DoxyCodeLine{00159\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_END\_OF\_SEQUENCE\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000002u;}
+\DoxyCodeLine{00160\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_END\_OF\_SEQUENCE\_SHIFT\ \ \ \ \ \ \ \ \ \ =\ 0x00000001u;}
+\DoxyCodeLine{00161\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_END\_OF\_SEQUENCE\_EVENTPENDING\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00162\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_END\_OF\_SEQUENCE\_NOEVENTPEND\ \ \ \ =\ 0x0u;}
+\DoxyCodeLine{00163\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_END\_OF\_SEQUENCE\_SETEVENT\ \ \ \ \ \ \ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00165\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_FIFO0\_OVERRUN\ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000008u;}
+\DoxyCodeLine{00166\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_FIFO0\_OVERRUN\_SHIFT\ \ \ \ \ \ \ \ =\ 0x00000003u;}
+\DoxyCodeLine{00167\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_FIFO0\_OVERRUN\_EVENTPENDING\ =\ 0x1u;}
+\DoxyCodeLine{00168\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_FIFO0\_OVERRUN\_NOEVENTPEND\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00169\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_FIFO0\_OVERRUN\_SETEVENT\ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00170\ }
+\DoxyCodeLine{00171\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_FIFO0\_THRESHOLD\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000004u;}
+\DoxyCodeLine{00172\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_FIFO0\_THRESHOLD\_SHIFT\ \ \ \ \ \ \ \ \ \ =\ 0x00000002u;}
+\DoxyCodeLine{00173\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_FIFO0\_THRESHOLD\_EVENTPENDING\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00174\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_FIFO0\_THRESHOLD\_NOEVENTPEND\ \ \ \ =\ 0x0u;}
+\DoxyCodeLine{00175\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_FIFO0\_THRESHOLD\_SETEVENT\ \ \ \ \ \ \ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_FIFO0\_UNDERFLOW\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000010u;}
+\DoxyCodeLine{00178\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_FIFO0\_UNDERFLOW\_SHIFT\ \ \ \ \ \ \ \ \ \ =\ 0x00000004u;}
+\DoxyCodeLine{00179\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_FIFO0\_UNDERFLOW\_EVENTPENDING\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00180\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_FIFO0\_UNDERFLOW\_NOEVENTPEND\ \ \ \ =\ 0x0u;}
+\DoxyCodeLine{00181\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_FIFO0\_UNDERFLOW\_SETEVENT\ \ \ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_FIFO1\_OVERRUN\ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000040u;}
+\DoxyCodeLine{00184\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_FIFO1\_OVERRUN\_SHIFT\ \ \ \ \ \ \ \ =\ 0x00000006u;}
+\DoxyCodeLine{00185\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_FIFO1\_OVERRUN\_NOEVENTPEND\ \ =\ 0x0u;}
+\DoxyCodeLine{00186\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_FIFO1\_OVERRUN\_SETEVENT\ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00187\ }
+\DoxyCodeLine{00188\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_FIFO1\_THRESHOLD\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000020u;}
+\DoxyCodeLine{00189\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_FIFO1\_THRESHOLD\_SHIFT\ \ \ \ \ \ \ \ \ \ =\ 0x00000005u;}
+\DoxyCodeLine{00190\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_FIFO1\_THRESHOLD\_EVENTPENDING\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00191\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_FIFO1\_THRESHOLD\_NOEVENTPEND\ \ \ \ =\ 0x0u;}
+\DoxyCodeLine{00192\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_FIFO1\_THRESHOLD\_SETEVENT\ \ \ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00193\ }
+\DoxyCodeLine{00194\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_FIFO1\_UNDERFLOW\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000080u;}
+\DoxyCodeLine{00195\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_FIFO1\_UNDERFLOW\_SHIFT\ \ \ \ \ \ \ \ \ \ =\ 0x00000007u;}
+\DoxyCodeLine{00196\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_FIFO1\_UNDERFLOW\_EVENTPENDING\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00197\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_FIFO1\_UNDERFLOW\_NOEVENTPEND\ \ \ \ =\ 0x0u;}
+\DoxyCodeLine{00198\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_FIFO1\_UNDERFLOW\_SETEVENT\ \ \ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00199\ }
+\DoxyCodeLine{00200\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_HW\_PEN\_EVENT\ \ \ \ \ \ \ =\ 0x00000001u;}
+\DoxyCodeLine{00201\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_HW\_PEN\_EVENT\_SHIFT\ =\ 0x00000000u;}
+\DoxyCodeLine{00202\ }
+\DoxyCodeLine{00203\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_OUT\_OF\_RANGE\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000100u;}
+\DoxyCodeLine{00204\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_OUT\_OF\_RANGE\_SHIFT\ \ \ \ \ \ \ \ \ =\ 0x00000008u;}
+\DoxyCodeLine{00205\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_OUT\_OF\_RANGE\_EVENTPENDING\ \ =\ 0x1u;}
+\DoxyCodeLine{00206\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_OUT\_OF\_RANGE\_NOEVENTPEND\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00207\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_OUT\_OF\_RANGE\_SETEVENT\ \ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00208\ }
+\DoxyCodeLine{00209\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_PEN\_IRQ\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000400u;}
+\DoxyCodeLine{00210\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_PEN\_IRQ\_SHIFT\ \ \ \ \ \ \ \ \ \ =\ 0x0000000Au;}
+\DoxyCodeLine{00211\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_PEN\_IRQ\_EVENTPENDING\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00212\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_PEN\_IRQ\_NOEVENTPEND\ \ \ \ =\ 0x0u;}
+\DoxyCodeLine{00213\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_PEN\_IRQ\_SETEVENT\ \ \ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00214\ }
+\DoxyCodeLine{00215\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_PEN\_UP\_EVENT\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000200u;}
+\DoxyCodeLine{00216\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_PEN\_UP\_EVENT\_SHIFT\ \ \ \ \ \ \ \ \ =\ 0x00000009u;}
+\DoxyCodeLine{00217\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_PEN\_UP\_EVENT\_EVENTPENDING\ \ =\ 0x1u;}
+\DoxyCodeLine{00218\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_PEN\_UP\_EVENT\_NOEVENTPEND\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00219\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_RAW\_PEN\_UP\_EVENT\_SETEVENT\ \ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00220\ }
+\DoxyCodeLine{00221\ \textcolor{comment}{/*\ IRQSTATUS\ */}}
+\DoxyCodeLine{00222\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_END\_OF\_SEQUENCE\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000002u;}
+\DoxyCodeLine{00223\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_END\_OF\_SEQUENCE\_SHIFT\ \ \ \ \ \ \ \ \ \ =\ 0x00000001u;}
+\DoxyCodeLine{00224\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_END\_OF\_SEQUENCE\_EVENTPENDING\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00225\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_END\_OF\_SEQUENCE\_NOEVENTPEND\ \ \ \ \ \ \ \ =\ 0x0u;}
+\DoxyCodeLine{00226\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_END\_OF\_SEQUENCE\_SETEVENT\ \ \ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00227\ }
+\DoxyCodeLine{00228\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_FIFO0\_OVERRUN\ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000008u;}
+\DoxyCodeLine{00229\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_FIFO0\_OVERRUN\_SHIFT\ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000003u;}
+\DoxyCodeLine{00230\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_FIFO0\_OVERRUN\_EVENTPENDING\ =\ 0x1u;}
+\DoxyCodeLine{00231\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_FIFO0\_OVERRUN\_NOEVENTPEND\ \ =\ 0x0u;}
+\DoxyCodeLine{00232\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_FIFO0\_OVERRUN\_SETEVENT\ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00233\ }
+\DoxyCodeLine{00234\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_FIFO0\_THRESHOLD\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000004u;}
+\DoxyCodeLine{00235\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_FIFO0\_THRESHOLD\_SHIFT\ \ \ \ \ \ \ \ \ \ =\ 0x00000002u;}
+\DoxyCodeLine{00236\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_FIFO0\_THRESHOLD\_EVENTPENDING\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00237\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_FIFO0\_THRESHOLD\_NOEVENTPEND\ \ \ \ \ \ \ \ =\ 0x0u;}
+\DoxyCodeLine{00238\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_FIFO0\_THRESHOLD\_SETEVENT\ \ \ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00239\ }
+\DoxyCodeLine{00240\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_FIFO0\_UNDERFLOW\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000010u;}
+\DoxyCodeLine{00241\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_FIFO0\_UNDERFLOW\_SHIFT\ \ \ \ \ \ \ \ \ \ =\ 0x00000004u;}
+\DoxyCodeLine{00242\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_FIFO0\_UNDERFLOW\_EVENTPENDING\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00243\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_FIFO0\_UNDERFLOW\_NOEVENTPEND\ \ \ \ \ \ \ \ =\ 0x0u;}
+\DoxyCodeLine{00244\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_FIFO0\_UNDERFLOW\_SETEVENT\ \ \ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00245\ }
+\DoxyCodeLine{00246\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_FIFO1\_OVERRUN\ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000040u;}
+\DoxyCodeLine{00247\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_FIFO1\_OVERRUN\_SHIFT\ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000006u;}
+\DoxyCodeLine{00248\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_FIFO1\_OVERRUN\_EVENTPENDING\ =\ 0x1u;}
+\DoxyCodeLine{00249\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_FIFO1\_OVERRUN\_NOEVENTPEND\ \ =\ 0x0u;}
+\DoxyCodeLine{00250\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_FIFO1\_OVERRUN\_SETEVENT\ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00251\ }
+\DoxyCodeLine{00252\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_FIFO1\_THRESHOLD\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000020u;}
+\DoxyCodeLine{00253\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_FIFO1\_THRESHOLD\_SHIFT\ \ \ \ \ \ \ \ \ \ =\ 0x00000005u;}
+\DoxyCodeLine{00254\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_FIFO1\_THRESHOLD\_EVENTPENDING\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00255\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_FIFO1\_THRESHOLD\_NOEVENTPEND\ \ \ \ \ \ \ \ =\ 0x0u;}
+\DoxyCodeLine{00256\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_FIFO1\_THRESHOLD\_SETEVENT\ \ \ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00257\ }
+\DoxyCodeLine{00258\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_FIFO1\_UNDERFLOW\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000080u;}
+\DoxyCodeLine{00259\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_FIFO1\_UNDERFLOW\_SHIFT\ \ \ \ \ \ \ \ \ \ =\ 0x00000007u;}
+\DoxyCodeLine{00260\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_FIFO1\_UNDERFLOW\_EVENTPENDING\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00261\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_FIFO1\_UNDERFLOW\_NOEVENTPEND\ \ \ \ \ \ \ \ =\ 0x0u;}
+\DoxyCodeLine{00262\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_FIFO1\_UNDERFLOW\_SETEVENT\ \ \ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00263\ }
+\DoxyCodeLine{00264\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_HW\_PEN\_EVENT\ \ \ \ \ \ \ =\ 0x00000001u;}
+\DoxyCodeLine{00265\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_HW\_PEN\_EVENT\_SHIFT\ =\ 0x00000000u;}
+\DoxyCodeLine{00266\ }
+\DoxyCodeLine{00267\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_OUT\_OF\_RANGE\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000100u;}
+\DoxyCodeLine{00268\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_OUT\_OF\_RANGE\_SHIFT\ \ \ \ \ \ \ \ \ =\ 0x00000008u;}
+\DoxyCodeLine{00269\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_OUT\_OF\_RANGE\_EVENTPENDING\ \ =\ 0x1u;}
+\DoxyCodeLine{00270\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_OUT\_OF\_RANGE\_NOEVENTPEND\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00271\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_OUT\_OF\_RANGE\_SETEVENT\ \ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00272\ }
+\DoxyCodeLine{00273\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_PEN\_IRQ\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000400u;}
+\DoxyCodeLine{00274\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_PEN\_IRQ\_SHIFT\ \ \ \ \ \ \ \ \ \ =\ 0x0000000Au;}
+\DoxyCodeLine{00275\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_PEN\_IRQ\_EVENTPENDING\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00276\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_PEN\_IRQ\_NOEVENTPEND\ \ \ \ \ \ \ \ =\ 0x0u;}
+\DoxyCodeLine{00277\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_PEN\_IRQ\_SETEVENT\ \ \ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00278\ }
+\DoxyCodeLine{00279\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_PEN\_UP\_EVENT\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000200u;}
+\DoxyCodeLine{00280\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_PEN\_UP\_EVENT\_SHIFT\ \ \ \ \ \ \ \ \ =\ 0x00000009u;}
+\DoxyCodeLine{00281\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_PEN\_UP\_EVENT\_EVENTPENDING\ \ =\ 0x1u;}
+\DoxyCodeLine{00282\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_PEN\_UP\_EVENT\_NOEVENTPEND\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00283\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQSTATUS\_PEN\_UP\_EVENT\_SETEVENT\ \ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00284\ }
+\DoxyCodeLine{00285\ }
+\DoxyCodeLine{00286\ \textcolor{comment}{/*\ IRQENABLE\_SET\ */}}
+\DoxyCodeLine{00287\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_END\_OF\_SEQUENCE\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000002u;}
+\DoxyCodeLine{00288\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_END\_OF\_SEQUENCE\_SHIFT\ \ \ \ \ \ =\ 0x00000001u;}
+\DoxyCodeLine{00289\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_END\_OF\_SEQUENCE\_DISABLED\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00290\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_END\_OF\_SEQUENCE\_ENABLE\ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00291\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_END\_OF\_SEQUENCE\_ENABLED\ \ \ \ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00292\ }
+\DoxyCodeLine{00293\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_FIFO0\_OVERRUN\ \ \ \ \ \ \ \ \ \ =\ 0x00000008u;}
+\DoxyCodeLine{00294\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_FIFO0\_OVERRUN\_SHIFT\ \ \ \ \ \ \ \ =\ 0x00000003u;}
+\DoxyCodeLine{00295\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_FIFO0\_OVERRUN\_DISABLED\ =\ 0x0u;}
+\DoxyCodeLine{00296\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_FIFO0\_OVERRUN\_ENABLE\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00297\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_FIFO0\_OVERRUN\_ENABLED\ \ =\ 0x1u;}
+\DoxyCodeLine{00298\ }
+\DoxyCodeLine{00299\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_FIFO0\_THRESHOLD\ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000004u;}
+\DoxyCodeLine{00300\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_FIFO0\_THRESHOLD\_SHIFT\ \ =\ 0x00000002u;}
+\DoxyCodeLine{00301\ }
+\DoxyCodeLine{00302\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_FIFO0\_UNDERFLOW\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000010u;}
+\DoxyCodeLine{00303\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_FIFO0\_UNDERFLOW\_SHIFT\ \ \ \ \ \ =\ 0x00000004u;}
+\DoxyCodeLine{00304\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_FIFO0\_UNDERFLOW\_DISABLED\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00305\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_FIFO0\_UNDERFLOW\_ENABLE\ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00306\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_FIFO0\_UNDERFLOW\_ENABLED\ \ \ \ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00307\ }
+\DoxyCodeLine{00308\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_FIFO1\_OVERRUN\ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000040u;}
+\DoxyCodeLine{00309\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_FIFO1\_OVERRUN\_SHIFT\ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000006u;}
+\DoxyCodeLine{00310\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_FIFO1\_OVERRUN\_DISABLED\ \ \ \ \ =\ 0x0u;}
+\DoxyCodeLine{00311\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_FIFO1\_OVERRUN\_ENABLE\ \ \ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00312\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_FIFO1\_OVERRUN\_ENABLED\ \ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00313\ }
+\DoxyCodeLine{00314\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_FIFO1\_THRESHOLD\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000020u;}
+\DoxyCodeLine{00315\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_FIFO1\_THRESHOLD\_SHIFT\ \ \ \ \ \ =\ 0x00000005u;}
+\DoxyCodeLine{00316\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_FIFO1\_THRESHOLD\_DISABLED\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00317\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_FIFO1\_THRESHOLD\_ENABLE\ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00318\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_FIFO1\_THRESHOLD\_ENABLED\ \ \ \ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00319\ }
+\DoxyCodeLine{00320\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_FIFO1\_UNDERFLOW\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000080u;}
+\DoxyCodeLine{00321\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_FIFO1\_UNDERFLOW\_SHIFT\ \ \ \ \ \ =\ 0x00000007u;}
+\DoxyCodeLine{00322\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_FIFO1\_UNDERFLOW\_DISABLED\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00323\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_FIFO1\_UNDERFLOW\_ENABLE\ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00324\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_FIFO1\_UNDERFLOW\_ENABLED\ \ \ \ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00325\ }
+\DoxyCodeLine{00326\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_HW\_PEN\_EVENT\_ASYNC\ \ \ \ \ \ \ \ \ =\ 0x00000001u;}
+\DoxyCodeLine{00327\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_HW\_PEN\_EVENT\_ASYNC\_SHIFT\ \ \ =\ 0x00000000u;}
+\DoxyCodeLine{00328\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_HW\_PEN\_EVENT\_ASYNC\_DISABLED\ \ \ \ =\ 0x0u;}
+\DoxyCodeLine{00329\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_HW\_PEN\_EVENT\_ASYNC\_ENABLE\ \ =\ 0x1u;}
+\DoxyCodeLine{00330\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_HW\_PEN\_EVENT\_ASYNC\_ENABLED\ =\ 0x1u;}
+\DoxyCodeLine{00331\ }
+\DoxyCodeLine{00332\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_HW\_PEN\_EVENT\_SYNC\ \ \ \ \ \ \ \ \ \ =\ 0x00000400u;}
+\DoxyCodeLine{00333\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_HW\_PEN\_EVENT\_SYNC\_SHIFT\ \ \ \ \ \ \ \ =\ 0x0000000Au;}
+\DoxyCodeLine{00334\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_HW\_PEN\_EVENT\_SYNC\_DISABLED\ =\ 0x0u;}
+\DoxyCodeLine{00335\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_HW\_PEN\_EVENT\_SYNC\_ENABLE\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00336\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_HW\_PEN\_EVENT\_SYNC\_ENABLED\ \ =\ 0x1u;}
+\DoxyCodeLine{00337\ }
+\DoxyCodeLine{00338\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_OUT\_OF\_RANGE\ \ \ \ \ \ \ \ \ \ \ =\ 0x00000100u;}
+\DoxyCodeLine{00339\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_OUT\_OF\_RANGE\_SHIFT\ \ \ \ \ =\ 0x00000008u;}
+\DoxyCodeLine{00340\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_OUT\_OF\_RANGE\_DISABLED\ \ =\ 0x0u;}
+\DoxyCodeLine{00341\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_OUT\_OF\_RANGE\_ENABLE\ \ \ \ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00342\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_OUT\_OF\_RANGE\_ENABLED\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00343\ }
+\DoxyCodeLine{00344\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_PEN\_UP\_EVENT\ \ \ \ \ \ \ \ \ \ \ =\ 0x00000200u;}
+\DoxyCodeLine{00345\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_PEN\_UP\_EVENT\_SHIFT\ \ \ \ \ =\ 0x00000009u;}
+\DoxyCodeLine{00346\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_PEN\_UP\_EVENT\_DISABLED\ \ =\ 0x0u;}
+\DoxyCodeLine{00347\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_PEN\_UP\_EVENT\_ENABLE\ \ \ \ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00348\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_SET\_PEN\_UP\_EVENT\_ENABLED\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00349\ }
+\DoxyCodeLine{00350\ }
+\DoxyCodeLine{00351\ \textcolor{comment}{/*\ IRQENABLE\_CLR\ */}}
+\DoxyCodeLine{00352\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_END\_OF\_SEQUENCE\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000002u;}
+\DoxyCodeLine{00353\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_END\_OF\_SEQUENCE\_SHIFT\ \ \ \ \ \ =\ 0x00000001u;}
+\DoxyCodeLine{00354\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_END\_OF\_SEQUENCE\_DISABLED\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00355\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_END\_OF\_SEQUENCE\_ENABLE\ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00356\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_END\_OF\_SEQUENCE\_ENABLED\ \ \ \ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00357\ }
+\DoxyCodeLine{00358\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_FIFO0\_OVERRUN\ \ \ \ \ \ \ \ \ \ =\ 0x00000008u;}
+\DoxyCodeLine{00359\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_FIFO0\_OVERRUN\_SHIFT\ \ \ \ \ \ \ \ =\ 0x00000003u;}
+\DoxyCodeLine{00360\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_FIFO0\_OVERRUN\_DISABLED\ =\ 0x0u;}
+\DoxyCodeLine{00361\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_FIFO0\_OVERRUN\_ENABLE\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00362\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_FIFO0\_OVERRUN\_ENABLED\ \ =\ 0x1u;}
+\DoxyCodeLine{00363\ }
+\DoxyCodeLine{00364\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_FIFO0\_THRESHOLD\ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000004u;}
+\DoxyCodeLine{00365\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_FIFO0\_THRESHOLD\_SHIFT\ \ =\ 0x00000002u;}
+\DoxyCodeLine{00366\ }
+\DoxyCodeLine{00367\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_FIFO0\_UNDERFLOW\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000010u;}
+\DoxyCodeLine{00368\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_FIFO0\_UNDERFLOW\_SHIFT\ \ \ \ \ \ =\ 0x00000004u;}
+\DoxyCodeLine{00369\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_FIFO0\_UNDERFLOW\_DISABLED\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00370\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_FIFO0\_UNDERFLOW\_ENABLE\ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00371\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_FIFO0\_UNDERFLOW\_ENABLED\ \ \ \ \ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00372\ }
+\DoxyCodeLine{00373\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_FIFO1\_OVERRUN\ \ \ =\ 0x00000040u;}
+\DoxyCodeLine{00374\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_FIFO1\_OVERRUN\_SHIFT\ \ \ =\ 0x00000006u;}
+\DoxyCodeLine{00375\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_FIFO1\_OVERRUN\_DISABLED\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00376\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_FIFO1\_OVERRUN\_ENABLE\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00377\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_FIFO1\_OVERRUN\_ENABLED\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00378\ }
+\DoxyCodeLine{00379\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_FIFO1\_THRESHOLD\ \ \ =\ 0x00000020u;}
+\DoxyCodeLine{00380\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_FIFO1\_THRESHOLD\_SHIFT\ \ \ =\ 0x00000005u;}
+\DoxyCodeLine{00381\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_FIFO1\_THRESHOLD\_DISABLED\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00382\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_FIFO1\_THRESHOLD\_ENABLE\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00383\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_FIFO1\_THRESHOLD\_ENABLED\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00384\ }
+\DoxyCodeLine{00385\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_FIFO1\_UNDERFLOW\ \ \ =\ 0x00000080u;}
+\DoxyCodeLine{00386\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_FIFO1\_UNDERFLOW\_SHIFT\ \ \ =\ 0x00000007u;}
+\DoxyCodeLine{00387\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_FIFO1\_UNDERFLOW\_DISABLED\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00388\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_FIFO1\_UNDERFLOW\_ENABLE\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00389\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_FIFO1\_UNDERFLOW\_ENABLED\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00390\ }
+\DoxyCodeLine{00391\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_HW\_PEN\_EVENT\_ASYNC\ \ \ =\ 0x00000001u;}
+\DoxyCodeLine{00392\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_HW\_PEN\_EVENT\_ASYNC\_SHIFT\ \ \ =\ 0x00000000u;}
+\DoxyCodeLine{00393\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_HW\_PEN\_EVENT\_ASYNC\_DISABLED\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00394\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_HW\_PEN\_EVENT\_ASYNC\_ENABLE\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00395\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_HW\_PEN\_EVENT\_ASYNC\_ENABLED\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00396\ }
+\DoxyCodeLine{00397\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_HW\_PEN\_EVENT\_SYNC\ \ \ =\ 0x00000400u;}
+\DoxyCodeLine{00398\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_HW\_PEN\_EVENT\_SYNC\_SHIFT\ \ \ =\ 0x0000000Au;}
+\DoxyCodeLine{00399\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_HW\_PEN\_EVENT\_SYNC\_DISABLED\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00400\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_HW\_PEN\_EVENT\_SYNC\_ENABLE\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00401\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_HW\_PEN\_EVENT\_SYNC\_ENABLED\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00402\ }
+\DoxyCodeLine{00403\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_OUT\_OF\_RANGE\ \ \ =\ 0x00000100u;}
+\DoxyCodeLine{00404\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_OUT\_OF\_RANGE\_SHIFT\ \ \ =\ 0x00000008u;}
+\DoxyCodeLine{00405\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_OUT\_OF\_RANGE\_DISABLED\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00406\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_OUT\_OF\_RANGE\_ENABLE\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00407\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_OUT\_OF\_RANGE\_ENABLED\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00408\ }
+\DoxyCodeLine{00409\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_PEN\_UP\_EVENT\ \ \ =\ 0x00000200u;}
+\DoxyCodeLine{00410\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_PEN\_UP\_EVENT\_SHIFT\ \ \ =\ 0x00000009u;}
+\DoxyCodeLine{00411\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_PEN\_UP\_EVENT\_DISABLED\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00412\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_PEN\_UP\_EVENT\_ENABLE\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00413\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQENABLE\_CLR\_PEN\_UP\_EVENT\_ENABLED\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00414\ }
+\DoxyCodeLine{00415\ }
+\DoxyCodeLine{00416\ \textcolor{comment}{/*\ IRQWAKEUP\ */}}
+\DoxyCodeLine{00417\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQWAKEUP\_WAKEEN0\ \ \ =\ 0x00000001u;}
+\DoxyCodeLine{00418\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IRQWAKEUP\_WAKEEN0\_SHIFT\ \ \ =\ 0x00000000u;}
+\DoxyCodeLine{00419\ }
+\DoxyCodeLine{00420\ }
+\DoxyCodeLine{00421\ \textcolor{comment}{/*\ DMAENABLE\_SET\ */}}
+\DoxyCodeLine{00422\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ DMAENABLE\_SET\_ENABLE0\ \ \ =\ 0x00000001u;}
+\DoxyCodeLine{00423\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ DMAENABLE\_SET\_ENABLE0\_SHIFT\ \ \ =\ 0x00000000u;}
+\DoxyCodeLine{00424\ }
+\DoxyCodeLine{00425\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ DMAENABLE\_SET\_ENABLE1\ \ \ =\ 0x00000002u;}
+\DoxyCodeLine{00426\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ DMAENABLE\_SET\_ENABLE1\_SHIFT\ \ \ =\ 0x00000001u;}
+\DoxyCodeLine{00427\ }
+\DoxyCodeLine{00428\ }
+\DoxyCodeLine{00429\ \textcolor{comment}{/*\ DMAENABLE\_CLR\ */}}
+\DoxyCodeLine{00430\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ DMAENABLE\_CLR\_ENABLE0\ \ \ =\ 0x00000001u;}
+\DoxyCodeLine{00431\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ DMAENABLE\_CLR\_ENABLE0\_SHIFT\ \ \ =\ 0x00000000u;}
+\DoxyCodeLine{00432\ }
+\DoxyCodeLine{00433\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ DMAENABLE\_CLR\_ENABLE1\ \ \ =\ 0x00000002u;}
+\DoxyCodeLine{00434\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ DMAENABLE\_CLR\_ENABLE1\_SHIFT\ \ \ =\ 0x00000001u;}
+\DoxyCodeLine{00435\ }
+\DoxyCodeLine{00436\ }
+\DoxyCodeLine{00437\ \textcolor{comment}{/*\ CTRL\ */}}
+\DoxyCodeLine{00438\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_ADC\_BIAS\_SELECT\ \ \ =\ 0x00000008u;}
+\DoxyCodeLine{00439\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_ADC\_BIAS\_SELECT\_SHIFT\ \ \ =\ 0x00000003u;}
+\DoxyCodeLine{00440\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_ADC\_BIAS\_SELECT\_EXTERNAL\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00441\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_ADC\_BIAS\_SELECT\_INTERNAL\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00442\ }
+\DoxyCodeLine{00443\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_AFE\_PEN\_CTRL\ \ \ =\ 0x00000060u;}
+\DoxyCodeLine{00444\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_AFE\_PEN\_CTRL\_SHIFT\ \ \ =\ 0x00000005u;}
+\DoxyCodeLine{00445\ }
+\DoxyCodeLine{00446\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_ENABLE\ \ \ =\ 0x00000001u;}
+\DoxyCodeLine{00447\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_ENABLE\_SHIFT\ \ \ =\ 0x00000000u;}
+\DoxyCodeLine{00448\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_ENABLE\_DISABLE\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00449\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_ENABLE\_ENABLE\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00450\ }
+\DoxyCodeLine{00451\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_HW\_EVENT\_MAPPING\ \ \ =\ 0x00000100u;}
+\DoxyCodeLine{00452\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_HW\_EVENT\_MAPPING\_SHIFT\ \ \ =\ 0x00000008u;}
+\DoxyCodeLine{00453\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_HW\_EVENT\_MAPPING\_HWEVENTINPUT\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00454\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_HW\_EVENT\_MAPPING\_PENTOUCHIRQ\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00455\ }
+\DoxyCodeLine{00456\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_HW\_PREEMPT\ \ \ =\ 0x00000200u;}
+\DoxyCodeLine{00457\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_HW\_PREEMPT\_SHIFT\ \ \ =\ 0x00000009u;}
+\DoxyCodeLine{00458\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_HW\_PREEMPT\_NOPREEMPT\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00459\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_HW\_PREEMPT\_PREEMPT\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00460\ }
+\DoxyCodeLine{00461\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_POWER\_DOWN\ \ \ =\ 0x00000010u;}
+\DoxyCodeLine{00462\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_POWER\_DOWN\_SHIFT\ \ \ =\ 0x00000004u;}
+\DoxyCodeLine{00463\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_POWER\_DOWN\_AFEPOWERDOWN\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00464\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_POWER\_DOWN\_AFEPOWERUP\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00465\ }
+\DoxyCodeLine{00466\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_STEPCONFIG\_WRITEPROTECT\_N\ \ \ =\ 0x00000004u;}
+\DoxyCodeLine{00467\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_STEPCONFIG\_WRITEPROTECT\_N\_SHIFT\ \ \ =\ 0x00000002u;}
+\DoxyCodeLine{00468\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_STEPCONFIG\_WRITEPROTECT\_N\_NOTPROTECTED\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00469\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_STEPCONFIG\_WRITEPROTECT\_N\_PROTECTED\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00470\ }
+\DoxyCodeLine{00471\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_STERP\_ID\_TAG\ \ \ =\ 0x00000002u;}
+\DoxyCodeLine{00472\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_STERP\_ID\_TAG\_SHIFT\ \ \ =\ 0x00000001u;}
+\DoxyCodeLine{00473\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_STERP\_ID\_TAG\_CHANNELID\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00474\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_STERP\_ID\_TAG\_WRZERO\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00475\ }
+\DoxyCodeLine{00476\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_TOUCH\_SCREEN\_ENABLE\ \ \ =\ 0x00000080u;}
+\DoxyCodeLine{00477\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_TOUCH\_SCREEN\_ENABLE\_SHIFT\ \ \ =\ 0x00000007u;}
+\DoxyCodeLine{00478\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_TOUCH\_SCREEN\_ENABLE\_DISABLED\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00479\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ CTRL\_TOUCH\_SCREEN\_ENABLE\_ENABLED\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00480\ }
+\DoxyCodeLine{00481\ }
+\DoxyCodeLine{00482\ \textcolor{comment}{/*\ ADCSTAT\ */}}
+\DoxyCodeLine{00483\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCSTAT\_FSM\_BUSY\ \ \ =\ 0x00000020u;}
+\DoxyCodeLine{00484\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCSTAT\_FSM\_BUSY\_SHIFT\ \ \ =\ 0x00000005u;}
+\DoxyCodeLine{00485\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCSTAT\_FSM\_BUSY\_BUSY\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00486\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCSTAT\_FSM\_BUSY\_IDLE\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00487\ }
+\DoxyCodeLine{00488\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCSTAT\_PEN\_IRQ0\ \ \ =\ 0x00000040u;}
+\DoxyCodeLine{00489\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCSTAT\_PEN\_IRQ0\_SHIFT\ \ \ =\ 0x00000006u;}
+\DoxyCodeLine{00490\ }
+\DoxyCodeLine{00491\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCSTAT\_PEN\_IRQ1\ \ \ =\ 0x00000080u;}
+\DoxyCodeLine{00492\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCSTAT\_PEN\_IRQ1\_SHIFT\ \ \ =\ 0x00000007u;}
+\DoxyCodeLine{00493\ }
+\DoxyCodeLine{00494\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCSTAT\_STEPID\ \ \ =\ 0x0000001Fu;}
+\DoxyCodeLine{00495\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCSTAT\_STEPID\_SHIFT\ \ \ =\ 0x00000000u;}
+\DoxyCodeLine{00496\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCSTAT\_STEPID\_CHARGE\ \ \ =\ 0x11u;}
+\DoxyCodeLine{00497\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCSTAT\_STEPID\_IDLE\ \ \ =\ 0x10u;}
+\DoxyCodeLine{00498\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCSTAT\_STEPID\_STEP1\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00499\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCSTAT\_STEPID\_STEP10\ \ \ =\ 0x9u;}
+\DoxyCodeLine{00500\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCSTAT\_STEPID\_STEP11\ \ \ =\ 0xAu;}
+\DoxyCodeLine{00501\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCSTAT\_STEPID\_STEP12\ \ \ =\ 0xBu;}
+\DoxyCodeLine{00502\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCSTAT\_STEPID\_STEP13\ \ \ =\ 0xCu;}
+\DoxyCodeLine{00503\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCSTAT\_STEPID\_STEP14\ \ \ =\ 0xDu;}
+\DoxyCodeLine{00504\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCSTAT\_STEPID\_STEP15\ \ \ =\ 0xEu;}
+\DoxyCodeLine{00505\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCSTAT\_STEPID\_STEP16\ \ \ =\ 0xFu;}
+\DoxyCodeLine{00506\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCSTAT\_STEPID\_STEP2\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00507\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCSTAT\_STEPID\_STEP3\ \ \ =\ 0x2u;}
+\DoxyCodeLine{00508\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCSTAT\_STEPID\_STEP4\ \ \ =\ 0x3u;}
+\DoxyCodeLine{00509\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCSTAT\_STEPID\_STEP5\ \ \ =\ 0x4u;}
+\DoxyCodeLine{00510\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCSTAT\_STEPID\_STEP6\ \ \ =\ 0x5u;}
+\DoxyCodeLine{00511\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCSTAT\_STEPID\_STEP7\ \ \ =\ 0x6u;}
+\DoxyCodeLine{00512\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCSTAT\_STEPID\_STEP8\ \ \ =\ 0x7u;}
+\DoxyCodeLine{00513\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCSTAT\_STEPID\_STEP9\ \ \ =\ 0x8u;}
+\DoxyCodeLine{00514\ }
+\DoxyCodeLine{00515\ }
+\DoxyCodeLine{00516\ \textcolor{comment}{/*\ ADCRANGE\ */}}
+\DoxyCodeLine{00517\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCRANGE\_HIGH\_RANGE\_DATA\ \ \ =\ 0x0FFF0000u;}
+\DoxyCodeLine{00518\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCRANGE\_HIGH\_RANGE\_DATA\_SHIFT\ \ \ =\ 0x00000010u;}
+\DoxyCodeLine{00519\ }
+\DoxyCodeLine{00520\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCRANGE\_LOW\_RANGE\_DATA\ \ \ =\ 0x00000FFFu;}
+\DoxyCodeLine{00521\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADCRANGE\_LOW\_RANGE\_DATA\_SHIFT\ \ \ =\ 0x00000000u;}
+\DoxyCodeLine{00522\ }
+\DoxyCodeLine{00523\ }
+\DoxyCodeLine{00524\ \textcolor{comment}{/*\ ADC\_CLKDIV\ */}}
+\DoxyCodeLine{00525\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADC\_CLKDIV\_ADC\_CLK\_DIV\ \ \ =\ 0x00007FFFu;}
+\DoxyCodeLine{00526\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADC\_CLKDIV\_ADC\_CLK\_DIV\_SHIFT\ \ \ =\ 0x00000000u;}
+\DoxyCodeLine{00527\ }
+\DoxyCodeLine{00528\ }
+\DoxyCodeLine{00529\ \textcolor{comment}{/*\ ADC\_MISC\ */}}
+\DoxyCodeLine{00530\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADC\_MISC\_AFE\_SPARE\_INPUT\ \ \ =\ 0x0000000Fu;}
+\DoxyCodeLine{00531\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADC\_MISC\_AFE\_SPARE\_INPUT\_SHIFT\ \ \ =\ 0x00000000u;}
+\DoxyCodeLine{00532\ }
+\DoxyCodeLine{00533\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADC\_MISC\_AFE\_SPARE\_OUTPUT\ \ \ =\ 0x000000F0u;}
+\DoxyCodeLine{00534\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ ADC\_MISC\_AFE\_SPARE\_OUTPUT\_SHIFT\ \ \ =\ 0x00000004u;}
+\DoxyCodeLine{00535\ }
+\DoxyCodeLine{00536\ }
+\DoxyCodeLine{00537\ \textcolor{comment}{/*\ STEPENABLE\ */}}
+\DoxyCodeLine{00538\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_STEP1\ \ \ =\ 0x00000002u;}
+\DoxyCodeLine{00539\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_STEP1\_SHIFT\ \ \ =\ 0x00000001u;}
+\DoxyCodeLine{00540\ }
+\DoxyCodeLine{00541\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_STEP10\ \ \ =\ 0x00000400u;}
+\DoxyCodeLine{00542\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_STEP10\_SHIFT\ \ \ =\ 0x0000000Au;}
+\DoxyCodeLine{00543\ }
+\DoxyCodeLine{00544\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_STEP11\ \ \ =\ 0x00000800u;}
+\DoxyCodeLine{00545\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_STEP11\_SHIFT\ \ \ =\ 0x0000000Bu;}
+\DoxyCodeLine{00546\ }
+\DoxyCodeLine{00547\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_STEP12\ \ \ =\ 0x00001000u;}
+\DoxyCodeLine{00548\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_STEP12\_SHIFT\ \ \ =\ 0x0000000Cu;}
+\DoxyCodeLine{00549\ }
+\DoxyCodeLine{00550\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_STEP13\ \ \ =\ 0x00002000u;}
+\DoxyCodeLine{00551\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_STEP13\_SHIFT\ \ \ =\ 0x0000000Du;}
+\DoxyCodeLine{00552\ }
+\DoxyCodeLine{00553\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_STEP14\ \ \ =\ 0x00004000u;}
+\DoxyCodeLine{00554\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_STEP14\_SHIFT\ \ \ =\ 0x0000000Eu;}
+\DoxyCodeLine{00555\ }
+\DoxyCodeLine{00556\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_STEP15\ \ \ =\ 0x00008000u;}
+\DoxyCodeLine{00557\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_STEP15\_SHIFT\ \ \ =\ 0x0000000Fu;}
+\DoxyCodeLine{00558\ }
+\DoxyCodeLine{00559\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_STEP16\ \ \ =\ 0x00010000u;}
+\DoxyCodeLine{00560\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_STEP16\_SHIFT\ \ \ =\ 0x00000010u;}
+\DoxyCodeLine{00561\ }
+\DoxyCodeLine{00562\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_STEP2\ \ \ =\ 0x00000004u;}
+\DoxyCodeLine{00563\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_STEP2\_SHIFT\ \ \ =\ 0x00000002u;}
+\DoxyCodeLine{00564\ }
+\DoxyCodeLine{00565\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_STEP3\ \ \ =\ 0x00000008u;}
+\DoxyCodeLine{00566\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_STEP3\_SHIFT\ \ \ =\ 0x00000003u;}
+\DoxyCodeLine{00567\ }
+\DoxyCodeLine{00568\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_STEP4\ \ \ =\ 0x00000010u;}
+\DoxyCodeLine{00569\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_STEP4\_SHIFT\ \ \ =\ 0x00000004u;}
+\DoxyCodeLine{00570\ }
+\DoxyCodeLine{00571\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_STEP5\ \ \ =\ 0x00000020u;}
+\DoxyCodeLine{00572\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_STEP5\_SHIFT\ \ \ =\ 0x00000005u;}
+\DoxyCodeLine{00573\ }
+\DoxyCodeLine{00574\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_STEP6\ \ \ =\ 0x00000040u;}
+\DoxyCodeLine{00575\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_STEP6\_SHIFT\ \ \ =\ 0x00000006u;}
+\DoxyCodeLine{00576\ }
+\DoxyCodeLine{00577\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_STEP7\ \ \ =\ 0x00000080u;}
+\DoxyCodeLine{00578\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_STEP7\_SHIFT\ \ \ =\ 0x00000007u;}
+\DoxyCodeLine{00579\ }
+\DoxyCodeLine{00580\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_STEP8\ \ \ =\ 0x00000100u;}
+\DoxyCodeLine{00581\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_STEP8\_SHIFT\ \ \ =\ 0x00000008u;}
+\DoxyCodeLine{00582\ }
+\DoxyCodeLine{00583\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_STEP9\ \ \ =\ 0x00000200u;}
+\DoxyCodeLine{00584\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_STEP9\_SHIFT\ \ \ =\ 0x00000009u;}
+\DoxyCodeLine{00585\ }
+\DoxyCodeLine{00586\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_TS\_CHARGE\ \ \ =\ 0x00000001u;}
+\DoxyCodeLine{00587\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ STEPENABLE\_TS\_CHARGE\_SHIFT\ \ \ =\ 0x00000000u;}
+\DoxyCodeLine{00588\ }
+\DoxyCodeLine{00589\ }
+\DoxyCodeLine{00590\ \textcolor{comment}{/*\ IDLECONFIG\ */}}
+\DoxyCodeLine{00591\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_DIFF\_CNTRL\ \ \ =\ 0x02000000u;}
+\DoxyCodeLine{00592\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_DIFF\_CNTRL\_SHIFT\ \ \ =\ 0x00000019u;}
+\DoxyCodeLine{00593\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_DIFF\_CNTRL\_DIFFERENTIAL\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00594\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_DIFF\_CNTRL\_SINGLE\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00595\ }
+\DoxyCodeLine{00596\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_SEL\_INM\_SWM\ \ \ =\ 0x00078000u;}
+\DoxyCodeLine{00597\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_SEL\_INM\_SWM\_SHIFT\ \ \ =\ 0x0000000Fu;}
+\DoxyCodeLine{00598\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_SEL\_INM\_SWM\_CHANNEL\_1\ \ \ =\ 0x000u;}
+\DoxyCodeLine{00599\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_SEL\_INM\_SWM\_CHANNEL\_8\ \ \ =\ 0x0111u;}
+\DoxyCodeLine{00600\ }
+\DoxyCodeLine{00601\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_SEL\_INP\_SWC\ \ \ =\ 0x00780000u;}
+\DoxyCodeLine{00602\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_SEL\_INP\_SWC\_SHIFT\ \ \ =\ 0x00000013u;}
+\DoxyCodeLine{00603\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_SEL\_INP\_SWC\_CHANNEL\_1\ \ \ =\ 0x000u;}
+\DoxyCodeLine{00604\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_SEL\_INP\_SWC\_CHANNEL\_8\ \ \ =\ 0x0111u;}
+\DoxyCodeLine{00605\ }
+\DoxyCodeLine{00606\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_SEL\_RFM\_SWC\ \ \ =\ 0x01800000u;}
+\DoxyCodeLine{00607\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_SEL\_RFM\_SWC\_SHIFT\ \ \ =\ 0x00000017u;}
+\DoxyCodeLine{00608\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_SEL\_RFM\_SWC\_ADCREFM\ \ \ =\ 0x3u;}
+\DoxyCodeLine{00609\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_SEL\_RFM\_SWC\_VSSA\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00610\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_SEL\_RFM\_SWC\_XNUR\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00611\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_SEL\_RFM\_SWC\_YNLR\ \ \ =\ 0x2u;}
+\DoxyCodeLine{00612\ }
+\DoxyCodeLine{00613\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_SEL\_RFP\_SWC\ \ \ =\ 0x00007000u;}
+\DoxyCodeLine{00614\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_SEL\_RFP\_SWC\_SHIFT\ \ \ =\ 0x0000000Cu;}
+\DoxyCodeLine{00615\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_SEL\_RFP\_SWC\_ADCREFP\ \ \ =\ 0x3u;}
+\DoxyCodeLine{00616\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_SEL\_RFP\_SWC\_VDDA\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00617\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_SEL\_RFP\_SWC\_XPUL\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00618\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_SEL\_RFP\_SWC\_YPLL\ \ \ =\ 0x2u;}
+\DoxyCodeLine{00619\ }
+\DoxyCodeLine{00620\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_WPNSW\_SWC\ \ \ =\ 0x00000800u;}
+\DoxyCodeLine{00621\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_WPNSW\_SWC\_SHIFT\ \ \ =\ 0x0000000Bu;}
+\DoxyCodeLine{00622\ }
+\DoxyCodeLine{00623\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_XNNSW\_SWC\ \ \ =\ 0x00000040u;}
+\DoxyCodeLine{00624\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_XNNSW\_SWC\_SHIFT\ \ \ =\ 0x00000006u;}
+\DoxyCodeLine{00625\ }
+\DoxyCodeLine{00626\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_XNPSW\_SWC\ \ \ =\ 0x00000200u;}
+\DoxyCodeLine{00627\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_XNPSW\_SWC\_SHIFT\ \ \ =\ 0x00000009u;}
+\DoxyCodeLine{00628\ }
+\DoxyCodeLine{00629\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_XPPSW\_SWC\ \ \ =\ 0x00000020u;}
+\DoxyCodeLine{00630\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_XPPSW\_SWC\_SHIFT\ \ \ =\ 0x00000005u;}
+\DoxyCodeLine{00631\ }
+\DoxyCodeLine{00632\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_YNNSW\_SWC\ \ \ =\ 0x00000100u;}
+\DoxyCodeLine{00633\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_YNNSW\_SWC\_SHIFT\ \ \ =\ 0x00000008u;}
+\DoxyCodeLine{00634\ }
+\DoxyCodeLine{00635\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_YPNSW\_SWC\ \ \ =\ 0x00000400u;}
+\DoxyCodeLine{00636\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_YPNSW\_SWC\_SHIFT\ \ \ =\ 0x0000000Au;}
+\DoxyCodeLine{00637\ }
+\DoxyCodeLine{00638\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_YPPSW\_SWC\ \ \ =\ 0x00000080u;}
+\DoxyCodeLine{00639\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ IDLECONFIG\_YPPSW\_SWC\_SHIFT\ \ \ =\ 0x00000007u;}
+\DoxyCodeLine{00640\ }
+\DoxyCodeLine{00641\ }
+\DoxyCodeLine{00642\ \textcolor{comment}{/*\ TS\_CHARGE\_STEPCONFIG\ */}}
+\DoxyCodeLine{00643\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_DIFF\_CNTRL\ \ \ =\ 0x02000000u;}
+\DoxyCodeLine{00644\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_DIFF\_CNTRL\_SHIFT\ \ \ =\ 0x00000019u;}
+\DoxyCodeLine{00645\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_DIFF\_CNTRL\_DIFFERENTIAL\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00646\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_DIFF\_CNTRL\_SINGLE\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00647\ }
+\DoxyCodeLine{00648\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_SEL\_INM\_SWM\ \ \ =\ 0x00078000u;}
+\DoxyCodeLine{00649\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_SEL\_INM\_SWM\_SHIFT\ \ \ =\ 0x0000000Fu;}
+\DoxyCodeLine{00650\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_SEL\_INM\_SWM\_CHANNEL\_1\ \ \ =\ 0x000u;}
+\DoxyCodeLine{00651\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_SEL\_INM\_SWM\_CHANNEL\_8\ \ \ =\ 0x0111u;}
+\DoxyCodeLine{00652\ }
+\DoxyCodeLine{00653\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_SEL\_INP\_SWC\ \ \ =\ 0x00780000u;}
+\DoxyCodeLine{00654\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_SEL\_INP\_SWC\_SHIFT\ \ \ =\ 0x00000013u;}
+\DoxyCodeLine{00655\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_SEL\_INP\_SWC\_CHANNEL\_1\ \ \ =\ 0x000u;}
+\DoxyCodeLine{00656\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_SEL\_INP\_SWC\_CHANNEL\_8\ \ \ =\ 0x0111u;}
+\DoxyCodeLine{00657\ }
+\DoxyCodeLine{00658\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_SEL\_RFM\_SWC\ \ \ =\ 0x01800000u;}
+\DoxyCodeLine{00659\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_SEL\_RFM\_SWC\_SHIFT\ \ \ =\ 0x00000017u;}
+\DoxyCodeLine{00660\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_SEL\_RFM\_SWC\_ADCREFM\ \ \ =\ 0x3u;}
+\DoxyCodeLine{00661\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_SEL\_RFM\_SWC\_VSSA\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00662\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_SEL\_RFM\_SWC\_XNUR\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00663\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_SEL\_RFM\_SWC\_YNLR\ \ \ =\ 0x2u;}
+\DoxyCodeLine{00664\ }
+\DoxyCodeLine{00665\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_SEL\_RFP\_SWC\ \ \ =\ 0x00007000u;}
+\DoxyCodeLine{00666\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_SEL\_RFP\_SWC\_SHIFT\ \ \ =\ 0x0000000Cu;}
+\DoxyCodeLine{00667\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_SEL\_RFP\_SWC\_ADCREFP\ \ \ =\ 0x3u;}
+\DoxyCodeLine{00668\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_SEL\_RFP\_SWC\_VDDA\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00669\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_SEL\_RFP\_SWC\_XPUL\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00670\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_SEL\_RFP\_SWC\_YPLL\ \ \ =\ 0x2u;}
+\DoxyCodeLine{00671\ }
+\DoxyCodeLine{00672\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_WPNSW\_SWC\ \ \ =\ 0x00000800u;}
+\DoxyCodeLine{00673\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_WPNSW\_SWC\_SHIFT\ \ \ =\ 0x0000000Bu;}
+\DoxyCodeLine{00674\ }
+\DoxyCodeLine{00675\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_XNNSW\_SWC\ \ \ =\ 0x00000040u;}
+\DoxyCodeLine{00676\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_XNNSW\_SWC\_SHIFT\ \ \ =\ 0x00000006u;}
+\DoxyCodeLine{00677\ }
+\DoxyCodeLine{00678\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_XNPSW\_SWC\ \ \ =\ 0x00000200u;}
+\DoxyCodeLine{00679\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_XNPSW\_SWC\_SHIFT\ \ \ =\ 0x00000009u;}
+\DoxyCodeLine{00680\ }
+\DoxyCodeLine{00681\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_XPPSW\_SWC\ \ \ =\ 0x00000020u;}
+\DoxyCodeLine{00682\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_XPPSW\_SWC\_SHIFT\ \ \ =\ 0x00000005u;}
+\DoxyCodeLine{00683\ }
+\DoxyCodeLine{00684\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_YNNSW\_SWC\ \ \ =\ 0x00000100u;}
+\DoxyCodeLine{00685\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_YNNSW\_SWC\_SHIFT\ \ \ =\ 0x00000008u;}
+\DoxyCodeLine{00686\ }
+\DoxyCodeLine{00687\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_YPNSW\_SWC\ \ \ =\ 0x00000400u;}
+\DoxyCodeLine{00688\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_YPNSW\_SWC\_SHIFT\ \ \ =\ 0x0000000Au;}
+\DoxyCodeLine{00689\ }
+\DoxyCodeLine{00690\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_YPPSW\_SWC\ \ \ =\ 0x00000080u;}
+\DoxyCodeLine{00691\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_STEPCONFIG\_YPPSW\_SWC\_SHIFT\ \ \ =\ 0x00000007u;}
+\DoxyCodeLine{00692\ }
+\DoxyCodeLine{00693\ }
+\DoxyCodeLine{00694\ \textcolor{comment}{/*\ TS\_CHARGE\_DELAY\ */}}
+\DoxyCodeLine{00695\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_DELAY\_OPEN\_DELAY\ \ \ =\ 0x0003FFFFu;}
+\DoxyCodeLine{00696\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ TS\_CHARGE\_DELAY\_OPEN\_DELAY\_SHIFT\ \ \ =\ 0x00000000u;}
+\DoxyCodeLine{00697\ }
+\DoxyCodeLine{00698\ }
+\DoxyCodeLine{00699\ \textcolor{comment}{/*\ STEPCONFIG\ */}}
+\DoxyCodeLine{00700\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_AVERAGING\ \ \ =\ 0x0000001Cu;}
+\DoxyCodeLine{00701\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_AVERAGING\_SHIFT\ \ \ =\ 0x00000002u;}
+\DoxyCodeLine{00702\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_AVERAGING\_16SAMPLESAVG\ \ \ =\ 0x4u;}
+\DoxyCodeLine{00703\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_AVERAGING\_2SAMPLESAVG\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00704\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_AVERAGING\_4SAMPLESAVG\ \ \ =\ 0x2u;}
+\DoxyCodeLine{00705\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_AVERAGING\_8SAMPLESAVG\ \ \ =\ 0x3u;}
+\DoxyCodeLine{00706\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_AVERAGING\_NOAVG\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00707\ }
+\DoxyCodeLine{00708\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_DIFF\_CNTRL\ \ \ =\ 0x02000000u;}
+\DoxyCodeLine{00709\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_DIFF\_CNTRL\_SHIFT\ \ \ =\ 0x00000019u;}
+\DoxyCodeLine{00710\ }
+\DoxyCodeLine{00711\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_FIFO\_SELECT\ \ \ =\ 0x04000000u;}
+\DoxyCodeLine{00712\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_FIFO\_SELECT\_SHIFT\ \ \ =\ 0x0000001Au;}
+\DoxyCodeLine{00713\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_FIFO\_SELECT\_FIFO\_0\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00714\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_FIFO\_SELECT\_FIFO\_1=\ 0x1u;}
+\DoxyCodeLine{00715\ }
+\DoxyCodeLine{00716\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_MODE\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000003u;}
+\DoxyCodeLine{00717\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_MODE\_SHIFT\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0x00000000u;}
+\DoxyCodeLine{00718\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_MODE\_HW\_SYNC\_CONTINUOUS\ \ =\ 0x3u;}
+\DoxyCodeLine{00719\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_MODE\_HW\_SYNC\_ONESHOT\ \ \ \ \ =\ 0x2u;}
+\DoxyCodeLine{00720\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_MODE\_SW\_EN\_CONTINUOUS\ \ \ \ =\ 0x1u;}
+\DoxyCodeLine{00721\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_MODE\_SW\_EN\_ONESHOT\ \ \ \ \ \ \ \ \ \ \ =\ 0x0u;}
+\DoxyCodeLine{00722\ }
+\DoxyCodeLine{00723\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_RANGE\_CHECK\ \ \ \ \ \ \ \ \ \ =\ 0x08000000u;}
+\DoxyCodeLine{00724\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_RANGE\_CHECK\_SHIFT\ \ \ \ =\ 0x0000001Bu;}
+\DoxyCodeLine{00725\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_RANGE\_CHECK\_DISABLE\ \ \ =\ 0x0u;}
+\DoxyCodeLine{00726\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_RANGE\_CHECK\_ENABLE\ \ \ =\ 0x1u;}
+\DoxyCodeLine{00727\ }
+\DoxyCodeLine{00728\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_SEL\_INM\_SWM\ \ \ \ \ \ =\ 0x00078000u;}
+\DoxyCodeLine{00729\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_SEL\_INM\_SWM\_SHIFT\ =\ 0x0000000Fu;}
+\DoxyCodeLine{00730\ }
+\DoxyCodeLine{00731\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_SEL\_INP\_SWC\ \ \ \ \ \ =\ 0x00780000u;}
+\DoxyCodeLine{00732\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_SEL\_INP\_SWC\_SHIFT\ =\ 0x00000013u;}
+\DoxyCodeLine{00733\ }
+\DoxyCodeLine{00734\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_SEL\_RFM\_SWC\ \ \ \ \ \ =\ 0x01800000u;}
+\DoxyCodeLine{00735\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_SEL\_RFM\_SWC\_SHIFT\ =\ 0x00000017u;}
+\DoxyCodeLine{00736\ }
+\DoxyCodeLine{00737\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_SEL\_RFP\_SWC\ \ \ \ \ \ =\ 0x00007000u;}
+\DoxyCodeLine{00738\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_SEL\_RFP\_SWC\_SHIFT\ \ \ \ =\ 0x0000000Cu;}
+\DoxyCodeLine{00739\ }
+\DoxyCodeLine{00740\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_WPNSW\_SWC\ \ \ \ \ \ \ \ =\ 0x00000800u;}
+\DoxyCodeLine{00741\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_WPNSW\_SWC\_SHIFT\ \ \ =\ 0x0000000Bu;}
+\DoxyCodeLine{00742\ }
+\DoxyCodeLine{00743\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_XNNSW\_SWC\ \ \ \ \ \ \ \ =\ 0x00000040u;}
+\DoxyCodeLine{00744\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_XNNSW\_SWC\_SHIFT\ \ \ =\ 0x00000006u;}
+\DoxyCodeLine{00745\ }
+\DoxyCodeLine{00746\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_XNPSW\_SWC\ \ \ \ \ \ \ \ =\ 0x00000200u;}
+\DoxyCodeLine{00747\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_XNPSW\_SWC\_SHIFT\ \ \ =\ 0x00000009u;}
+\DoxyCodeLine{00748\ }
+\DoxyCodeLine{00749\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_XPPSW\_SWC\ \ \ \ \ \ \ \ =\ 0x00000020u;}
+\DoxyCodeLine{00750\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_XPPSW\_SWC\_SHIFT\ \ \ =\ 0x00000005u;}
+\DoxyCodeLine{00751\ }
+\DoxyCodeLine{00752\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_YNNSW\_SWC\ \ \ \ \ \ \ \ =\ 0x00000100u;}
+\DoxyCodeLine{00753\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_YNNSW\_SWC\_SHIFT\ \ =\ 0x00000008u;}
+\DoxyCodeLine{00754\ }
+\DoxyCodeLine{00755\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_YPNSW\_SWC\ \ \ \ \ \ \ \ =\ 0x00000400u;}
+\DoxyCodeLine{00756\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_YPNSW\_SWC\_SHIFT\ \ =\ 0x0000000Au;}
+\DoxyCodeLine{00757\ }
+\DoxyCodeLine{00758\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_YPPSW\_SWC\ \ \ \ \ \ \ \ =\ 0x00000080u;}
+\DoxyCodeLine{00759\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPCONFIG\_YPPSW\_SWC\_SHIFT\ \ =\ 0x00000007u;}
+\DoxyCodeLine{00760\ }
+\DoxyCodeLine{00761\ }
+\DoxyCodeLine{00762\ \textcolor{comment}{/*\ STEPDELAY\ */}}
+\DoxyCodeLine{00763\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPDELAY\_OPEN\_DELAY\ \ \ \ \ \ \ \ =\ 0x0003FFFFu;}
+\DoxyCodeLine{00764\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPDELAY\_OPEN\_DELAY\_SHIFT\ \ =\ 0x00000000u;}
+\DoxyCodeLine{00765\ }
+\DoxyCodeLine{00766\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPDELAY\_SAMPLE\_DELAY\ \ \ \ \ \ =\ 0xFF000000u;}
+\DoxyCodeLine{00767\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ \ STEPDELAY\_SAMPLE\_DELAY\_SHIFT\ \ \ \ =\ 0x00000018u;}
+\DoxyCodeLine{00768\ }
+\DoxyCodeLine{00769\ }
+\DoxyCodeLine{00770\ \textcolor{comment}{/*\ FIFO0COUNT\ */}}
+\DoxyCodeLine{00771\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ FIFO0COUNT\_WORDS\_IN\_FIFO0\ \ \ \ \ \ \ \ =\ 0x0000007Fu;}
+\DoxyCodeLine{00772\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ FIFO0COUNT\_WORDS\_IN\_FIFO0\_SHIFT\ \ =\ 0x00000000u;}
+\DoxyCodeLine{00773\ }
+\DoxyCodeLine{00774\ }
+\DoxyCodeLine{00775\ \textcolor{comment}{/*\ FIFO0THRESHOLD\ */}}
+\DoxyCodeLine{00776\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ FIFO0THRESHOLD\_FIFO0\_THRESHOLD\_LEVEL\ \ \ \ \ \ \ \ \ =\ 0x0000003Fu;}
+\DoxyCodeLine{00777\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ FIFO0THRESHOLD\_FIFO0\_THRESHOLD\_LEVEL\_SHIFT\ \ \ =\ 0x00000000u;}
+\DoxyCodeLine{00778\ }
+\DoxyCodeLine{00779\ }
+\DoxyCodeLine{00780\ \textcolor{comment}{/*\ DMA0REQ\ */}}
+\DoxyCodeLine{00781\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ DMA0REQ\_DMA\_REQUEST\_LEVEL\ \ \ \ \ \ \ \ =\ 0x0000003Fu;}
+\DoxyCodeLine{00782\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ DMA0REQ\_DMA\_REQUEST\_LEVEL\_SHIFT\ \ =\ 0x00000000u;}
+\DoxyCodeLine{00783\ }
+\DoxyCodeLine{00784\ }
+\DoxyCodeLine{00785\ \textcolor{comment}{/*\ FIFO1COUNT\ */}}
+\DoxyCodeLine{00786\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ FIFO1COUNT\_WORDS\_IN\_FIFO1\ \ \ \ \ \ \ \ =\ 0x0000007Fu;}
+\DoxyCodeLine{00787\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ FIFO1COUNT\_WORDS\_IN\_FIFO1\_SHIFT\ \ =\ 0x00000000u;}
+\DoxyCodeLine{00788\ }
+\DoxyCodeLine{00789\ }
+\DoxyCodeLine{00790\ \textcolor{comment}{/*\ FIFO1THRESHOLD\ */}}
+\DoxyCodeLine{00791\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ FIFO1THRESHOLD\_FIFO1\_THRESHOLD\_LEVEL\ \ \ \ \ \ \ \ \ =\ 0x0000003Fu;}
+\DoxyCodeLine{00792\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ FIFO1THRESHOLD\_FIFO1\_THRESHOLD\_LEVEL\_SHIFT\ \ \ =\ 0x00000000u;}
+\DoxyCodeLine{00793\ }
+\DoxyCodeLine{00794\ }
+\DoxyCodeLine{00795\ \textcolor{comment}{/*\ DMA1REQ\ */}}
+\DoxyCodeLine{00796\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ DMA1REQ\_DMA\_REQUEST\_LEVEL\ \ \ \ \ \ \ \ =\ 0x0000003Fu;}
+\DoxyCodeLine{00797\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ DMA1REQ\_DMA\_REQUEST\_LEVEL\_SHIFT\ \ =\ 0x00000000u;}
+\DoxyCodeLine{00798\ }
+\DoxyCodeLine{00799\ }
+\DoxyCodeLine{00800\ \textcolor{comment}{/*\ FIFO0DATA\ */}}
+\DoxyCodeLine{00801\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ FIFODATA\_ADCCHLNID\ \ \ \ \ \ \ \ \ \ \ =\ 0x000F0000u;}
+\DoxyCodeLine{00802\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ FIFODATA\_ADCCHLNID\_SHIFT\ =\ 0x00000010u;}
+\DoxyCodeLine{00803\ }
+\DoxyCodeLine{00804\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ FIFODATA\_ADC\_DATA\ \ \ \ \ \ \ \ =\ 0x00000FFFu;}
+\DoxyCodeLine{00805\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ FIFODATA\_ADC\_DATA\_SHIFT\ \ =\ 0x00000000u;}
+\DoxyCodeLine{00806\ }
+\DoxyCodeLine{00807\ }
+\DoxyCodeLine{00808\ }
+\DoxyCodeLine{00809\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ TSCADC\_HW\_H\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

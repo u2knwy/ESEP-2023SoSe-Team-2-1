@@ -106,30 +106,101 @@ class HAL {
 public:
 	HAL();
 	virtual ~HAL();
+	/**
+	 * Turns the green lamp on
+	 */
 	void GreenLampOn();
+	/**
+	 * Turns the green lamp off
+	 */
 	void GreenLampOff();
+	/**
+	 * Turns the yellow lamp on
+	 */
 	void YellowLampOn();
+	/**
+	 * Turns the yellow lamp off
+	 */
 	void YellowLampOff();
+	/**
+	 * Turns the red lamp on
+	 */
 	void RedLampOn();
+	/**
+	 * Turns the red lamp off
+	 */
 	void RedLampOff();
+	/**
+	 * Turns the LED at the 'Start' button on
+	 */
 	void StartLedOn();
+	/**
+	 * Turns the LED at the 'Start' button off
+	 */
 	void StartLedOff();
+	/**
+	 * Turns the LED at the 'Reset' button on
+	 */
 	void ResetLedOn();
+	/**
+	 * Turns the LED at the 'Reset' button off
+	 */
 	void ResetLedOff();
+	/**
+	 * Turns the 'Q1' LED on
+	 */
 	void Q1LedOn();
+	/**
+	 * Turns the 'Q1' LED off
+	 */
 	void Q1LedOff();
+	/**
+	 * Turns the 'Q2' LED on
+	 */
 	void Q2LedOn();
+	/**
+	 * Turns the 'Q2' LED off
+	 */
 	void Q2LedOff();
+	/**
+	 * Sets the 'Motor slow' flag. This does NOT start or stop the motor.
+	 */
 	void motorSlow();
+	/**
+	 * Clears the 'Motor slow' flag. This does NOT start or stop the motor.
+	 */
 	void motorFast();
+	/**
+	 * Start motor in right direction.
+	 */
 	void motorRight();
+	/**
+	 * Start motor in left direction.
+	 */
 	void motorLeft();
+	/**
+	 * Stops the motor.
+	 */
 	void motorStop();
+	/**
+	 * Opens the switch to let a workpiece pass.
+	 */
 	void openSwitch();
+	/**
+	 * Closes the switch to let a workpiece fall into the slide.
+	 */
 	void closeSwitch();
-	void handleGpioInterrupt();
+	/**
+	 * JUST FOR DEMONSTRATION PURPOSE: Measure ADC values and print it to the console.
+	 */
 	void adcDemo();
+	/**
+	 * Continuously receive ADC or GPIO events
+	 */
 	void receivingRoutine();
+	/**
+	 * JUST FOR DEMONSTRATION PURPOSE: Receive GPIO interrupts and print it to the console.
+	 */
 	void gpioDemo();
 private:
 	uintptr_t gpio_bank_0;
@@ -139,5 +210,12 @@ private:
 	bool receivingRunning{false};
 	int interruptID;
 	int chanID;
+	/**
+	 * Initialize all interrupts on GPIO pins and ADC.
+	 */
 	void initInterrupts();
+	/**
+	 * Check the latest GPIO interrupt and handle it.
+	 */
+	void handleGpioInterrupt();
 };
