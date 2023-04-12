@@ -26,6 +26,6 @@ System_Boundary(system, "Sorting Machine"){
 }
 
 Rel(user, config, "configures system using config file")
-
+Rel(user, hal, "puts workpieces on Conveyor")
 
 @enduml

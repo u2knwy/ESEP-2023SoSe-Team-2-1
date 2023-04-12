@@ -1,0 +1,36 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(user, "User", "Puts WS on the machine and removes them at the end or at slide")
+Person(admin, "Admin", "Responsible for setting up, configuring and maintaining the system")
+
+System_Boundary(system, "Sorting Machine"){
+  Container_Ext(fb, "Förderband", $descr="Förderband zum befördern von Werkstücken")
+  Container_Ext(slide, "Rutsche", $descr="Aussortierte WS landen hier")
+  Container_Ext(gns, "GNS", "Blackberry QNX", "Global Name Service")
+  Container(config, "Configuration", "File I/O", $descr="Beinhaltet die aktuelle Konfiguration des Systems")
+  Container(hal, "HAL", "GPIO, ADC", $descr="Beinhaltet Sensorik und steuert Aktorik (Förderband und Weiche/Auswerfer)")
+  Container(logic, "Logic", "FSM", $descr="Beinhaltet die Logik (FSM) des Systems")
+  Container(dispatcher, "Dispatcher", "QNX, MessagePassing", $descr="Empfängt Events von Publishern und leitet sie weiter an Subscribers")
+  Container(wd, "Watchdog", "GNS", $descr="Überwacht Status der Partneranlage")
+  Container(logger, "Logger", "stdout", $descr="Logging von Events und Meldungen auf der Konsole")
+  Rel_U(hal, fb, "controls motor of")
+  Rel_R(hal, dispatcher, "sends SensorEvents to")
+  Rel_L(config, logic, "defines behavior of")
+  Rel(dispatcher, logger, "logs events using")
+  Rel(dispatcher, logic, "triggers state transitions by forwarding events to")
+  Rel_U(dispatcher, gns, "sends events to partner system using")
+  Rel(logic, hal, "controls actuators using")
+  Rel(logic, logger, "logs actions and state transitions using")
+  Rel_U(hal, slide, "sorts WS out to")
+  Rel_D(slide, hal, "reports full slide using lamps")
+  Rel_U(wd, gns, "receives heartbeats from partner system using")
+  Rel_D(wd, dispatcher, "reports status of partner system to")
+}
+
+Rel_L(admin, config, "configures system using")
+Rel_D(user, fb, "puts WS on start of / removes WS from end of")
+Rel_D(user, slide, "removes WS from")
+
+
+@enduml
