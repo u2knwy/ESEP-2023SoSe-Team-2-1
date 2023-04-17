@@ -14,32 +14,33 @@
 #include <stdlib.h>
 #include <sys/neutrino.h>
 
-#include "hal/hal.h"
-#include "comm/Communication.h"
+#include "hal.h"
 #include "utils/cxxopts.hpp"
+
+#include "interrupts.hpp"
 
 /* Für die Simulation: */
 // #include "../simulationqnx/simqnxgpioapi.h" // must be last include !!!
 
 using namespace std;
 
-void gpioDemo() {
-	cout << "Switch traffic light on / off" << endl;
+void actuatorDemo() {
+	std::cout << "Actuator Demo" << std::endl;
+	uintptr_t gpio_bank_0 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_0);
+	uintptr_t gpio_bank_1 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_1);
+	uintptr_t gpio_bank_2 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_2);
+	uintptr_t gpio_bank_3 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_3);
 
-	// Create a shared pointer which holds a reference to the HAL.
-	// This can be shared across multiple classes and the destructor will automatically be called,
-	// if there are no more references to it.
-	shared_ptr<HAL> hal = std::make_shared<HAL>();
+	out32((uintptr_t) (gpio_bank_1 + GPIO_SETDATAOUT), LAMP_GREEN_PIN);
+	out32((uintptr_t) (gpio_bank_2 + GPIO_SETDATAOUT), (1 << 2));
+	std::this_thread::sleep_for(std::chrono::seconds(3));
+	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), LAMP_GREEN_PIN);
+	out32((uintptr_t) (gpio_bank_2 + GPIO_CLEARDATAOUT), (1 << 2));
 
-#define RUNS 10
-	for(int i = 0; i < RUNS; i++){
-		cout << "loop " << i+1 << "/" << RUNS << endl;
-		hal->GreenLampOn();
-        usleep(1000*500);
-
-        hal->GreenLampOff();
-        usleep(1000*500);
-	}
+	munmap_device_io(gpio_bank_0, GPIO_SIZE);
+	munmap_device_io(gpio_bank_1, GPIO_SIZE);
+	munmap_device_io(gpio_bank_2, GPIO_SIZE);
+	munmap_device_io(gpio_bank_3, GPIO_SIZE);
 }
 
 int chid = -1;
@@ -102,8 +103,9 @@ int main(int argc, char *argv[]) {
 	auto result = options.parse(argc, argv);
 	cout << result["m"].as<std::string>() << endl;
 
-	//gpioDemo();
-	gnsDemo();
+	sensorDemo();
+	//actuatorDemo();
+	//gnsDemo();
 
 	return 0;
 }
