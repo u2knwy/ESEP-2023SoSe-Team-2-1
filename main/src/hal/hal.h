@@ -107,6 +107,14 @@ public:
 	HAL();
 	virtual ~HAL();
 	/**
+	 * Starts receiving HAL events in an infinite loop in a seperate thread
+	 */
+	void startEventLoop();
+	/**
+	 * Stops the HAL event loop
+	 */
+	void stopEventLoop();
+	/**
 	 * Turns the green lamp on
 	 */
 	void GreenLampOn();
@@ -191,29 +199,39 @@ public:
 	 */
 	void closeSwitch();
 	/**
-	 * JUST FOR DEMONSTRATION PURPOSE: Measure ADC values and print it to the console.
+	 * Starts the ADC height measurement
 	 */
-	void adcDemo();
+	void startHeightMeasurement();
 	/**
-	 * Continuously receive ADC or GPIO events
+	 * Stops the ADC height measurement
 	 */
-	void receivingRoutine();
+	void stopHeightMeasurement();
 	/**
-	 * JUST FOR DEMONSTRATION PURPOSE: Receive GPIO interrupts and print it to the console.
+	 * Continuously receive ADC and GPIO events
 	 */
-	void gpioDemo();
+	void eventLoop();
+	/**
+	 * Receives ADC values from ADC channel in a continuous loop
+	 */
+	void adcReceivingRoutine();
 private:
 	uintptr_t gpio_bank_0;
 	uintptr_t gpio_bank_1;
 	uintptr_t gpio_bank_2;
+	TSCADC tsc;
 	ADC* adc;
 	bool receivingRunning{false};
 	int interruptID;
 	int chanID;
+	int conID;
+	int adcChanID;
+	int adcConID;
+	std::thread eventLoopThread;
+	std::thread adcReceivingThread;
 	/**
 	 * Initialize all interrupts on GPIO pins and ADC.
 	 */
-	void initInterrupts();
+	void init();
 	/**
 	 * Check the latest GPIO interrupt and handle it.
 	 */

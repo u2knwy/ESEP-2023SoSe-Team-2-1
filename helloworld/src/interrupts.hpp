@@ -16,7 +16,6 @@
 
 #include <sys/mman.h>
 #include <hw/inout.h>
-
 #include "hal.h"
 #include "macros.h"
 
