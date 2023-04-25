@@ -1,0 +1,3 @@
+H:/dxhacksdemo/clionprojects/ESEP-2023SoSe-Team-2-1Git/EventMgr/cmake-build-debug/CMakeFiles/Construct.dir
+H:/dxhacksdemo/clionprojects/ESEP-2023SoSe-Team-2-1Git/EventMgr/cmake-build-debug/CMakeFiles/edit_cache.dir
+H:/dxhacksdemo/clionprojects/ESEP-2023SoSe-Team-2-1Git/EventMgr/cmake-build-debug/CMakeFiles/rebuild_cache.dir

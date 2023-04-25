@@ -1,0 +1,7 @@
+# ninja log v5
+394	504	7031937897640930	Construct.exe	a513659f6ad7965a
+3	393	7031937896590201	CMakeFiles/Construct.dir/main.cpp.obj	32ab17a1ece71a9
+5	53	7032678955197744	CMakeFiles/Construct.dir/Watchdog.cpp.obj	f02e847c2f5928ad
+2	63	7031914463071223	CMakeFiles/Construct.dir/Logger.cpp.obj	60630156cc949e2b
+1	132	7032699591067949	build.ninja	ce97ad2221e93a6d
+9	491	7032678959547741	CMakeFiles/Construct.dir/eventmanager.cpp.obj	8997ca788aad193e
