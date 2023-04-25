@@ -1,0 +1,3 @@
+C:\Users\Dominik\AppData\Local\JetBrains\Toolbox\apps\CLion\ch-0\231.8109.222\bin\cmake\win\x64\bin\cmake.exe -E rm -f CMakeFiles\Construct.dir/objects.a
+C:\Users\Dominik\AppData\Local\JetBrains\Toolbox\apps\CLion\ch-0\231.8109.222\bin\mingw\bin\ar.exe qc CMakeFiles\Construct.dir/objects.a @CMakeFiles\Construct.dir\objects1
+C:\Users\Dominik\AppData\Local\JetBrains\Toolbox\apps\CLion\ch-0\231.8109.222\bin\mingw\bin\g++.exe -g -Wl,--whole-archive CMakeFiles\Construct.dir/objects.a -Wl,--no-whole-archive -o Construct.exe -Wl,--out-implib,libConstruct.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\Construct.dir\linkLibs.rsp
