@@ -1,0 +1,13 @@
+C:\Users\domxs\AppData\Local\JetBrains\Toolbox\apps\CLion\ch-0\231.8109.222\bin\cmake\win\x64\bin\cmake.exe -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=C:/Users/domxs/AppData/Local/JetBrains/Toolbox/apps/CLion/ch-0/231.8109.222/bin/ninja/win/x64/ninja.exe -G Ninja -S C:\Users\domxs\Desktop\MasterSlaveConfig\Server -B C:\Users\domxs\Desktop\MasterSlaveConfig\Server\cmake-build-debug
+-- Configuring done
+CMake Error at CMakeLists.txt:11 (add_executable):
+  Cannot find source file:
+
+    helloworld/src/comm/Communication.cpp
+
+
+CMake Error at CMakeLists.txt:11 (add_executable):
+  No SOURCES given to target: Client
+
+
+CMake Generate step failed.  Build files cannot be regenerated correctly.
