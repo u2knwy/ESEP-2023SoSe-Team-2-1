@@ -72,7 +72,9 @@ void sensorDemo() {
 	std::cout << "Sensor Demo" << std::endl;
 
 	std::shared_ptr<HAL> hal = std::make_shared<HAL>();
+	hal->startEventLoop();
 	std::this_thread::sleep_for(std::chrono::seconds(999));
+	hal->stopEventLoop();
 
 	std::cout << "Stop Sensor Demo" << std::endl;
 }

@@ -9,6 +9,10 @@
 #include <string>
 
 HAL::HAL() {
+	gpio_bank_0 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_0);
+	gpio_bank_1 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_1);
+	gpio_bank_2 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_2);
+
 	adc = new ADC(tsc);
 
 	/* ### Create channel to receive interrupt pulse messages ### */
@@ -36,7 +40,11 @@ HAL::HAL() {
 
 	receivingRunning = false;
 
-	init();
+	initInterrupts();
+
+	// Default: Stop Motor
+	motorFast();
+	motorStop();
 }
 
 HAL::~HAL() {
@@ -74,7 +82,7 @@ HAL::~HAL() {
 	delete adc;
 }
 
-void HAL::init() {
+void HAL::initInterrupts() {
 	using namespace std;
 
 	/* ### Setup ### */
@@ -93,10 +101,6 @@ void HAL::init() {
 	}
 
 	InterruptEnable(); //Enables interrupts
-
-	gpio_bank_0 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_0);
-	gpio_bank_1 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_1);
-	gpio_bank_2 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_2);
 
 	/* ### Register interrupts by OS. ### */
 	struct sigevent intr_event;
@@ -140,10 +144,6 @@ void HAL::init() {
 	falling = falling
 			| (KEY_START_PIN | KEY_STOP_PIN | KEY_RESET_PIN | ESTOP_PIN);
 	out32((uintptr_t) (gpio_bank_0 + GPIO_FALLINGDETECT), falling);
-
-	// Default: Stop Motor
-	motorFast();
-	motorStop();
 }
 
 void HAL::startEventLoop() {

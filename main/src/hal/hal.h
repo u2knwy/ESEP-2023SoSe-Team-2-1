@@ -206,14 +206,6 @@ public:
 	 * Stops the ADC height measurement
 	 */
 	void stopHeightMeasurement();
-	/**
-	 * Continuously receive ADC and GPIO events
-	 */
-	void eventLoop();
-	/**
-	 * Receives ADC values from ADC channel in a continuous loop
-	 */
-	void adcReceivingRoutine();
 private:
 	uintptr_t gpio_bank_0;
 	uintptr_t gpio_bank_1;
@@ -231,9 +223,17 @@ private:
 	/**
 	 * Initialize all interrupts on GPIO pins and ADC.
 	 */
-	void init();
+	void initInterrupts();
 	/**
 	 * Check the latest GPIO interrupt and handle it.
 	 */
 	void handleGpioInterrupt();
+	/**
+	 * Continuously receive ADC and GPIO events
+	 */
+	void eventLoop();
+	/**
+	 * Receives ADC values from ADC channel in a continuous loop
+	 */
+	void adcReceivingRoutine();
 };
