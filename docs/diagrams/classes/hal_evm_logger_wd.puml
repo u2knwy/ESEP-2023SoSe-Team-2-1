@@ -1,0 +1,102 @@
+@startuml
+
+class EventManager {
+  -int channelID
+  -std::map<int, std::vector<IEventHandler&>> handlers
+  -ILogger logger
+  +register(Event event, IEventHandler& handler)
+  +unregister(Event event, IEventHandler& handler)
+  -receiveLoop()
+  +sendEvent(Event event)
+}
+
+EventManager o- ConsoleLogger
+
+class Watchdog {
+  -EventManager* eventManager
+  +notify(Event event)
+  -sendHeartbeatLoop()
+}
+
+Watchdog o-- EventManager
+IEventHandler <|.. Watchdog
+
+interface IEventHandler {
+  #notify(Event event)
+}
+
+enum LogLevel {
+  DEBUG
+  INFO
+  WARNING
+  ERROR
+}
+
+interface ILogger {
+  #setLogLevel(LogLevel level)
+  #debug(std::string msg)
+  #info(std::string msg)
+  #warning(std::string msg)
+  #error(std::string msg)
+}
+
+ILogger *- LogLevel
+
+class ConsoleLogger {
+  -LogLevel level
+  +setLogLevel(LogLevel level)
+  +debug(std::string msg)
+  +info(std::string msg)
+  +warning(std::string msg)
+  +error(std::string msg)
+}
+ILogger <|.. ConsoleLogger
+
+enum Event {
+  START_X_SHORT
+  START_X_LONG
+  STOP_X_SHORT
+  ...
+  LB1_X_BLOCKED
+  MD_X_PAYLOAD
+  ...
+}
+
+IEventHandler . Event
+
+class HAL {
+  -EventManager* eventManager
+  -int evmConnectionId
+  -ADC adc
+  -int adcChannel
+  -std::thread adcLoop
+  -bool adcLoopRunning
+  -int eventLoopChannel
+  -std::thread eventLoop
+  -bool eventLoopRunning
+  +notify(Event event)
+  +greenLampOn()
+  +greenLampOff()
+  +yellowLampOn()
+  +yellowLampOff()
+  +redLampOn()
+  +redLampOff()
+  +startLedOn()
+  +startLedOff()
+  +resetLedOn()
+  +resetLedOff()
+  +q1LedOn()
+  +q1LedOff()
+  +q2LedOn()
+  +q2LedOff()
+  +motorStop()
+  +motorRightFast()
+  +motorRightSlow()
+  +openSwitch()
+  +closeSwitch()
+}
+
+IEventHandler <|.. HAL
+HAL o- EventManager
+
+@enduml

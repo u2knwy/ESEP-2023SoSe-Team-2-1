@@ -1,0 +1,105 @@
+@startuml
+interface IEventHandler {
+  #notify(Event event)
+}
+
+enum WorkpieceType {
+  UNKNOWN
+  TYPE_A
+  TYPE_B
+  TYPE_C
+}
+
+enum WorkpieceResult {
+  PENDING
+  VALID
+  INVALID
+  SORTED_OUT
+}
+
+enum Position {
+  FBM1_START_HM
+  FBM1_HM_MD
+  FBM1_MD_SW
+  FBM1_SW_RAMP
+  FBM1_SORTED_OUT
+  FBM1_SW_END
+  FBM1_END
+  FBM2_START_HM
+  FBM2_HM_MD
+  FBM2_MD_SW
+  FBM2_SW_RAMP
+  FBM2_SORTED_OUT
+  FBM2_SW_END
+  FBM2_END
+}
+
+class Workpiece {
+  +int id
+  +float heightFBM1
+  +bool metalFBM1
+  +float heightFBM2
+  +bool metalFBM2
+  +bool flipped
+  +Position currentPosition
+  +WorkpieceResult result
+  +WorkpieceType type
+}
+
+Workpiece *-- Position
+Workpiece *- WorkpieceType
+Workpiece *-- WorkpieceResult
+
+class WorkpieceManager {
+  -WorkpieceType[3] desiredOrder
+  -std::vector<Workpiece> workpieces
+  -int nextID
+  +Workpiece addNewWorkpiece()
+  +Workpiece getWorkpieceByPosition(Position pos)
+  +Workpiece updateWorkpiece(Workpiece updatedInfo)
+}
+
+WorkpieceManager o- Workpiece
+
+class MainFSM {
+  -WorkpieceManager* wpManager
+  -EventManager* eventManager
+  +notify(Event event)
+  .. Handler for button events ..
+  -startPressedShort()
+  -startPressedLong()
+  -stopPressed()
+  -resetPressed()
+  -estopPressedFBM1()
+  -estopPressedFBM2()
+  -errorOccured()
+  -errorSolved()
+  .. Handler for sensor events from master ..
+  -master_lb1Blocked()
+  -master_lb1Unblocked()
+  -master_lb2Blocked()
+  -master_lb2Unblocked()
+  -master_lb3Blocked()
+  -master_lb3Unblocked()
+  -master_lb4Blocked()
+  -master_lb4Unblocked()
+  -master_metalDetected()
+  -master_newHeightResult(float mm)
+  .. Handler for sensor events from slave ..
+  -slave_lb1Blocked()
+  -slave_lb1Unblocked()
+  -slave_lb2Blocked()
+  -slave_lb2Unblocked()
+  -slave_lb3Blocked()
+  -slave_lb3Unblocked()
+  -slave_lb4Blocked()
+  -slave_lb4Unblocked()
+  -slave_metalDetected()
+  -slave_newHeightResult(float mm)
+}
+
+IEventHandler <|.. MainFSM
+MainFSM o- WorkpieceManager
+
+
+@enduml

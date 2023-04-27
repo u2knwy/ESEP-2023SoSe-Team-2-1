@@ -1,0 +1,36 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(user, "User", "Bedient die Anlage, legt WS auf und entnimmt sie in sortierter Reihenfolge am Ende von FB2, leert die Rutsche und behebt Fehler")
+Person(admin, "Admin", "Konfiguriert und wartet das System")
+
+System_Boundary(system, "Sorting Machine"){
+  Container_Ext(fb, "Förderband", $descr="Förderband zum befördern von Werkstücken")
+  Container_Ext(slide, "Rutsche", $descr="Aussortierte WS landen hier")
+  Container_Ext(gns, "GNS", "Blackberry QNX", "Global Name Service")
+  Container(config, "Configuration", "File I/O", $descr="Beinhaltet die aktuelle Konfiguration des Systems")
+  Container(hal, "HAL", "GPIO, ADC", $descr="Beinhaltet Sensorik und steuert Aktorik (Förderband und Weiche/Auswerfer)")
+  Container(logic, "Logic", "FSM", $descr="Beinhaltet die Logik (FSM) des Systems")
+  Container(dispatcher, "EventManager", "QNX, MessagePassing", $descr="Empfängt Events von Publishern und leitet sie weiter an Subscribers")
+  Container(wd, "Watchdog", "GNS", $descr="Überwacht Status der Partneranlage und sendet kontinuierlich Heartbeats per GNS")
+  Container(logger, "Logger", "stdout", $descr="Logging von Events und Meldungen auf der Konsole")
+  Rel_U(hal, fb, "steuert Motor")
+  Rel_R(hal, dispatcher, "sendet SensorEvents")
+  Rel_L(logic, config, "frage Konfiguration ab")
+  Rel(dispatcher, logger, "loggt Events")
+  Rel(dispatcher, logic, "leitet Events weiter")
+  Rel_U(dispatcher, gns, "leitet Events an Partneranlage")
+  Rel(logic, hal, "steuert Aktoren")
+  Rel(logic, logger, "loggt Aktionen")
+  Rel_U(hal, slide, "sortiert WS aus")
+  Rel_D(slide, hal, "zeigt volle Rutsche an")
+  Rel_U(wd, gns, "empfängt Heartbeats von Partneranlage")
+  Rel_D(wd, dispatcher, "sendet Verbindungsstatus")
+}
+
+Rel_L(admin, config, "konfiguriert System")
+Rel_D(user, fb, "legt WS auf und entnimmt sie")
+Rel_D(user, slide, "leert Rutsche")
+
+
+@enduml
