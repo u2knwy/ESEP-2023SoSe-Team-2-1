@@ -10,7 +10,7 @@ class EventManager {
   +sendEvent(Event event)
 }
 
-EventManager o- ConsoleLogger
+EventManager o- Logger
 
 class Watchdog {
   -EventManager* eventManager
@@ -42,7 +42,7 @@ interface ILogger {
 
 ILogger *- LogLevel
 
-class ConsoleLogger {
+class Logger {
   -LogLevel level
   +setLogLevel(LogLevel level)
   +debug(std::string msg)
@@ -50,7 +50,7 @@ class ConsoleLogger {
   +warning(std::string msg)
   +error(std::string msg)
 }
-ILogger <|.. ConsoleLogger
+ILogger <|.. Logger
 
 enum Event {
   START_X_SHORT

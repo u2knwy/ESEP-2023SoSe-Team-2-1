@@ -10,13 +10,6 @@ enum WorkpieceType {
   TYPE_C
 }
 
-enum WorkpieceResult {
-  PENDING
-  VALID
-  INVALID
-  SORTED_OUT
-}
-
 enum Position {
   FBM1_START_HM
   FBM1_HM_MD
@@ -36,14 +29,14 @@ enum Position {
 
 class Workpiece {
   +int id
-  +float heightFBM1
+  +int heightFBM1
   +bool metalFBM1
-  +float heightFBM2
+  +int heightFBM2
   +bool metalFBM2
   +bool flipped
   +Position currentPosition
-  +WorkpieceResult result
   +WorkpieceType type
+  +bool valid
 }
 
 Workpiece *-- Position
@@ -84,7 +77,7 @@ class MainFSM {
   -master_lb4Blocked()
   -master_lb4Unblocked()
   -master_metalDetected()
-  -master_newHeightResult(float mm)
+  -master_newHeightResult(int mm)
   .. Handler for sensor events from slave ..
   -slave_lb1Blocked()
   -slave_lb1Unblocked()
@@ -95,7 +88,7 @@ class MainFSM {
   -slave_lb4Blocked()
   -slave_lb4Unblocked()
   -slave_metalDetected()
-  -slave_newHeightResult(float mm)
+  -slave_newHeightResult(int mm)
 }
 
 IEventHandler <|.. MainFSM
