@@ -26,7 +26,7 @@ Logic -> WPM : handleHeightResult(HM_RESULT_BOM)
 activate WPM
 note right of WPM : Erstes WS das auf\nHM wartet updaten
 WPM -> WPM : getWpByPos(START_HM): wp
-WPM -> WPM : wp.type = WS_F\nwp.result = VALID
+WPM -> WPM : wp.type = WS_BOM\nwp.result = VALID
 WPM -->> Logic
 deactivate WPM
 
