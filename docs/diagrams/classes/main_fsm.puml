@@ -41,18 +41,32 @@ class Workpiece {
 
 Workpiece *-- Position
 Workpiece *- WorkpieceType
-Workpiece *-- WorkpieceResult
+
+enum SystemType {
+  MASTER
+  SLAVE
+}
 
 class WorkpieceManager {
   -WorkpieceType[3] desiredOrder
   -std::vector<Workpiece> workpieces
   -int nextID
-  +Workpiece addNewWorkpiece()
+  ... Getters ...
   +Workpiece getWorkpieceByPosition(Position pos)
-  +Workpiece updateWorkpiece(Workpiece updatedInfo)
+  +bool sortOutNextWorkpiece()
+  ... Handlers for updating workpiece info ...
+  +wpAtStart(SystemType sys)
+  +wpAtHeightSensor(SystemType sys)
+  +handleHeightResult(SystemType sys, WorkpieceType type)
+  +handleMetalDetected(SystemType sys, bool isMetal)
+  +wpAtSwitch(SystemType sys)
+  +wpAtRamp(SystemType sys)
+  +wpAtEnd(SystemType sys)
+  +wpRemoved()
 }
 
 WorkpieceManager o- Workpiece
+SystemType .. WorkpieceManager
 
 class MainFSM {
   -WorkpieceManager* wpManager
