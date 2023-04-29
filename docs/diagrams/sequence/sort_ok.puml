@@ -18,7 +18,7 @@ deactivate WPM
 EVM_M ->> HM_M : handleEvent(LB1_1_BLOCKED)
 activate HM_M
 HM_M -> HM_M : start()
-HM_M ->> EVM_M : HM_RESULT_FLAT
+HM_M ->> EVM_M : HM_RESULT_BOM
 HM_M -> HM_M : stop()
 deactivate HM_M
 EVM_M ->> Logic : handleEvent(HM_RESULT_BOM)
