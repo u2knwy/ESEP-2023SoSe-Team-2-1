@@ -6,35 +6,42 @@ participant "Logic" as Logic << Master >>
 participant "EventManager" as EventManager_S << Slave >>
 participant "HAL" as HAL_S << Slave >>
 
-HAL_M -> EventManager_M : ESTOP_1_PRESSED
-EventManager_M -> Logic : ESTOP_1_PRESSED
-Logic -> EventManager_M : MODE_EMERGENCY
-EventManager_M -> HAL_M : MODE_EMERGENCY
+' E-Stopp gedrückt -> beide FBM in Emergency Mode
+HAL_M ->> EventManager_M : ESTOP_1_PRESSED
+EventManager_M ->> Logic : ESTOP_1_PRESSED
+Logic ->> EventManager_M : MODE_EMERGENCY
+EventManager_M ->> HAL_M : MODE_EMERGENCY
 activate HAL_M
 HAL_M -> HAL_M : emergencyMode()
 deactivate HAL_M
-EventManager_M -> EventManager_S : MODE_EMERGENCY
-EventManager_S -> HAL_S : MODE_EMERGENCY
+
+EventManager_M ->> EventManager_S : MODE_EMERGENCY
+EventManager_S ->> HAL_S : MODE_EMERGENCY
 activate HAL_S
 HAL_S -> HAL_S : emergencyMode()
 deactivate HAL_S
-HAL_M -> EventManager_M : ESTOP_1_RELEASED
-EventManager_M -> Logic : ESTOP_1_RELEASED
-HAL_M -> EventManager_M : RESET_1_PRESSED
-EventManager_M -> Logic : RESET_1_PRESSED
-HAL_S -> EventManager_S : RESET_2_PRESSED
-EventManager_S -> EventManager_M : RESET_2_PRESSED
-EventManager_M -> Logic : RESET_2_PRESSED
-Logic -> EventManager_M : MODE_STANDBY
-EventManager_M -> HAL_M : MODE_STANDBY
+
+' E-Stopp ziehen und an beiden FBM Reset drücken -> danach in Standby
+HAL_M ->> EventManager_M : ESTOP_1_RELEASED
+EventManager_M ->> Logic : ESTOP_1_RELEASED
+HAL_M ->> EventManager_M : RESET_1_PRESSED
+EventManager_M ->> Logic : RESET_1_PRESSED
+HAL_S ->> EventManager_S : RESET_2_PRESSED
+EventManager_S ->> EventManager_M : RESET_2_PRESSED
+EventManager_M ->> Logic : RESET_2_PRESSED
+Logic ->> EventManager_M : MODE_STANDBY
+EventManager_M ->> HAL_M : MODE_STANDBY
 activate HAL_M
 HAL_M -> HAL_M : standbyMode()
 deactivate HAL_M
-EventManager_M -> EventManager_S : MODE_STANDBY
-EventManager_S -> HAL_S : MODE_STANDBY
+
+EventManager_M ->> EventManager_S : MODE_STANDBY
+EventManager_S ->> HAL_S : MODE_STANDBY
 activate HAL_S
 HAL_S -> HAL_S : standbyMode()
 deactivate HAL_S
+
+' Start drücken -> wieder in Betriebsmodus
 HAL_M -> EventManager_M : START_1_PRESSED_SHORT
 EventManager_M -> Logic : START_1_PRESSED_SHORT
 Logic -> EventManager_M : MODE_RUNNING

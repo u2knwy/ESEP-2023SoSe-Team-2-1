@@ -1,0 +1,54 @@
+@startuml
+participant "HAL" as HAL_M << Master >>
+participant "HeightSensor" as HM_M << Master >>
+participant "EventManager" as EVM_M << Master >>
+participant "Logic" as Logic << Master >>
+participant "WorkpieceManager" as WPM << Master >>
+participant "EventManager" as EVM_S << Slave >>
+participant "HAL" as HAL_S << Slave >>
+
+note left of HAL_M : Neues WS an\nFBM1 eingelegt
+HAL_M ->> EVM_M : LB1_1_BLOCKED
+EVM_M ->> Logic : handleEvent(LB1_1_BLOCKED)
+Logic -> WPM : createWp()
+note right of WPM : WS mit neuer ID anlegen
+activate WPM
+WPM -->> Logic : createWp(): Workpiece
+deactivate WPM
+EVM_M ->> HM_M : handleEvent(LB1_1_BLOCKED)
+activate HM_M
+HM_M -> HM_M : start()
+HM_M ->> EVM_M : HM_RESULT_FLAT
+HM_M -> HM_M : stop()
+deactivate HM_M
+EVM_M ->> Logic : handleEvent(HM_RESULT_FLAT)
+Logic -> WPM : handleHeightResult(HM_RESULT_FLAT)
+activate WPM
+note right of WPM : Erstes WS das auf\nHM wartet updaten
+WPM -> WPM : getWpByPos(START_HM): wp
+WPM -> WPM : wp.type = WS_F\nwp.result = INVALID
+WPM -->> Logic
+deactivate WPM
+
+HAL_M ->> EVM_M : LB2_1_BLOCKED
+EVM_M ->> Logic : handleEvent(LB2_1_BLOCKED)
+Logic -> WPM : sortOut()
+activate WPM
+note right of WPM : Bestimmen ob WP an Weiche\naussortiert werden soll
+WPM -->> Logic : sortOut(): true
+deactivate WPM
+Logic ->> EVM_M : SORT_1_OUT
+EVM_M ->> HAL_M : handleEvent(SORT_1_OUT)
+activate HAL_M
+HAL_M -> HAL_M : closeSwitch()
+note left of HAL_M : Weiche schließen bis\nWS an Rutsche
+HAL_M ->> EVM_M : LB4_1_BLOCKED
+HAL_M -> HAL_M : warningOn()
+EVM_M ->> Logic : handleEvent(LB4_1_BLOCKED)
+Logic -> Logic : wpSortedOut()
+note right of Logic : Aussortiertes WS\nlöschen
+HAL_M ->> EVM_M : LB4_1_UNBLOCKED
+HAL_M -> HAL_M : warningOff()
+deactivate HAL_M
+
+@enduml
