@@ -7,6 +7,8 @@
 
 #include "hal.h"
 #include <string>
+#include <logger/logger.hpp>
+#include <events/events.h>
 
 HAL::HAL() {
 	gpio_bank_0 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_0);
@@ -144,6 +146,10 @@ void HAL::initInterrupts() {
 	falling = falling
 			| (KEY_START_PIN | KEY_STOP_PIN | KEY_RESET_PIN | ESTOP_PIN);
 	out32((uintptr_t) (gpio_bank_0 + GPIO_FALLINGDETECT), falling);
+}
+
+void HAL::handleEvent(EventType eventType) {
+	Logger::debug("HAL handle Event: " + EVENT_TO_STRING(eventType));
 }
 
 void HAL::startEventLoop() {

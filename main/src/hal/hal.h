@@ -19,6 +19,8 @@
 #include <thread>
 #include <chrono>
 
+#include "events/IEventHandler.h"
+
 /* Helper macros */
 #define BIT_MASK(x) (1 << (x))
 
@@ -102,10 +104,13 @@
 // ADC IRQ pin mask
 #define ADC_IRQ_PIN_MASK 0x2
 
-class HAL {
+class HAL : public IEventHandler {
 public:
 	HAL();
 	virtual ~HAL();
+
+	void handleEvent(EventType eventType) override;
+
 	/**
 	 * Starts receiving HAL events in an infinite loop in a seperate thread
 	 */

@@ -4,6 +4,7 @@
 
 #include "demo/demos.h"
 #include "logger/logger.hpp"
+#include <events/events.h>
 
 #include <gtest/gtest.h>
 
@@ -23,7 +24,7 @@ int main(int argc, char **argv) {
 
 	//actuatorDemo();
 	//sensorDemo();
-	adcDemo();
+	//adcDemo();
 
 	return 0;
 }
