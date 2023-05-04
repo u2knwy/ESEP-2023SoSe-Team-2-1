@@ -7,6 +7,8 @@
 
 #include "hal.h"
 #include <string>
+#include <logger/logger.hpp>
+#include <events/events.h>
 
 HAL::HAL() {
 	gpio_bank_0 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_0);
@@ -146,6 +148,10 @@ void HAL::initInterrupts() {
 	out32((uintptr_t) (gpio_bank_0 + GPIO_FALLINGDETECT), falling);
 }
 
+void HAL::handleEvent(EventType eventType) {
+	Logger::debug("HAL handle Event: " + EVENT_TO_STRING(eventType));
+}
+
 void HAL::startEventLoop() {
 	/* ### Start thread for handling interrupt messages. */
 	eventLoopThread = std::thread(&HAL::eventLoop, this);
@@ -261,13 +267,13 @@ void HAL::startHeightMeasurement() {
 }
 
 void HAL::stopHeightMeasurement() {
-	std::cout << "Stop height measurement" << std::endl;
 
 	// Detach interrupts.
 	adc->adcDisable();
 	adc->unregisterAdcISR();
 
 	if (adcReceivingThread.joinable()) {
+		Logger::debug("Stop height measurement");
 		// Stop receiving thread.
 		MsgSendPulse(adcConID, -1, PULSE_STOP_THREAD, 0);
 		adcReceivingThread.join();
@@ -291,13 +297,13 @@ void HAL::eventLoop() {
 		if (recvid == 0) { // pulse received.
 			// Stop thread while it blocks.
 			if (msg.code == PULSE_STOP_THREAD) {
-				cout << "Thread kill code received!" << endl;
+				Logger::debug("Thread kill code received!");
 				receivingRunning = false;
 				continue;
 			}
 
 			if (msg.code == PULSE_INTR_ON_PORT0) {
-				cout << "Received GPIO interrupt on port 0" << endl;
+				Logger::debug("Received GPIO interrupt on port 0");
 				handleGpioInterrupt();
 			}
 
@@ -328,7 +334,7 @@ void HAL::handleGpioInterrupt() {
 void HAL::adcReceivingRoutine() {
 	ThreadCtl(_NTO_TCTL_IO, 0); // Request IO privileges for this thread.
 
-	std::cout << "ADC receiving routine started..." << std::endl;
+	Logger::debug("ADC receiving routine started...");
 
 	using namespace std;
 	_pulse msg;
