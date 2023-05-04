@@ -18,8 +18,8 @@ LD = $(CXX)
 #User defined include/preprocessor flags and libraries
 
 #INCLUDES += -I/path/to/my/lib/include
-#INCLUDES += -I../mylib/public
-SIM_ROOT = src/simulation/src
+INCLUDES += -Isrc
+SIM_ROOT = src/simulation
 INCLUDES += -I$(SIM_ROOT)/simulationadapterqnx
 INCLUDES += -I$(SIM_ROOT)/simulationbase
 INCLUDES += -I$(SIM_ROOT)/simulationcore
@@ -28,6 +28,7 @@ INCLUDES += -I$(SIM_ROOT)/simulationudpqnx
 #LIBS += -L/path/to/my/lib/$(PLATFORM)/usr/lib -lmylib
 #LIBS += -L../mylib/$(OUTPUT_DIR) -lmylib
 LIBS += -lsocket
+LIBS += -lgtest
 
 #Compiler flags for build profiles
 CCFLAGS_release += -O2

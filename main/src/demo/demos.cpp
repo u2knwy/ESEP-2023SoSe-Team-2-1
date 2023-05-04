@@ -9,8 +9,8 @@
 #include <ostream>
 #include <chrono>
 #include <thread>
-#include "../hal/hal.h"
-#include "../logger/logger.hpp"
+#include "hal/hal.h"
+#include "logger/logger.hpp"
 
 void actuatorDemo() {
 	Logger::info("Actuator Demo");

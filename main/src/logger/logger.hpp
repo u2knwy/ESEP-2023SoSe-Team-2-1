@@ -86,10 +86,11 @@ class Logger
 
 			stringstream << level_str(log_level);
 			{
-				auto t = std::time(nullptr);
+				auto now = std::time(nullptr);
 				//localtime is not thread safe
-				auto local_time = *std::localtime(&t);
-				stringstream << '[' << std::put_time(&local_time, "%F %T") << "] ";
+				auto local_time = std::localtime(&now);
+				//stringstream << '[' << std::put_time(&local_time, "%F %T") << "] ";
+	            stringstream << '[' << std::put_time(local_time, "%Y-%m-%d %H:%M:%S") << "] ";
 			}
 			stringstream << log;
 
