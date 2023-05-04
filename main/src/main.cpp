@@ -24,8 +24,8 @@ int main(int argc, char **argv) {
 
 	const auto demo = std::string(std::getenv("DEMO_MODE"));
 	if(demo == "TRUE") {
-		actuatorDemo();
-		//sensorDemo();
+		//actuatorDemo();
+		sensorDemo();
 		//adcDemo();
 	}
 

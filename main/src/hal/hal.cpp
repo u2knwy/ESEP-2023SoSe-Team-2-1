@@ -42,6 +42,7 @@ HAL::HAL() {
 
 	receivingRunning = false;
 
+	configurePins();
 	initInterrupts();
 
 	// Default: Stop Motor
@@ -84,6 +85,29 @@ HAL::~HAL() {
 	delete adc;
 }
 
+void HAL::configurePins() {
+	ThreadCtl(_NTO_TCTL_IO, 0);
+
+	uint32_t temp, outputs, inputs;
+	inputs = LB_START_PIN | LB_HEIGHT_PIN | LB_HEIGHT_OK_PIN | LB_SWITCH_PIN | SE_METAL_PIN | SE_SWITCH_PIN | LB_RAMP_PIN | LB_END_PIN;
+	inputs = inputs | KEY_START_PIN | KEY_STOP_PIN | KEY_RESET_PIN | ESTOP_PIN;
+
+	// Configure GPIOs as inputs
+	temp = in32((uintptr_t) gpio_bank_0 + GPIO_OE_REGISTER);
+	out32((uintptr_t) gpio_bank_0 + GPIO_OE_REGISTER, temp & inputs);
+
+	// Configure GPIOs as outputs
+	// Port 1
+	outputs = MOTOR_LEFT_PIN | MOTOR_RIGHT_PIN | MOTOR_SLOW_PIN | MOTOR_STOP_PIN | LAMP_RED_PIN | LAMP_YELLOW_PIN | LAMP_GREEN_PIN | SWITCH_PIN;
+	temp = in32((uintptr_t) gpio_bank_1 + GPIO_OE_REGISTER);
+	out32((uintptr_t) gpio_bank_1 + GPIO_OE_REGISTER, temp & ~outputs);
+
+	// Port 2
+	outputs = LED_Q1_PIN | LED_Q2_PIN | LED_RESET_PIN | LED_START_PIN;
+	temp = in32((uintptr_t) gpio_bank_2 + GPIO_OE_REGISTER);
+	out32((uintptr_t) gpio_bank_2 + GPIO_OE_REGISTER, temp & ~outputs);
+}
+
 void HAL::initInterrupts() {
 	using namespace std;
 
@@ -115,37 +139,27 @@ void HAL::initInterrupts() {
 	}
 
 	// Enable interrupts on pins.
-	out32((uintptr_t) gpio_bank_0 + GPIO_IRQSTATUS_SET_1, LB_START_PIN);
-	out32((uintptr_t) gpio_bank_0 + GPIO_IRQSTATUS_SET_1, LB_END_PIN);
-	out32((uintptr_t) gpio_bank_0 + GPIO_IRQSTATUS_SET_1, LB_RAMP_PIN);
-	out32((uintptr_t) gpio_bank_0 + GPIO_IRQSTATUS_SET_1, LB_SWITCH_PIN);
-	out32((uintptr_t) gpio_bank_0 + GPIO_IRQSTATUS_SET_1, LB_HEIGHT_PIN);
-	out32((uintptr_t) gpio_bank_0 + GPIO_IRQSTATUS_SET_1, LB_HEIGHT_OK_PIN);
-
-	out32((uintptr_t) gpio_bank_0 + GPIO_IRQSTATUS_SET_1, SE_SWITCH_PIN);
-	out32((uintptr_t) gpio_bank_0 + GPIO_IRQSTATUS_SET_1, SE_METAL_PIN);
-
-	out32((uintptr_t) gpio_bank_0 + GPIO_IRQSTATUS_SET_1, KEY_START_PIN);
-	out32((uintptr_t) gpio_bank_0 + GPIO_IRQSTATUS_SET_1, KEY_STOP_PIN);
-	out32((uintptr_t) gpio_bank_0 + GPIO_IRQSTATUS_SET_1, KEY_RESET_PIN);
-	out32((uintptr_t) gpio_bank_0 + GPIO_IRQSTATUS_SET_1, ESTOP_PIN);
+	uint32_t intEnable = (LB_START_PIN | LB_END_PIN | LB_RAMP_PIN | LB_SWITCH_PIN | LB_HEIGHT_PIN | LB_HEIGHT_OK_PIN);
+	intEnable |= (SE_SWITCH_PIN | SE_METAL_PIN | KEY_START_PIN | KEY_STOP_PIN | KEY_RESET_PIN | ESTOP_PIN);
+	out32((uintptr_t) gpio_bank_0 + GPIO_IRQSTATUS_SET_1, intEnable);
+	uint32_t enabled = in32((uintptr_t) gpio_bank_0 + GPIO_IRQSTATUS_SET_1);
+	std::bitset<32> enabledBits(enabled);
+	Logger::debug("INT enabled: " + enabledBits.to_string());
 
 	// Set irq event types...
+	uint32_t temp, rising, falling;
+
 	//	(for rising edge detection)
-	unsigned int rising = (LB_START_PIN | LB_END_PIN | LB_RAMP_PIN
-			| LB_SWITCH_PIN | LB_HEIGHT_PIN | LB_HEIGHT_OK_PIN);
-	rising = rising | (SE_SWITCH_PIN | SE_METAL_PIN);
-	rising = rising
-			| (KEY_START_PIN | KEY_STOP_PIN | KEY_RESET_PIN | ESTOP_PIN);
-	out32((uintptr_t) (gpio_bank_0 + GPIO_RISINGDETECT), rising);
+	rising = (LB_START_PIN | LB_END_PIN | LB_RAMP_PIN | LB_SWITCH_PIN | LB_HEIGHT_PIN | LB_HEIGHT_OK_PIN);
+	rising |= (SE_SWITCH_PIN | SE_METAL_PIN | KEY_START_PIN | KEY_STOP_PIN | KEY_RESET_PIN | ESTOP_PIN);
+	temp = in32((uintptr_t) gpio_bank_0 + GPIO_RISINGDETECT);
+	out32((uintptr_t) (gpio_bank_0 + GPIO_RISINGDETECT), temp | rising);
 
 	// 	(for falling edge detection)
-	unsigned int falling = (LB_START_PIN | LB_END_PIN | LB_RAMP_PIN
-			| LB_SWITCH_PIN | LB_HEIGHT_PIN | LB_HEIGHT_OK_PIN);
-	falling = falling | (SE_SWITCH_PIN | SE_METAL_PIN);
-	falling = falling
-			| (KEY_START_PIN | KEY_STOP_PIN | KEY_RESET_PIN | ESTOP_PIN);
-	out32((uintptr_t) (gpio_bank_0 + GPIO_FALLINGDETECT), falling);
+	falling = (LB_START_PIN | LB_END_PIN | LB_RAMP_PIN | LB_SWITCH_PIN | LB_HEIGHT_PIN | LB_HEIGHT_OK_PIN);
+	falling |= (SE_SWITCH_PIN | SE_METAL_PIN | KEY_START_PIN | KEY_STOP_PIN | KEY_RESET_PIN | ESTOP_PIN);
+	temp = in32((uintptr_t) gpio_bank_0 + GPIO_FALLINGDETECT);
+	out32((uintptr_t) (gpio_bank_0 + GPIO_FALLINGDETECT), temp | falling);
 }
 
 void HAL::handleEvent(EventType eventType) {
