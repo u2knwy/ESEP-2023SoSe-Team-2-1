@@ -11,10 +11,11 @@
 #include <iomanip>
 #include <mutex>
 
+#include <events/events.h>
+
 using namespace std;
 
-class Logger
-{
+class Logger : public IEventHandler {
 	public:
 		enum class level {
 			ERR = 4,
@@ -46,6 +47,10 @@ class Logger
 
 	    static void set_level(level log_level) {
 	        getInstance().minimal_log_level = log_level;
+	    }
+
+	    void handleEvent(EventType eventType) override {
+	    	info("Event occurred: " + EVENT_TO_STRING(eventType));
 	    }
 
 	private:

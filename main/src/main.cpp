@@ -22,9 +22,12 @@ int main(int argc, char **argv) {
 		Logger::set_level(Logger::level::INFO);
 	}
 
-	//actuatorDemo();
-	//sensorDemo();
-	//adcDemo();
+	const auto demo = std::string(std::getenv("DEMO_MODE"));
+	if(demo == "TRUE") {
+		actuatorDemo();
+		//sensorDemo();
+		//adcDemo();
+	}
 
 	return 0;
 }
