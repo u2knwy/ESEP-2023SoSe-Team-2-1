@@ -19,6 +19,8 @@
 #include <thread>
 #include <chrono>
 
+#include "events/IEventHandler.h"
+
 /* Helper macros */
 #define BIT_MASK(x) (1 << (x))
 
@@ -75,6 +77,7 @@
 #define INTR_GPIO_PORT2 		33
 
 /* GPIO register offsets (spruh73l.pdf S.4877) */
+#define GPIO_OE_REGISTER		0x134
 #define GPIO_LEVELDETECT0 		0x140
 #define GPIO_LEVELDETECT1 		0x144
 #define GPIO_RISINGDETECT 		0x148
@@ -102,10 +105,13 @@
 // ADC IRQ pin mask
 #define ADC_IRQ_PIN_MASK 0x2
 
-class HAL {
+class HAL : public IEventHandler {
 public:
 	HAL();
 	virtual ~HAL();
+
+	void handleEvent(EventType eventType) override;
+
 	/**
 	 * Starts receiving HAL events in an infinite loop in a seperate thread
 	 */
@@ -220,6 +226,11 @@ private:
 	int adcConID;
 	std::thread eventLoopThread;
 	std::thread adcReceivingThread;
+
+	/**
+	 * Configure all Pins as input / outputs
+	 */
+	void configurePins();
 	/**
 	 * Initialize all interrupts on GPIO pins and ADC.
 	 */

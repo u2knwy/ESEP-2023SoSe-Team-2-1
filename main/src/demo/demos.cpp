@@ -9,10 +9,11 @@
 #include <ostream>
 #include <chrono>
 #include <thread>
-#include "../hal/hal.h"
+#include "hal/hal.h"
+#include "logger/logger.hpp"
 
 void actuatorDemo() {
-	std::cout << "Actuator Demo" << std::endl;
+	Logger::info("Actuator Demo");
 
 	// Create a shared pointer which holds a reference to the HAL.
 	// This can be shared across multiple classes and the destructor will automatically be called,
@@ -22,7 +23,7 @@ void actuatorDemo() {
 	hal->motorStop();
 
 	// ALL ON
-	std::cout << "Switch all actuators on" << std::endl;
+	Logger::info("Switch all actuators on");
 	hal->GreenLampOn();
 	hal->YellowLampOn();
 	hal->RedLampOn();
@@ -34,7 +35,7 @@ void actuatorDemo() {
 	std::this_thread::sleep_for(std::chrono::seconds(5));
 
 	// ALL OFF
-	std::cout << "Switch all actuators off" << std::endl;
+	Logger::info("Switch all actuators off");
 	hal->GreenLampOff();
 	hal->YellowLampOff();
 	hal->RedLampOff();
@@ -45,22 +46,22 @@ void actuatorDemo() {
 	hal->closeSwitch();
 	std::this_thread::sleep_for(std::chrono::seconds(5));
 
-	std::cout << "Motor right fast" << std::endl;
+	Logger::info("Motor right fast");
 	hal->motorFast();
 	hal->motorRight();
 	std::this_thread::sleep_for(std::chrono::seconds(2));
 
-	std::cout << "Motor right slow" << std::endl;
+	Logger::info("Motor right slow");
 	hal->motorSlow();
 	hal->motorRight();
 	std::this_thread::sleep_for(std::chrono::seconds(2));
 
-	std::cout << "Motor left fast" << std::endl;
+	Logger::info("Motor left fast");
 	hal->motorFast();
 	hal->motorLeft();
 	std::this_thread::sleep_for(std::chrono::seconds(2));
 
-	std::cout << "Motor left slow" << std::endl;
+	Logger::info("Motor left slow");
 	hal->motorSlow();
 	hal->motorLeft();
 	std::this_thread::sleep_for(std::chrono::seconds(2));
@@ -69,14 +70,14 @@ void actuatorDemo() {
 }
 
 void sensorDemo() {
-	std::cout << "Sensor Demo" << std::endl;
+	Logger::info("Sensor Demo");
 
 	std::shared_ptr<HAL> hal = std::make_shared<HAL>();
 	hal->startEventLoop();
 	std::this_thread::sleep_for(std::chrono::seconds(999));
 	hal->stopEventLoop();
 
-	std::cout << "Stop Sensor Demo" << std::endl;
+	Logger::info("Stop Sensor Demo");
 }
 
 void adcDemo() {
