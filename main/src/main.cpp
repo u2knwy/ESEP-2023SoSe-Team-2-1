@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
 #endif
 
     Options options{argc, argv};
-    options.slave ? Logger::info("Program started as SLAVE") : Logger::info("Program started as MASTER");
+    options.master ? Logger::info("Program started as MASTER") : Logger::info("Program started as SLAVE");
     options.pusher ? Logger::info("Hardware uses Pusher for sorting out") : Logger::info("Hardware uses Switch for sorting out");
 
 	// Initialize Logger
