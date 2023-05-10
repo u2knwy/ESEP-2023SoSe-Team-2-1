@@ -11,45 +11,57 @@
 
 using namespace std;
 
+enum Mode { MASTER, SLAVE, TESTS, DEMO };
+
 class Options {
 public:
-	bool master;
-    bool pusher;
+	Mode mode;
+	bool pusher;
+	bool sensorDemo;
+	bool actuatorDemo;
+	bool heightDemo;
 
-    Options(int argc, char **argv) {
-        cxxopts::Options options("sorting-machine", "ESEP Sorting Machine");
+	Options(int argc, char **argv) {
+		cxxopts::Options options("sorting-machine", "ESEP Sorting Machine");
 
-        options.add_options()
-			("mode", "Mode the system should be started as", cxxopts::value<std::string>())
-			("p,pusher", "Pusher is mounted for sorting out workpieces (Default: switch is used)")
-			("h,help", "Get help for usage");
+		options.add_options()
+					("mode", "Mode the system should be started as", cxxopts::value<std::string>())
+					("p,pusher", "Pusher is mounted for sorting out workpieces (Default: switch is used)")
+
+					("s,sensors", "Run Sensor Demo", cxxopts::value<bool>()->default_value("false"))
+					("a,actuators", "Run Actuator Demo", cxxopts::value<bool>()->default_value("false"))
+					("m,measure", "Run HeightSensor Demo", cxxopts::value<bool>()->default_value("false"))
+
+					("h,help", "Get help for usage");
 		;
-        options.allow_unrecognised_options();
-        options.parse_positional({"mode"});
+		options.allow_unrecognised_options();
+		options.parse_positional({"mode"});
 
-        auto result = options.parse(argc, argv);
+		auto result = options.parse(argc, argv);
 
-        if (result.count("help"))
+		if (result.count("help"))
 		{
-		  std::cout << options.help() << std::endl;
-		  exit(EXIT_SUCCESS);
+			std::cout << options.help() << std::endl;
+			exit(EXIT_SUCCESS);
 		}
 
-        try {
-            std::string mode = result["mode"].as<std::string>();
-            if(mode != "master" && mode != "slave") {
-                cerr << "Invalid value for first positional argument (must be 'master' or 'slave')" << endl;
-                exit(EXIT_FAILURE);
-            }
-            master = (mode == "master");
-        } catch (cxxopts::exceptions::option_has_no_value &ex) {
-            cerr << "First positional argument is missing (must be 'master' or 'slave')." << endl;
-            exit(EXIT_FAILURE);
-        }
+		std::string mode = result["mode"].as<std::string>();
+		if(mode == "master") {
+			this->mode = MASTER;
+		} else if(mode == "slave") {
+			this->mode = SLAVE;
+		} else if(mode == "tests") {
+			this->mode = TESTS;
+		} else if(mode == "demo") {
+			this->mode = DEMO;
+		} else {
+			throw cxxopts::exceptions::no_such_option(mode);
+		}
 
-        master = result["master"].as<bool>();
-        pusher = result["pusher"].as<bool>();
-
-    }
+		pusher = result["pusher"].as<bool>();
+		sensorDemo = result["sensor"].as<bool>();
+		actuatorDemo = result["actuator"].as<bool>();
+		heightDemo = result["measure"].as<bool>();
+	}
 
 };
