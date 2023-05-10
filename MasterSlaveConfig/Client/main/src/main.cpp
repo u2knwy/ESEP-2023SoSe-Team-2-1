@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "events/eventtypes_enum.h"
+#include "eventmanager/eventmanager.h"
 #include "hal/hal.h"
 #include <sys/iofunc.h>
 #include <sys/neutrino.h>
@@ -31,17 +32,6 @@ typedef struct _pulse header_t;
 #define DATA_MSG  (_IO_MAX + 2)
 
 
-
-
-/* Second header: used by application - if required */
-typedef struct {
-	int size; // size of data block
-	int count;
-	EventType eventnr;// some counter used by the application
-	// further data fields required by our application
-} app_header_t;
-
-
 int client() { // Client side of the code
 
     int server_coid;
@@ -59,7 +49,7 @@ int client() { // Client side of the code
     	perror("Client: name_open failed, check server");
         return EXIT_FAILURE;
     }
-    printf("connected to server\n");
+    printf("connected to server, channel %i\n", server_coid);
 
     // Do whatever work you wanted with server connection
     for (int no = 0; no < NO_OF_MSGS; no++) {
@@ -98,12 +88,12 @@ int client() { // Client side of the code
 }
 
 int main(int argc, char **argv) {
-	std::shared_ptr<HAL> hal = std::make_shared<HAL>();
+	//std::shared_ptr<HAL> hal = std::make_shared<HAL>();
     printf("gns must be running.\n");
 
         printf("Running Client ... \n");
-        int ret;
-        ret = client();
+        int ret = 1;
+        eventmanager myEventMgr;
+        myEventMgr.sendMessagewithPayload(EventType::HALroteLampeAus, "potatox3");
     return ret;
 }
-
