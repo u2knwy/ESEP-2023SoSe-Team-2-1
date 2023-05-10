@@ -8,7 +8,7 @@
 #include "eventmanager.h"
 
 
-int eventmanager::sendMessagewithPayload(EventType event, char* payload) { // Client side of the cod
+int eventmanager::sendMessagePayload(EventType event, char* payload) { // Client side of the cod
 
 
     header_t     header;

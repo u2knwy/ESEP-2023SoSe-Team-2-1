@@ -63,7 +63,7 @@ public:
 		printf("destroying eventMgr \n");
 	    // close connection
 	    name_close(server_coid);};
-	int sendMessagewithPayload(EventType event, char* payload);
+	int sendMessagePayload(EventType event, char* payload);
 };
 
 #endif /* SRC_EVENTMANAGER_EVENTMANAGER_H_ */

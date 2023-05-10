@@ -94,6 +94,8 @@ int main(int argc, char **argv) {
         printf("Running Client ... \n");
         int ret = 1;
         eventmanager myEventMgr;
-        myEventMgr.sendMessagewithPayload(EventType::HALroteLampeAus, "potatox3");
-    return ret;
+        myEventMgr.sendMessagePayload(EventType::HALroteLampeAus, "potatox3");
+        myEventMgr.sendMessagePayload(EventType::HALroteLampeAn, "hangryx5");
+
+        return ret;
 }
