@@ -12,11 +12,13 @@ HeightSensor::HeightSensor() : chanID(-1), conID(-1) {
 	adc = new ADC(tsc);
 	adcOffset = ADC_OFFSET_CONV;
 	adcIncPerMillimeter = 100;
+	fsm = new HeightSensorFSM();
 }
 
 HeightSensor::~HeightSensor() {
 	stop();
 	delete adc;
+	delete fsm;
 }
 
 void HeightSensor::start() {
@@ -105,7 +107,9 @@ void HeightSensor::threadFunction() {
 			if (msg.code == PULSE_ADC_SAMPLING_DONE) {
 				int heightRaw = msg.value.sival_int;
 				Logger::debug("[HM] Value from ADC: " + std::to_string(heightRaw));
-				Logger::debug("[HM] Height in mm: " + std::to_string(msg.value.sival_int));
+				int heightMillimeter = adcValueToMillimeter(heightRaw);
+				Logger::debug("[HM] Height in mm: " + std::to_string(heightMillimeter));
+				fsm->heightValueReceived(heightMillimeter);
 				this_thread::sleep_for(chrono::milliseconds(100));
 				adc->sample();
 			}

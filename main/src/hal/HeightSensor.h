@@ -9,6 +9,7 @@
 
 #include "adc/ADC.h"
 #include "events/events.h"
+#include "logic/hm/HeightSensorFSM.h"
 
 #include <sys/mman.h>
 #include <hw/inout.h>
@@ -24,6 +25,7 @@
 /*---------------------------------------------------------------------------
    HEIGHT SENSOR CONFIGURATION
 ----------------------------------------------------------------------------- */
+#define HEIGHT_CONV_MAX 5
 #define HEIGHT_FLAT 18
 #define HEIGHT_HIGH 21
 #define HEIGHT_HOLE 10
@@ -56,6 +58,7 @@ public:
 private:
 	TSCADC tsc;
 	ADC* adc;
+	HeightSensorFSM* fsm;
 	int chanID;
 	int conID;
     std::thread measureThread;
