@@ -45,6 +45,7 @@ ADC::ADC(TSCADC& tscadc)
 
 ADC::~ADC() {
 	// This should call disable method...
+	adcDisable();
 }
 
 void ADC::registerAdcISR(int connectionID, char msgType){
@@ -71,7 +72,7 @@ void ADC::registerAdcISR(int connectionID, char msgType){
 void ADC::unregisterAdcISR(void){
 	if( InterruptDetach(interruptID) < 0){
 		DBG_ERROR("could not detach adc interrupt handler");
-		exit(EXIT_FAILURE);
+		//exit(EXIT_FAILURE);
 	}
 	tscadc->eventInterruptDisable(END_OF_SEQUENCE_INT);
 
