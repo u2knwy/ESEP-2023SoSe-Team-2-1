@@ -17,9 +17,6 @@ class Options {
 public:
 	Mode mode;
 	bool pusher;
-	bool sensorDemo;
-	bool actuatorDemo;
-	bool heightDemo;
 
 	Options(int argc, char **argv) {
 		cxxopts::Options options("sorting-machine", "ESEP Sorting Machine");
@@ -27,10 +24,6 @@ public:
 		options.add_options()
 					("mode", "Mode the system should be started as", cxxopts::value<std::string>())
 					("p,pusher", "Pusher is mounted for sorting out workpieces (Default: switch is used)")
-
-					("s,sensors", "Run Sensor Demo", cxxopts::value<bool>()->default_value("false"))
-					("a,actuators", "Run Actuator Demo", cxxopts::value<bool>()->default_value("false"))
-					("m,measure", "Run HeightSensor Demo", cxxopts::value<bool>()->default_value("false"))
 
 					("h,help", "Get help for usage");
 		;
@@ -59,9 +52,6 @@ public:
 		}
 
 		pusher = result["pusher"].as<bool>();
-		sensorDemo = result["sensor"].as<bool>();
-		actuatorDemo = result["actuator"].as<bool>();
-		heightDemo = result["measure"].as<bool>();
 	}
 
 };
