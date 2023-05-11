@@ -24,11 +24,6 @@
 /* Helper macros */
 #define BIT_MASK(x) (1 << (x))
 
-// My pulse codes
-#define PULSE_STOP_THREAD 		_PULSE_CODE_MINAVAIL + 1
-#define PULSE_ADC_SAMPLING_DONE _PULSE_CODE_MINAVAIL + 2
-#define PULSE_INTR_ON_PORT0 	_PULSE_CODE_MINAVAIL + 3
-
 /*---------------------------------------------------------------------------
    GPIO CONFIGURATION
 ----------------------------------------------------------------------------- */
@@ -88,22 +83,6 @@
 #define GPIO_IRQSTATUS_SET_0 	0x34
 #define GPIO_IRQSTATUS_SET_1 	0x38
 
-/*---------------------------------------------------------------------------
-   ADC CONFIGURATION
------------------------------------------------------------------------------ */
-#include "adc/ADC.h"
-#define ADC_BASE 0x44E0D000
-#define ADC_LENGTH 0x2000
-
-// TSC_ADC register offsets (spruh73l.pdf S.1747)
-#define ADC_IRQ_ENABLE_SET 0x2c
-#define ADC_IRQ_ENABLE_CLR 0x30
-#define ADC_IRQ_STATUS 0x28
-#define ADC_CTRL 0x40
-#define ADC_DATA 0x100
-
-// ADC IRQ pin mask
-#define ADC_IRQ_PIN_MASK 0x2
 
 class HAL : public IEventHandler {
 public:
@@ -204,28 +183,16 @@ public:
 	 * Closes the switch to let a workpiece fall into the slide.
 	 */
 	void closeSwitch();
-	/**
-	 * Starts the ADC height measurement
-	 */
-	void startHeightMeasurement();
-	/**
-	 * Stops the ADC height measurement
-	 */
-	void stopHeightMeasurement();
+
 private:
 	uintptr_t gpio_bank_0;
 	uintptr_t gpio_bank_1;
 	uintptr_t gpio_bank_2;
-	TSCADC tsc;
-	ADC* adc;
 	bool receivingRunning{false};
 	int interruptID;
 	int chanID;
 	int conID;
-	int adcChanID;
-	int adcConID;
 	std::thread eventLoopThread;
-	std::thread adcReceivingThread;
 
 	/**
 	 * Configure all Pins as input / outputs
@@ -243,8 +210,4 @@ private:
 	 * Continuously receive ADC and GPIO events
 	 */
 	void eventLoop();
-	/**
-	 * Receives ADC values from ADC channel in a continuous loop
-	 */
-	void adcReceivingRoutine();
 };

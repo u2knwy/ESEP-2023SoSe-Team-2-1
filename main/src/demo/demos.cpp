@@ -11,6 +11,7 @@
 #include <thread>
 #include "hal/hal.h"
 #include "logger/logger.hpp"
+#include "hal/HeightSensor.h"
 
 void actuatorDemo() {
 	Logger::info("Actuator Demo");
@@ -89,8 +90,9 @@ void adcDemo() {
 	hal->motorRight();
 	hal->motorSlow();
 
-	hal->startEventLoop();
-	hal->startHeightMeasurement();
+	// HeightSensor with FSM
+	HeightSensor hm;
+	hm.start();
 
 #define DEMO_DURATION 5
 	cout << "Demo time for " << DEMO_DURATION << " seconds..." << endl;
@@ -104,8 +106,7 @@ void adcDemo() {
 	this_thread::sleep_for(chrono::seconds(1));
 	cout << "NOW!" << endl;
 
-	hal->stopEventLoop();
-	hal->stopHeightMeasurement();
+	hm.stop();
 
 	// Stop motor for demo
 	hal->motorStop();
