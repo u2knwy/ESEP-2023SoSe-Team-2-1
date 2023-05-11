@@ -16,7 +16,7 @@ Das Repository ist unterteilt in folgende Ordner:
 Das Programm kann wie folgt gestartet werden:
 
 ```shell
-sorting [mode] [-p,--pusher] [-s,--sensors] [-a,--actuators] [-m,--measure]
+sorting [mode] [-p,--pusher]
 ```
 
 Der positionale Parameter `mode` ist dabei obligatorisch und muss einer der folgenden Werte haben:
