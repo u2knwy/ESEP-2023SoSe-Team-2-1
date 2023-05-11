@@ -23,6 +23,6 @@ HeightSensorFSM::~HeightSensorFSM() {
 	delete state;
 }
 
-void HeightSensorFSM::heightValueReceived(int value) {
-	state->heightValueReceived(value);
+void HeightSensorFSM::heightValueReceived(float valueMM) {
+	state->heightValueReceived(valueMM);
 }

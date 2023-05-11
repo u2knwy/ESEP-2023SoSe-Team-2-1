@@ -11,16 +11,17 @@
 #include "High.h"
 
 void High::entry() {
+	Logger::debug("[HM] High detected - waiting for belt or hole...");
 }
 
-bool High::heightValueReceived(int value) {
-	if(value < HEIGHT_CONV_MAX) {
+bool High::heightValueReceived(float valueMM) {
+	if(valueMM < HEIGHT_CONV_MAX) {
 		actions->sendHeightResultFBM1(data->currentType, data->avgValue);
 		exit();
 		new(this) WaitForWorkpiece;
 		entry();
 		return true;
-	} else if(value > HEIGHT_HOLE-1 && value < HEIGHT_HOLE+1) {
+	} else if(valueMM > HEIGHT_HOLE-1 && valueMM < HEIGHT_HOLE+1) {
 		actions->sendHeightResultFBM1(data->currentType, data->avgValue);
 		exit();
 		new(this) WaitForBelt;

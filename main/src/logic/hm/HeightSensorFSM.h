@@ -15,7 +15,7 @@ class HeightSensorFSM {
 public:
 	HeightSensorFSM();
 	virtual ~HeightSensorFSM();
-	void heightValueReceived(int value);
+	void heightValueReceived(float valueMM);
 private:
 	HeightActions* actions;
 	HeightBasestate* state;

@@ -76,7 +76,7 @@ void HeightSensor::calibrateRefHigh(int highValue) {
 }
 
 int HeightSensor::adcValueToMillimeter(int adcValue) {
-	return (int) ((adcOffset-adcValue) * adcIncPerMillimeter);
+	return ((adcOffset-adcValue) * adcIncPerMillimeter);
 }
 
 void HeightSensor::threadFunction() {
@@ -107,7 +107,7 @@ void HeightSensor::threadFunction() {
 			if (msg.code == PULSE_ADC_SAMPLING_DONE) {
 				int heightRaw = msg.value.sival_int;
 				Logger::debug("[HM] Value from ADC: " + std::to_string(heightRaw));
-				int heightMillimeter = adcValueToMillimeter(heightRaw);
+				float heightMillimeter = adcValueToMillimeter(heightRaw);
 				Logger::debug("[HM] Height in mm: " + std::to_string(heightMillimeter));
 				fsm->heightValueReceived(heightMillimeter);
 				this_thread::sleep_for(chrono::milliseconds(100));

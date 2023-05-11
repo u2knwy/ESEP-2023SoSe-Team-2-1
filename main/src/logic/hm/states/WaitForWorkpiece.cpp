@@ -12,16 +12,17 @@
 void WaitForWorkpiece::entry() {
 	data->avgValue = 0;
 	data->maxValue = 0;
+	Logger::debug("[HM] Waiting for new workpiece...");
 }
 
-bool WaitForWorkpiece::heightValueReceived(int value) {
-	if(value > HEIGHT_FLAT-1 && value < HEIGHT_FLAT+1) {
+bool WaitForWorkpiece::heightValueReceived(float valueMM) {
+	if(valueMM > HEIGHT_FLAT-1 && valueMM < HEIGHT_FLAT+1) {
 		data->currentType = EventType::HM_M_WS_F;
 		exit();
 		new(this) WaitForBelt;
 		entry();
 		return true;
-	} else if(value > HEIGHT_HIGH-1 && value < HEIGHT_HIGH+1) {
+	} else if(valueMM > HEIGHT_HIGH-1 && valueMM < HEIGHT_HIGH+1) {
 		data->currentType = EventType::HM_M_WS_OB;
 		return true;
 	} else  {

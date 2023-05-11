@@ -8,6 +8,7 @@
 
 #include "HeightContextData.h"
 #include "HeightActions.h"
+#include "logger/logger.hpp"
 
 class HeightBasestate {
 protected:
@@ -27,7 +28,7 @@ public:
 	virtual void entry() {}
 	virtual void exit() {}
 
-	virtual bool heightValueReceived(int value) {
+	virtual bool heightValueReceived(float valueMM) {
 		return false;
 	}
 };
