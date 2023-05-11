@@ -29,9 +29,3 @@ Der positionale Parameter `mode` ist dabei obligatorisch und muss einer der folg
 Die optionalen Parameter haben folgende Bedeutung:
 
 - `-p,--pusher`: An der Hardware ist ein Auswerfer anstatt einer Weiche montiert. Wenn nicht angegeben, wird angenommen dass eine Weiche montiert ist.
-
-Folgende Parameter werden nur im Demo-Modus verwendet und werden sonst ignoriert. Standardmäßig sind sie auf false.
-
-- `-s,--sensors`: Ausführen der Sensor Demo-Funktion
-- `-a,--actuators`: Ausführen der Aktor Demo-Funktion
-- `-m,--measure`: Ausführen der Höhensensor Demo-Funktion

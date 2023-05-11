@@ -22,9 +22,9 @@ int main(int argc, char **argv) {
     } else if (options.mode == Mode::DEMO) {
     	Logger::info("Starting in Demo Mode...");
     	// Run Demo programs...
-		actuatorDemo();
+		//actuatorDemo();
 		sensorDemo();
-		adcDemo();
+		//adcDemo();
     	return EXIT_SUCCESS;
     }
 
