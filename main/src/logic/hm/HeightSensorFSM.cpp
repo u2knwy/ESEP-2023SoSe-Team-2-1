@@ -26,3 +26,11 @@ HeightSensorFSM::~HeightSensorFSM() {
 void HeightSensorFSM::heightValueReceived(float valueMM) {
 	state->heightValueReceived(valueMM);
 }
+
+EventType HeightSensorFSM::getDetectedWorkpieceType() {
+	return data->currentType;
+}
+
+HeightBasestate* HeightSensorFSM::getCurrentState() {
+	return state;
+}

@@ -16,6 +16,8 @@ public:
 	HeightSensorFSM();
 	virtual ~HeightSensorFSM();
 	void heightValueReceived(float valueMM);
+	EventType getDetectedWorkpieceType();
+	HeightBasestate* getCurrentState();
 private:
 	HeightActions* actions;
 	HeightBasestate* state;
