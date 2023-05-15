@@ -1,5 +1,6 @@
 #include <iostream>
 #include <thread>
+#include <csignal>
 #include "hal/hal.h"
 
 #include "demo/demos.h"
@@ -8,10 +9,27 @@
 #include "configuration/options.hpp"
 #include "common/macros.h"
 
+#include "hal/HeightSensor.h"
+#include "logic/hm/HeightSensorFSM.h"
+
 #include <gtest/gtest.h>
 
-
 using namespace std;
+
+std::shared_ptr<HeightSensorFSM> heightFSM;
+std::shared_ptr<HeightSensor> heightSensor;
+
+bool running = true;
+
+/**
+ * Signal Handler which must be called if the program is terminated.
+ * Does all necessary stuff for cleanup to avoid memory leaks.
+ */
+void cleanup(int exitCode) {
+	Logger::info("Exit code received: " + std::to_string(exitCode));
+	heightSensor->stop();
+	running = false;
+}
 
 int main(int argc, char **argv) {
     Options options{argc, argv};
@@ -43,6 +61,19 @@ int main(int argc, char **argv) {
 		//sensorDemo();
 		adcDemo();
 		return EXIT_SUCCESS;
+	}
+
+	heightFSM = std::make_shared<HeightSensorFSM>();
+	heightSensor = std::make_shared<HeightSensor>(heightFSM);
+	heightSensor->start();
+
+	// Register handler function to be called if the program is not terminated properly
+	std::signal(SIGINT, cleanup);
+	std::signal(SIGABRT, cleanup);
+	std::signal(SIGTERM, cleanup);
+
+	while(running) {
+        std::this_thread::sleep_for(std::chrono::seconds(10));
 	}
 
 	Logger::info("Sorting Machine was terminated.");

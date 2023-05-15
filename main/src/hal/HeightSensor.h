@@ -31,7 +31,8 @@
 #define HEIGHT_FLAT 21
 #define HEIGHT_HIGH 25
 #define HEIGHT_HOLE 6
-#define ADC_OFFSET_CONV 3640
+#define ADC_DEFAULT_OFFSET 3648
+#define ADC_DEFAULT_HIGH 2323
 // use N samples for averaging / max. value (sliding window)
 #define ADC_SAMPLE_SIZE 100
 

@@ -10,10 +10,10 @@
 
 HeightSensor::HeightSensor(std::shared_ptr<HeightSensorFSM> fsm) : fsm(fsm), chanID(-1), conID(-1) {
 	adc = new ADC(tsc);
-	adcOffset = ADC_OFFSET_CONV;
-	adcIncPerMillimeter = 100;
 	windowCapacity = ADC_SAMPLE_SIZE;
 	window.reserve(windowCapacity);
+	calibrateOffset(ADC_DEFAULT_OFFSET);
+	calibrateRefHigh(ADC_DEFAULT_HIGH);
 }
 
 HeightSensor::~HeightSensor() {
@@ -58,6 +58,7 @@ void HeightSensor::start() {
 
 	// ### Start thread for handling interrupt messages.
 	measureThread = std::thread(&HeightSensor::threadFunction, this);
+	measureThread.detach();
 
 	adc->sample();
 }
