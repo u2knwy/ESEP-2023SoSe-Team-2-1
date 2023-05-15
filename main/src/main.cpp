@@ -16,9 +16,11 @@
 
 using namespace std;
 
+// Components which will be launched in main-function and cleaned up if program is terminated
 std::shared_ptr<HeightSensorFSM> heightFSM;
 std::shared_ptr<HeightSensor> heightSensor;
 
+// Set this variable to false to stop main function from executing...
 bool running = true;
 
 /**
@@ -72,8 +74,10 @@ int main(int argc, char **argv) {
 	std::signal(SIGABRT, cleanup);
 	std::signal(SIGTERM, cleanup);
 
+	// Endless loop - wait until termination
 	while(running) {
-        std::this_thread::sleep_for(std::chrono::seconds(10));
+		// Sleep to save CPU resources
+        std::this_thread::sleep_for(std::chrono::seconds(1));
 	}
 
 	Logger::info("Sorting Machine was terminated.");

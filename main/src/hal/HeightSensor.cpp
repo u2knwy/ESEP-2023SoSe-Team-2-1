@@ -58,7 +58,6 @@ void HeightSensor::start() {
 
 	// ### Start thread for handling interrupt messages.
 	measureThread = std::thread(&HeightSensor::threadFunction, this);
-	measureThread.detach();
 
 	adc->sample();
 }
