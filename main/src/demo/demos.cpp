@@ -87,16 +87,25 @@ void adcDemo() {
 	std::shared_ptr<HAL> hal = std::make_shared<HAL>();
 
 	// Start motor slow for demo
-	hal->motorRight();
-	hal->motorSlow();
+	//hal->motorRight();
+	//hal->motorSlow();
 
 	// HeightSensor with FSM
 	HeightSensor hm;
+	hm.calibrateOffset(3648);
+	hm.calibrateRefHigh(2323);
 	hm.start();
 
 #define DEMO_DURATION 5
 	cout << "Demo time for " << DEMO_DURATION << " seconds..." << endl;
-	this_thread::sleep_for(chrono::seconds(DEMO_DURATION));
+	//this_thread::sleep_for(chrono::seconds(DEMO_DURATION));
+	for(int i = 0; i < 10; i++) {
+		float avg = hm.getAverageHeight();
+		std::ostringstream oss;
+		oss << std::fixed << std::setprecision(2) << avg;
+		Logger::info("AVG Height: " + oss.str() + " mm");
+		this_thread::sleep_for(chrono::seconds(1));
+	}
 	cout << "Stopping in..." << endl;
 	cout << "3" << endl;
 	this_thread::sleep_for(chrono::seconds(1));

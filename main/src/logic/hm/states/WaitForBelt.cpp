@@ -10,8 +10,6 @@
 #include "WaitForBelt.h"
 
 void WaitForBelt::entry() {
-	data->avgValue = 0;
-	data->maxValue = 0;
 	Logger::debug("[HM] Waiting for belt...");
 }
 

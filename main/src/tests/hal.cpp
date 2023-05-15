@@ -6,16 +6,19 @@
  */
 #include <gtest/gtest.h>
 #include "hal/hal.h"
+#include "hal/HeightSensor.h"
 
 class HAL_Test : public ::testing::Test {
 protected:
-  HAL *hal;
+  HAL* hal;
+  HeightSensor* hm;
 
   /**
    * OPTIONAL: Prepare objects before each test
    */
   void SetUp() override {
 	  hal = new HAL();
+	  hm = new HeightSensor();
   }
 
   /**
@@ -23,6 +26,7 @@ protected:
    */
   void TearDown() override {
 	  delete hal;
+	  delete hm;
   }
 };
 
@@ -69,4 +73,12 @@ TEST_F(HAL_Test, RedLamp) {
 	EXPECT_EQ(true, readPin(1, 16));
 	hal->RedLampOff();
 	EXPECT_EQ(false, readPin(1, 16));
+}
+
+TEST_F(HAL_Test, HmFlat) {
+	hm->calibrateOffset(3500);
+	hm->calibrateRefHigh(3000);
+	// 3500-3000 = 500
+	// 500/25mm = 20 inc/mm
+	hm->start();
 }

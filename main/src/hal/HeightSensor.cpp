@@ -13,6 +13,8 @@ HeightSensor::HeightSensor() : chanID(-1), conID(-1) {
 	adcOffset = ADC_OFFSET_CONV;
 	adcIncPerMillimeter = 100;
 	fsm = new HeightSensorFSM();
+	windowCapacity = ADC_SAMPLE_SIZE;
+	window.reserve(windowCapacity);
 }
 
 HeightSensor::~HeightSensor() {
@@ -36,6 +38,24 @@ void HeightSensor::start() {
 		perror("Could not connect to channel!");
 	}
 
+
+	/* ### Setup ### */
+	ThreadCtl(_NTO_TCTL_IO, 0);	//Request IO privileges for process.
+
+	// Request interrupt and IO abilities.
+	int procmgr_status = procmgr_ability(0,
+	PROCMGR_ADN_ROOT | PROCMGR_AOP_ALLOW | PROCMGR_AID_INTERRUPT,
+	PROCMGR_ADN_NONROOT | PROCMGR_AOP_ALLOW | PROCMGR_AID_INTERRUPT,
+	PROCMGR_ADN_ROOT | PROCMGR_AOP_ALLOW | PROCMGR_AID_IO,
+	PROCMGR_ADN_NONROOT | PROCMGR_AOP_ALLOW | PROCMGR_AID_IO,
+	PROCMGR_AID_EOL);
+	if (procmgr_status != EOK) {
+		perror("Requested abilities failed or denied!");
+		exit(EXIT_FAILURE);
+	}
+
+	InterruptEnable(); //Enables interrupts
+
 	adc->registerAdcISR(conID, PULSE_ADC_SAMPLING_DONE);
 
 	// ### Start thread for handling interrupt messages.
@@ -50,7 +70,7 @@ void HeightSensor::stop() {
 	adc->unregisterAdcISR();
 
 	if (measureThread.joinable()) {
-		Logger::debug("[HM] Stopping...");
+		Logger::debug("[HM] Stopping receiving thread...");
 		// Stop receiving thread.
 		MsgSendPulse(conID, -1, PULSE_STOP_THREAD, 0);
 		measureThread.join();
@@ -58,25 +78,40 @@ void HeightSensor::stop() {
 
 	int detachStatus = ConnectDetach(conID);
 	if (detachStatus != EOK) {
-		Logger::error("Detaching ADC channel failed!");
+		Logger::debug("Detaching ADC channel failed!");
 	}
 
 	int destroyStatus = ChannelDestroy(chanID);
 	if (destroyStatus != EOK) {
-		Logger::error("Destroying ADC channel failed!");
+		Logger::debug("Destroying ADC channel failed!");
 	}
 }
 
 void HeightSensor::calibrateOffset(int offsetValue) {
 	adcOffset = offsetValue;
+	Logger::debug("Calibrated OFFSET: " + std::to_string(adcOffset) + " inc");
 }
 
 void HeightSensor::calibrateRefHigh(int highValue) {
 	adcIncPerMillimeter = (adcOffset - highValue) / HEIGHT_HIGH;
+	Logger::debug("Calibrated REF High: " + std::to_string(adcIncPerMillimeter) + " inc/mm");
 }
 
-int HeightSensor::adcValueToMillimeter(int adcValue) {
-	return ((adcOffset-adcValue) * adcIncPerMillimeter);
+float HeightSensor::adcValueToMillimeter(int adcValue) {
+	int abs = adcOffset-adcValue;
+	float mm = ((float) abs / adcIncPerMillimeter);
+	if(mm < 0)
+		return 0.0;
+	return mm;
+}
+
+void HeightSensor::addValue(int value) {
+	if (window.size() == ADC_SAMPLE_SIZE) {
+		// If window is full: Remove first element
+		window.erase(window.begin());
+	}
+	// Add value to window
+	window.push_back(value);
 }
 
 void HeightSensor::threadFunction() {
@@ -106,11 +141,12 @@ void HeightSensor::threadFunction() {
 			// ADC interrupt value.
 			if (msg.code == PULSE_ADC_SAMPLING_DONE) {
 				int heightRaw = msg.value.sival_int;
-				Logger::debug("[HM] Value from ADC: " + std::to_string(heightRaw));
+				addValue(heightRaw);
 				float heightMillimeter = adcValueToMillimeter(heightRaw);
-				Logger::debug("[HM] Height in mm: " + std::to_string(heightMillimeter));
+				//Logger::debug("[HM] Value from ADC: " + std::to_string(heightRaw));
+				//Logger::debug("[HM] Height in mm: " + std::to_string(heightMillimeter));
 				fsm->heightValueReceived(heightMillimeter);
-				this_thread::sleep_for(chrono::milliseconds(100));
+				//this_thread::sleep_for(chrono::milliseconds(100));
 				adc->sample();
 			}
 
@@ -119,4 +155,23 @@ void HeightSensor::threadFunction() {
 	}
 
 	std::cout << "ADC thread stops..." << std::endl;
+}
+
+float HeightSensor::getAverageHeight() {
+	long sum = 0;
+	for(int val : window) {
+		sum += val;
+	}
+	int avg = sum / window.size();
+	return adcValueToMillimeter(avg);
+}
+
+float HeightSensor::getMaxHeight() {
+	int max = 0;
+	for(int val : window) {
+		if(val > max) {
+			max = val;
+		}
+	}
+	return adcValueToMillimeter(max);
 }

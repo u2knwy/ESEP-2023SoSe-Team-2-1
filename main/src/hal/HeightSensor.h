@@ -21,15 +21,18 @@
 #include <sys/procmgr.h>
 #include <thread>
 #include <chrono>
+#include <vector>
 
 /*---------------------------------------------------------------------------
    HEIGHT SENSOR CONFIGURATION
 ----------------------------------------------------------------------------- */
-#define HEIGHT_CONV_MAX 5
-#define HEIGHT_FLAT 18
-#define HEIGHT_HIGH 21
-#define HEIGHT_HOLE 10
-#define ADC_OFFSET_CONV 3600
+#define HEIGHT_CONV_MAX 2
+#define HEIGHT_FLAT 21
+#define HEIGHT_HIGH 25
+#define HEIGHT_HOLE 6
+#define ADC_OFFSET_CONV 3640
+// use N samples for averaging / max. value (sliding window)
+#define ADC_SAMPLE_SIZE 100
 
 /*---------------------------------------------------------------------------
    ADC CONFIGURATION
@@ -55,6 +58,8 @@ public:
 	void stop();
 	void calibrateOffset(int offsetValue);
 	void calibrateRefHigh(int highValue);
+	float getAverageHeight();
+	float getMaxHeight();
 private:
 	TSCADC tsc;
 	ADC* adc;
@@ -62,9 +67,12 @@ private:
 	int chanID;
 	int conID;
     std::thread measureThread;
+    std::vector<int> window;
+    size_t windowCapacity;
+    void addValue(int value);
     bool running{false};
     void threadFunction();
     int adcOffset;
     int adcIncPerMillimeter;
-    int adcValueToMillimeter(int adcValue);
+    float adcValueToMillimeter(int adcValue);
 };

@@ -16,12 +16,16 @@ void High::entry() {
 
 bool High::heightValueReceived(float valueMM) {
 	if(valueMM < HEIGHT_CONV_MAX) {
+		Logger::debug("[HM] Belt detected -> WS_OB");
+		data->setCurrentType(EventType::HM_M_WS_OB);
 		actions->sendHeightResultFBM1(data->currentType, data->avgValue);
 		exit();
 		new(this) WaitForWorkpiece;
 		entry();
 		return true;
 	} else if(valueMM > HEIGHT_HOLE-1 && valueMM < HEIGHT_HOLE+1) {
+		Logger::debug("[HM] Hole detected -> WS_BOM");
+		data->setCurrentType(EventType::HM_M_WS_BOM);
 		actions->sendHeightResultFBM1(data->currentType, data->avgValue);
 		exit();
 		new(this) WaitForBelt;

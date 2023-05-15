@@ -11,5 +11,6 @@
 
 class IEventHandler {
 public:
+	virtual ~IEventHandler() {};
 	virtual void handleEvent(EventType eventType) = 0;
 };

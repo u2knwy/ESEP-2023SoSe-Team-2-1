@@ -6,13 +6,17 @@
  */
 
 #include <logic/hm/HeightContextData.h>
+#include "logger/logger.hpp"
+#include "events/events.h"
 
-HeightContextData::HeightContextData() {
-	// TODO Auto-generated constructor stub
-
+HeightContextData::HeightContextData() : avgValue(0.0), maxValue(0.0), currentType(EventType::HM_M_WS_UNKNOWN) {
 }
 
 HeightContextData::~HeightContextData() {
 	// TODO Auto-generated destructor stub
 }
 
+
+void HeightContextData::setCurrentType(EventType type) {
+	this->currentType = type;
+}

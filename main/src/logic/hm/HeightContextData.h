@@ -16,4 +16,5 @@ public:
 	EventType currentType;
 	int avgValue;
 	int maxValue;
+	void setCurrentType(EventType type);
 };

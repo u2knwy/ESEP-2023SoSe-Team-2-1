@@ -8,6 +8,8 @@
 #include <logic/hm/states/WaitForWorkpiece.h>
 #include "hal/HeightSensor.h"
 #include "WaitForBelt.h"
+#include "High.h"
+#include "logger/logger.hpp"
 
 void WaitForWorkpiece::entry() {
 	data->avgValue = 0;
@@ -17,16 +19,22 @@ void WaitForWorkpiece::entry() {
 
 bool WaitForWorkpiece::heightValueReceived(float valueMM) {
 	if(valueMM > HEIGHT_FLAT-1 && valueMM < HEIGHT_FLAT+1) {
-		data->currentType = EventType::HM_M_WS_F;
+		Logger::debug("[HFSM] FLAT detected");
+		data->setCurrentType(EventType::HM_M_WS_F);
 		exit();
 		new(this) WaitForBelt;
 		entry();
 		return true;
 	} else if(valueMM > HEIGHT_HIGH-1 && valueMM < HEIGHT_HIGH+1) {
-		data->currentType = EventType::HM_M_WS_OB;
+		Logger::debug("[HFSM] HIGH detected");
+		data->setCurrentType(EventType::HM_M_WS_OB);
+		exit();
+		new(this) High;
+		entry();
 		return true;
 	} else  {
-		data->currentType = EventType::HM_M_WS_UNKNOWN;
+		Logger::debug("[HFSM] UNKNOWN detected");
+		data->setCurrentType(EventType::HM_M_WS_UNKNOWN);
 		return true;
 	}
 	return false;

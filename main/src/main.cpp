@@ -6,8 +6,10 @@
 #include "logger/logger.hpp"
 #include "events/events.h"
 #include "configuration/options.hpp"
+#include "common/macros.h"
 
 #include <gtest/gtest.h>
+
 
 using namespace std;
 
@@ -19,13 +21,6 @@ int main(int argc, char **argv) {
     	::testing::InitGoogleTest(&argc, argv);
     	auto result = RUN_ALL_TESTS();
     	return result;
-    } else if (options.mode == Mode::DEMO) {
-    	Logger::info("Starting in Demo Mode...");
-    	// Run Demo programs...
-		//actuatorDemo();
-		sensorDemo();
-		//adcDemo();
-    	return EXIT_SUCCESS;
     }
 
     options.mode == Mode::MASTER ? Logger::info("Program started as MASTER") : Logger::info("Program started as SLAVE");
@@ -38,6 +33,16 @@ int main(int argc, char **argv) {
 		Logger::debug("##### Started in DEBUG mode #####");
 	} else {
 		Logger::set_level(Logger::level::INFO);
+	}
+
+	if (options.mode == Mode::DEMO) {
+		Logger::info("Starting in Demo Mode...");
+		DELAY_S(1);
+		// Run Demo programs...
+		//actuatorDemo();
+		//sensorDemo();
+		adcDemo();
+		return EXIT_SUCCESS;
 	}
 
 	Logger::info("Sorting Machine was terminated.");
