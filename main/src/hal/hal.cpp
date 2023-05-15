@@ -7,15 +7,13 @@
 
 #include "hal.h"
 #include <string>
-#include <logger/logger.hpp>
-#include <events/events.h>
+#include "logger/logger.hpp"
+#include "events/events.h"
 
 HAL::HAL() {
 	gpio_bank_0 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_0);
 	gpio_bank_1 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_1);
 	gpio_bank_2 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_2);
-
-	adc = new ADC(tsc);
 
 	/* ### Create channel to receive interrupt pulse messages ### */
 	chanID = ChannelCreate(0);
@@ -26,17 +24,6 @@ HAL::HAL() {
 	//Connect to channel.
 	conID = ConnectAttach(0, 0, chanID, _NTO_SIDE_CHANNEL, 0);
 	if (conID < 0) {
-		perror("Could not connect to channel!");
-	}
-
-	/* ### Create channel to receive ADC values ### */
-	adcChanID = ChannelCreate(0);
-	if (adcChanID < 0) {
-		perror("Could not create a channel!\n");
-	}
-
-	adcConID = ConnectAttach(0, 0, adcChanID, _NTO_SIDE_CHANNEL, 0); // Connect to channel.
-	if (adcConID < 0) {
 		perror("Could not connect to channel!");
 	}
 
@@ -52,7 +39,6 @@ HAL::HAL() {
 
 HAL::~HAL() {
 	stopEventLoop();
-	stopHeightMeasurement();
 
 	int detach_status = ConnectDetach(conID);
 	if (detach_status != EOK) {
@@ -66,23 +52,9 @@ HAL::~HAL() {
 		exit(EXIT_FAILURE);
 	}
 
-	int adc_detach_status = ConnectDetach(adcConID);
-	if (adc_detach_status != EOK) {
-		perror("Detaching ADC channel failed!");
-		exit(EXIT_FAILURE);
-	}
-
-	int adc_destroy_status = ChannelDestroy(adcChanID);
-	if (adc_destroy_status != EOK) {
-		perror("Destroying ADC channel failed!");
-		exit(EXIT_FAILURE);
-	}
-
 	munmap_device_io(gpio_bank_0, GPIO_SIZE);
 	munmap_device_io(gpio_bank_1, GPIO_SIZE);
 	munmap_device_io(gpio_bank_2, GPIO_SIZE);
-
-	delete adc;
 }
 
 void HAL::configurePins() {
@@ -268,32 +240,6 @@ void HAL::closeSwitch() {
 	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), SWITCH_PIN);
 }
 
-void HAL::startHeightMeasurement() {
-	using namespace std;
-	std::cout << "Start height measurement" << std::endl;
-
-	adc->registerAdcISR(adcConID, PULSE_ADC_SAMPLING_DONE);
-
-	// ### Start thread for handling interrupt messages.
-	adcReceivingThread = std::thread(&HAL::adcReceivingRoutine, this);
-
-	adc->sample();
-}
-
-void HAL::stopHeightMeasurement() {
-
-	// Detach interrupts.
-	adc->adcDisable();
-	adc->unregisterAdcISR();
-
-	if (adcReceivingThread.joinable()) {
-		Logger::debug("Stop height measurement");
-		// Stop receiving thread.
-		MsgSendPulse(adcConID, -1, PULSE_STOP_THREAD, 0);
-		adcReceivingThread.join();
-	}
-}
-
 void HAL::eventLoop() {
 	using namespace std;
 	ThreadCtl(_NTO_TCTL_IO, 0); // Request IO privileges for this thread.
@@ -343,43 +289,4 @@ void HAL::handleGpioInterrupt() {
 			printf("Interrupt on pin %d, now %d\n", pin, current_level);
 		}
 	}
-}
-
-void HAL::adcReceivingRoutine() {
-	ThreadCtl(_NTO_TCTL_IO, 0); // Request IO privileges for this thread.
-
-	Logger::debug("ADC receiving routine started...");
-
-	using namespace std;
-	_pulse msg;
-	receivingRunning = true;
-	while (receivingRunning) {
-		int recvid = MsgReceivePulse(adcChanID, &msg, sizeof(_pulse), nullptr);
-
-		if (recvid < 0) {
-			perror("MsgReceivePulse failed!");
-			exit(EXIT_FAILURE);
-		}
-
-		if (recvid == 0) { // pulse received.
-
-			// Stop thread while it blocks.
-			if (msg.code == PULSE_STOP_THREAD) {
-				std::cout << "ADC thread kill code received" << std::endl;
-				receivingRunning = false;
-				continue;
-			}
-
-			// ADC interrupt value.
-			if (msg.code == PULSE_ADC_SAMPLING_DONE) {
-				printf("Value from ADC: %d\n", msg.value);
-				this_thread::sleep_for(chrono::milliseconds(100));
-				adc->sample();
-			}
-
-			// Do not ignore OS pulses!
-		}
-	}
-
-	std::cout << "ADC thread stops..." << std::endl;
 }
