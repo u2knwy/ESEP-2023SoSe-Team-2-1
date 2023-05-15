@@ -91,7 +91,8 @@ void adcDemo() {
 	//hal->motorSlow();
 
 	// HeightSensor with FSM
-	HeightSensor hm;
+	std::shared_ptr<HeightSensorFSM> heightFSM = std::make_shared<HeightSensorFSM>();
+	HeightSensor hm(heightFSM);
 	hm.calibrateOffset(3648);
 	hm.calibrateRefHigh(2323);
 	hm.start();

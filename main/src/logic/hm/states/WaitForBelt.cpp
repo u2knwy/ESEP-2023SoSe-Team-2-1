@@ -15,7 +15,7 @@ void WaitForBelt::entry() {
 
 bool WaitForBelt::heightValueReceived(float valueMM) {
 	if(valueMM < HEIGHT_CONV_MAX) {
-		actions->sendHeightResultFBM1(data->currentType, data->avgValue);
+		actions->sendHeightResultFBM1(data->getCurrentType(), data->avgValue);
 		exit();
 		new(this) WaitForWorkpiece;
 		entry();

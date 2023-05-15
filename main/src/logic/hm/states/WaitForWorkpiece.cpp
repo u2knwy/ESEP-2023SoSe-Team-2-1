@@ -32,7 +32,9 @@ bool WaitForWorkpiece::heightValueReceived(float valueMM) {
 		new(this) High;
 		entry();
 		return true;
-	} else  {
+	} else if(valueMM < HEIGHT_CONV_MAX) {
+		//Logger::debug("[HFSM] CONVEYOR detected");
+	} else {
 		Logger::debug("[HFSM] UNKNOWN detected");
 		data->setCurrentType(EventType::HM_M_WS_UNKNOWN);
 		return true;

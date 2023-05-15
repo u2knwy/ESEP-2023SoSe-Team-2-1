@@ -16,6 +16,9 @@ HeightContextData::~HeightContextData() {
 	// TODO Auto-generated destructor stub
 }
 
+EventType HeightContextData::getCurrentType() {
+	return currentType;
+}
 
 void HeightContextData::setCurrentType(EventType type) {
 	this->currentType = type;

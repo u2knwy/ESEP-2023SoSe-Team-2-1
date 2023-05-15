@@ -8,11 +8,10 @@
 #include "HeightSensor.h"
 #include "logger/logger.hpp"
 
-HeightSensor::HeightSensor() : chanID(-1), conID(-1) {
+HeightSensor::HeightSensor(std::shared_ptr<HeightSensorFSM> fsm) : fsm(fsm), chanID(-1), conID(-1) {
 	adc = new ADC(tsc);
 	adcOffset = ADC_OFFSET_CONV;
 	adcIncPerMillimeter = 100;
-	fsm = new HeightSensorFSM();
 	windowCapacity = ADC_SAMPLE_SIZE;
 	window.reserve(windowCapacity);
 }
@@ -20,7 +19,6 @@ HeightSensor::HeightSensor() : chanID(-1), conID(-1) {
 HeightSensor::~HeightSensor() {
 	stop();
 	delete adc;
-	delete fsm;
 }
 
 void HeightSensor::start() {
@@ -106,6 +104,7 @@ float HeightSensor::adcValueToMillimeter(int adcValue) {
 }
 
 void HeightSensor::addValue(int value) {
+	std::lock_guard<std::mutex> lock(mtx);
 	if (window.size() == ADC_SAMPLE_SIZE) {
 		// If window is full: Remove first element
 		window.erase(window.begin());
@@ -154,7 +153,7 @@ void HeightSensor::threadFunction() {
 		}
 	}
 
-	std::cout << "ADC thread stops..." << std::endl;
+	Logger::debug("ADC thread has stopped.");
 }
 
 float HeightSensor::getAverageHeight() {

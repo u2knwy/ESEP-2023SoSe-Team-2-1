@@ -22,6 +22,7 @@
 #include <thread>
 #include <chrono>
 #include <vector>
+#include <mutex>
 
 /*---------------------------------------------------------------------------
    HEIGHT SENSOR CONFIGURATION
@@ -52,7 +53,7 @@
 
 class HeightSensor {
 public:
-	HeightSensor();
+	HeightSensor(std::shared_ptr<HeightSensorFSM> fsm);
 	virtual ~HeightSensor();
 	void start();
 	void stop();
@@ -61,14 +62,15 @@ public:
 	float getAverageHeight();
 	float getMaxHeight();
 private:
+	std::shared_ptr<HeightSensorFSM> fsm;
 	TSCADC tsc;
 	ADC* adc;
-	HeightSensorFSM* fsm;
 	int chanID;
 	int conID;
     std::thread measureThread;
     std::vector<int> window;
     size_t windowCapacity;
+    std::mutex mtx;
     void addValue(int value);
     bool running{false};
     void threadFunction();

@@ -10,6 +10,7 @@
 #include "HeightActions.h"
 #include "HeightBasestate.h"
 #include "HeightContextData.h"
+#include "events/IEventHandler.h"
 
 class HeightSensorFSM {
 public:

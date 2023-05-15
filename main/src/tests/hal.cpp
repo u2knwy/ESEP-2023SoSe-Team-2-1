@@ -18,7 +18,8 @@ protected:
    */
   void SetUp() override {
 	  hal = new HAL();
-	  hm = new HeightSensor();
+	  auto fsm = std::make_shared<HeightSensorFSM>();
+	  hm = new HeightSensor(fsm);
   }
 
   /**

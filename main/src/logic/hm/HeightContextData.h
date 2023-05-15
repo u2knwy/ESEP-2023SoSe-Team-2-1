@@ -13,8 +13,10 @@ class HeightContextData {
 public:
 	HeightContextData();
 	virtual ~HeightContextData();
-	EventType currentType;
 	int avgValue;
 	int maxValue;
+	EventType getCurrentType();
 	void setCurrentType(EventType type);
+private:
+	EventType currentType;
 };
