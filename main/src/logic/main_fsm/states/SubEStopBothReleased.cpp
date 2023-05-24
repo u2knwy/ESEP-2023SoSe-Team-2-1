@@ -8,19 +8,18 @@
 #include "SubEStopBothReleased.h"
 #include "SubEStopOnePressed.h"
 #include "Standby.h"
+#include "logger/logger.hpp"
 
 #include <iostream>
 
-using namespace std;
-
 void SubEStopBothReleased::entry() {
-	cout << "SubEStopBothReleased::entry" << endl;
+	Logger::debug("SubEStopBothReleased::entry");
 	masterReset = false;
 	slaveReset = false;
 }
 
 bool SubEStopBothReleased::master_btnReset_Pressed() {
-	cout << "SubEStopBothReleased::master_btnReset_Pressed" << endl;
+	Logger::debug("SubEStopBothReleased::master_btnReset_Pressed");
 	this->masterReset = true;
 	if(masterReset && slaveReset) {
 		exit();
@@ -31,7 +30,7 @@ bool SubEStopBothReleased::master_btnReset_Pressed() {
 }
 
 bool SubEStopBothReleased::slave_btnReset_Pressed() {
-	cout << "SubEStopBothReleased::slave_btnReset_Pressed" << endl;
+	Logger::debug("SubEStopBothReleased::slave_btnReset_Pressed");
 	this->slaveReset = true;
 	if(masterReset && slaveReset) {
 		exit();
@@ -42,7 +41,7 @@ bool SubEStopBothReleased::slave_btnReset_Pressed() {
 }
 
 bool SubEStopBothReleased::master_EStop_Pressed() {
-	cout << "SubEStopBothReleased::master_EStop_Pressed" << endl;
+	Logger::debug("SubEStopBothReleased::master_EStop_Pressed");
 	exit();
 	new(this) SubEStopOnePressed;
 	entry();
@@ -50,7 +49,7 @@ bool SubEStopBothReleased::master_EStop_Pressed() {
 }
 
 bool SubEStopBothReleased::slave_EStop_Pressed() {
-	cout << "SubEStopBothReleased::slave_EStop_Pressed" << endl;
+	Logger::debug("SubEStopBothReleased::slave_EStop_Pressed");
 	exit();
 	new(this) SubEStopOnePressed;
 	entry();

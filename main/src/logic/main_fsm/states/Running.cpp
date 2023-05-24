@@ -7,105 +7,104 @@
 
 #include "Running.h"
 #include "Standby.h"
+#include "logger/logger.hpp"
 
 #include <iostream>
-
-using namespace std;
 
 MainState Running::getCurrentState() {
 	return MainState::RUNNING;
 };
 
 void Running::entry() {
-	cout << "Running::entry" << endl;
+	Logger::debug("Running::entry");
 }
 
 void Running::exit() {
-	cout << "Running::exit" << endl;
+	Logger::debug("Running::exit");
 }
 
 bool Running::master_LBA_Blocked() {
-	cout << "Running::master_LBA_Blocked" << endl;
+	Logger::debug("Running::master_LBA_Blocked");
 	return true;
 }
 
 bool Running::master_LBA_Unblocked() {
-	cout << "Running::master_LBA_Unblocked" << endl;
+	Logger::debug("Running::master_LBA_Unblocked");
 	return true;
 }
 
 bool Running::master_LBW_Blocked() {
-	cout << "Running::master_LBW_Blocked" << endl;
+	Logger::debug("Running::master_LBW_Blocked");
 	return true;
 }
 
 bool Running::master_LBW_Unblocked() {
-	cout << "Running::master_LBW_Unblocked" << endl;
+	Logger::debug("Running::master_LBW_Unblocked");
 	return true;
 }
 
 bool Running::master_LBE_Blocked() {
-	cout << "Running::master_LBE_Blocked" << endl;
+	Logger::debug("Running::master_LBE_Blocked");
 	return true;
 }
 
 bool Running::master_LBE_Unblocked() {
-	cout << "Running::master_LBE_Unblocked" << endl;
+	Logger::debug("Running::master_LBE_Unblocked");
 	return true;
 }
 
 bool Running::master_LBR_Blocked() {
-	cout << "Running::master_LBR_Blocked" << endl;
+	Logger::debug("Running::master_LBR_Blocked");
 	return true;
 }
 
 bool Running::master_LBR_Unblocked() {
-	cout << "Running::master_LBR_Unblocked" << endl;
+	Logger::debug("Running::master_LBR_Unblocked");
 	return true;
 }
 
 bool Running::slave_LBA_Blocked() {
-	cout << "Running::slave_LBA_Blocked" << endl;
+	Logger::debug("Running::slave_LBA_Blocked");
 	return true;
 }
 
 bool Running::slave_LBA_Unblocked() {
-	cout << "Running::slave_LBA_Unblocked" << endl;
+	Logger::debug("Running::slave_LBA_Unblocked");
 	return true;
 }
 
 bool Running::slave_LBW_Blocked() {
-	cout << "Running::slave_LBW_Blocked" << endl;
+	Logger::debug("Running::slave_LBW_Blocked");
 	return true;
 }
 
 bool Running::slave_LBW_Unblocked() {
-	cout << "Running::slave_LBW_Unblocked" << endl;
+	Logger::debug("Running::slave_LBW_Unblocked");
 	return true;
 }
 
 bool Running::slave_LBE_Blocked() {
-	cout << "Running::slave_LBE_Blocked" << endl;
+	Logger::debug("Running::slave_LBE_Blocked");
 	return true;
 }
 
 bool Running::slave_LBE_Unblocked() {
-	cout << "Running::slave_LBE_Unblocked" << endl;
+	Logger::debug("Running::slave_LBE_Unblocked");
 	return true;
 }
 
 bool Running::slave_LBR_Blocked() {
-	cout << "Running::slave_LBR_Blocked" << endl;
+	Logger::debug("Running::slave_LBR_Blocked");
 	return true;
 }
 
 bool Running::slave_LBR_Unblocked() {
-	cout << "Running::slave_LBR_Unblocked" << endl;
+	Logger::debug("Running::slave_LBR_Unblocked");
 	return true;
 }
 
 bool Running::master_btnStop_Pressed() {
-	cout << "Running::master_btnStop_Pressed" << endl;
+	Logger::debug("Running::master_btnStop_Pressed");
 	exit();
 	new(this) Standby;
 	entry();
@@ -113,7 +112,7 @@ bool Running::master_btnStop_Pressed() {
 }
 
 bool Running::slave_btnStop_Pressed() {
-	cout << "Running::slave_btnStop_Pressed" << endl;
+	Logger::debug("Running::slave_btnStop_Pressed");
 	exit();
 	new(this) Standby;
 	entry();
@@ -121,11 +120,11 @@ bool Running::slave_btnStop_Pressed() {
 }
 
 bool Running::master_EStop_Pressed() {
-	cout << "Running::master_EStop_Pressed" << endl;
+	Logger::debug("Running::master_EStop_Pressed");
 	return true;
 }
 
 bool Running::slave_EStop_Pressed() {
-	cout << "Running::slave_EStop_Pressed" << endl;
+	Logger::debug("Running::slave_EStop_Pressed");
 	return true;
 }

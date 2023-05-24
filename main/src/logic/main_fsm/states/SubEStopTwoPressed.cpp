@@ -7,13 +7,12 @@
 
 #include "SubEStopTwoPressed.h"
 #include "SubEStopOnePressed.h"
+#include "logger/logger.hpp"
 
 #include <iostream>
 
-using namespace std;
-
 bool SubEStopTwoPressed::master_EStop_Released() {
-	cout << "SubEStopTwoPressed::master_EStop_Released" << endl;
+	Logger::debug("SubEStopTwoPressed::master_EStop_Released");
 	exit();
 	new(this) SubEStopOnePressed;
 	entry();
@@ -21,7 +20,7 @@ bool SubEStopTwoPressed::master_EStop_Released() {
 }
 
 bool SubEStopTwoPressed::slave_EStop_Released() {
-	cout << "SubEStopTwoPressed::slave_EStop_Released" << endl;
+	Logger::debug("SubEStopTwoPressed::slave_EStop_Released");
 	exit();
 	new(this) SubEStopOnePressed;
 	entry();

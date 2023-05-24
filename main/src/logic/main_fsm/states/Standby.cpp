@@ -7,48 +7,47 @@
 
 #include "Standby.h"
 #include <iostream>
-
-using namespace std;
+#include "logger/logger.hpp"
 
 MainState Standby::getCurrentState() {
 	return MainState::STANDBY;
 };
 
 void Standby::entry() {
-	cout << "Standby::entry" << endl;
+	Logger::debug("Standby::entry");
 }
 
 void Standby::exit() {
-	cout << "Standby::exit" << endl;
+	Logger::debug("Standby::exit");
 }
 
 bool Standby::master_btnStart_PressedShort() {
-	cout << "Standby::master_btnStart_PressedShort" << endl;
+	Logger::debug("Standby::master_btnStart_PressedShort");
 	return true;
 }
 
 bool Standby::master_btnStart_PressedLong() {
-	cout << "Standby::master_btnStart_PressedLong" << endl;
+	Logger::debug("Standby::master_btnStart_PressedLong");
 	return true;
 }
 
 bool Standby::master_EStop_Pressed() {
-	cout << "Standby::master_EStop_Pressed" << endl;
+	Logger::debug("Standby::master_EStop_Pressed");
 	return true;
 }
 
 bool Standby::slave_btnStart_PressedShort() {
-	cout << "Standby::slave_btnStart_PressedShort" << endl;
+	Logger::debug("Standby::slave_btnStart_PressedShort");
 	return true;
 }
 
 bool Standby::slave_btnStart_PressedLong() {
-	cout << "Standby::slave_btnStart_PressedLong" << endl;
+	Logger::debug("Standby::slave_btnStart_PressedLong");
 	return true;
 }
 
 bool Standby::slave_EStop_Pressed() {
-	cout << "Standby::slave_EStop_Pressed" << endl;
+	Logger::debug("Standby::slave_EStop_Pressed");
 	return true;
 }
 

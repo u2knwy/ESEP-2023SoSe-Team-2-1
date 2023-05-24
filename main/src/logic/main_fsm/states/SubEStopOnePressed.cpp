@@ -7,21 +7,20 @@
 
 #include "SubEStopOnePressed.h"
 #include "SubEStopTwoPressed.h"
+#include "logger/logger.hpp"
 
 #include <iostream>
 
-using namespace std;
-
 void SubEStopOnePressed::entry() {
-	cout << "SubEStopOnePressed::entry" << endl;
+	Logger::debug("SubEStopOnePressed::entry");
 }
 
 void SubEStopOnePressed::exit() {
-	cout << "SubEStopOnePressed::exit" << endl;
+	Logger::debug("SubEStopOnePressed::exit");
 }
 
 bool SubEStopOnePressed::master_EStop_Pressed() {
-	cout << "SubEStopOnePressed::master_EStop_Pressed" << endl;
+	Logger::debug("SubEStopOnePressed::master_EStop_Pressed");
 	exit();
 	new(this) SubEStopTwoPressed;
 	entry();
@@ -29,12 +28,12 @@ bool SubEStopOnePressed::master_EStop_Pressed() {
 }
 
 bool SubEStopOnePressed::master_EStop_Released() {
-	cout << "SubEStopOnePressed::master_EStop_Released" << endl;
+	Logger::debug("SubEStopOnePressed::master_EStop_Released");
 	return true;
 }
 
 bool SubEStopOnePressed::slave_EStop_Pressed() {
-	cout << "SubEStopOnePressed::slave_EStop_Pressed" << endl;
+	Logger::debug("SubEStopOnePressed::slave_EStop_Pressed");
 	exit();
 	new(this) SubEStopTwoPressed;
 	entry();
@@ -42,6 +41,6 @@ bool SubEStopOnePressed::slave_EStop_Pressed() {
 }
 
 bool SubEStopOnePressed::slave_EStop_Released() {
-	cout << "SubEStopOnePressed::slave_EStop_Released" << endl;
+	Logger::debug("SubEStopOnePressed::slave_EStop_Released");
 	return true;
 }

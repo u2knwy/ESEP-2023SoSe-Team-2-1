@@ -7,47 +7,46 @@
 
 #include "EStop.h"
 #include <iostream>
-
-using namespace std;
+#include "logger/logger.hpp"
 
 MainState EStop::getCurrentState() {
 	return MainState::ESTOP;
 };
 
 void EStop::entry() {
-	cout << "EStop::entry" << endl;
+	Logger::debug("EStop::entry");
 }
 
 void EStop::exit() {
-	cout << "EStop::exit" << endl;
+	Logger::debug("EStop::exit");
 }
 
 bool EStop::master_EStop_Pressed() {
-	cout << "EStop::master_EStop_Pressed" << endl;
+	Logger::debug("EStop::master_EStop_Pressed");
 	return true;
 }
 
 bool EStop::master_EStop_Released() {
-	cout << "EStop::master_EStop_Released" << endl;
+	Logger::debug("EStop::master_EStop_Released");
 	return true;
 }
 
 bool EStop::slave_EStop_Pressed() {
-	cout << "EStop::slave_EStop_Pressed" << endl;
+	Logger::debug("EStop::slave_EStop_Pressed");
 	return true;
 }
 
 bool EStop::slave_EStop_Released() {
-	cout << "EStop::slave_EStop_Released" << endl;
+	Logger::debug("EStop::slave_EStop_Released");
 	return true;
 }
 
 bool EStop::master_btnReset_Pressed() {
-	cout << "EStop::master_btnReset_Pressed" << endl;
+	Logger::debug("EStop::master_btnReset_Pressed");
 	return true;
 }
 
 bool EStop::slave_btnReset_Pressed() {
-	cout << "EStop::slave_btnReset_Pressed" << endl;
+	Logger::debug("EStop::slave_btnReset_Pressed");
 	return true;
 }
