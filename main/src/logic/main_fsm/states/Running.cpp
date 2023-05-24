@@ -25,6 +25,8 @@ void Running::exit() {
 
 bool Running::master_LBA_Blocked() {
 	Logger::debug("Running::master_LBA_Blocked");
+	Workpiece* wp = data->wpManager->addWorkpiece();
+	Logger::info("New workpiece inserted: " + wp->getId());
 	return true;
 }
 

@@ -4,14 +4,12 @@
  *  Created on: 24.05.2023
  *      Author: Maik
  */
-
-#ifndef SRC_LOGIC_MAIN_FSM_MAINCONTEXTDATA_H_
-#define SRC_LOGIC_MAIN_FSM_MAINCONTEXTDATA_H_
+#pragma once
+#include "data/WorkpieceManager.h"
 
 class MainContextData {
 public:
 	MainContextData();
 	virtual ~MainContextData();
+	WorkpieceManager* wpManager;
 };
-
-#endif /* SRC_LOGIC_MAIN_FSM_MAINCONTEXTDATA_H_ */

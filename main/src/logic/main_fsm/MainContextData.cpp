@@ -8,11 +8,10 @@
 #include "MainContextData.h"
 
 MainContextData::MainContextData() {
-	// TODO Auto-generated constructor stub
-
+	wpManager = new WorkpieceManager();
 }
 
 MainContextData::~MainContextData() {
-	// TODO Auto-generated destructor stub
+	delete wpManager;
 }
 
