@@ -12,6 +12,10 @@
 
 using namespace std;
 
+MainState Running::getCurrentState() {
+	return MainState::RUNNING;
+};
+
 void Running::entry() {
 	cout << "Running::entry" << endl;
 }

@@ -29,35 +29,35 @@ protected:
 
 // When launching the FSM -> Current state must be STANDBY
 TEST_F(MainFSM_Test, StartStateStandby) {
-	EXPECT_EQ(true, false);
+	EXPECT_EQ(MainState::STANDBY, fsm->getCurrentState());
 }
 
 // Start pressed short -> Current state must be RUNNING
 TEST_F(MainFSM_Test, StateRunningAfterStartPressedShort) {
 	fsm->master_btnStart_PressedShort();
-	EXPECT_EQ(true, false);
+	EXPECT_EQ(MainState::RUNNING, fsm->getCurrentState());
 
 	fsm.reset();
 	fsm = std::make_shared<MainContext>();
 
 	fsm->slave_btnStart_PressedShort();
-	EXPECT_EQ(true, false);
+	EXPECT_EQ(MainState::RUNNING, fsm->getCurrentState());
 }
 
 // Start pressed long -> Current state must be SERVICE_MODE
 TEST_F(MainFSM_Test, StateServiceModeAfterStartPressedLong) {
 	fsm->master_btnStart_PressedLong();
-	EXPECT_EQ(true, false);	// in ServiceMode
+	EXPECT_EQ(MainState::SERVICEMODE, fsm->getCurrentState());	// in ServiceMode
 	fsm->master_btnStop_Pressed();
-	EXPECT_EQ(true, false); // back in Standby
+	EXPECT_EQ(MainState::STANDBY, fsm->getCurrentState()); // back in Standby
 
 	fsm.reset();
 	fsm = std::make_shared<MainContext>();
 
 	fsm->slave_btnStart_PressedLong();
-	EXPECT_EQ(true, false);	// in ServiceMode
+	EXPECT_EQ(MainState::SERVICEMODE, fsm->getCurrentState());	// in ServiceMode
 	fsm->slave_btnStop_Pressed();
-	EXPECT_EQ(true, false); // back in Standby
+	EXPECT_EQ(MainState::STANDBY, fsm->getCurrentState()); // back in Standby
 }
 
 // In state running and stop pressed -> Current state must be STANDBY
@@ -65,12 +65,12 @@ TEST_F(MainFSM_Test, StateStandbyAfterRunningAndStopPressed) {
 	// Buttons pressed at master
 	fsm->master_btnStart_PressedShort();
 	fsm->master_btnStop_Pressed();
-	EXPECT_EQ(true, false);
+	EXPECT_EQ(MainState::STANDBY, fsm->getCurrentState());
 
 	// Buttons pressed at slave
 	fsm->slave_btnStart_PressedShort();
 	fsm->slave_btnStop_Pressed();
-	EXPECT_EQ(true, false);
+	EXPECT_EQ(MainState::STANDBY, fsm->getCurrentState());
 }
 
 // In state running and EStop pressed -> Current state must be ESTOP
@@ -78,33 +78,33 @@ TEST_F(MainFSM_Test, StateEStopAfterRunningAndEStopPressed) {
 	// Buttons pressed at master
 	fsm->master_btnStart_PressedShort();
 	fsm->master_EStop_Pressed();
-	EXPECT_EQ(true, false); // must be in EStop
+	EXPECT_EQ(MainState::ESTOP, fsm->getCurrentState()); // must be in EStop
 
 	// One EStop pressed -> must still stay in EStop
 	fsm->master_btnReset_Pressed();
-	EXPECT_EQ(true, false);
+	EXPECT_EQ(MainState::ESTOP, fsm->getCurrentState());
 	fsm->slave_btnReset_Pressed();
-	EXPECT_EQ(true, false);
+	EXPECT_EQ(MainState::ESTOP, fsm->getCurrentState());
 
 	// Second EStop pressed -> must still stay in EStop
 	fsm->slave_EStop_Pressed();
-	EXPECT_EQ(true, false);
+	EXPECT_EQ(MainState::ESTOP, fsm->getCurrentState());
 	fsm->master_btnReset_Pressed();
-	EXPECT_EQ(true, false);
+	EXPECT_EQ(MainState::ESTOP, fsm->getCurrentState());
 	fsm->slave_btnReset_Pressed();
-	EXPECT_EQ(true, false);
+	EXPECT_EQ(MainState::ESTOP, fsm->getCurrentState());
 
 	// First EStop released -> must still stay in EStop
 	fsm->master_EStop_Released();
 	fsm->master_btnReset_Pressed();
-	EXPECT_EQ(true, false);
+	EXPECT_EQ(MainState::ESTOP, fsm->getCurrentState());
 	fsm->slave_btnReset_Pressed();
-	EXPECT_EQ(true, false);
+	EXPECT_EQ(MainState::ESTOP, fsm->getCurrentState());
 
 	// Second EStop released -> must go to Standby if both reset buttons pressed
 	fsm->slave_EStop_Released();
 	fsm->master_btnReset_Pressed();
-	EXPECT_EQ(true, false); // still in EStop
+	EXPECT_EQ(MainState::ESTOP, fsm->getCurrentState()); // still in EStop
 	fsm->slave_btnReset_Pressed();
-	EXPECT_EQ(true, false); // now in Standby
+	EXPECT_EQ(MainState::STANDBY, fsm->getCurrentState()); // now in Standby
 }

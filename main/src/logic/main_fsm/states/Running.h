@@ -12,6 +12,8 @@ class Running: public MainBasestate {
 	void entry() override;
 	void exit() override;
 
+	MainState getCurrentState() override;
+
 	bool master_LBA_Blocked() override;
 	bool master_LBA_Unblocked() override;
 	bool master_LBW_Blocked() override;

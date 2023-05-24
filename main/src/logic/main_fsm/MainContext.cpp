@@ -21,6 +21,10 @@ MainContext::~MainContext() {
 	delete state;
 }
 
+MainState MainContext::getCurrentState() {
+	return state->getCurrentState();
+}
+
 void MainContext::master_LBA_Blocked() {
 	Logger::debug("MainContext::master_LBA_Blocked");
 }

@@ -10,6 +10,15 @@
 #include "MainActions.h"
 #include "MainContextData.h"
 
+enum MainState {
+	MAIN_NONE,
+	STANDBY,
+	RUNNING,
+	SERVICEMODE,
+	ERROR,
+	ESTOP
+};
+
 class MainBasestate {
 protected:
 	MainContextData* data;
@@ -24,6 +33,10 @@ public:
 	virtual void setAction(MainActions* actions) {
 		this->actions = actions;
 	}
+
+	virtual MainState getCurrentState() {
+		return MAIN_NONE;
+	};
 
 	virtual void entry() {}
 	virtual void exit() {}

@@ -17,6 +17,8 @@ public:
 	MainContext();
 	virtual ~MainContext();
 
+	MainState getCurrentState();
+
 	void master_LBA_Blocked();
 	void master_LBA_Unblocked();
 	void master_LBW_Blocked();

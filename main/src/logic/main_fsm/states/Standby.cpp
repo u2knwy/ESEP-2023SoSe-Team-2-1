@@ -10,6 +10,10 @@
 
 using namespace std;
 
+MainState Standby::getCurrentState() {
+	return MainState::STANDBY;
+};
+
 void Standby::entry() {
 	cout << "Standby::entry" << endl;
 }

@@ -10,6 +10,10 @@
 
 using namespace std;
 
+MainState EStop::getCurrentState() {
+	return MainState::ESTOP;
+};
+
 void EStop::entry() {
 	cout << "EStop::entry" << endl;
 }
