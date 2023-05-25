@@ -14,12 +14,14 @@
 #include <iostream>
 #include <stdio.h>
 #include <errno.h>
-#include <sys/neutrino.h>
-#include <sys/procmgr.h>
 #include <thread>
 #include <chrono>
+#include <memory>
+#include <sys/neutrino.h>
+#include <sys/procmgr.h>
 
 #include "events/IEventHandler.h"
+#include "events/EventManager.h"
 
 /* Helper macros */
 #define BIT_MASK(x) (1 << (x))
@@ -86,7 +88,7 @@
 
 class HAL : public IEventHandler {
 public:
-	HAL();
+	HAL(std::shared_ptr<EventManager> mngr);
 	virtual ~HAL();
 
 	void handleEvent(EventType eventType) override;
@@ -193,6 +195,7 @@ private:
 	int chanID;
 	int conID;
 	std::thread eventLoopThread;
+	std::shared_ptr<EventManager> eventManager;
 
 	/**
 	 * Configure all Pins as input / outputs
@@ -202,6 +205,10 @@ private:
 	 * Initialize all interrupts on GPIO pins and ADC.
 	 */
 	void initInterrupts();
+	/**
+	 * Subscribes to events from EventManager
+	 */
+	void subscribeToEvents();
 	/**
 	 * Check the latest GPIO interrupt and handle it.
 	 */

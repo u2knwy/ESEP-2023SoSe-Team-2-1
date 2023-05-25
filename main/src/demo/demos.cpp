@@ -13,6 +13,7 @@
 #include "logger/logger.hpp"
 #include "hal/HeightSensor.h"
 #include "logic/main_fsm/MainContext.h"
+#include "events/EventManager.h"
 
 void actuatorDemo() {
 	Logger::info("Actuator Demo");
@@ -20,7 +21,8 @@ void actuatorDemo() {
 	// Create a shared pointer which holds a reference to the HAL.
 	// This can be shared across multiple classes and the destructor will automatically be called,
 	// if there are no more references to it.
-	std::shared_ptr<HAL> hal = std::make_shared<HAL>();
+	std::shared_ptr<EventManager> mngr = std::make_shared<EventManager>();
+	std::shared_ptr<HAL> hal = std::make_shared<HAL>(mngr);
 
 	hal->motorStop();
 
@@ -74,7 +76,8 @@ void actuatorDemo() {
 void sensorDemo() {
 	Logger::info("Sensor Demo");
 
-	std::shared_ptr<HAL> hal = std::make_shared<HAL>();
+	std::shared_ptr<EventManager> mngr = std::make_shared<EventManager>();
+	std::shared_ptr<HAL> hal = std::make_shared<HAL>(mngr);
 	hal->startEventLoop();
 	std::this_thread::sleep_for(std::chrono::seconds(999));
 	hal->stopEventLoop();
@@ -85,7 +88,8 @@ void sensorDemo() {
 void adcDemo() {
 	using namespace std;
 
-	std::shared_ptr<HAL> hal = std::make_shared<HAL>();
+	std::shared_ptr<EventManager> mngr = std::make_shared<EventManager>();
+	std::shared_ptr<HAL> hal = std::make_shared<HAL>(mngr);
 
 	// Start motor slow for demo
 	//hal->motorRight();

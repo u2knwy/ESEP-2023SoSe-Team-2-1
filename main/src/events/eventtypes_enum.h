@@ -7,7 +7,7 @@
 
 #define ESTRING(x) x,
 
-typedef enum EventType {
+enum EventType {
 #include "eventtypes_estrings.h"
 };
 

@@ -10,10 +10,13 @@
 #include "logger/logger.hpp"
 #include "events/events.h"
 
-HAL::HAL() {
+HAL::HAL(std::shared_ptr<EventManager> mngr) : eventManager(eventManager) {
 	gpio_bank_0 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_0);
 	gpio_bank_1 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_1);
 	gpio_bank_2 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_2);
+
+	// Default: Stop Motor
+	motorStop();
 
 	/* ### Create channel to receive interrupt pulse messages ### */
 	chanID = ChannelCreate(0);
@@ -31,10 +34,8 @@ HAL::HAL() {
 
 	configurePins();
 	initInterrupts();
+	subscribeToEvents();
 
-	// Default: Stop Motor
-	motorFast();
-	motorStop();
 }
 
 HAL::~HAL() {
@@ -132,6 +133,21 @@ void HAL::initInterrupts() {
 	falling |= (SE_SWITCH_PIN | SE_METAL_PIN | KEY_START_PIN | KEY_STOP_PIN | KEY_RESET_PIN | ESTOP_PIN);
 	temp = in32((uintptr_t) gpio_bank_0 + GPIO_FALLINGDETECT);
 	out32((uintptr_t) (gpio_bank_0 + GPIO_FALLINGDETECT), temp | falling);
+}
+
+void HAL::subscribeToEvents() {
+	// Subscribe to lamp events
+	eventManager->subscribe(EventType::HALroteLampeAn, std::bind(&HAL::RedLampOn, this));
+	eventManager->subscribe(EventType::HALroteLampeAus, std::bind(&HAL::RedLampOff, this));
+	eventManager->subscribe(EventType::HALgelbeLampeAn, std::bind(&HAL::YellowLampOn, this));
+	eventManager->subscribe(EventType::HALgelbeLampeAus, std::bind(&HAL::YellowLampOff, this));
+	eventManager->subscribe(EventType::HALgrueneLampeAn, std::bind(&HAL::GreenLampOn, this));
+	eventManager->subscribe(EventType::HALgrueneLampeAus, std::bind(&HAL::GreenLampOff, this));
+
+	// Subscribe to motor events
+	eventManager->subscribe(EventType::HALmotorFastRight, std::bind(&HAL::motorFast, this));
+	eventManager->subscribe(EventType::HALmotorSlowRight, std::bind(&HAL::motorSlow, this));
+	eventManager->subscribe(EventType::HALmotorStop, std::bind(&HAL::motorStop, this));
 }
 
 void HAL::handleEvent(EventType eventType) {

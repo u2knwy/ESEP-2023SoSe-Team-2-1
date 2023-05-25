@@ -11,7 +11,7 @@
 #include <functional>
 #include <string>
 
-typedef struct EventData {
+struct EventData {
     EventType event;
     int data;
     std::string msg;

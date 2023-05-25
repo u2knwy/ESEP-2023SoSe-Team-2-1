@@ -7,7 +7,7 @@
 #include <gtest/gtest.h>
 #include "hal/hal.h"
 #include "hal/HeightSensor.h"
-
+#include "events/EventManager.h"
 
 class HAL_Test : public ::testing::Test {
 protected:
@@ -15,7 +15,8 @@ protected:
   HeightSensor* hm;
 
   void SetUp() override {
-	  hal = new HAL();
+	  std::shared_ptr<EventManager> mngr = std::make_shared<EventManager>();
+	  hal = new HAL(mngr);
 	  auto fsm = std::make_shared<HeightSensorFSM>();
 	  hm = new HeightSensor(fsm);
   }
