@@ -32,6 +32,11 @@ int main(int argc, char **argv) {
     options.mode == Mode::MASTER ? Logger::info("Program started as MASTER") : Logger::info("Program started as SLAVE");
     options.pusher ? Logger::info("Hardware uses Pusher for sorting out") : Logger::info("Hardware uses Switch for sorting out");
 
+	Configuration& conf = Configuration::getInstance();
+	conf.readConfigFromFile("/usr/tmp/conf.txt");
+    conf.setMaster(options.mode == Mode::MASTER);
+    conf.setPusherMounted(options.pusher);
+
 	// Initialize Logger
 	const string debug = string(getenv("QNX_DEBUG"));
 	if(debug == "TRUE") {
@@ -41,8 +46,6 @@ int main(int argc, char **argv) {
 		Logger::set_level(Logger::level::INFO);
 	}
 
-	Configuration conf;
-	conf.readConfigFromFile("/usr/tmp/conf.txt");
 
 	Logger::info("Sorting Machine was terminated.");
 	return EXIT_SUCCESS;
