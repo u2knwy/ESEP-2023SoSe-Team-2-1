@@ -28,25 +28,25 @@ void actuatorDemo() {
 
 	// ALL ON
 	Logger::info("Switch all actuators on");
-	hal->GreenLampOn();
-	hal->YellowLampOn();
-	hal->RedLampOn();
-	hal->StartLedOn();
-	hal->ResetLedOn();
-	hal->Q1LedOn();
-	hal->Q2LedOn();
+	hal->greenLampOn();
+	hal->yellowLampOn();
+	hal->redLampOn();
+	hal->startLedOn();
+	hal->resetLedOn();
+	hal->q1LedOn();
+	hal->q2LedOn();
 	hal->openSwitch();
 	std::this_thread::sleep_for(std::chrono::seconds(5));
 
 	// ALL OFF
 	Logger::info("Switch all actuators off");
-	hal->GreenLampOff();
-	hal->YellowLampOff();
-	hal->RedLampOff();
-	hal->StartLedOff();
-	hal->ResetLedOff();
-	hal->Q1LedOff();
-	hal->Q2LedOff();
+	hal->greenLampOff();
+	hal->yellowLampOff();
+	hal->redLampOff();
+	hal->startLedOff();
+	hal->resetLedOff();
+	hal->q1LedOff();
+	hal->q2LedOff();
 	hal->closeSwitch();
 	std::this_thread::sleep_for(std::chrono::seconds(5));
 

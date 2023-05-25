@@ -50,25 +50,25 @@ static bool readPin(uint32_t port, uint32_t pin) {
 
 TEST_F(HAL_Test, GreenLamp) {
 	// Example: now we can call methods on the object created in SetUp method
-	hal->GreenLampOn();
+	hal->greenLampOn();
 	EXPECT_EQ(true, readPin(1, 18));
-	hal->GreenLampOff();
+	hal->greenLampOff();
 	EXPECT_EQ(false, readPin(1, 18));
 }
 
 TEST_F(HAL_Test, YellowLamp) {
 	// Example: now we can call methods on the object created in SetUp method
-	hal->YellowLampOn();
+	hal->yellowLampOn();
 	EXPECT_EQ(true, readPin(1, 17));
-	hal->YellowLampOff();
+	hal->yellowLampOff();
 	EXPECT_EQ(false, readPin(1, 17));
 }
 
 TEST_F(HAL_Test, RedLamp) {
 	// Example: now we can call methods on the object created in SetUp method
-	hal->RedLampOn();
+	hal->redLampOn();
 	EXPECT_EQ(true, readPin(1, 16));
-	hal->RedLampOff();
+	hal->redLampOff();
 	EXPECT_EQ(false, readPin(1, 16));
 }
 

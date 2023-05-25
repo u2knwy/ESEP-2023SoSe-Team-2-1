@@ -137,12 +137,12 @@ void HAL::initInterrupts() {
 
 void HAL::subscribeToEvents() {
 	// Subscribe to lamp events
-	eventManager->subscribe(EventType::HALroteLampeAn, std::bind(&HAL::RedLampOn, this));
-	eventManager->subscribe(EventType::HALroteLampeAus, std::bind(&HAL::RedLampOff, this));
-	eventManager->subscribe(EventType::HALgelbeLampeAn, std::bind(&HAL::YellowLampOn, this));
-	eventManager->subscribe(EventType::HALgelbeLampeAus, std::bind(&HAL::YellowLampOff, this));
-	eventManager->subscribe(EventType::HALgrueneLampeAn, std::bind(&HAL::GreenLampOn, this));
-	eventManager->subscribe(EventType::HALgrueneLampeAus, std::bind(&HAL::GreenLampOff, this));
+	eventManager->subscribe(EventType::HALroteLampeAn, std::bind(&HAL::redLampOn, this));
+	eventManager->subscribe(EventType::HALroteLampeAus, std::bind(&HAL::redLampOff, this));
+	eventManager->subscribe(EventType::HALgelbeLampeAn, std::bind(&HAL::yellowLampOn, this));
+	eventManager->subscribe(EventType::HALgelbeLampeAus, std::bind(&HAL::yellowLampOff, this));
+	eventManager->subscribe(EventType::HALgrueneLampeAn, std::bind(&HAL::greenLampOn, this));
+	eventManager->subscribe(EventType::HALgrueneLampeAus, std::bind(&HAL::greenLampOff, this));
 
 	// Subscribe to motor events
 	eventManager->subscribe(EventType::HALmotorFastRight, std::bind(&HAL::motorFast, this));
@@ -166,59 +166,59 @@ void HAL::stopEventLoop() {
 	}
 }
 
-void HAL::GreenLampOn() {
+void HAL::greenLampOn() {
 	out32((uintptr_t) (gpio_bank_1 + GPIO_SETDATAOUT), LAMP_GREEN_PIN);
 }
 
-void HAL::GreenLampOff() {
+void HAL::greenLampOff() {
 	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), LAMP_GREEN_PIN);
 }
 
-void HAL::YellowLampOn() {
+void HAL::yellowLampOn() {
 	out32((uintptr_t) (gpio_bank_1 + GPIO_SETDATAOUT), LAMP_YELLOW_PIN);
 }
 
-void HAL::YellowLampOff() {
+void HAL::yellowLampOff() {
 	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), LAMP_YELLOW_PIN);
 }
 
-void HAL::RedLampOn() {
+void HAL::redLampOn() {
 	out32((uintptr_t) (gpio_bank_1 + GPIO_SETDATAOUT), LAMP_RED_PIN);
 }
 
-void HAL::RedLampOff() {
+void HAL::redLampOff() {
 	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), LAMP_RED_PIN);
 }
 
-void HAL::StartLedOn() {
+void HAL::startLedOn() {
 	out32((uintptr_t) (gpio_bank_2 + GPIO_SETDATAOUT), LED_START_PIN);
 }
 
-void HAL::StartLedOff() {
+void HAL::startLedOff() {
 	out32((uintptr_t) (gpio_bank_2 + GPIO_CLEARDATAOUT), LED_START_PIN);
 }
 
-void HAL::ResetLedOn() {
+void HAL::resetLedOn() {
 	out32((uintptr_t) (gpio_bank_2 + GPIO_SETDATAOUT), LED_RESET_PIN);
 }
 
-void HAL::ResetLedOff() {
+void HAL::resetLedOff() {
 	out32((uintptr_t) (gpio_bank_2 + GPIO_CLEARDATAOUT), LED_RESET_PIN);
 }
 
-void HAL::Q1LedOn() {
+void HAL::q1LedOn() {
 	out32((uintptr_t) (gpio_bank_2 + GPIO_SETDATAOUT), LED_Q1_PIN);
 }
 
-void HAL::Q1LedOff() {
+void HAL::q1LedOff() {
 	out32((uintptr_t) (gpio_bank_2 + GPIO_CLEARDATAOUT), LED_Q1_PIN);
 }
 
-void HAL::Q2LedOn() {
+void HAL::q2LedOn() {
 	out32((uintptr_t) (gpio_bank_2 + GPIO_SETDATAOUT), LED_Q2_PIN);
 }
 
-void HAL::Q2LedOff() {
+void HAL::q2LedOff() {
 	out32((uintptr_t) (gpio_bank_2 + GPIO_CLEARDATAOUT), LED_Q2_PIN);
 }
 

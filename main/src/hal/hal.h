@@ -104,59 +104,59 @@ public:
 	/**
 	 * Turns the green lamp on
 	 */
-	void GreenLampOn();
+	void greenLampOn();
 	/**
 	 * Turns the green lamp off
 	 */
-	void GreenLampOff();
+	void greenLampOff();
 	/**
 	 * Turns the yellow lamp on
 	 */
-	void YellowLampOn();
+	void yellowLampOn();
 	/**
 	 * Turns the yellow lamp off
 	 */
-	void YellowLampOff();
+	void yellowLampOff();
 	/**
 	 * Turns the red lamp on
 	 */
-	void RedLampOn();
+	void redLampOn();
 	/**
 	 * Turns the red lamp off
 	 */
-	void RedLampOff();
+	void redLampOff();
 	/**
 	 * Turns the LED at the 'Start' button on
 	 */
-	void StartLedOn();
+	void startLedOn();
 	/**
 	 * Turns the LED at the 'Start' button off
 	 */
-	void StartLedOff();
+	void startLedOff();
 	/**
 	 * Turns the LED at the 'Reset' button on
 	 */
-	void ResetLedOn();
+	void resetLedOn();
 	/**
 	 * Turns the LED at the 'Reset' button off
 	 */
-	void ResetLedOff();
+	void resetLedOff();
 	/**
 	 * Turns the 'Q1' LED on
 	 */
-	void Q1LedOn();
+	void q1LedOn();
 	/**
 	 * Turns the 'Q1' LED off
 	 */
-	void Q1LedOff();
+	void q1LedOff();
 	/**
 	 * Turns the 'Q2' LED on
 	 */
-	void Q2LedOn();
+	void q2LedOn();
 	/**
 	 * Turns the 'Q2' LED off
 	 */
-	void Q2LedOff();
+	void q2LedOff();
 	/**
 	 * Sets the 'Motor slow' flag. This does NOT start or stop the motor.
 	 */

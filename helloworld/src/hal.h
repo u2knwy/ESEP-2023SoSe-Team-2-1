@@ -66,8 +66,8 @@ class HAL {
 public:
 	HAL();
 	virtual ~HAL();
-	void GreenLampOn();
-	void GreenLampOff();
+	void greenLampOn();
+	void greenLampOff();
 private:
 	uintptr_t gpio_bank_1;
 };
