@@ -7,11 +7,14 @@
 #pragma once
 
 #include "events.h"
+#include "eventtypes_enum.h"
 #include <functional>
 
-class EventData {
-public:
-	EventData() {};
+typedef struct EventData
+{
+    EventType event;
+    int data;
+    string msg;
 };
 
 class EventManager {
