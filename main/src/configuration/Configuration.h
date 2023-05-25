@@ -15,6 +15,7 @@ enum WorkpieceType {
 	WS_F,
 	WS_BOM,
 	WS_BUM,
+	WS_OB,
 	UNKNOWN
 };
 

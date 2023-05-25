@@ -8,6 +8,7 @@
 #pragma once
 
 #include "events/eventtypes_enum.h"
+#include "configuration/Configuration.h"
 
 class HeightContextData {
 public:
@@ -15,8 +16,8 @@ public:
 	virtual ~HeightContextData();
 	int avgValue;
 	int maxValue;
-	EventType getCurrentType();
-	void setCurrentType(EventType type);
+	WorkpieceType getCurrentType();
+	void setCurrentType(WorkpieceType type);
 private:
-	EventType currentType;
+	WorkpieceType currentType;
 };
