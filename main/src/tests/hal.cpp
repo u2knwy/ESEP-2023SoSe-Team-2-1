@@ -8,23 +8,18 @@
 #include "hal/hal.h"
 #include "hal/HeightSensor.h"
 
+
 class HAL_Test : public ::testing::Test {
 protected:
   HAL* hal;
   HeightSensor* hm;
 
-  /**
-   * OPTIONAL: Prepare objects before each test
-   */
   void SetUp() override {
 	  hal = new HAL();
 	  auto fsm = std::make_shared<HeightSensorFSM>();
 	  hm = new HeightSensor(fsm);
   }
 
-  /**
-   * OPTIONAL: Release any resources allocated in SetUp() method
-   */
   void TearDown() override {
 	  delete hal;
 	  delete hm;

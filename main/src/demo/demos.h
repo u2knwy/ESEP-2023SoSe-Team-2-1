@@ -10,3 +10,4 @@
 void actuatorDemo();
 void sensorDemo();
 void adcDemo();
+void fsmDemo();

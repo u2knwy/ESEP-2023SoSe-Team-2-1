@@ -61,7 +61,8 @@ int main(int argc, char **argv) {
 		// Run Demo programs...
 		//actuatorDemo();
 		//sensorDemo();
-		adcDemo();
+		//adcDemo();
+		fsmDemo();
 		return EXIT_SUCCESS;
 	}
 
