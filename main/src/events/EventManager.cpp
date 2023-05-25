@@ -6,9 +6,10 @@
  */
 
 #include "EventManager.h"
+#include "configuration/Configuration.h"
 
 EventManager::EventManager() : server_coid(-1) {
-	isMaster = true;
+	isMaster = Configuration::getInstance().systemIsMaster();
 }
 
 EventManager::~EventManager() {
