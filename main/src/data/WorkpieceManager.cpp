@@ -13,7 +13,7 @@ WorkpieceManager::WorkpieceManager() {
 }
 
 WorkpieceManager::~WorkpieceManager() {
-	// TODO Auto-generated destructor stub
+	delete workpieceOnFBM2;
 }
 
 Workpiece* WorkpieceManager::addWorkpiece() {

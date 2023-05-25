@@ -7,6 +7,7 @@
 
 #include "Running.h"
 #include "Standby.h"
+#include "EStop.h"
 #include "logger/logger.hpp"
 
 #include <iostream>
@@ -123,10 +124,16 @@ bool Running::slave_btnStop_Pressed() {
 
 bool Running::master_EStop_Pressed() {
 	Logger::debug("Running::master_EStop_Pressed");
+	exit();
+	new(this) EStop;
+	entry();
 	return true;
 }
 
 bool Running::slave_EStop_Pressed() {
 	Logger::debug("Running::slave_EStop_Pressed");
+	exit();
+	new(this) EStop;
+	entry();
 	return true;
 }

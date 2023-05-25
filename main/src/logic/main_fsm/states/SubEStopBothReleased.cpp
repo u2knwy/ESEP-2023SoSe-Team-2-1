@@ -7,6 +7,7 @@
 
 #include "SubEStopBothReleased.h"
 #include "SubEStopOnePressed.h"
+#include "SubEStopEndState.h"
 #include "Standby.h"
 #include "logger/logger.hpp"
 
@@ -18,26 +19,34 @@ void SubEStopBothReleased::entry() {
 	slaveReset = false;
 }
 
+void SubEStopBothReleased::exit() {
+	Logger::debug("SubEStopBothReleased::exit");
+}
+
 bool SubEStopBothReleased::master_btnReset_Pressed() {
 	Logger::debug("SubEStopBothReleased::master_btnReset_Pressed");
 	this->masterReset = true;
 	if(masterReset && slaveReset) {
+		Logger::debug("EStop was resetted -> leave EStop mode");
 		exit();
-		new(this) Standby;
+		new(this) SubEStopEndState;
 		entry();
+		return true;
 	}
-	return true;
+	return false;
 }
 
 bool SubEStopBothReleased::slave_btnReset_Pressed() {
 	Logger::debug("SubEStopBothReleased::slave_btnReset_Pressed");
 	this->slaveReset = true;
 	if(masterReset && slaveReset) {
+		Logger::debug("EStop was resetted -> leave EStop mode");
 		exit();
-		new(this) Standby;
+		new(this) SubEStopEndState;
 		entry();
+		return true;
 	}
-	return true;
+	return false;
 }
 
 bool SubEStopBothReleased::master_EStop_Pressed() {

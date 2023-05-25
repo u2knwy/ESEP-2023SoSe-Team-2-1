@@ -23,6 +23,7 @@ class MainBasestate {
 protected:
 	MainContextData* data;
 	MainActions* actions;
+	MainBasestate* substateEStop;
 
 public:
 	virtual ~MainBasestate(){};
@@ -40,6 +41,10 @@ public:
 
 	virtual void entry() {}
 	virtual void exit() {}
+
+	virtual void initSubStateEStop() {}
+
+	virtual bool isSubEndState() { return false; };
 
 	// Light Barriers
 	virtual bool master_LBA_Blocked() 	{ return false; }	// Anfang blockiert

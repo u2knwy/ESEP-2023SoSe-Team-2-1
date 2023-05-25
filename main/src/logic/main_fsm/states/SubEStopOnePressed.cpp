@@ -7,6 +7,7 @@
 
 #include "SubEStopOnePressed.h"
 #include "SubEStopTwoPressed.h"
+#include "SubEStopBothReleased.h"
 #include "logger/logger.hpp"
 
 #include <iostream>
@@ -29,6 +30,9 @@ bool SubEStopOnePressed::master_EStop_Pressed() {
 
 bool SubEStopOnePressed::master_EStop_Released() {
 	Logger::debug("SubEStopOnePressed::master_EStop_Released");
+	exit();
+	new(this) SubEStopBothReleased;
+	entry();
 	return true;
 }
 
@@ -42,5 +46,8 @@ bool SubEStopOnePressed::slave_EStop_Pressed() {
 
 bool SubEStopOnePressed::slave_EStop_Released() {
 	Logger::debug("SubEStopOnePressed::slave_EStop_Released");
+	exit();
+	new(this) SubEStopBothReleased;
+	entry();
 	return true;
 }

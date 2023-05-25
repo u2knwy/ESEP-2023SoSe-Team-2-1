@@ -18,11 +18,11 @@ class MainFSM_Test : public ::testing::Test {
 protected:
 	std::shared_ptr<MainContext> fsm;
 
-  /**
-   * OPTIONAL: Prepare objects before each test
-   */
   void SetUp() override {
 	  fsm = std::make_shared<MainContext>();
+  }
+
+  void TearDown() override {
   }
 
 };
@@ -77,6 +77,7 @@ TEST_F(MainFSM_Test, StateStandbyAfterRunningAndStopPressed) {
 TEST_F(MainFSM_Test, StateEStopAfterRunningAndEStopPressed) {
 	// Buttons pressed at master
 	fsm->master_btnStart_PressedShort();
+	EXPECT_EQ(MainState::RUNNING, fsm->getCurrentState());
 	fsm->master_EStop_Pressed();
 	EXPECT_EQ(MainState::ESTOP, fsm->getCurrentState()); // must be in EStop
 

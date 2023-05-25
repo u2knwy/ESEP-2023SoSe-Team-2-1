@@ -14,6 +14,8 @@ class EStop: public MainBasestate {
 
 	MainState getCurrentState() override;
 
+	void initSubStateEStop() override;
+
 	bool master_EStop_Pressed() override;
 	bool master_EStop_Released() override;
 

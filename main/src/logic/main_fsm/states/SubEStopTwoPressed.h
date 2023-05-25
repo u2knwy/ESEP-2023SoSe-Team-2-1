@@ -9,6 +9,7 @@
 #include "../MainBasestate.h"
 
 class SubEStopTwoPressed: public MainBasestate {
+
 	bool master_EStop_Released() override;
 	bool slave_EStop_Released() override;
 };

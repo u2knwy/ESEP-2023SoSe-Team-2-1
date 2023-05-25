@@ -12,6 +12,7 @@
 #include "hal/hal.h"
 #include "logger/logger.hpp"
 #include "hal/HeightSensor.h"
+#include "logic/main_fsm/MainContext.h"
 
 void actuatorDemo() {
 	Logger::info("Actuator Demo");
@@ -121,4 +122,14 @@ void adcDemo() {
 	// Stop motor for demo
 	hal->motorStop();
 	// ### END ADC TEST
+}
+
+void fsmDemo() {
+	MainContext fsm;
+	fsm.master_EStop_Pressed();
+	fsm.slave_EStop_Pressed();
+	fsm.master_EStop_Released();
+	fsm.slave_EStop_Released();
+	fsm.master_btnReset_Pressed();
+	fsm.slave_btnReset_Pressed();
 }
