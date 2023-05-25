@@ -10,6 +10,7 @@
 #include "adc/ADC.h"
 #include "events/events.h"
 #include "logic/hm/HeightSensorFSM.h"
+#include "configuration/Configuration.h"
 
 #include <sys/mman.h>
 #include <hw/inout.h>

@@ -8,10 +8,11 @@
 #pragma once
 
 enum WorkpieceType {
-	UNKNOWN,
-	TYPE_A,
-	TYPE_B,
-	TYPE_C
+	WS_F,
+	WS_BOM,
+	WS_BUM,
+	WS_OB,
+	UNKNOWN
 };
 
 class Workpiece {

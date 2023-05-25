@@ -8,13 +8,11 @@
 
 #include <string>
 #include <vector>
+#include "data/Workpiece.h"
 
-enum WorkpieceType {
-	WS_F,
-	WS_BOM,
-	WS_BUM,
-	WS_OB,
-	UNKNOWN
+struct Calibration {
+	int calOffset;
+	int calRef;
 };
 
 class Configuration {
@@ -30,6 +28,7 @@ public:
 	bool pusherMounted();
 	void setDesiredWorkpieceOrder(std::vector<WorkpieceType> order);
 	std::vector<WorkpieceType> getDesiredOrder();
+	Calibration getCalibration();
 private:
 	Configuration();
 	virtual ~Configuration();
@@ -39,5 +38,5 @@ private:
 	bool isMaster{true};
 	bool hasPusher{false};
 	int calOffset{0};
-	int calAdcPerMillimeter{50};
+	int calRefHigh{0};
 };

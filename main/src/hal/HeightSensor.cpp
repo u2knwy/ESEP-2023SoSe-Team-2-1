@@ -12,8 +12,10 @@ HeightSensor::HeightSensor(std::shared_ptr<HeightSensorFSM> fsm) : fsm(fsm), cha
 	adc = new ADC(tsc);
 	windowCapacity = ADC_SAMPLE_SIZE;
 	window.reserve(windowCapacity);
-	calibrateOffset(ADC_DEFAULT_OFFSET);
-	calibrateRefHigh(ADC_DEFAULT_HIGH);
+	Configuration &conf = Configuration::getInstance();
+	Calibration cal = conf.getCalibration();
+	calibrateOffset(cal.calOffset);
+	calibrateRefHigh(cal.calRef);
 }
 
 HeightSensor::~HeightSensor() {
