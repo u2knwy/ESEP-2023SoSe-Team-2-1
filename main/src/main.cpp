@@ -8,9 +8,9 @@
 #include "events/events.h"
 #include "configuration/options.hpp"
 #include "common/macros.h"
-
 #include "hal/HeightSensor.h"
 #include "logic/hm/HeightSensorFSM.h"
+#include "configuration/Configuration.h"
 
 #include <gtest/gtest.h>
 
@@ -27,41 +27,53 @@ bool running = true;
  * Signal Handler which must be called if the program is terminated.
  * Does all necessary stuff for cleanup to avoid memory leaks.
  */
-void cleanup(int exitCode) {
+void cleanup(int exitCode)
+{
 	Logger::info("Exit code received: " + std::to_string(exitCode));
 	heightSensor->stop();
 	running = false;
 }
 
-int main(int argc, char **argv) {
-    Options options{argc, argv};
-    if (options.mode == Mode::TESTS) {
-    	// Run Unit Tests
-    	Logger::info("Running tests...");
-    	::testing::InitGoogleTest(&argc, argv);
-    	auto result = RUN_ALL_TESTS();
-    	return result;
-    }
+int main(int argc, char **argv)
+{
+	Options options{argc, argv};
+	if (options.mode == Mode::TESTS)
+	{
+		// Run Unit Tests
+		Logger::info("Running tests...");
+		::testing::InitGoogleTest(&argc, argv);
+		auto result = RUN_ALL_TESTS();
+		return result;
+	}
 
-    options.mode == Mode::MASTER ? Logger::info("Program started as MASTER") : Logger::info("Program started as SLAVE");
-    options.pusher ? Logger::info("Hardware uses Pusher for sorting out") : Logger::info("Hardware uses Switch for sorting out");
+	options.mode == Mode::MASTER ? Logger::info("Program started as MASTER") : Logger::info("Program started as SLAVE");
+	options.pusher ? Logger::info("Hardware uses Pusher for sorting out") : Logger::info("Hardware uses Switch for sorting out");
+
+	Configuration &conf = Configuration::getInstance();
+	conf.readConfigFromFile("/usr/tmp/conf.txt");
+	conf.setMaster(options.mode == Mode::MASTER);
+	conf.setPusherMounted(options.pusher);
 
 	// Initialize Logger
 	const string debug = string(getenv("QNX_DEBUG"));
-	if(debug == "TRUE") {
+	if (debug == "TRUE")
+	{
 		Logger::set_level(Logger::level::DEBUG);
 		Logger::debug("##### Started in DEBUG mode #####");
-	} else {
+	}
+	else
+	{
 		Logger::set_level(Logger::level::INFO);
 	}
 
-	if (options.mode == Mode::DEMO) {
+	if (options.mode == Mode::DEMO)
+	{
 		Logger::info("Starting in Demo Mode...");
 		DELAY_S(1);
 		// Run Demo programs...
-		//actuatorDemo();
-		//sensorDemo();
-		//adcDemo();
+		// actuatorDemo();
+		// sensorDemo();
+		// adcDemo();
 		fsmDemo();
 		return EXIT_SUCCESS;
 	}
@@ -76,9 +88,10 @@ int main(int argc, char **argv) {
 	std::signal(SIGTERM, cleanup);
 
 	// Endless loop - wait until termination
-	while(running) {
+	while (running)
+	{
 		// Sleep to save CPU resources
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+		std::this_thread::sleep_for(std::chrono::seconds(1));
 	}
 
 	Logger::info("Sorting Machine was terminated.");

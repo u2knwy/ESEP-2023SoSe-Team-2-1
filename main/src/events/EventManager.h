@@ -9,12 +9,12 @@
 #include "events.h"
 #include "eventtypes_enum.h"
 #include <functional>
+#include <string>
 
-typedef struct EventData
-{
+typedef struct EventData {
     EventType event;
     int data;
-    string msg;
+    std::string msg;
 };
 
 class EventManager {
