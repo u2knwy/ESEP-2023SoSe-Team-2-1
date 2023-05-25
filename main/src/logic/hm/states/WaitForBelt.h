@@ -11,5 +11,7 @@
 
 class WaitForBelt : public HeightBasestate {
 	void entry() override;
-	bool heightValueReceived(float valueMM) override;
+
+	bool beltDetected() override;
+	bool unknownDetected() override;
 };

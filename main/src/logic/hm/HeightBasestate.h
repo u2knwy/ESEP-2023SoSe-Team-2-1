@@ -28,7 +28,38 @@ public:
 	virtual void entry() {}
 	virtual void exit() {}
 
-	virtual bool heightValueReceived(float valueMM) {
+	/**
+	 * Height BELT was detected
+	 */
+	virtual bool beltDetected() {
+		return false;
+	}
+
+	/**
+	 * Height FLAT was detected
+	 */
+	virtual bool flatDetected() {
+		return false;
+	}
+
+	/**
+	 * Height HIGH was detected
+	 */
+	virtual bool highDetected() {
+		return false;
+	}
+
+	/**
+	 * Height HOLE was detected
+	 */
+	virtual bool holeDetected() {
+		return false;
+	}
+
+	/**
+	 * Height UNKNOWN was detected
+	 */
+	virtual bool unknownDetected() {
 		return false;
 	}
 };

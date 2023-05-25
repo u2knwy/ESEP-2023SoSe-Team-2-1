@@ -11,5 +11,8 @@
 
 class High : public HeightBasestate {
 	void entry() override;
-	bool heightValueReceived(float valueMM) override;
+
+	bool beltDetected() override;
+	bool holeDetected() override;
+	bool unknownDetected() override;
 };

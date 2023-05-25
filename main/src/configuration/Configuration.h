@@ -10,14 +10,26 @@
 #include <vector>
 #include "data/Workpiece.h"
 
-struct Calibration {
+enum WorkpieceType
+{
+	WS_F,
+	WS_BOM,
+	WS_BUM,
+	WS_OB,
+	UNKNOWN
+};
+
+struct Calibration
+{
 	int calOffset;
 	int calRef;
 };
 
-class Configuration {
+class Configuration
+{
 public:
-	static Configuration& getInstance() {
+	static Configuration &getInstance()
+	{
 		static Configuration instance;
 		return instance;
 	}
@@ -29,11 +41,12 @@ public:
 	void setDesiredWorkpieceOrder(std::vector<WorkpieceType> order);
 	std::vector<WorkpieceType> getDesiredOrder();
 	Calibration getCalibration();
+
 private:
 	Configuration();
 	virtual ~Configuration();
-	Configuration(const Configuration&) = delete;
-	Configuration& operator=(const Configuration&) = delete;
+	Configuration(const Configuration &) = delete;
+	Configuration &operator=(const Configuration &) = delete;
 	std::vector<WorkpieceType> order;
 	bool isMaster{true};
 	bool hasPusher{false};

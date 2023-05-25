@@ -9,17 +9,20 @@
 #include "logger/logger.hpp"
 #include "events/events.h"
 
-HeightContextData::HeightContextData() : avgValue(0.0), maxValue(0.0), currentType(EventType::HM_M_WS_UNKNOWN) {
+HeightContextData::HeightContextData() {
+	avgValue = 0.0;
+	maxValue = 0.0;
+	currentType = WorkpieceType::UNKNOWN;
 }
 
 HeightContextData::~HeightContextData() {
 	// TODO Auto-generated destructor stub
 }
 
-EventType HeightContextData::getCurrentType() {
+WorkpieceType HeightContextData::getCurrentType() {
 	return currentType;
 }
 
-void HeightContextData::setCurrentType(EventType type) {
+void HeightContextData::setCurrentType(WorkpieceType type) {
 	this->currentType = type;
 }

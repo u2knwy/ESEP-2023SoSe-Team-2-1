@@ -8,6 +8,7 @@
 #include "HeightSensorFSM.h"
 #include "states/WaitForWorkpiece.h"
 #include "HeightActions.h"
+#include "hal/HeightSensor.h"
 
 HeightSensorFSM::HeightSensorFSM() {
 	data = new HeightContextData();
@@ -24,10 +25,25 @@ HeightSensorFSM::~HeightSensorFSM() {
 }
 
 void HeightSensorFSM::heightValueReceived(float valueMM) {
-	state->heightValueReceived(valueMM);
+	if(valueMM > HEIGHT_FLAT-1 && valueMM < HEIGHT_FLAT+1) {
+		Logger::debug("[HFSM] FLAT detected");
+		state->flatDetected();
+	} else if(valueMM > HEIGHT_HIGH-1 && valueMM < HEIGHT_HIGH+1) {
+		Logger::debug("[HFSM] HIGH detected");
+		state->highDetected();
+	} else if(valueMM < HEIGHT_CONV_MAX) {
+		Logger::debug("[HFSM] CONVEYOR detected");
+		state->beltDetected();
+	} else if(valueMM > HEIGHT_HOLE && valueMM < HEIGHT_HOLE+1) {
+		Logger::debug("[HFSM] HOLE detected");
+		state->holeDetected();
+	} else {
+		Logger::debug("[HFSM] UNKNOWN detected");
+		state->unknownDetected();
+	}
 }
 
-EventType HeightSensorFSM::getDetectedWorkpieceType() {
+WorkpieceType HeightSensorFSM::getDetectedWorkpieceType() {
 	return data->getCurrentType();
 }
 

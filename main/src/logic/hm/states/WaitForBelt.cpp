@@ -13,13 +13,15 @@ void WaitForBelt::entry() {
 	Logger::debug("[HM] Waiting for belt...");
 }
 
-bool WaitForBelt::heightValueReceived(float valueMM) {
-	if(valueMM < HEIGHT_CONV_MAX) {
-		actions->sendHeightResultFBM1(data->getCurrentType(), data->avgValue);
-		exit();
-		new(this) WaitForWorkpiece;
-		entry();
-		return true;
-	}
+bool WaitForBelt::beltDetected() {
+	actions->sendHeightResultFBM1(data->getCurrentType(), data->avgValue);
+	exit();
+	new(this) WaitForWorkpiece;
+	entry();
+	return true;
+}
+
+bool WaitForBelt::unknownDetected() {
+	data->setCurrentType(WorkpieceType::UNKNOWN);
 	return false;
 }

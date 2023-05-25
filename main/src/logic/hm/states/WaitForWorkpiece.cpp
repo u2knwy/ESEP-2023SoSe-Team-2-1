@@ -17,27 +17,22 @@ void WaitForWorkpiece::entry() {
 	Logger::debug("[HM] Waiting for new workpiece...");
 }
 
-bool WaitForWorkpiece::heightValueReceived(float valueMM) {
-	if(valueMM > HEIGHT_FLAT-1 && valueMM < HEIGHT_FLAT+1) {
-		Logger::debug("[HFSM] FLAT detected");
-		data->setCurrentType(EventType::HM_M_WS_F);
-		exit();
-		new(this) WaitForBelt;
-		entry();
-		return true;
-	} else if(valueMM > HEIGHT_HIGH-1 && valueMM < HEIGHT_HIGH+1) {
-		Logger::debug("[HFSM] HIGH detected");
-		data->setCurrentType(EventType::HM_M_WS_OB);
-		exit();
-		new(this) High;
-		entry();
-		return true;
-	} else if(valueMM < HEIGHT_CONV_MAX) {
-		//Logger::debug("[HFSM] CONVEYOR detected");
-	} else {
-		Logger::debug("[HFSM] UNKNOWN detected");
-		data->setCurrentType(EventType::HM_M_WS_UNKNOWN);
-		return true;
-	}
-	return false;
+void WaitForWorkpiece::exit() {
+	actions->newWorkpieceDetected();
+}
+
+bool WaitForWorkpiece::flatDetected() {
+	data->setCurrentType(WorkpieceType::WS_F);
+	exit();
+	new(this) WaitForBelt;
+	entry();
+	return true;
+}
+
+bool WaitForWorkpiece::highDetected() {
+	data->setCurrentType(WorkpieceType::WS_OB);
+	exit();
+	new(this) High;
+	entry();
+	return true;
 }
