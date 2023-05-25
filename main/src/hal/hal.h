@@ -102,6 +102,33 @@ public:
 	 */
 	void stopEventLoop();
 	/**
+	 * Sets all actuators when Standby mode is entered:
+	 * - all off
+	 */
+	void standbyMode();
+	/**
+	 * Sets all actuators when Running mode is entered:
+	 * - green lamp on
+	 */
+	void runningMode();
+
+	/**
+	 * Sets all actuators when Service mode is entered
+	 * - green lamp flashing
+	 */
+	void serviceMode();
+	/**
+	 * Sets all actuators when Error mode is entered
+	 * - red lamp flashing fast
+	 * - motor stop
+	 */
+	void errorMode();
+	/**
+	 * Sets all actuators when EStop mode is entered:
+	 * - all off
+	 */
+	void estopMode();
+	/**
 	 * Turns the green lamp on
 	 */
 	void greenLampOn();
@@ -109,6 +136,10 @@ public:
 	 * Turns the green lamp off
 	 */
 	void greenLampOff();
+	/**
+	 * Lets the green lamp blink
+	 */
+	void greenLampBlinking();
 	/**
 	 * Turns the yellow lamp on
 	 */
@@ -121,6 +152,14 @@ public:
 	 * Turns the red lamp on
 	 */
 	void redLampOn();
+	/**
+	 * Lets the red lamp blink fast
+	 */
+	void redLampBlinkFast();
+	/**
+	 * Lets the red lamp blink slow
+	 */
+	void redLampBlinkSlow();
 	/**
 	 * Turns the red lamp off
 	 */

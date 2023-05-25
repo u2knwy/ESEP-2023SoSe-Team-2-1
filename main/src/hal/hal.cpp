@@ -10,7 +10,7 @@
 #include "logger/logger.hpp"
 #include "events/events.h"
 
-HAL::HAL(std::shared_ptr<EventManager> mngr) : eventManager(eventManager) {
+HAL::HAL(std::shared_ptr<EventManager> mngr) : eventManager(mngr) {
 	gpio_bank_0 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_0);
 	gpio_bank_1 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_1);
 	gpio_bank_2 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_2);
@@ -35,7 +35,6 @@ HAL::HAL(std::shared_ptr<EventManager> mngr) : eventManager(eventManager) {
 	configurePins();
 	initInterrupts();
 	subscribeToEvents();
-
 }
 
 HAL::~HAL() {
@@ -136,6 +135,13 @@ void HAL::initInterrupts() {
 }
 
 void HAL::subscribeToEvents() {
+	// Subscribe to modes
+	eventManager->subscribe(EventType::MODE_STANDBY, std::bind(&HAL::standbyMode, this));
+	eventManager->subscribe(EventType::MODE_RUNNING, std::bind(&HAL::runningMode, this));
+	eventManager->subscribe(EventType::MODE_SERVICE, std::bind(&HAL::serviceMode, this));
+	eventManager->subscribe(EventType::MODE_ESTOP, std::bind(&HAL::estopMode, this));
+	eventManager->subscribe(EventType::MODE_ERROR, std::bind(&HAL::errorMode, this));
+
 	// Subscribe to lamp events
 	eventManager->subscribe(EventType::HALroteLampeAn, std::bind(&HAL::redLampOn, this));
 	eventManager->subscribe(EventType::HALroteLampeAus, std::bind(&HAL::redLampOff, this));
@@ -166,8 +172,46 @@ void HAL::stopEventLoop() {
 	}
 }
 
+void HAL::standbyMode() {
+	greenLampOff();
+	yellowLampOff();
+	redLampOff();
+	motorStop();
+}
+
+void HAL::runningMode() {
+	greenLampOn();
+	yellowLampOff();
+	redLampOff();
+}
+
+void HAL::serviceMode() {
+	greenLampBlinking();
+	yellowLampOff();
+	redLampOff();
+	motorStop();
+}
+
+void HAL::errorMode() {
+	greenLampOff();
+	yellowLampOff();
+	redLampBlinkFast();
+	motorStop();
+}
+
+void HAL::estopMode() {
+	greenLampOff();
+	yellowLampOff();
+	redLampOff();
+	motorStop();
+}
+
 void HAL::greenLampOn() {
 	out32((uintptr_t) (gpio_bank_1 + GPIO_SETDATAOUT), LAMP_GREEN_PIN);
+}
+
+void HAL::greenLampBlinking() {
+	// TODO: Let green lamp blink for ServiceMode
 }
 
 void HAL::greenLampOff() {
@@ -184,6 +228,14 @@ void HAL::yellowLampOff() {
 
 void HAL::redLampOn() {
 	out32((uintptr_t) (gpio_bank_1 + GPIO_SETDATAOUT), LAMP_RED_PIN);
+}
+
+void HAL::redLampBlinkFast() {
+	// TODO: Let red lamp blink with 1Hz
+}
+
+void HAL::redLampBlinkSlow() {
+	// TODO: Let red lamp blink with 0,5Hz
 }
 
 void HAL::redLampOff() {
