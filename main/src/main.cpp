@@ -6,6 +6,7 @@
 #include "logger/logger.hpp"
 #include "events/events.h"
 #include "configuration/options.hpp"
+#include "configuration/Configuration.h"
 
 #include <gtest/gtest.h>
 
@@ -39,6 +40,9 @@ int main(int argc, char **argv) {
 	} else {
 		Logger::set_level(Logger::level::INFO);
 	}
+
+	Configuration conf;
+	conf.readConfigFromFile("/usr/tmp/conf.txt");
 
 	Logger::info("Sorting Machine was terminated.");
 	return EXIT_SUCCESS;

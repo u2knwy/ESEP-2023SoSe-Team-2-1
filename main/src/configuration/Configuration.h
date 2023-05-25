@@ -4,12 +4,10 @@
  *  Created on: 07.05.2023
  *      Author: Maik
  */
+#pragma once
 
-#ifndef SRC_CONFIGURATION_CONFIGURATION_H_
-#define SRC_CONFIGURATION_CONFIGURATION_H_
-
-#import <string>
-#import <vector>
+#include <string>
+#include <vector>
 
 enum WorkpieceType {
 	WS_F,
@@ -26,13 +24,14 @@ public:
 	bool systemIsMaster();
 	bool pusherMounted();
 	std::vector<WorkpieceType> getDesiredOrder();
-	WorkpieceType getNextExpectedWorkpiece();
+	static Configuration& getInstance() {
+		static Configuration instance;
+		return instance;
+	}
 private:
-	Configuration* instance;
-	bool isMaster;
-	bool hasPusher;
-	int calOffset;
-	int calAdcPerMillimeter;
+	std::vector<WorkpieceType> order;
+	bool isMaster{true};
+	bool hasPusher{false};
+	int calOffset{0};
+	int calAdcPerMillimeter{50};
 };
-
-#endif /* SRC_CONFIGURATION_CONFIGURATION_H_ */
