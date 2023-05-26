@@ -64,18 +64,22 @@ private:
 	 * Configure all Pins as input / outputs
 	 */
 	void configurePins();
+
 	/**
 	 * Initialize all interrupts on GPIO pins and ADC.
 	 */
 	void initInterrupts();
+
 	/**
 	 * Subscribes to events from EventManager
 	 */
 	void subscribeToEvents();
+
 	/**
 	 * Check the latest GPIO interrupt and handle it.
 	 */
 	void handleGpioInterrupt();
+
 	/**
 	 * Continuously receive ADC and GPIO events
 	 */

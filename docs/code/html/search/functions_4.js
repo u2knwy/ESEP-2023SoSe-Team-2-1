@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['getrevision_0',['getRevision',['../class_t_s_c_a_d_c.html#aba48d5e2bf84838b8614d1a5a9f76ff7',1,'TSCADC']]],
-  ['gpiodemo_1',['gpioDemo',['../class_h_a_l.html#ad0d20b92fb0cbc5ab78b24309c9f89aa',1,'HAL']]],
-  ['greenlampoff_2',['GreenLampOff',['../class_h_a_l.html#acf016eb272df3f51eb0fed83fc2c5147',1,'HAL']]],
-  ['greenlampon_3',['GreenLampOn',['../class_h_a_l.html#a70250f2fe2ea1bf3f89fa897712505d0',1,'HAL']]]
+  ['fifoadcdataread_0',['fifoADCDataRead',['../class_t_s_c_a_d_c.html#a8c2bd0f7cc62132c827d1cd8f236f7ce',1,'TSCADC']]],
+  ['fifoirqthresholdlevelconfig_1',['fifoIRQThresholdLevelConfig',['../class_t_s_c_a_d_c.html#a7d3c87015cc31cfcb3d7d5fdf79ce39c',1,'TSCADC']]],
+  ['flatdetected_2',['flatDetected',['../class_height_basestate.html#a36057a2e55e937990f67c42709158acb',1,'HeightBasestate']]]
 ];

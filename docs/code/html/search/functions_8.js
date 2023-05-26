@@ -1,7 +1,9 @@
 var searchData=
 [
-  ['q1ledoff_0',['Q1LedOff',['../class_h_a_l.html#af8067a265e37a3df469d0cd83d311df7',1,'HAL']]],
-  ['q1ledon_1',['Q1LedOn',['../class_h_a_l.html#a7d8df5f2ea5861df167e72120b8c9738',1,'HAL']]],
-  ['q2ledoff_2',['Q2LedOff',['../class_h_a_l.html#a63cc11e4cb1a85241ea645661ec5836d',1,'HAL']]],
-  ['q2ledon_3',['Q2LedOn',['../class_h_a_l.html#a8c7b1533c22e1b71286cce2afca093eb',1,'HAL']]]
+  ['modulestateset_0',['moduleStateSet',['../class_t_s_c_a_d_c.html#ae3a8d4f1fab265f65d33a993b20ea022',1,'TSCADC']]],
+  ['motorfast_1',['motorFast',['../class_actuators.html#a3acf7b7592204a394b98e23ebdad4978',1,'Actuators']]],
+  ['motorleft_2',['motorLeft',['../class_actuators.html#a77feea6c50b0b7b4f2a56e30341b2b2e',1,'Actuators']]],
+  ['motorright_3',['motorRight',['../class_actuators.html#ac020cf8f94e22354337de45f9f19ca9b',1,'Actuators']]],
+  ['motorslow_4',['motorSlow',['../class_actuators.html#a50f2e70a409a70ed8e0974123a55c7e2',1,'Actuators']]],
+  ['motorstop_5',['motorStop',['../class_actuators.html#a8596f49e04e29ea6837d298d3340f178',1,'Actuators']]]
 ];
