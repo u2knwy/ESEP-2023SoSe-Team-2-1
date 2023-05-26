@@ -23,8 +23,6 @@
 #include "events/IEventHandler.h"
 #include "events/EventManager.h"
 
-/* Helper macros */
-#define BIT_MASK(x) (1 << (x))
 
 /*---------------------------------------------------------------------------
    GPIO CONFIGURATION
@@ -224,6 +222,22 @@ public:
 	 * Closes the switch to let a workpiece fall into the slide.
 	 */
 	void closeSwitch();
+
+	bool lbStartBlocked();
+	bool lbStartUnblocked();
+	bool lbSwitchBlocked();
+	bool lbSwitchUnblocked();
+	bool lbRampBlocked();
+	bool lbRampUnblocked();
+	bool metalDetected();
+	bool lbEndBlocked();
+	bool lbEndUnblocked();
+
+	bool startPressed();
+	bool stopPressed();
+	bool resetPressed();
+	bool eStopPressed();
+	bool eStopReleased();
 
 private:
 	uintptr_t gpio_bank_0;

@@ -1,15 +1,17 @@
 #include <iostream>
 #include <thread>
 #include <csignal>
-#include "hal/hal.h"
 
 #include "demo/demos.h"
 #include "logger/logger.hpp"
-#include "events/events.h"
-#include "configuration/options.hpp"
 #include "common/macros.h"
+
+#include "hal/hal.h"
 #include "hal/HeightSensor.h"
+#include "configuration/options.hpp"
 #include "logic/hm/HeightSensorFSM.h"
+#include "events/events.h"
+#include "events/EventManager.h"
 #include "configuration/Configuration.h"
 
 #include <gtest/gtest.h>
@@ -19,6 +21,8 @@ using namespace std;
 // Components which will be launched in main-function and cleaned up if program is terminated
 std::shared_ptr<HeightSensorFSM> heightFSM;
 std::shared_ptr<HeightSensor> heightSensor;
+std::shared_ptr<HAL> hal;
+std::shared_ptr<EventManager> eventManager;
 
 // Set this variable to false to stop main function from executing...
 bool running = true;
@@ -77,6 +81,10 @@ int main(int argc, char **argv)
 		fsmDemo();
 		return EXIT_SUCCESS;
 	}
+
+	eventManager = std::make_shared<EventManager>();
+	hal = std::make_shared<HAL>(eventManager);
+	hal->startEventLoop();
 
 	heightFSM = std::make_shared<HeightSensorFSM>();
 	heightSensor = std::make_shared<HeightSensor>(heightFSM);

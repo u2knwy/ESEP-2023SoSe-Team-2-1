@@ -19,6 +19,7 @@ HeightActions::~HeightActions() {
 
 void HeightActions::newWorkpieceDetected() {
 	// TODO: Send event to indicate the measurement starts now
+	Logger::debug("[HFSM] New workpiece detected");
 }
 
 void HeightActions::sendHeightResultFBM1(WorkpieceType type, int avg) {

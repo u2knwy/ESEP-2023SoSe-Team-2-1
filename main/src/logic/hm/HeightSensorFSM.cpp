@@ -16,6 +16,7 @@ HeightSensorFSM::HeightSensorFSM() {
 	state->setData(data);
 	actions = new HeightActions();
 	state->setAction(actions);
+	state->entry();
 }
 
 HeightSensorFSM::~HeightSensorFSM() {
@@ -26,19 +27,14 @@ HeightSensorFSM::~HeightSensorFSM() {
 
 void HeightSensorFSM::heightValueReceived(float valueMM) {
 	if(valueMM > HEIGHT_FLAT-1 && valueMM < HEIGHT_FLAT+1) {
-		Logger::debug("[HFSM] FLAT detected");
 		state->flatDetected();
 	} else if(valueMM > HEIGHT_HIGH-1 && valueMM < HEIGHT_HIGH+1) {
-		Logger::debug("[HFSM] HIGH detected");
 		state->highDetected();
 	} else if(valueMM < HEIGHT_CONV_MAX) {
-		Logger::debug("[HFSM] CONVEYOR detected");
 		state->beltDetected();
 	} else if(valueMM > HEIGHT_HOLE && valueMM < HEIGHT_HOLE+1) {
-		Logger::debug("[HFSM] HOLE detected");
 		state->holeDetected();
 	} else {
-		Logger::debug("[HFSM] UNKNOWN detected");
 		state->unknownDetected();
 	}
 }

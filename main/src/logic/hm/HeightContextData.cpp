@@ -24,5 +24,6 @@ WorkpieceType HeightContextData::getCurrentType() {
 }
 
 void HeightContextData::setCurrentType(WorkpieceType type) {
+	Logger::debug("[HFSM] Current type changed: " + std::to_string(type));
 	this->currentType = type;
 }

@@ -13,7 +13,7 @@
 
 struct EventData {
     EventType event;
-    int data;
+    int data{-1};
     std::string msg;
 };
 

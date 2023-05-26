@@ -14,7 +14,7 @@
 void WaitForWorkpiece::entry() {
 	data->avgValue = 0;
 	data->maxValue = 0;
-	Logger::debug("[HM] Waiting for new workpiece...");
+	Logger::debug("[HFSM] Waiting for new workpiece...");
 }
 
 void WaitForWorkpiece::exit() {
@@ -23,6 +23,7 @@ void WaitForWorkpiece::exit() {
 
 bool WaitForWorkpiece::flatDetected() {
 	data->setCurrentType(WorkpieceType::WS_F);
+	Logger::debug("[HFSM] Current type: WS_F");
 	exit();
 	new(this) WaitForBelt;
 	entry();
@@ -31,6 +32,7 @@ bool WaitForWorkpiece::flatDetected() {
 
 bool WaitForWorkpiece::highDetected() {
 	data->setCurrentType(WorkpieceType::WS_OB);
+	Logger::debug("[HFSM] Current type: WS_OB");
 	exit();
 	new(this) High;
 	entry();
