@@ -118,7 +118,6 @@ void HAL::initInterrupts() {
 	out32((uintptr_t) gpio_bank_0 + GPIO_IRQSTATUS_SET_1, intEnable);
 	uint32_t enabled = in32((uintptr_t) gpio_bank_0 + GPIO_IRQSTATUS_SET_1);
 	std::bitset<32> enabledBits(enabled);
-	Logger::debug("INT enabled: " + enabledBits.to_string());
 
 	// Set irq event types...
 	uint32_t temp, rising, falling;

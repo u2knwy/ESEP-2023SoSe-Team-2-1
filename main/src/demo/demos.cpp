@@ -129,7 +129,8 @@ void adcDemo() {
 }
 
 void fsmDemo() {
-	MainContext fsm;
+	std::shared_ptr<EventManager> mngr = std::make_shared<EventManager>();
+	MainContext fsm(mngr);
 	fsm.master_EStop_Pressed();
 	fsm.slave_EStop_Pressed();
 	fsm.master_EStop_Released();

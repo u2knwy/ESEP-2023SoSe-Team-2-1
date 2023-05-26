@@ -10,6 +10,8 @@
 #include "eventtypes_enum.h"
 #include <functional>
 #include <string>
+#include <map>
+#include <mutex>
 
 struct EventData {
     EventType event;
@@ -29,4 +31,6 @@ public:
 private:
 	bool isMaster;
 	int server_coid;
+	std::map<EventType, std::vector<EventCallback>> subscribers;
+	std::mutex mtx;
 };

@@ -58,11 +58,13 @@ bool Running::master_LBE_Unblocked() {
 
 bool Running::master_LBR_Blocked() {
 	Logger::debug("Running::master_LBR_Blocked");
+	data->setRampFBM1Blocked(true);
 	return true;
 }
 
 bool Running::master_LBR_Unblocked() {
 	Logger::debug("Running::master_LBR_Unblocked");
+	data->setRampFBM1Blocked(false);
 	return true;
 }
 
@@ -98,11 +100,13 @@ bool Running::slave_LBE_Unblocked() {
 
 bool Running::slave_LBR_Blocked() {
 	Logger::debug("Running::slave_LBR_Blocked");
+	data->setRampFBM2Blocked(true);
 	return true;
 }
 
 bool Running::slave_LBR_Unblocked() {
 	Logger::debug("Running::slave_LBR_Unblocked");
+	data->setRampFBM2Blocked(false);
 	return true;
 }
 

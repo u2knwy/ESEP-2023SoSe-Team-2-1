@@ -23,7 +23,14 @@ EventManager::~EventManager() {
 }
 
 void EventManager::subscribe(EventType event, EventCallback callback) {
+	EventData data;
+	callback(data);
 
+	if (subscribers.find(event) == subscribers.end()) {
+		// If event doesn't exist yet, create a new list and add it to the map
+		subscribers[event] = std::vector<EventCallback>();
+	}
+	subscribers[event].push_back(callback);
 }
 
 void EventManager::unsubscribe(EventType event, EventCallback callback) {
@@ -38,6 +45,17 @@ void EventManager::sendEvent(const EventData &event) {
 	if(event.data != -1)
 		ss << ", data: " << std::to_string(event.data);
 	Logger::info(ss.str());
+
+	std::lock_guard<std::mutex> lock(mtx);
+	if (subscribers.find(event.event) != subscribers.end()) {
+		Logger::debug("Notifiying subscribers...");
+		int i = 1;
+		for(const auto& callback : subscribers[event.event]) {
+			Logger::debug("Notifiying subscriber #" + std::to_string(i++));
+			EventData data;
+			callback(data);
+		}
+	}
 }
 
 int EventManager::start() {

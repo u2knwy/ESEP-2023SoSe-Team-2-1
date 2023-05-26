@@ -12,13 +12,32 @@
 
 #include <memory>
 
-MainContext::MainContext() {
+MainContext::MainContext(std::shared_ptr<EventManager> mngr) : eventManager(mngr) {
 	this->data = std::unique_ptr<MainContextData>(new MainContextData());
 	this->state = new Standby();
+	// TODO: @Domi subscribeToEvents funktioniert so nicht (sobald ich mehrere Threads habe die auf Events subscribed sind)
+	// "Process 348184 (main) terminated SIGSEGV code=1 fltno=11 ip=0102cda8(/usr/lib/ldqnx.so.2@_band_get_aligned+0x000002b8) mapaddr=0002cda8. ref=00000000"
+	//subscribeToEvents();
 }
 
 MainContext::~MainContext() {
 	delete state;
+}
+
+void MainContext::subscribeToEvents() {
+	eventManager->subscribe(EventType::START_M_SHORT, std::bind(&MainContext::master_btnStart_PressedShort, this));
+	eventManager->subscribe(EventType::START_M_LONG, std::bind(&MainContext::master_btnStart_PressedLong, this));
+	eventManager->subscribe(EventType::STOP_M_SHORT, std::bind(&MainContext::master_btnStop_Pressed, this));
+	eventManager->subscribe(EventType::RESET_M_SHORT, std::bind(&MainContext::master_btnReset_Pressed, this));
+	eventManager->subscribe(EventType::ESTOP_M_PRESSED, std::bind(&MainContext::master_EStop_Pressed, this));
+	eventManager->subscribe(EventType::ESTOP_M_RELEASED, std::bind(&MainContext::master_EStop_Released, this));
+
+	eventManager->subscribe(EventType::START_S_SHORT, std::bind(&MainContext::slave_btnStart_PressedShort, this));
+	eventManager->subscribe(EventType::START_S_LONG, std::bind(&MainContext::slave_btnStart_PressedLong, this));
+	eventManager->subscribe(EventType::STOP_S_SHORT, std::bind(&MainContext::slave_btnStop_Pressed, this));
+	eventManager->subscribe(EventType::RESET_S_SHORT, std::bind(&MainContext::slave_btnReset_Pressed, this));
+	eventManager->subscribe(EventType::ESTOP_S_PRESSED, std::bind(&MainContext::slave_EStop_Pressed, this));
+	eventManager->subscribe(EventType::ESTOP_S_RELEASED, std::bind(&MainContext::slave_EStop_Released, this));
 }
 
 MainState MainContext::getCurrentState() {

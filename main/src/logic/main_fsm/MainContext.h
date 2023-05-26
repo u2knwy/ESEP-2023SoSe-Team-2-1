@@ -9,12 +9,13 @@
 #include "MainActions.h"
 #include "MainBasestate.h"
 #include "MainContextData.h"
+#include "events/EventManager.h"
 
 #include <memory>
 
 class MainContext {
 public:
-	MainContext();
+	MainContext(std::shared_ptr<EventManager> mngr);
 	virtual ~MainContext();
 
 	MainState getCurrentState();
@@ -59,4 +60,6 @@ private:
 	std::unique_ptr<MainActions> actions;
 	MainBasestate* state;
 	std::unique_ptr<MainContextData> data;
+	std::shared_ptr<EventManager> eventManager;
+	void subscribeToEvents();
 };

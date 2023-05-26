@@ -10,6 +10,7 @@
 #include "hal/HeightSensor.h"
 #include "configuration/options.hpp"
 #include "logic/hm/HeightSensorFSM.h"
+#include "logic/main_fsm/MainContext.h"
 #include "events/events.h"
 #include "events/EventManager.h"
 #include "configuration/Configuration.h"
@@ -23,6 +24,7 @@ std::shared_ptr<HeightSensorFSM> heightFSM;
 std::shared_ptr<HeightSensor> heightSensor;
 std::shared_ptr<HAL> hal;
 std::shared_ptr<EventManager> eventManager;
+std::shared_ptr<MainContext> mainFSM;
 
 // Set this variable to false to stop main function from executing...
 bool running = true;
@@ -84,10 +86,12 @@ int main(int argc, char **argv)
 
 	eventManager = std::make_shared<EventManager>();
 	hal = std::make_shared<HAL>(eventManager);
-	hal->startEventLoop();
+	mainFSM = std::make_shared<MainContext>(eventManager);
 
 	heightFSM = std::make_shared<HeightSensorFSM>();
 	heightSensor = std::make_shared<HeightSensor>(heightFSM);
+
+	hal->startEventLoop();
 	heightSensor->start();
 
 	// Register handler function to be called if the program is not terminated properly
@@ -96,8 +100,7 @@ int main(int argc, char **argv)
 	std::signal(SIGTERM, cleanup);
 
 	// Endless loop - wait until termination
-	while (running)
-	{
+	while (running) {
 		// Sleep to save CPU resources
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 	}

@@ -13,13 +13,16 @@
  */
 #include <gtest/gtest.h>
 #include "logic/main_fsm/MainContext.h"
+#include "events/EventManager.h"
 
 class MainFSM_Test : public ::testing::Test {
 protected:
 	std::shared_ptr<MainContext> fsm;
+	std::shared_ptr<EventManager> eventManager;
 
   void SetUp() override {
-	  fsm = std::make_shared<MainContext>();
+	  eventManager = std::make_shared<EventManager>();
+	  fsm = std::make_shared<MainContext>(eventManager);
   }
 
   void TearDown() override {
@@ -38,7 +41,7 @@ TEST_F(MainFSM_Test, StateRunningAfterStartPressedShort) {
 	EXPECT_EQ(MainState::RUNNING, fsm->getCurrentState());
 
 	fsm.reset();
-	fsm = std::make_shared<MainContext>();
+	fsm = std::make_shared<MainContext>(eventManager);
 
 	fsm->slave_btnStart_PressedShort();
 	EXPECT_EQ(MainState::RUNNING, fsm->getCurrentState());
@@ -52,7 +55,7 @@ TEST_F(MainFSM_Test, StateServiceModeAfterStartPressedLong) {
 	EXPECT_EQ(MainState::STANDBY, fsm->getCurrentState()); // back in Standby
 
 	fsm.reset();
-	fsm = std::make_shared<MainContext>();
+	fsm = std::make_shared<MainContext>(eventManager);
 
 	fsm->slave_btnStart_PressedLong();
 	EXPECT_EQ(MainState::SERVICEMODE, fsm->getCurrentState());	// in ServiceMode
