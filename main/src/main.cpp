@@ -6,9 +6,9 @@
 #include "logger/logger.hpp"
 #include "common/macros.h"
 
-#include "hal/hal.h"
-#include "hal/HeightSensor.h"
 #include "configuration/options.hpp"
+#include "hal/HeightSensor.h"
+#include "hal/Actuators.h"
 #include "logic/hm/HeightSensorFSM.h"
 #include "logic/main_fsm/MainContext.h"
 #include "events/events.h"
@@ -16,13 +16,15 @@
 #include "configuration/Configuration.h"
 
 #include <gtest/gtest.h>
+#include <hal/Sensors.h>
 
 using namespace std;
 
 // Components which will be launched in main-function and cleaned up if program is terminated
 std::shared_ptr<HeightSensorFSM> heightFSM;
 std::shared_ptr<HeightSensor> heightSensor;
-std::shared_ptr<HAL> hal;
+std::shared_ptr<Sensors> sensors;
+std::shared_ptr<Actuators> actuators;
 std::shared_ptr<EventManager> eventManager;
 std::shared_ptr<MainContext> mainFSM;
 
@@ -85,13 +87,16 @@ int main(int argc, char **argv)
 	}
 
 	eventManager = std::make_shared<EventManager>();
-	hal = std::make_shared<HAL>(eventManager);
+	actuators = std::make_shared<Actuators>(eventManager);
+	sensors = std::make_shared<Sensors>(eventManager);
 	mainFSM = std::make_shared<MainContext>(eventManager);
+
+	actuators->motorStop();
 
 	heightFSM = std::make_shared<HeightSensorFSM>();
 	heightSensor = std::make_shared<HeightSensor>(heightFSM);
 
-	hal->startEventLoop();
+	sensors->startEventLoop();
 	heightSensor->start();
 
 	// Register handler function to be called if the program is not terminated properly

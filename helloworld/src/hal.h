@@ -62,10 +62,10 @@
 #define BUTTON_START_PIN 		22	//active high
 
 
-class HAL {
+class Sensors {
 public:
 	HAL();
-	virtual ~HAL();
+	virtual ~Sensors();
 	void greenLampOn();
 	void greenLampOff();
 private:

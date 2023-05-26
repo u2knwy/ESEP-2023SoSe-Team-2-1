@@ -9,8 +9,10 @@
 #include <ostream>
 #include <chrono>
 #include <thread>
-#include "hal/hal.h"
 #include "logger/logger.hpp"
+#include "hal/hal.h"
+#include "hal/Sensors.h"
+#include "hal/Actuators.h"
 #include "hal/HeightSensor.h"
 #include "logic/main_fsm/MainContext.h"
 #include "events/EventManager.h"
@@ -22,65 +24,65 @@ void actuatorDemo() {
 	// This can be shared across multiple classes and the destructor will automatically be called,
 	// if there are no more references to it.
 	std::shared_ptr<EventManager> mngr = std::make_shared<EventManager>();
-	std::shared_ptr<HAL> hal = std::make_shared<HAL>(mngr);
+	std::shared_ptr<Actuators> actuators = std::make_shared<Actuators>(mngr);
 
-	hal->motorStop();
+	actuators->motorStop();
 
 	// ALL ON
 	Logger::info("Switch all actuators on");
-	hal->greenLampOn();
-	hal->yellowLampOn();
-	hal->redLampOn();
-	hal->startLedOn();
-	hal->resetLedOn();
-	hal->q1LedOn();
-	hal->q2LedOn();
-	hal->openSwitch();
+	actuators->greenLampOn();
+	actuators->yellowLampOn();
+	actuators->redLampOn();
+	actuators->startLedOn();
+	actuators->resetLedOn();
+	actuators->q1LedOn();
+	actuators->q2LedOn();
+	actuators->openSwitch();
 	std::this_thread::sleep_for(std::chrono::seconds(5));
 
 	// ALL OFF
 	Logger::info("Switch all actuators off");
-	hal->greenLampOff();
-	hal->yellowLampOff();
-	hal->redLampOff();
-	hal->startLedOff();
-	hal->resetLedOff();
-	hal->q1LedOff();
-	hal->q2LedOff();
-	hal->closeSwitch();
+	actuators->greenLampOff();
+	actuators->yellowLampOff();
+	actuators->redLampOff();
+	actuators->startLedOff();
+	actuators->resetLedOff();
+	actuators->q1LedOff();
+	actuators->q2LedOff();
+	actuators->closeSwitch();
 	std::this_thread::sleep_for(std::chrono::seconds(5));
 
 	Logger::info("Motor right fast");
-	hal->motorFast();
-	hal->motorRight();
+	actuators->motorFast();
+	actuators->motorRight();
 	std::this_thread::sleep_for(std::chrono::seconds(2));
 
 	Logger::info("Motor right slow");
-	hal->motorSlow();
-	hal->motorRight();
+	actuators->motorSlow();
+	actuators->motorRight();
 	std::this_thread::sleep_for(std::chrono::seconds(2));
 
 	Logger::info("Motor left fast");
-	hal->motorFast();
-	hal->motorLeft();
+	actuators->motorFast();
+	actuators->motorLeft();
 	std::this_thread::sleep_for(std::chrono::seconds(2));
 
 	Logger::info("Motor left slow");
-	hal->motorSlow();
-	hal->motorLeft();
+	actuators->motorSlow();
+	actuators->motorLeft();
 	std::this_thread::sleep_for(std::chrono::seconds(2));
 
-	hal->motorStop();
+	actuators->motorStop();
 }
 
 void sensorDemo() {
 	Logger::info("Sensor Demo");
 
 	std::shared_ptr<EventManager> mngr = std::make_shared<EventManager>();
-	std::shared_ptr<HAL> hal = std::make_shared<HAL>(mngr);
-	hal->startEventLoop();
+	std::shared_ptr<Sensors> sensors = std::make_shared<Sensors>(mngr);
+	sensors->startEventLoop();
 	std::this_thread::sleep_for(std::chrono::seconds(999));
-	hal->stopEventLoop();
+	sensors->stopEventLoop();
 
 	Logger::info("Stop Sensor Demo");
 }
@@ -89,7 +91,7 @@ void adcDemo() {
 	using namespace std;
 
 	std::shared_ptr<EventManager> mngr = std::make_shared<EventManager>();
-	std::shared_ptr<HAL> hal = std::make_shared<HAL>(mngr);
+	std::shared_ptr<Actuators> actuators = std::make_shared<Actuators>(mngr);
 
 	// Start motor slow for demo
 	//hal->motorRight();
@@ -124,7 +126,7 @@ void adcDemo() {
 	hm.stop();
 
 	// Stop motor for demo
-	hal->motorStop();
+	actuators->motorStop();
 	// ### END ADC TEST
 }
 

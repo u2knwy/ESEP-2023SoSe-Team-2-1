@@ -7,22 +7,26 @@
 #include <gtest/gtest.h>
 #include "hal/hal.h"
 #include "hal/HeightSensor.h"
+#include "hal/Actuators.h"
+#include "hal/Sensors.h"
 #include "events/EventManager.h"
 
 class HAL_Test : public ::testing::Test {
 protected:
-  HAL* hal;
+  Actuators* actuators;
+  Sensors* sensors;
   HeightSensor* hm;
 
   void SetUp() override {
 	  std::shared_ptr<EventManager> mngr = std::make_shared<EventManager>();
-	  hal = new HAL(mngr);
+	  actuators = new Actuators(mngr);
 	  auto fsm = std::make_shared<HeightSensorFSM>();
 	  hm = new HeightSensor(fsm);
   }
 
   void TearDown() override {
-	  delete hal;
+	  delete actuators;
+	  delete sensors;
 	  delete hm;
   }
 };
@@ -50,25 +54,25 @@ static bool readPin(uint32_t port, uint32_t pin) {
 
 TEST_F(HAL_Test, GreenLamp) {
 	// Example: now we can call methods on the object created in SetUp method
-	hal->greenLampOn();
+	actuators->greenLampOn();
 	EXPECT_EQ(true, readPin(1, 18));
-	hal->greenLampOff();
+	actuators->greenLampOff();
 	EXPECT_EQ(false, readPin(1, 18));
 }
 
 TEST_F(HAL_Test, YellowLamp) {
 	// Example: now we can call methods on the object created in SetUp method
-	hal->yellowLampOn();
+	actuators->yellowLampOn();
 	EXPECT_EQ(true, readPin(1, 17));
-	hal->yellowLampOff();
+	actuators->yellowLampOff();
 	EXPECT_EQ(false, readPin(1, 17));
 }
 
 TEST_F(HAL_Test, RedLamp) {
 	// Example: now we can call methods on the object created in SetUp method
-	hal->redLampOn();
+	actuators->redLampOn();
 	EXPECT_EQ(true, readPin(1, 16));
-	hal->redLampOff();
+	actuators->redLampOff();
 	EXPECT_EQ(false, readPin(1, 16));
 }
 

@@ -5,20 +5,15 @@
  *      Author: Maik
  */
 
-#include "hal.h"
+#include "Sensors.h"
 #include <string>
 #include "logger/logger.hpp"
 #include "events/events.h"
 #include "common/macros.h"
 #include "configuration/Configuration.h"
 
-HAL::HAL(std::shared_ptr<EventManager> mngr) : eventManager(mngr) {
+Sensors::Sensors(std::shared_ptr<EventManager> mngr) : eventManager(mngr) {
 	gpio_bank_0 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_0);
-	gpio_bank_1 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_1);
-	gpio_bank_2 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_2);
-
-	// Default: Stop Motor
-	motorStop();
 
 	/* ### Create channel to receive interrupt pulse messages ### */
 	chanID = ChannelCreate(0);
@@ -36,10 +31,9 @@ HAL::HAL(std::shared_ptr<EventManager> mngr) : eventManager(mngr) {
 
 	configurePins();
 	initInterrupts();
-	subscribeToEvents();
 }
 
-HAL::~HAL() {
+Sensors::~Sensors() {
 	stopEventLoop();
 
 	int detach_status = ConnectDetach(conID);
@@ -55,34 +49,21 @@ HAL::~HAL() {
 	}
 
 	munmap_device_io(gpio_bank_0, GPIO_SIZE);
-	munmap_device_io(gpio_bank_1, GPIO_SIZE);
-	munmap_device_io(gpio_bank_2, GPIO_SIZE);
 }
 
-void HAL::configurePins() {
+void Sensors::configurePins() {
 	ThreadCtl(_NTO_TCTL_IO, 0);
 
-	uint32_t temp, outputs, inputs;
+	uint32_t temp, inputs;
 	inputs = LB_START_PIN | LB_HEIGHT_PIN | LB_HEIGHT_OK_PIN | LB_SWITCH_PIN | SE_METAL_PIN | SE_SWITCH_PIN | LB_RAMP_PIN | LB_END_PIN;
 	inputs = inputs | KEY_START_PIN | KEY_STOP_PIN | KEY_RESET_PIN | ESTOP_PIN;
 
 	// Configure GPIOs as inputs
 	temp = in32((uintptr_t) gpio_bank_0 + GPIO_OE_REGISTER);
 	out32((uintptr_t) gpio_bank_0 + GPIO_OE_REGISTER, temp & inputs);
-
-	// Configure GPIOs as outputs
-	// Port 1
-	outputs = MOTOR_LEFT_PIN | MOTOR_RIGHT_PIN | MOTOR_SLOW_PIN | MOTOR_STOP_PIN | LAMP_RED_PIN | LAMP_YELLOW_PIN | LAMP_GREEN_PIN | SWITCH_PIN;
-	temp = in32((uintptr_t) gpio_bank_1 + GPIO_OE_REGISTER);
-	out32((uintptr_t) gpio_bank_1 + GPIO_OE_REGISTER, temp & ~outputs);
-
-	// Port 2
-	outputs = LED_Q1_PIN | LED_Q2_PIN | LED_RESET_PIN | LED_START_PIN;
-	temp = in32((uintptr_t) gpio_bank_2 + GPIO_OE_REGISTER);
-	out32((uintptr_t) gpio_bank_2 + GPIO_OE_REGISTER, temp & ~outputs);
 }
 
-void HAL::initInterrupts() {
+void Sensors::initInterrupts() {
 	using namespace std;
 
 	/* ### Setup ### */
@@ -135,237 +116,79 @@ void HAL::initInterrupts() {
 	out32((uintptr_t) (gpio_bank_0 + GPIO_FALLINGDETECT), temp | falling);
 }
 
-void HAL::subscribeToEvents() {
-	// Subscribe to modes
-	eventManager->subscribe(EventType::MODE_STANDBY, std::bind(&HAL::standbyMode, this));
-	eventManager->subscribe(EventType::MODE_RUNNING, std::bind(&HAL::runningMode, this));
-	eventManager->subscribe(EventType::MODE_SERVICE, std::bind(&HAL::serviceMode, this));
-	eventManager->subscribe(EventType::MODE_ESTOP, std::bind(&HAL::estopMode, this));
-	eventManager->subscribe(EventType::MODE_ERROR, std::bind(&HAL::errorMode, this));
-
-	// Subscribe to lamp events
-	eventManager->subscribe(EventType::HALroteLampeAn, std::bind(&HAL::redLampOn, this));
-	eventManager->subscribe(EventType::HALroteLampeAus, std::bind(&HAL::redLampOff, this));
-	eventManager->subscribe(EventType::HALgelbeLampeAn, std::bind(&HAL::yellowLampOn, this));
-	eventManager->subscribe(EventType::HALgelbeLampeAus, std::bind(&HAL::yellowLampOff, this));
-	eventManager->subscribe(EventType::HALgrueneLampeAn, std::bind(&HAL::greenLampOn, this));
-	eventManager->subscribe(EventType::HALgrueneLampeAus, std::bind(&HAL::greenLampOff, this));
-
-	// Subscribe to motor events
-	eventManager->subscribe(EventType::HALmotorFastRight, std::bind(&HAL::motorFast, this));
-	eventManager->subscribe(EventType::HALmotorSlowRight, std::bind(&HAL::motorSlow, this));
-	eventManager->subscribe(EventType::HALmotorStop, std::bind(&HAL::motorStop, this));
-}
-
-void HAL::handleEvent(EventType eventType) {
+void Sensors::handleEvent(EventType eventType) {
 	Logger::debug("HAL handle Event: " + EVENT_TO_STRING(eventType));
 }
 
-void HAL::startEventLoop() {
+void Sensors::startEventLoop() {
 	/* ### Start thread for handling interrupt messages. */
-	eventLoopThread = std::thread(&HAL::eventLoop, this);
+	eventLoopThread = std::thread(&Sensors::eventLoop, this);
 }
 
-void HAL::stopEventLoop() {
+void Sensors::stopEventLoop() {
 	if (eventLoopThread.joinable()) {
 		MsgSendPulse(conID, -1, PULSE_STOP_THREAD, 0); // using prio of calling thread.
 		eventLoopThread.join();
 	}
 }
 
-void HAL::standbyMode() {
-	greenLampOff();
-	yellowLampOff();
-	redLampOff();
-	motorStop();
-}
-
-void HAL::runningMode() {
-	greenLampOn();
-	yellowLampOff();
-	redLampOff();
-}
-
-void HAL::serviceMode() {
-	greenLampBlinking();
-	yellowLampOff();
-	redLampOff();
-	motorStop();
-}
-
-void HAL::errorMode() {
-	greenLampOff();
-	yellowLampOff();
-	redLampBlinkFast();
-	motorStop();
-}
-
-void HAL::estopMode() {
-	greenLampOff();
-	yellowLampOff();
-	redLampOff();
-	motorStop();
-}
-
-void HAL::greenLampOn() {
-	out32((uintptr_t) (gpio_bank_1 + GPIO_SETDATAOUT), LAMP_GREEN_PIN);
-}
-
-void HAL::greenLampBlinking() {
-	// TODO: Let green lamp blink for ServiceMode
-}
-
-void HAL::greenLampOff() {
-	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), LAMP_GREEN_PIN);
-}
-
-void HAL::yellowLampOn() {
-	out32((uintptr_t) (gpio_bank_1 + GPIO_SETDATAOUT), LAMP_YELLOW_PIN);
-}
-
-void HAL::yellowLampOff() {
-	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), LAMP_YELLOW_PIN);
-}
-
-void HAL::redLampOn() {
-	out32((uintptr_t) (gpio_bank_1 + GPIO_SETDATAOUT), LAMP_RED_PIN);
-}
-
-void HAL::redLampBlinkFast() {
-	// TODO: Let red lamp blink with 1Hz
-}
-
-void HAL::redLampBlinkSlow() {
-	// TODO: Let red lamp blink with 0,5Hz
-}
-
-void HAL::redLampOff() {
-	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), LAMP_RED_PIN);
-}
-
-void HAL::startLedOn() {
-	out32((uintptr_t) (gpio_bank_2 + GPIO_SETDATAOUT), LED_START_PIN);
-}
-
-void HAL::startLedOff() {
-	out32((uintptr_t) (gpio_bank_2 + GPIO_CLEARDATAOUT), LED_START_PIN);
-}
-
-void HAL::resetLedOn() {
-	out32((uintptr_t) (gpio_bank_2 + GPIO_SETDATAOUT), LED_RESET_PIN);
-}
-
-void HAL::resetLedOff() {
-	out32((uintptr_t) (gpio_bank_2 + GPIO_CLEARDATAOUT), LED_RESET_PIN);
-}
-
-void HAL::q1LedOn() {
-	out32((uintptr_t) (gpio_bank_2 + GPIO_SETDATAOUT), LED_Q1_PIN);
-}
-
-void HAL::q1LedOff() {
-	out32((uintptr_t) (gpio_bank_2 + GPIO_CLEARDATAOUT), LED_Q1_PIN);
-}
-
-void HAL::q2LedOn() {
-	out32((uintptr_t) (gpio_bank_2 + GPIO_SETDATAOUT), LED_Q2_PIN);
-}
-
-void HAL::q2LedOff() {
-	out32((uintptr_t) (gpio_bank_2 + GPIO_CLEARDATAOUT), LED_Q2_PIN);
-}
-
-void HAL::motorSlow() {
-	out32((uintptr_t) (gpio_bank_1 + GPIO_SETDATAOUT), MOTOR_SLOW_PIN);
-}
-
-void HAL::motorFast() {
-	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), MOTOR_SLOW_PIN);
-}
-
-void HAL::motorRight() {
-	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), MOTOR_STOP_PIN);
-	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), MOTOR_LEFT_PIN);
-	out32((uintptr_t) (gpio_bank_1 + GPIO_SETDATAOUT), MOTOR_RIGHT_PIN);
-}
-
-void HAL::motorLeft() {
-	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), MOTOR_STOP_PIN);
-	out32((uintptr_t) (gpio_bank_1 + GPIO_SETDATAOUT), MOTOR_LEFT_PIN);
-	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), MOTOR_RIGHT_PIN);
-}
-
-void HAL::motorStop() {
-	out32((uintptr_t) (gpio_bank_1 + GPIO_SETDATAOUT), MOTOR_STOP_PIN);
-	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), MOTOR_LEFT_PIN);
-	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), MOTOR_RIGHT_PIN);
-}
-
-void HAL::openSwitch() {
-	out32((uintptr_t) (gpio_bank_1 + GPIO_SETDATAOUT), SWITCH_PIN);
-}
-
-void HAL::closeSwitch() {
-	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), SWITCH_PIN);
-}
-
-bool HAL::lbStartBlocked() {
+bool Sensors::lbStartBlocked() {
 	return BIT_NOTSET(LB_START_PIN, in32((uintptr_t) gpio_bank_0 + GPIO_DATAIN));
 }
 
-bool HAL::lbStartUnblocked() {
+bool Sensors::lbStartUnblocked() {
 	return BIT_SET(LB_START_PIN, in32((uintptr_t) gpio_bank_0 + GPIO_DATAIN));
 }
 
-bool HAL::lbSwitchBlocked() {
+bool Sensors::lbSwitchBlocked() {
 	return BIT_NOTSET(LB_SWITCH_PIN, in32((uintptr_t) gpio_bank_0 + GPIO_DATAIN));
 }
 
-bool HAL::lbSwitchUnblocked() {
+bool Sensors::lbSwitchUnblocked() {
 	return BIT_SET(LB_SWITCH_PIN, in32((uintptr_t) gpio_bank_0 + GPIO_DATAIN));
 }
 
-bool HAL::lbRampBlocked() {
+bool Sensors::lbRampBlocked() {
 	return BIT_NOTSET(LB_RAMP_PIN, in32((uintptr_t) gpio_bank_0 + GPIO_DATAIN));
 }
 
-bool HAL::lbRampUnblocked() {
+bool Sensors::lbRampUnblocked() {
 	return BIT_SET(LB_RAMP_PIN, in32((uintptr_t) gpio_bank_0 + GPIO_DATAIN));
 }
 
-bool HAL::metalDetected() {
+bool Sensors::metalDetected() {
 	return BIT_SET(SE_METAL_PIN, in32((uintptr_t) gpio_bank_0 + GPIO_DATAIN));
 }
 
-bool HAL::lbEndBlocked() {
+bool Sensors::lbEndBlocked() {
 	return BIT_NOTSET(LB_END_PIN, in32((uintptr_t) gpio_bank_0 + GPIO_DATAIN));
 }
 
-bool HAL::lbEndUnblocked() {
+bool Sensors::lbEndUnblocked() {
 	return BIT_SET(LB_END_PIN, in32((uintptr_t) gpio_bank_0 + GPIO_DATAIN));
 }
 
-bool HAL::startPressed() {
+bool Sensors::startPressed() {
 	return BIT_SET(KEY_START_PIN, in32((uintptr_t) gpio_bank_0 + GPIO_DATAIN));
 }
 
-bool HAL::stopPressed() {
+bool Sensors::stopPressed() {
 	return BIT_NOTSET(KEY_STOP_PIN, in32((uintptr_t) gpio_bank_0 + GPIO_DATAIN));
 }
 
-bool HAL::resetPressed() {
+bool Sensors::resetPressed() {
 	return BIT_SET(KEY_RESET_PIN, in32((uintptr_t) gpio_bank_0 + GPIO_DATAIN));
 }
 
-bool HAL::eStopPressed() {
+bool Sensors::eStopPressed() {
 	return BIT_NOTSET(ESTOP_PIN, in32((uintptr_t) gpio_bank_0 + GPIO_DATAIN));
 }
 
-bool HAL::eStopReleased() {
+bool Sensors::eStopReleased() {
 	return BIT_SET(ESTOP_PIN, in32((uintptr_t) gpio_bank_0 + GPIO_DATAIN));
 }
 
-void HAL::eventLoop() {
+void Sensors::eventLoop() {
 	using namespace std;
 	ThreadCtl(_NTO_TCTL_IO, 0); // Request IO privileges for this thread.
 
@@ -398,7 +221,7 @@ void HAL::eventLoop() {
 	cout << "Message thread stops..." << endl;
 }
 
-void HAL::handleGpioInterrupt() {
+void Sensors::handleGpioInterrupt() {
 	unsigned int intrStatusReg = in32(uintptr_t(gpio_bank_0 + GPIO_IRQSTATUS_1));
 
 	out32(uintptr_t(gpio_bank_0 + GPIO_IRQSTATUS_1), 0xffffffff);	//clear all interrupts
