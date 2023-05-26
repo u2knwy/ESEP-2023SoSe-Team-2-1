@@ -13,6 +13,10 @@ void WaitForBelt::entry() {
 	Logger::debug("[HM] Waiting for belt...");
 }
 
+HeightState WaitForBelt::getCurrentState() {
+	return HeightState::WAIT_FOR_BELT;
+}
+
 bool WaitForBelt::beltDetected() {
 	actions->sendHeightResultFBM1(data->getCurrentType(), data->avgValue);
 	exit();

@@ -14,6 +14,10 @@ void High::entry() {
 	Logger::debug("[HM] High detected - waiting for belt or hole...");
 }
 
+HeightState High::getCurrentState() {
+	return HeightState::HIGH;
+}
+
 bool High::beltDetected() {
 	Logger::debug("[HM] Belt detected -> WS_OB");
 	data->setCurrentType(WorkpieceType::WS_OB);
@@ -27,7 +31,6 @@ bool High::beltDetected() {
 bool High::holeDetected() {
 	Logger::debug("[HM] Hole detected -> WS_BOM");
 	data->setCurrentType(WorkpieceType::WS_BOM);
-	actions->sendHeightResultFBM1(data->getCurrentType(), data->avgValue);
 	exit();
 	new(this) WaitForBelt;
 	entry();

@@ -10,6 +10,13 @@
 #include "HeightActions.h"
 #include "logger/logger.hpp"
 
+enum HeightState {
+	HEIGHT_NONE,
+	WAIT_FOR_WS,
+	HIGH,
+	WAIT_FOR_BELT
+};
+
 class HeightBasestate {
 protected:
 	HeightContextData* data;
@@ -24,6 +31,10 @@ public:
 	virtual void setAction(HeightActions* actions) {
 		this->actions = actions;
 	}
+
+	virtual HeightState getCurrentState() {
+		return HEIGHT_NONE;
+	};
 
 	virtual void entry() {}
 	virtual void exit() {}

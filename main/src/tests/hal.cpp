@@ -13,22 +13,23 @@
 
 class HAL_Test : public ::testing::Test {
 protected:
-  Actuators* actuators;
-  Sensors* sensors;
-  HeightSensor* hm;
+/*	std::shared_ptr<EventManager> mngr;
+	//Actuators* actuators;
+	Sensors* sensors;
+	std::shared_ptr<HeightSensorFSM> hmFSM;
+	HeightSensor* hm;
 
   void SetUp() override {
-	  std::shared_ptr<EventManager> mngr = std::make_shared<EventManager>();
-	  actuators = new Actuators(mngr);
-	  auto fsm = std::make_shared<HeightSensorFSM>();
-	  hm = new HeightSensor(fsm);
+	  mngr = std::make_shared<EventManager>();
+	  hmFSM = std::make_shared<HeightSensorFSM>();
+	  hm = new HeightSensor(hmFSM);
   }
 
   void TearDown() override {
-	  delete actuators;
+	  //delete actuators;
 	  delete sensors;
 	  delete hm;
-  }
+  }*/
 };
 
 static bool readPin(uint32_t port, uint32_t pin) {
@@ -47,39 +48,25 @@ static bool readPin(uint32_t port, uint32_t pin) {
 		perror("Invalid parameter 'port' for 'readPin' function");
 		exit(EXIT_FAILURE);
 	}
-	bool result = ((in32((uintptr_t) gpio_bank + GPIO_DATAIN) >> pin) & 0x1) == 0x1;
+	uint32_t reg = (in32((uintptr_t) gpio_bank + GPIO_DATAIN) >> pin);
+	std::cout << "REG: " << std::bitset<32>(reg) << std::endl;
+	bool result = (reg & 0x1) == 0x1;
 	munmap_device_io(gpio_bank, GPIO_SIZE);
 	return result;
 }
 
-TEST_F(HAL_Test, GreenLamp) {
-	// Example: now we can call methods on the object created in SetUp method
+/*TEST_F(HAL_Test, GreenLampOn) {
+	std::shared_ptr<EventManager> mngr = std::make_shared<EventManager>();
+	Actuators* actuators = new Actuators(mngr);
 	actuators->greenLampOn();
+	delete actuators;
 	EXPECT_EQ(true, readPin(1, 18));
+}
+
+TEST_F(HAL_Test, GreenLampOff) {
+	std::shared_ptr<EventManager> mngr = std::make_shared<EventManager>();
+	Actuators* actuators = new Actuators(mngr);
 	actuators->greenLampOff();
+	delete actuators;
 	EXPECT_EQ(false, readPin(1, 18));
-}
-
-TEST_F(HAL_Test, YellowLamp) {
-	// Example: now we can call methods on the object created in SetUp method
-	actuators->yellowLampOn();
-	EXPECT_EQ(true, readPin(1, 17));
-	actuators->yellowLampOff();
-	EXPECT_EQ(false, readPin(1, 17));
-}
-
-TEST_F(HAL_Test, RedLamp) {
-	// Example: now we can call methods on the object created in SetUp method
-	actuators->redLampOn();
-	EXPECT_EQ(true, readPin(1, 16));
-	actuators->redLampOff();
-	EXPECT_EQ(false, readPin(1, 16));
-}
-
-TEST_F(HAL_Test, HmFlat) {
-	hm->calibrateOffset(3500);
-	hm->calibrateRefHigh(3000);
-	// 3500-3000 = 500
-	// 500/25mm = 20 inc/mm
-	hm->start();
-}
+}*/

@@ -12,6 +12,8 @@
 class High : public HeightBasestate {
 	void entry() override;
 
+	HeightState getCurrentState() override;
+
 	bool beltDetected() override;
 	bool holeDetected() override;
 	bool unknownDetected() override;

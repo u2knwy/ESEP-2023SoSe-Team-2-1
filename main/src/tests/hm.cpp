@@ -34,81 +34,50 @@ protected:
 
 
 TEST_F(HeightSensor_Test, DefaultState) {
-	HeightBasestate* state = fsm->getCurrentState();
-	WaitForWorkpiece* initialState = dynamic_cast<WaitForWorkpiece*>(state);
-	EXPECT_TRUE(initialState != nullptr);
+	EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
 }
 
 TEST_F(HeightSensor_Test, HighDetected) {
-	HeightBasestate* state;
-
 	// HIGH WS detected
-	fsm->heightValueReceived(21.0);
-	state = fsm->getCurrentState();
-	High* highState = dynamic_cast<High*>(state);
-	EXPECT_TRUE(highState != nullptr);
-	EXPECT_EQ(EventType::HM_M_WS_OB, fsm->getDetectedWorkpieceType());
+	fsm->heightValueReceived(25.0);
+	EXPECT_EQ(WorkpieceType::WS_OB, fsm->getDetectedWorkpieceType());
+	EXPECT_EQ(HeightState::HIGH, fsm->getCurrentState());
 
 	// NEXT COMES BELT
 	fsm->heightValueReceived(1.0);
-	state = fsm->getCurrentState();
-	WaitForWorkpiece* initialState = dynamic_cast<WaitForWorkpiece*>(state);
-	EXPECT_TRUE(initialState != nullptr);
+	EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
 }
 
 TEST_F(HeightSensor_Test, FlatDetected) {
-	HeightBasestate* state;
-
 	// FLAT WS detected
-	fsm->heightValueReceived(18.0);
-	state = fsm->getCurrentState();
-	WaitForBelt* waitForBeltState = dynamic_cast<WaitForBelt*>(state);
-	EXPECT_TRUE(waitForBeltState != nullptr);
-	EXPECT_EQ(EventType::HM_M_WS_F, fsm->getDetectedWorkpieceType());
+	fsm->heightValueReceived(21.0);
+	EXPECT_EQ(WorkpieceType::WS_F, fsm->getDetectedWorkpieceType());
+	EXPECT_EQ(HeightState::WAIT_FOR_BELT, fsm->getCurrentState());
 
 	// NEXT COMES BELT
 	fsm->heightValueReceived(1.0);
-	state = fsm->getCurrentState();
-	WaitForWorkpiece* initialState = dynamic_cast<WaitForWorkpiece*>(state);
-	EXPECT_TRUE(initialState != nullptr);
+	EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
 }
 
 TEST_F(HeightSensor_Test, HighWithHoleDetected) {
-	HeightBasestate* state;
-
 	// HIGH WS detected
-	fsm->heightValueReceived(21.0);
-	state = fsm->getCurrentState();
-	High* highState = dynamic_cast<High*>(state);
-	EXPECT_TRUE(highState != nullptr);
+	fsm->heightValueReceived(25.0);
+	EXPECT_EQ(WorkpieceType::WS_OB, fsm->getDetectedWorkpieceType());
+	EXPECT_EQ(HeightState::HIGH, fsm->getCurrentState());
 
 	// NEXT COMES HOLE
-	fsm->heightValueReceived(10.0);
-	state = fsm->getCurrentState();
-	WaitForBelt* waitForBeltState = dynamic_cast<WaitForBelt*>(state);
-	EXPECT_TRUE(waitForBeltState != nullptr);
-	EXPECT_EQ(EventType::HM_M_WS_BOM, fsm->getDetectedWorkpieceType());
+	fsm->heightValueReceived(6.0);
+	EXPECT_EQ(WorkpieceType::WS_BOM, fsm->getDetectedWorkpieceType());
+	EXPECT_EQ(HeightState::WAIT_FOR_BELT, fsm->getCurrentState());
 
 	// NEXT COMES BELT
 	fsm->heightValueReceived(1.0);
-	state = fsm->getCurrentState();
-	WaitForWorkpiece* initialState = dynamic_cast<WaitForWorkpiece*>(state);
-	EXPECT_TRUE(initialState != nullptr);
+	EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
 }
 
 TEST_F(HeightSensor_Test, UnknownDetected) {
-	HeightBasestate* state;
-
 	// UNKNOWN WS detected
 	fsm->heightValueReceived(30.0);
-	state = fsm->getCurrentState();
-	WaitForBelt* waitForBeltState = dynamic_cast<WaitForBelt*>(state);
-	EXPECT_TRUE(waitForBeltState != nullptr);
-	EXPECT_EQ(EventType::HM_M_WS_UNKNOWN, fsm->getDetectedWorkpieceType());
-
-	// NEXT COMES BELT
-	fsm->heightValueReceived(1.0);
-	state = fsm->getCurrentState();
-	WaitForWorkpiece* initialState = dynamic_cast<WaitForWorkpiece*>(state);
-	EXPECT_TRUE(initialState != nullptr);
+	EXPECT_EQ(WorkpieceType::UNKNOWN, fsm->getDetectedWorkpieceType());
+	EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
 }

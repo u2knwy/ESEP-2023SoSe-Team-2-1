@@ -21,6 +21,10 @@ void WaitForWorkpiece::exit() {
 	actions->newWorkpieceDetected();
 }
 
+HeightState WaitForWorkpiece::getCurrentState() {
+	return HeightState::WAIT_FOR_WS;
+}
+
 bool WaitForWorkpiece::flatDetected() {
 	data->setCurrentType(WorkpieceType::WS_F);
 	Logger::debug("[HFSM] Current type: WS_F");

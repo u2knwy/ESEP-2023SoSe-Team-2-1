@@ -32,7 +32,7 @@ void HeightSensorFSM::heightValueReceived(float valueMM) {
 		state->highDetected();
 	} else if(valueMM < HEIGHT_CONV_MAX) {
 		state->beltDetected();
-	} else if(valueMM > HEIGHT_HOLE && valueMM < HEIGHT_HOLE+1) {
+	} else if(valueMM > HEIGHT_HOLE-1 && valueMM < HEIGHT_HOLE+1) {
 		state->holeDetected();
 	} else {
 		state->unknownDetected();
@@ -43,6 +43,6 @@ WorkpieceType HeightSensorFSM::getDetectedWorkpieceType() {
 	return data->getCurrentType();
 }
 
-HeightBasestate* HeightSensorFSM::getCurrentState() {
-	return state;
+HeightState HeightSensorFSM::getCurrentState() {
+	return state->getCurrentState();
 }
