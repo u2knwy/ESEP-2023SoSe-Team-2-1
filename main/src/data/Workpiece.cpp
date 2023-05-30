@@ -9,10 +9,15 @@
 
 Workpiece::Workpiece(int id) {
 	this->id = id;
+	this->status = WorkpieceStatus::FBM1_START_HM;
 }
 
 int Workpiece::getId() {
 	return this->id;
+}
+
+void Workpiece::setType(WorkpieceType type) {
+	this->type = type;
 }
 
 void Workpiece::setAvgHeightFBM1(float height) {
@@ -37,4 +42,12 @@ void Workpiece::setFlipped(bool flipped) {
 
 WorkpieceType Workpiece::getType() {
 	return type;
+}
+
+WorkpieceStatus Workpiece::getStatus() {
+	return this->status;
+}
+
+void Workpiece::setStatus(WorkpieceStatus newStatus) {
+	this->status = newStatus;
 }
