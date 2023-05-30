@@ -20,9 +20,13 @@
 #define GPIO_BANK_1 		0x4804C000
 #define GPIO_BANK_2 		0x481AC000
 #define GPIO_BANK_3 		0x481AE000
-#define GPIO_CLEARDATAOUT 	0x190
-#define GPIO_SETDATAOUT 	0x194
-#define GPIO_DATAIN			0x138
+#define GPIO_CLEARDATAOUT(base)		(uintptr_t) base + 0x190
+#define GPIO_SETDATAOUT(base)		(uintptr_t) base + 0x194
+#define GPIO_DATAIN(base)			(uintptr_t) base + 0x138
+#define GPIO_DEBOUNCENABLE(base)	(uintptr_t) base + 0x150
+#define GPIO_DEBOUNCINGTIME(base)	(uintptr_t) base + 0x154
+// Input Debouncing Value in 31 microsecond steps. Debouncing Value = (DEBOUNCETIME + 1) * 31 microseconds (see p. 4875)
+#define GPIO_DEBOUNCE_VALUE	321 // ca. 10ms
 
 /* GPIO0 PINS -> INPUTS */
 #define LB_START_PIN		(1 << 2)	// Werkstück im Einlauf = low when true
@@ -60,14 +64,14 @@
 #define INTR_GPIO_PORT2 		33
 
 /* GPIO register offsets (spruh73l.pdf S.4877) */
-#define GPIO_OE_REGISTER		0x134
-#define GPIO_LEVELDETECT0 		0x140
-#define GPIO_LEVELDETECT1 		0x144
-#define GPIO_RISINGDETECT 		0x148
-#define GPIO_FALLINGDETECT 		0x14C
+#define GPIO_OE_REGISTER(base)	 (uintptr_t) base + 0x134
+#define GPIO_LEVELDETECT0(base)	 (uintptr_t) base + 0x140
+#define GPIO_LEVELDETECT1(base)  (uintptr_t) base + 0x144
+#define GPIO_RISINGDETECT(base)	 (uintptr_t) base + 0x148
+#define GPIO_FALLINGDETECT(base) (uintptr_t) base + 0x14C
 
-#define GPIO_IRQSTATUS_0 		0x2C
-#define GPIO_IRQSTATUS_1 		0x30
-#define GPIO_IRQSTATUS_SET_0 	0x34
-#define GPIO_IRQSTATUS_SET_1 	0x38
+#define GPIO_IRQSTATUS_0(base)		(uintptr_t) base + 0x2C
+#define GPIO_IRQSTATUS_1(base)		(uintptr_t) base + 0x30
+#define GPIO_IRQSTATUS_SET_0(base)	(uintptr_t) base + 0x34
+#define GPIO_IRQSTATUS_SET_1(base)	(uintptr_t) base + 0x38
 

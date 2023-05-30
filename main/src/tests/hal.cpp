@@ -48,7 +48,7 @@ static bool readPin(uint32_t port, uint32_t pin) {
 		perror("Invalid parameter 'port' for 'readPin' function");
 		exit(EXIT_FAILURE);
 	}
-	uint32_t reg = (in32((uintptr_t) gpio_bank + GPIO_DATAIN) >> pin);
+	uint32_t reg = (in32(GPIO_DATAIN(gpio_bank)) >> pin);
 	std::cout << "REG: " << std::bitset<32>(reg) << std::endl;
 	bool result = (reg & 0x1) == 0x1;
 	munmap_device_io(gpio_bank, GPIO_SIZE);

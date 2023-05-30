@@ -12,6 +12,8 @@
 #include "common/macros.h"
 #include "configuration/Configuration.h"
 
+static std::chrono::steady_clock::time_point lastStartBtnPressTime;
+
 Sensors::Sensors(std::shared_ptr<EventManager> mngr) : eventManager(mngr) {
 	gpio_bank_0 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_0);
 
@@ -59,8 +61,13 @@ void Sensors::configurePins() {
 	inputs = inputs | KEY_START_PIN | KEY_STOP_PIN | KEY_RESET_PIN | ESTOP_PIN;
 
 	// Configure GPIOs as inputs
-	temp = in32((uintptr_t) gpio_bank_0 + GPIO_OE_REGISTER);
-	out32((uintptr_t) gpio_bank_0 + GPIO_OE_REGISTER, temp & inputs);
+	temp = in32(GPIO_OE_REGISTER(gpio_bank_0));
+	out32(GPIO_OE_REGISTER(gpio_bank_0), temp & inputs);
+
+	// Set debounce value/time
+	out32(GPIO_DEBOUNCINGTIME(gpio_bank_0), GPIO_DEBOUNCE_VALUE);
+	// Enable debouncing
+	out32(GPIO_DEBOUNCENABLE(gpio_bank_0), inputs);
 }
 
 void Sensors::initInterrupts() {
@@ -96,8 +103,8 @@ void Sensors::initInterrupts() {
 	// Enable interrupts on pins.
 	uint32_t intEnable = (LB_START_PIN | LB_END_PIN | LB_RAMP_PIN | LB_SWITCH_PIN | LB_HEIGHT_PIN | LB_HEIGHT_OK_PIN);
 	intEnable |= (SE_SWITCH_PIN | SE_METAL_PIN | KEY_START_PIN | KEY_STOP_PIN | KEY_RESET_PIN | ESTOP_PIN);
-	out32((uintptr_t) gpio_bank_0 + GPIO_IRQSTATUS_SET_1, intEnable);
-	uint32_t enabled = in32((uintptr_t) gpio_bank_0 + GPIO_IRQSTATUS_SET_1);
+	out32(GPIO_IRQSTATUS_SET_1(gpio_bank_0), intEnable);
+	uint32_t enabled = in32(GPIO_IRQSTATUS_SET_1(gpio_bank_0));
 	std::bitset<32> enabledBits(enabled);
 
 	// Set irq event types...
@@ -106,14 +113,14 @@ void Sensors::initInterrupts() {
 	//	(for rising edge detection)
 	rising = (LB_START_PIN | LB_END_PIN | LB_RAMP_PIN | LB_SWITCH_PIN | LB_HEIGHT_PIN | LB_HEIGHT_OK_PIN);
 	rising |= (SE_SWITCH_PIN | SE_METAL_PIN | KEY_START_PIN | KEY_STOP_PIN | KEY_RESET_PIN | ESTOP_PIN);
-	temp = in32((uintptr_t) gpio_bank_0 + GPIO_RISINGDETECT);
-	out32((uintptr_t) (gpio_bank_0 + GPIO_RISINGDETECT), temp | rising);
+	temp = in32(GPIO_RISINGDETECT(gpio_bank_0));
+	out32(GPIO_RISINGDETECT(gpio_bank_0), temp | rising);
 
 	// 	(for falling edge detection)
 	falling = (LB_START_PIN | LB_END_PIN | LB_RAMP_PIN | LB_SWITCH_PIN | LB_HEIGHT_PIN | LB_HEIGHT_OK_PIN);
 	falling |= (SE_SWITCH_PIN | SE_METAL_PIN | KEY_START_PIN | KEY_STOP_PIN | KEY_RESET_PIN | ESTOP_PIN);
-	temp = in32((uintptr_t) gpio_bank_0 + GPIO_FALLINGDETECT);
-	out32((uintptr_t) (gpio_bank_0 + GPIO_FALLINGDETECT), temp | falling);
+	temp = in32(GPIO_FALLINGDETECT(gpio_bank_0));
+	out32(GPIO_FALLINGDETECT(gpio_bank_0), temp | falling);
 }
 
 void Sensors::handleEvent(EventType eventType) {
@@ -133,59 +140,59 @@ void Sensors::stopEventLoop() {
 }
 
 bool Sensors::lbStartBlocked() {
-	return BIT_NOTSET(LB_START_PIN, in32((uintptr_t) gpio_bank_0 + GPIO_DATAIN));
+	return BIT_NOTSET(LB_START_PIN, in32(GPIO_DATAIN(gpio_bank_0)));
 }
 
 bool Sensors::lbStartUnblocked() {
-	return BIT_SET(LB_START_PIN, in32((uintptr_t) gpio_bank_0 + GPIO_DATAIN));
+	return BIT_SET(LB_START_PIN, in32(GPIO_DATAIN(gpio_bank_0)));
 }
 
 bool Sensors::lbSwitchBlocked() {
-	return BIT_NOTSET(LB_SWITCH_PIN, in32((uintptr_t) gpio_bank_0 + GPIO_DATAIN));
+	return BIT_NOTSET(LB_SWITCH_PIN, in32(GPIO_DATAIN(gpio_bank_0)));
 }
 
 bool Sensors::lbSwitchUnblocked() {
-	return BIT_SET(LB_SWITCH_PIN, in32((uintptr_t) gpio_bank_0 + GPIO_DATAIN));
+	return BIT_SET(LB_SWITCH_PIN, in32(GPIO_DATAIN(gpio_bank_0)));
 }
 
 bool Sensors::lbRampBlocked() {
-	return BIT_NOTSET(LB_RAMP_PIN, in32((uintptr_t) gpio_bank_0 + GPIO_DATAIN));
+	return BIT_NOTSET(LB_RAMP_PIN, in32(GPIO_DATAIN(gpio_bank_0)));
 }
 
 bool Sensors::lbRampUnblocked() {
-	return BIT_SET(LB_RAMP_PIN, in32((uintptr_t) gpio_bank_0 + GPIO_DATAIN));
+	return BIT_SET(LB_RAMP_PIN, in32(GPIO_DATAIN(gpio_bank_0)));
 }
 
 bool Sensors::metalDetected() {
-	return BIT_SET(SE_METAL_PIN, in32((uintptr_t) gpio_bank_0 + GPIO_DATAIN));
+	return BIT_SET(SE_METAL_PIN, in32(GPIO_DATAIN(gpio_bank_0)));
 }
 
 bool Sensors::lbEndBlocked() {
-	return BIT_NOTSET(LB_END_PIN, in32((uintptr_t) gpio_bank_0 + GPIO_DATAIN));
+	return BIT_NOTSET(LB_END_PIN, in32(GPIO_DATAIN(gpio_bank_0)));
 }
 
 bool Sensors::lbEndUnblocked() {
-	return BIT_SET(LB_END_PIN, in32((uintptr_t) gpio_bank_0 + GPIO_DATAIN));
+	return BIT_SET(LB_END_PIN, in32(GPIO_DATAIN(gpio_bank_0)));
 }
 
 bool Sensors::startPressed() {
-	return BIT_SET(KEY_START_PIN, in32((uintptr_t) gpio_bank_0 + GPIO_DATAIN));
+	return BIT_SET(KEY_START_PIN, in32(GPIO_DATAIN(gpio_bank_0)));
 }
 
 bool Sensors::stopPressed() {
-	return BIT_NOTSET(KEY_STOP_PIN, in32((uintptr_t) gpio_bank_0 + GPIO_DATAIN));
+	return BIT_NOTSET(KEY_STOP_PIN, in32(GPIO_DATAIN(gpio_bank_0)));
 }
 
 bool Sensors::resetPressed() {
-	return BIT_SET(KEY_RESET_PIN, in32((uintptr_t) gpio_bank_0 + GPIO_DATAIN));
+	return BIT_SET(KEY_RESET_PIN, in32(GPIO_DATAIN(gpio_bank_0)));
 }
 
 bool Sensors::eStopPressed() {
-	return BIT_NOTSET(ESTOP_PIN, in32((uintptr_t) gpio_bank_0 + GPIO_DATAIN));
+	return BIT_NOTSET(ESTOP_PIN, in32(GPIO_DATAIN(gpio_bank_0)));
 }
 
 bool Sensors::eStopReleased() {
-	return BIT_SET(ESTOP_PIN, in32((uintptr_t) gpio_bank_0 + GPIO_DATAIN));
+	return BIT_SET(ESTOP_PIN, in32(GPIO_DATAIN(gpio_bank_0)));
 }
 
 void Sensors::eventLoop() {
@@ -222,13 +229,16 @@ void Sensors::eventLoop() {
 }
 
 void Sensors::handleGpioInterrupt() {
-	unsigned int intrStatusReg = in32(uintptr_t(gpio_bank_0 + GPIO_IRQSTATUS_1));
+	uint32_t intrStatusReg = in32(GPIO_IRQSTATUS_1(gpio_bank_0));
 
-	out32(uintptr_t(gpio_bank_0 + GPIO_IRQSTATUS_1), 0xffffffff);	//clear all interrupts
-	InterruptUnmask(INTR_GPIO_PORT0, interruptID);					//unmask interrupt
+	// clear interrupts and unmask
+	out32(GPIO_IRQSTATUS_1(gpio_bank_0), intrStatusReg);
+	InterruptUnmask(INTR_GPIO_PORT0, interruptID);
 
 	bool master = Configuration::getInstance().systemIsMaster();
 	EventData event;
+	event.event = (EventType) -1;
+
 	if(BIT_SET(ESTOP_PIN, intrStatusReg)) {
 		if(eStopPressed()) {
 			Logger::debug("ESTOP pressed");
@@ -239,6 +249,9 @@ void Sensors::handleGpioInterrupt() {
 		}
 	} else if(BIT_SET(KEY_START_PIN, intrStatusReg)) {
 		// TODO: Check if button is pressed short or long
+		using namespace std::chrono;
+		const auto now = steady_clock::now();
+		int elapsed_ms = duration_cast<milliseconds>(now - lastStartBtnPressTime).count();
 		if(startPressed()) {
 			Logger::debug("START pressed");
 			event.event = master ? EventType::START_M_SHORT : EventType::START_S_SHORT;
@@ -302,15 +315,8 @@ void Sensors::handleGpioInterrupt() {
 		}
 	}
 
-	if(event.event) {
+	// If IRQ is associated to an event, we send it!
+	if((int) event.event != -1) {
 		eventManager->sendEvent(event);
 	}
-
-	/*	for (int pin = 0; pin < 32; pin++) {
-		unsigned int mask = (uint32_t) BIT_MASK(pin);
-		if (intrStatusReg == mask) {
-			int current_level = (in32((uintptr_t) gpio_bank_0 + GPIO_DATAIN) >> pin) & 0x1;
-			printf("Interrupt on pin %d, now %d\n", pin, current_level);
-		}
-	}*/
 }
