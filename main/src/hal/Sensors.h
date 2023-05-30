@@ -24,7 +24,7 @@ public:
 	Sensors(std::shared_ptr<EventManager> mngr);
 	virtual ~Sensors();
 
-	void handleEvent(EventType eventType) override;
+	void handleEvent(Event eventType) override;
 
 	/**
 	 * Starts receiving HAL events in an infinite loop in a seperate thread

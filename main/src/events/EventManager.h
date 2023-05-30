@@ -7,26 +7,21 @@
 #pragma once
 
 #include "events.h"
-#include "eventtypes_enum.h"
 #include <functional>
 #include <string>
 #include <map>
 #include <mutex>
 
-struct EventData {
-    EventType event;
-    int data{-1};
-    std::string msg;
-};
 
 class EventManager {
 public:
-	using EventCallback = std::function<void(const EventData &)>;
+	using EventCallback = std::function<void(const Event &)>;
+	//typedef void (*EventCallback)(Event);
 	EventManager();
 	virtual ~EventManager();
-	void subscribe(EventType event, EventCallback callback);
-	void unsubscribe(EventType event, EventCallback callback);
-	void sendEvent(const EventData &event);
+	void subscribe(EventType type, EventCallback callback);
+	void unsubscribe(EventType type, EventCallback callback);
+	void sendEvent(const Event &event);
 	int start();
 private:
 	bool isMaster;

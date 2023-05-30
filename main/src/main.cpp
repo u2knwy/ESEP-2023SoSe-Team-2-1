@@ -18,6 +18,10 @@
 #include <gtest/gtest.h>
 #include <hal/Sensors.h>
 
+#ifdef SIMULATION
+#include "simulation/simulationadapterqnx/simqnxgpioapi.h" // must be last include !!!
+#endif
+
 using namespace std;
 
 // Components which will be launched in main-function and cleaned up if program is terminated
@@ -63,7 +67,8 @@ int main(int argc, char **argv)
 	conf.setPusherMounted(options.pusher);
 
 	// Initialize Logger
-	const string debug = string(getenv("QNX_DEBUG"));
+	const char* debugValue = getenv("QNX_DEBUG");
+	const std::string debug = debugValue ? debugValue : "";
 	if (debug == "TRUE")
 	{
 		Logger::set_level(Logger::level::DEBUG);
@@ -79,9 +84,9 @@ int main(int argc, char **argv)
 		Logger::info("Starting in Demo Mode...");
 		DELAY_S(1);
 		// Run Demo programs...
-		// actuatorDemo();
-		// sensorDemo();
-		// adcDemo();
+		actuatorDemo();
+		sensorDemo();
+		adcDemo();
 		fsmDemo();
 		return EXIT_SUCCESS;
 	}
@@ -108,6 +113,9 @@ int main(int argc, char **argv)
 	while (running) {
 		// Sleep to save CPU resources
 		std::this_thread::sleep_for(std::chrono::seconds(1));
+		Event ev;
+		ev.type = EventType::START_M_SHORT;
+		eventManager->sendEvent(ev);
 	}
 
 	Logger::info("Sorting Machine was terminated.");

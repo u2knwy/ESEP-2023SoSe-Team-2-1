@@ -20,7 +20,7 @@ public:
 	Actuators(std::shared_ptr<EventManager> mngr);
 	virtual ~Actuators();
 
-	void handleEvent(EventType eventType) override;
+	void handleEvent(Event event) override;
 
 	/**
 	 * Sets all actuators when Standby mode is entered:

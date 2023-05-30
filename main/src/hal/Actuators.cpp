@@ -7,6 +7,10 @@
 
 #include "Actuators.h"
 #include "logger/logger.hpp"
+#ifdef SIMULATION
+#include "../simulation/simulationadapterqnx/simqnxgpioapi.h"
+#include "../simulation/simulationadapterqnx/simqnxirqapi.h"
+#endif
 
 Actuators::Actuators(std::shared_ptr<EventManager> mngr) : eventManager(mngr) {
 	gpio_bank_1 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_1);
@@ -52,8 +56,12 @@ void Actuators::configurePins() {
 	out32((uintptr_t) gpio_bank_2 + GPIO_OE_REGISTER, temp & ~outputs);
 }
 
+void Actuators::handleEvent(Event event) {
+	Logger::debug("Actuators handle Event: " + EVENT_TO_STRING(event.type));
+}
+
 void Actuators::subscribeToEvents() {
-	// Subscribe to modes
+	/* // Subscribe to modes
 	eventManager->subscribe(EventType::MODE_STANDBY, std::bind(&Actuators::standbyMode, this));
 	eventManager->subscribe(EventType::MODE_RUNNING, std::bind(&Actuators::runningMode, this));
 	eventManager->subscribe(EventType::MODE_SERVICE, std::bind(&Actuators::serviceMode, this));
@@ -71,12 +79,12 @@ void Actuators::subscribeToEvents() {
 	// Subscribe to motor events
 	eventManager->subscribe(EventType::HALmotorFastRight, std::bind(&Actuators::motorFast, this));
 	eventManager->subscribe(EventType::HALmotorSlowRight, std::bind(&Actuators::motorSlow, this));
-	eventManager->subscribe(EventType::HALmotorStop, std::bind(&Actuators::motorStop, this));
+	eventManager->subscribe(EventType::HALmotorStop, std::bind(&Actuators::motorStop, this)); */
+
+	eventManager->subscribe(EventType::START_M_SHORT, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
 }
 
-void Actuators::handleEvent(EventType eventType) {
-	Logger::debug("Actuators handle Event: " + EVENT_TO_STRING(eventType));
-}
+
 
 void Actuators::standbyMode() {
 	greenLampOff();

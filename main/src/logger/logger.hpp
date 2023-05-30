@@ -49,8 +49,8 @@ class Logger : public IEventHandler {
 	        getInstance().minimal_log_level = log_level;
 	    }
 
-	    void handleEvent(EventType eventType) override {
-	    	info("Event occurred: " + EVENT_TO_STRING(eventType));
+	    void handleEvent(Event event) override {
+	    	info("Event occurred: " + EVENT_TO_STRING(event.type));
 	    }
 
 	private:

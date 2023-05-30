@@ -59,5 +59,5 @@ void HeightActions::sendHeightResultFBM1(WorkpieceType type, int avg) {
 }
 
 void HeightActions::sendHeightResultFBM2(WorkpieceType type, int max) {
-	Logger::debug("[HM] Height Result at FBM2: " + EVENT_TO_STRING(type) + ", max (mm): " + std::to_string(max));
+	//Logger::debug("[HM] Height Result at FBM2: " + EVENT_TO_STRING(type) + ", max (mm): " + std::to_string(max)); //error WS Type to string
 }

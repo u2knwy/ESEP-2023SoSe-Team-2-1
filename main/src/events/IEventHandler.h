@@ -8,9 +8,15 @@
 #pragma once
 
 #include "eventtypes_enum.h"
+#include "events.h"
+
+typedef struct Event {
+    EventType type;
+    int data{-1};
+};
 
 class IEventHandler {
 public:
 	virtual ~IEventHandler() {};
-	virtual void handleEvent(EventType eventType) = 0;
+	virtual void handleEvent(Event event) = 0;
 };

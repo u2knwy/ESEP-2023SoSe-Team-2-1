@@ -7,6 +7,10 @@
 
 #include "HeightSensor.h"
 #include "logger/logger.hpp"
+#ifdef SIMULATION
+#include "../simulation/simulationadapterqnx/simqnxgpioapi.h"
+#include "../simulation/simulationadapterqnx/simqnxirqapi.h"
+#endif
 
 HeightSensor::HeightSensor(std::shared_ptr<HeightSensorFSM> fsm) : fsm(fsm), chanID(-1), conID(-1) {
 	adc = new ADC(tsc);

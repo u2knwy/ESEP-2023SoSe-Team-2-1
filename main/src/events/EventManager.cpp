@@ -13,47 +13,55 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <errno.h>
+#include <sys/neutrino.h>
+#include <sys/dispatch.h>
+#include <sys/iofunc.h>
+
+#define ATTACH_POINT_LOCAL_M "EventMgrMaster"
+#define ATTACH_POINT_LOCAL_S "EventMgrSlave"
+
+#define ATTACH_POINT_GNS_M "/dev/name/global/EventMgrMaster"
+#define ATTACH_POINT_GNS_S "/dev/name/global/EventMgrSlave"
+
 
 EventManager::EventManager() : server_coid(-1) {
 	isMaster = Configuration::getInstance().systemIsMaster();
+
 }
 
 EventManager::~EventManager() {
 	// TODO Auto-generated destructor stub
 }
 
-void EventManager::subscribe(EventType event, EventCallback callback) {
-	EventData data;
-	callback(data);
+void EventManager::subscribe(EventType type, EventCallback callback) {
 
-	if (subscribers.find(event) == subscribers.end()) {
-		// If event doesn't exist yet, create a new list and add it to the map
-		subscribers[event] = std::vector<EventCallback>();
-	}
-	subscribers[event].push_back(callback);
+		if (subscribers.find(type) == subscribers.end()) {
+			// If event doesn't exist yet, create a new list and add it to the map
+			subscribers[type] = std::vector<EventCallback>();
+		}
+		subscribers[type].push_back(callback);
 }
 
-void EventManager::unsubscribe(EventType event, EventCallback callback) {
+void EventManager::unsubscribe(EventType type, EventCallback callback) {
 
 }
 
-void EventManager::sendEvent(const EventData &event) {
+void EventManager::sendEvent(const Event &event) {
 	std::stringstream ss;
-	ss << "[EventManager] sendEvent: " << EVENT_TO_STRING(event.event);
-	if(!event.msg.empty())
-		ss << ", message: " << event.msg;
+	ss << "[EventManager] sendEvent: " << EVENT_TO_STRING(event.type);
+
 	if(event.data != -1)
 		ss << ", data: " << std::to_string(event.data);
 	Logger::info(ss.str());
 
 	std::lock_guard<std::mutex> lock(mtx);
-	if (subscribers.find(event.event) != subscribers.end()) {
+	if (subscribers.find(event.type) != subscribers.end()) {
 		Logger::debug("Notifiying subscribers...");
 		int i = 1;
-		for(const auto& callback : subscribers[event.event]) {
+		for(const auto& callback : subscribers[event.type]) {
 			Logger::debug("Notifiying subscriber #" + std::to_string(i++));
-			EventData data;
-			callback(data);
+			callback(event);
 		}
 	}
 }

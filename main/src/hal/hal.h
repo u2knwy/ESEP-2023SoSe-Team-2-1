@@ -11,6 +11,9 @@
 #include <sys/neutrino.h>
 #include <sys/procmgr.h>
 #include <hw/inout.h>
+#ifdef SIMULATION
+#include "simulation/simulationadapterqnx/simqnxgpioapi.h"
+#endif
 
 /*---------------------------------------------------------------------------
    GPIO CONFIGURATION
