@@ -47,13 +47,13 @@ void Actuators::configurePins() {
 	// Configure GPIOs as outputs
 	// Port 1
 	outputs = MOTOR_LEFT_PIN | MOTOR_RIGHT_PIN | MOTOR_SLOW_PIN | MOTOR_STOP_PIN | LAMP_RED_PIN | LAMP_YELLOW_PIN | LAMP_GREEN_PIN | SWITCH_PIN;
-	temp = in32((uintptr_t) gpio_bank_1 + GPIO_OE_REGISTER);
-	out32((uintptr_t) gpio_bank_1 + GPIO_OE_REGISTER, temp & ~outputs);
+	temp = in32(GPIO_OE_REGISTER(gpio_bank_1));
+	out32(GPIO_OE_REGISTER(gpio_bank_1), temp & ~outputs);
 
 	// Port 2
 	outputs = LED_Q1_PIN | LED_Q2_PIN | LED_RESET_PIN | LED_START_PIN;
-	temp = in32((uintptr_t) gpio_bank_2 + GPIO_OE_REGISTER);
-	out32((uintptr_t) gpio_bank_2 + GPIO_OE_REGISTER, temp & ~outputs);
+	temp = in32(GPIO_OE_REGISTER(gpio_bank_2));
+	out32(GPIO_OE_REGISTER(gpio_bank_2), temp & ~outputs);
 }
 
 void Actuators::handleEvent(Event event) {
@@ -121,7 +121,7 @@ void Actuators::estopMode() {
 }
 
 void Actuators::greenLampOn() {
-	out32((uintptr_t) (gpio_bank_1 + GPIO_SETDATAOUT), LAMP_GREEN_PIN);
+	out32(GPIO_SETDATAOUT(gpio_bank_1), LAMP_GREEN_PIN);
 }
 
 void Actuators::greenLampBlinking() {
@@ -129,19 +129,19 @@ void Actuators::greenLampBlinking() {
 }
 
 void Actuators::greenLampOff() {
-	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), LAMP_GREEN_PIN);
+	out32(GPIO_CLEARDATAOUT(gpio_bank_1), LAMP_GREEN_PIN);
 }
 
 void Actuators::yellowLampOn() {
-	out32((uintptr_t) (gpio_bank_1 + GPIO_SETDATAOUT), LAMP_YELLOW_PIN);
+	out32(GPIO_SETDATAOUT(gpio_bank_1), LAMP_YELLOW_PIN);
 }
 
 void Actuators::yellowLampOff() {
-	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), LAMP_YELLOW_PIN);
+	out32(GPIO_CLEARDATAOUT(gpio_bank_1), LAMP_YELLOW_PIN);
 }
 
 void Actuators::redLampOn() {
-	out32((uintptr_t) (gpio_bank_1 + GPIO_SETDATAOUT), LAMP_RED_PIN);
+	out32(GPIO_SETDATAOUT(gpio_bank_1), LAMP_RED_PIN);
 }
 
 void Actuators::redLampBlinkFast() {
@@ -153,71 +153,71 @@ void Actuators::redLampBlinkSlow() {
 }
 
 void Actuators::redLampOff() {
-	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), LAMP_RED_PIN);
+	out32(GPIO_CLEARDATAOUT(gpio_bank_1), LAMP_RED_PIN);
 }
 
 void Actuators::startLedOn() {
-	out32((uintptr_t) (gpio_bank_2 + GPIO_SETDATAOUT), LED_START_PIN);
+	out32(GPIO_SETDATAOUT(gpio_bank_2), LED_START_PIN);
 }
 
 void Actuators::startLedOff() {
-	out32((uintptr_t) (gpio_bank_2 + GPIO_CLEARDATAOUT), LED_START_PIN);
+	out32(GPIO_CLEARDATAOUT(gpio_bank_2), LED_START_PIN);
 }
 
 void Actuators::resetLedOn() {
-	out32((uintptr_t) (gpio_bank_2 + GPIO_SETDATAOUT), LED_RESET_PIN);
+	out32(GPIO_SETDATAOUT(gpio_bank_2), LED_RESET_PIN);
 }
 
 void Actuators::resetLedOff() {
-	out32((uintptr_t) (gpio_bank_2 + GPIO_CLEARDATAOUT), LED_RESET_PIN);
+	out32(GPIO_CLEARDATAOUT(gpio_bank_2), LED_RESET_PIN);
 }
 
 void Actuators::q1LedOn() {
-	out32((uintptr_t) (gpio_bank_2 + GPIO_SETDATAOUT), LED_Q1_PIN);
+	out32(GPIO_SETDATAOUT(gpio_bank_2), LED_Q1_PIN);
 }
 
 void Actuators::q1LedOff() {
-	out32((uintptr_t) (gpio_bank_2 + GPIO_CLEARDATAOUT), LED_Q1_PIN);
+	out32(GPIO_CLEARDATAOUT(gpio_bank_2), LED_Q1_PIN);
 }
 
 void Actuators::q2LedOn() {
-	out32((uintptr_t) (gpio_bank_2 + GPIO_SETDATAOUT), LED_Q2_PIN);
+	out32(GPIO_SETDATAOUT(gpio_bank_2), LED_Q2_PIN);
 }
 
 void Actuators::q2LedOff() {
-	out32((uintptr_t) (gpio_bank_2 + GPIO_CLEARDATAOUT), LED_Q2_PIN);
+	out32(GPIO_CLEARDATAOUT(gpio_bank_2), LED_Q2_PIN);
 }
 
 void Actuators::motorSlow() {
-	out32((uintptr_t) (gpio_bank_1 + GPIO_SETDATAOUT), MOTOR_SLOW_PIN);
+	out32(GPIO_SETDATAOUT(gpio_bank_1), MOTOR_SLOW_PIN);
 }
 
 void Actuators::motorFast() {
-	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), MOTOR_SLOW_PIN);
+	out32(GPIO_CLEARDATAOUT(gpio_bank_1), MOTOR_SLOW_PIN);
 }
 
 void Actuators::motorRight() {
-	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), MOTOR_STOP_PIN);
-	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), MOTOR_LEFT_PIN);
-	out32((uintptr_t) (gpio_bank_1 + GPIO_SETDATAOUT), MOTOR_RIGHT_PIN);
+	out32(GPIO_CLEARDATAOUT(gpio_bank_1), MOTOR_STOP_PIN);
+	out32(GPIO_CLEARDATAOUT(gpio_bank_1), MOTOR_LEFT_PIN);
+	out32(GPIO_SETDATAOUT(gpio_bank_1), MOTOR_RIGHT_PIN);
 }
 
 void Actuators::motorLeft() {
-	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), MOTOR_STOP_PIN);
-	out32((uintptr_t) (gpio_bank_1 + GPIO_SETDATAOUT), MOTOR_LEFT_PIN);
-	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), MOTOR_RIGHT_PIN);
+	out32(GPIO_CLEARDATAOUT(gpio_bank_1), MOTOR_STOP_PIN);
+	out32(GPIO_SETDATAOUT(gpio_bank_1), MOTOR_LEFT_PIN);
+	out32(GPIO_CLEARDATAOUT(gpio_bank_1), MOTOR_RIGHT_PIN);
 }
 
 void Actuators::motorStop() {
-	out32((uintptr_t) (gpio_bank_1 + GPIO_SETDATAOUT), MOTOR_STOP_PIN);
-	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), MOTOR_LEFT_PIN);
-	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), MOTOR_RIGHT_PIN);
+	out32(GPIO_SETDATAOUT(gpio_bank_1), MOTOR_STOP_PIN);
+	out32(GPIO_CLEARDATAOUT(gpio_bank_1), MOTOR_LEFT_PIN);
+	out32(GPIO_CLEARDATAOUT(gpio_bank_1), MOTOR_RIGHT_PIN);
 }
 
 void Actuators::openSwitch() {
-	out32((uintptr_t) (gpio_bank_1 + GPIO_SETDATAOUT), SWITCH_PIN);
+	out32(GPIO_SETDATAOUT(gpio_bank_1), SWITCH_PIN);
 }
 
 void Actuators::closeSwitch() {
-	out32((uintptr_t) (gpio_bank_1 + GPIO_CLEARDATAOUT), SWITCH_PIN);
+	out32(GPIO_CLEARDATAOUT(gpio_bank_1), SWITCH_PIN);
 }
