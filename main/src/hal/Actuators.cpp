@@ -18,6 +18,8 @@ Actuators::Actuators(std::shared_ptr<EventManager> mngr) : eventManager(mngr) {
 
 	// Default: Stop Motor
 	motorStop(true);
+	motorSlow(false);
+	motorFast(false);
 
 	subscribeToEvents();
 }
@@ -57,7 +59,7 @@ void Actuators::configurePins() {
 }
 
 void Actuators::handleEvent(Event event) {
-	Logger::debug("Actuators handle Event: " + EVENT_TO_STRING(event.type));
+	Logger::debug("Actuators handle Event: " + EVENT_TO_STRING(event.type) + " - data: " + std::to_string(event.data));
 	switch(event.type) {
 	case EventType::HALmotorStop:
 		motorStop((bool) event.data); break;
@@ -214,12 +216,17 @@ void Actuators::motorSlow(bool slow) {
 
 void Actuators::motorFast(bool fast) {
 	if(fast) {
-		out32(GPIO_CLEARDATAOUT(gpio_bank_1), MOTOR_SLOW_PIN);
 		out32(GPIO_SETDATAOUT(gpio_bank_1), MOTOR_RIGHT_PIN);
 	} else {
-		out32(GPIO_SETDATAOUT(gpio_bank_1), MOTOR_SLOW_PIN);
-		out32(GPIO_SETDATAOUT(gpio_bank_1), MOTOR_RIGHT_PIN);
+		out32(GPIO_CLEARDATAOUT(gpio_bank_1), MOTOR_RIGHT_PIN);
 	}
+}
+
+void Actuators::motorStop(bool stop) {
+	if(stop)
+		out32(GPIO_SETDATAOUT(gpio_bank_1), MOTOR_STOP_PIN);
+	else
+		out32(GPIO_CLEARDATAOUT(gpio_bank_1), MOTOR_STOP_PIN);
 }
 
 void Actuators::motorRight() {
@@ -232,13 +239,6 @@ void Actuators::motorLeft() {
 	out32(GPIO_CLEARDATAOUT(gpio_bank_1), MOTOR_STOP_PIN);
 	out32(GPIO_SETDATAOUT(gpio_bank_1), MOTOR_LEFT_PIN);
 	out32(GPIO_CLEARDATAOUT(gpio_bank_1), MOTOR_RIGHT_PIN);
-}
-
-void Actuators::motorStop(bool stop) {
-	if(stop)
-		out32(GPIO_SETDATAOUT(gpio_bank_1), MOTOR_STOP_PIN);
-	else
-		out32(GPIO_CLEARDATAOUT(gpio_bank_1), MOTOR_STOP_PIN);
 }
 
 void Actuators::openSwitch() {

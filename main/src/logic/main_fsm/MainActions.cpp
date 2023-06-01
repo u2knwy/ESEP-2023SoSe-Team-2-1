@@ -17,7 +17,7 @@ MainActions::~MainActions() {
 
 
 void MainActions::setMotorStop(bool stop) {
-	Logger::debug("MainActions::setMotorStop");
+	Logger::debug("MainActions::setMotorStop " + std::to_string(stop));
 	Event event;
 	event.type = EventType::HALmotorStop;
 	event.data = (int) stop;
@@ -25,7 +25,7 @@ void MainActions::setMotorStop(bool stop) {
 }
 
 void MainActions::setMotorFast(bool fast) {
-	Logger::debug("MainActions::setMotorFast");
+	Logger::debug("MainActions::setMotorFast " + std::to_string(fast));
 	Event event;
 	event.type = EventType::HALmotorFastRight;
 	event.data = (int) fast;
@@ -33,7 +33,7 @@ void MainActions::setMotorFast(bool fast) {
 }
 
 void MainActions::setMotorSlow(bool slow) {
-	Logger::debug("MainActions::setMotorSlow");
+	Logger::debug("MainActions::setMotorSlow " + std::to_string(slow));
 	Event event;
 	event.type = EventType::HALmotorSlowRight;
 	event.data = (int) slow;
