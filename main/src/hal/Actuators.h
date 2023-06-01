@@ -139,12 +139,12 @@ public:
 	/**
 	 * Sets the 'Motor slow' flag. This does NOT start or stop the motor.
 	 */
-	void motorSlow();
+	void motorSlow(bool slow);
 
 	/**
 	 * Clears the 'Motor slow' flag. This does NOT start or stop the motor.
 	 */
-	void motorFast();
+	void motorFast(bool fast);
 
 	/**
 	 * Start motor in right direction.
@@ -159,7 +159,7 @@ public:
 	/**
 	 * Stops the motor.
 	 */
-	void motorStop();
+	void motorStop(bool stop);
 
 	/**
 	 * Opens the switch to let a workpiece pass.

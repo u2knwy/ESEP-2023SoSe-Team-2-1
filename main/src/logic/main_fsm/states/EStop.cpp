@@ -16,12 +16,15 @@ MainState EStop::getCurrentState() {
 };
 
 void EStop::entry() {
-	Logger::debug("EStop::entry");
+	Logger::info("Entered EStop mode");
 	initSubStateEStop();
+	actions->setEStopMode();
+	actions->setMotorStop(true);
 }
 
 void EStop::exit() {
 	Logger::debug("EStop::exit");
+	actions->setMotorStop(false);
 }
 
 void EStop::initSubStateEStop() {

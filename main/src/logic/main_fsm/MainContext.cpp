@@ -25,19 +25,51 @@ MainContext::~MainContext() {
 }
 
 void MainContext::subscribeToEvents() {
-	eventManager->subscribe(EventType::START_M_SHORT, std::bind(&MainContext::master_btnStart_PressedShort, this));
-	eventManager->subscribe(EventType::START_M_LONG, std::bind(&MainContext::master_btnStart_PressedLong, this));
-	eventManager->subscribe(EventType::STOP_M_SHORT, std::bind(&MainContext::master_btnStop_Pressed, this));
-	eventManager->subscribe(EventType::RESET_M_SHORT, std::bind(&MainContext::master_btnReset_Pressed, this));
-	eventManager->subscribe(EventType::ESTOP_M_PRESSED, std::bind(&MainContext::master_EStop_Pressed, this));
-	eventManager->subscribe(EventType::ESTOP_M_RELEASED, std::bind(&MainContext::master_EStop_Released, this));
+	eventManager->subscribe(EventType::START_M_SHORT, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::START_M_LONG, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::STOP_M_SHORT, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::RESET_M_SHORT, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::ESTOP_M_PRESSED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::ESTOP_M_RELEASED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 
-	eventManager->subscribe(EventType::START_S_SHORT, std::bind(&MainContext::slave_btnStart_PressedShort, this));
-	eventManager->subscribe(EventType::START_S_LONG, std::bind(&MainContext::slave_btnStart_PressedLong, this));
-	eventManager->subscribe(EventType::STOP_S_SHORT, std::bind(&MainContext::slave_btnStop_Pressed, this));
-	eventManager->subscribe(EventType::RESET_S_SHORT, std::bind(&MainContext::slave_btnReset_Pressed, this));
-	eventManager->subscribe(EventType::ESTOP_S_PRESSED, std::bind(&MainContext::slave_EStop_Pressed, this));
-	eventManager->subscribe(EventType::ESTOP_S_RELEASED, std::bind(&MainContext::slave_EStop_Released, this));
+	eventManager->subscribe(EventType::START_S_SHORT, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::START_S_LONG, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::STOP_S_SHORT, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::RESET_S_SHORT, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::ESTOP_S_PRESSED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::ESTOP_S_RELEASED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+}
+
+void MainContext::handleEvent(Event event) {
+	Logger::debug("MainFSM handle Event: " + EVENT_TO_STRING(event.type));
+	switch(event.type) {
+	case EventType::START_M_SHORT:
+		state->master_btnStart_PressedShort(); break;
+	case EventType::START_M_LONG:
+		state->master_btnStart_PressedLong(); break;
+	case EventType::STOP_M_SHORT:
+		state->master_btnStop_Pressed(); break;
+	case EventType::RESET_M_SHORT:
+		state->master_btnReset_Pressed(); break;
+	case EventType::ESTOP_M_PRESSED:
+		state->master_EStop_Pressed(); break;
+	case EventType::ESTOP_M_RELEASED:
+		state->master_EStop_Released(); break;
+	case EventType::START_S_SHORT:
+		state->slave_btnStart_PressedShort(); break;
+	case EventType::START_S_LONG:
+		state->slave_btnStart_PressedLong(); break;
+	case EventType::STOP_S_SHORT:
+		state->slave_btnStop_Pressed(); break;
+	case EventType::RESET_S_SHORT:
+		state->slave_btnReset_Pressed(); break;
+	case EventType::ESTOP_S_PRESSED:
+		state->slave_EStop_Pressed(); break;
+	case EventType::ESTOP_S_RELEASED:
+		state->slave_EStop_Released(); break;
+	default:
+		Logger::warn(EVENT_TO_STRING(event.type) + " was not handled by MainFSM");
+	}
 }
 
 MainState MainContext::getCurrentState() {

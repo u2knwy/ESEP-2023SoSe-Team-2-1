@@ -26,7 +26,7 @@ void actuatorDemo() {
 	std::shared_ptr<EventManager> mngr = std::make_shared<EventManager>();
 	std::shared_ptr<Actuators> actuators = std::make_shared<Actuators>(mngr);
 
-	actuators->motorStop();
+	actuators->motorStop(true);
 
 	// ALL ON
 	Logger::info("Switch all actuators on");
@@ -52,27 +52,29 @@ void actuatorDemo() {
 	actuators->closeSwitch();
 	std::this_thread::sleep_for(std::chrono::seconds(5));
 
+	actuators->motorStop(false);
+
 	Logger::info("Motor right fast");
-	actuators->motorFast();
+	actuators->motorFast(true);
 	actuators->motorRight();
 	std::this_thread::sleep_for(std::chrono::seconds(2));
 
 	Logger::info("Motor right slow");
-	actuators->motorSlow();
+	actuators->motorSlow(true);
 	actuators->motorRight();
 	std::this_thread::sleep_for(std::chrono::seconds(2));
 
 	Logger::info("Motor left fast");
-	actuators->motorFast();
+	actuators->motorFast(true);
 	actuators->motorLeft();
 	std::this_thread::sleep_for(std::chrono::seconds(2));
 
 	Logger::info("Motor left slow");
-	actuators->motorSlow();
+	actuators->motorSlow(true);
 	actuators->motorLeft();
 	std::this_thread::sleep_for(std::chrono::seconds(2));
 
-	actuators->motorStop();
+	actuators->motorStop(true);
 }
 
 void sensorDemo() {
@@ -126,7 +128,7 @@ void adcDemo() {
 	hm.stop();
 
 	// Stop motor for demo
-	actuators->motorStop();
+	actuators->motorStop(true);
 	// ### END ADC TEST
 }
 

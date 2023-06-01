@@ -96,7 +96,7 @@ int main(int argc, char **argv)
 	sensors = std::make_shared<Sensors>(eventManager);
 	mainFSM = std::make_shared<MainContext>(eventManager);
 
-	actuators->motorStop();
+	actuators->motorStop(true);
 
 	heightFSM = std::make_shared<HeightSensorFSM>();
 	heightSensor = std::make_shared<HeightSensor>(heightFSM);

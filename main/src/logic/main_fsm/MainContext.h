@@ -10,13 +10,17 @@
 #include "MainBasestate.h"
 #include "MainContextData.h"
 #include "events/EventManager.h"
+#include "events/events.h"
+#include "events/IEventHandler.h"
 
 #include <memory>
 
-class MainContext {
+class MainContext : public IEventHandler {
 public:
 	MainContext(std::shared_ptr<EventManager> mngr);
 	virtual ~MainContext();
+
+	void handleEvent(Event event) override;
 
 	MainState getCurrentState();
 

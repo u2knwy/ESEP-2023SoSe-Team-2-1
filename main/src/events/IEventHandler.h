@@ -10,7 +10,7 @@
 #include "eventtypes_enum.h"
 #include "events.h"
 
-typedef struct Event {
+struct Event {
     EventType type;
     int data{-1};
 };

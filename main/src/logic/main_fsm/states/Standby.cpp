@@ -18,7 +18,9 @@ MainState Standby::getCurrentState() {
 };
 
 void Standby::entry() {
-	Logger::debug("Standby::entry");
+	Logger::info("Entered Standby mode");
+	actions->setMotorStop(true);
+	actions->setStandbyMode();
 }
 
 void Standby::exit() {

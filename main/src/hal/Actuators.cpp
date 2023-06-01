@@ -17,7 +17,7 @@ Actuators::Actuators(std::shared_ptr<EventManager> mngr) : eventManager(mngr) {
 	gpio_bank_2 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_2);
 
 	// Default: Stop Motor
-	motorStop();
+	motorStop(true);
 
 	subscribeToEvents();
 }
@@ -58,39 +58,56 @@ void Actuators::configurePins() {
 
 void Actuators::handleEvent(Event event) {
 	Logger::debug("Actuators handle Event: " + EVENT_TO_STRING(event.type));
+	switch(event.type) {
+	case EventType::HALmotorStop:
+		motorStop((bool) event.data); break;
+	case EventType::HALmotorFastRight:
+		motorFast((bool) event.data); break;
+	case EventType::HALmotorSlowRight:
+		motorSlow((bool) event.data); break;
+	case EventType::MODE_STANDBY:
+		standbyMode(); break;
+	case EventType::MODE_RUNNING:
+		runningMode(); break;
+	case EventType::MODE_SERVICE:
+		serviceMode(); break;
+	case EventType::MODE_ESTOP:
+		estopMode(); break;
+	case EventType::MODE_ERROR:
+		errorMode(); break;
+	default:
+		Logger::warn(EVENT_TO_STRING(event.type) + " was not handled by actuators");
+	}
 }
 
 void Actuators::subscribeToEvents() {
-	/* // Subscribe to modes
-	eventManager->subscribe(EventType::MODE_STANDBY, std::bind(&Actuators::standbyMode, this));
-	eventManager->subscribe(EventType::MODE_RUNNING, std::bind(&Actuators::runningMode, this));
-	eventManager->subscribe(EventType::MODE_SERVICE, std::bind(&Actuators::serviceMode, this));
-	eventManager->subscribe(EventType::MODE_ESTOP, std::bind(&Actuators::estopMode, this));
-	eventManager->subscribe(EventType::MODE_ERROR, std::bind(&Actuators::errorMode, this));
+	// Subscribe to motor events
+	eventManager->subscribe(EventType::HALmotorStop, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::HALmotorFastRight, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::HALmotorSlowRight, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
 
 	// Subscribe to lamp events
-	eventManager->subscribe(EventType::HALroteLampeAn, std::bind(&Actuators::redLampOn, this));
-	eventManager->subscribe(EventType::HALroteLampeAus, std::bind(&Actuators::redLampOff, this));
-	eventManager->subscribe(EventType::HALgelbeLampeAn, std::bind(&Actuators::yellowLampOn, this));
-	eventManager->subscribe(EventType::HALgelbeLampeAus, std::bind(&Actuators::yellowLampOff, this));
-	eventManager->subscribe(EventType::HALgrueneLampeAn, std::bind(&Actuators::greenLampOn, this));
-	eventManager->subscribe(EventType::HALgrueneLampeAus, std::bind(&Actuators::greenLampOff, this));
+	eventManager->subscribe(EventType::HALroteLampeAn, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::HALroteLampeAus, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::HALgelbeLampeAn, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::HALgelbeLampeAus, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::HALgrueneLampeAn, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::HALgrueneLampeAus, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
 
-	// Subscribe to motor events
-	eventManager->subscribe(EventType::HALmotorFastRight, std::bind(&Actuators::motorFast, this));
-	eventManager->subscribe(EventType::HALmotorSlowRight, std::bind(&Actuators::motorSlow, this));
-	eventManager->subscribe(EventType::HALmotorStop, std::bind(&Actuators::motorStop, this)); */
+	// Subscribe to modes
+	eventManager->subscribe(EventType::MODE_STANDBY, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::MODE_RUNNING, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::MODE_SERVICE, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::MODE_ESTOP, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::MODE_ERROR, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
 
-	eventManager->subscribe(EventType::START_M_SHORT, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
 }
-
-
 
 void Actuators::standbyMode() {
 	greenLampOff();
 	yellowLampOff();
 	redLampOff();
-	motorStop();
+	motorStop(true);
 }
 
 void Actuators::runningMode() {
@@ -103,21 +120,21 @@ void Actuators::serviceMode() {
 	greenLampBlinking();
 	yellowLampOff();
 	redLampOff();
-	motorStop();
+	motorStop(true);
 }
 
 void Actuators::errorMode() {
 	greenLampOff();
 	yellowLampOff();
 	redLampBlinkFast();
-	motorStop();
+	motorStop(true);
 }
 
 void Actuators::estopMode() {
 	greenLampOff();
 	yellowLampOff();
 	redLampOff();
-	motorStop();
+	motorStop(true);
 }
 
 void Actuators::greenLampOn() {
@@ -188,12 +205,21 @@ void Actuators::q2LedOff() {
 	out32(GPIO_CLEARDATAOUT(gpio_bank_2), LED_Q2_PIN);
 }
 
-void Actuators::motorSlow() {
-	out32(GPIO_SETDATAOUT(gpio_bank_1), MOTOR_SLOW_PIN);
+void Actuators::motorSlow(bool slow) {
+	if(slow)
+		out32(GPIO_SETDATAOUT(gpio_bank_1), MOTOR_SLOW_PIN);
+	else
+		out32(GPIO_CLEARDATAOUT(gpio_bank_1), MOTOR_SLOW_PIN);
 }
 
-void Actuators::motorFast() {
-	out32(GPIO_CLEARDATAOUT(gpio_bank_1), MOTOR_SLOW_PIN);
+void Actuators::motorFast(bool fast) {
+	if(fast) {
+		out32(GPIO_CLEARDATAOUT(gpio_bank_1), MOTOR_SLOW_PIN);
+		out32(GPIO_SETDATAOUT(gpio_bank_1), MOTOR_RIGHT_PIN);
+	} else {
+		out32(GPIO_SETDATAOUT(gpio_bank_1), MOTOR_SLOW_PIN);
+		out32(GPIO_SETDATAOUT(gpio_bank_1), MOTOR_RIGHT_PIN);
+	}
 }
 
 void Actuators::motorRight() {
@@ -208,10 +234,11 @@ void Actuators::motorLeft() {
 	out32(GPIO_CLEARDATAOUT(gpio_bank_1), MOTOR_RIGHT_PIN);
 }
 
-void Actuators::motorStop() {
-	out32(GPIO_SETDATAOUT(gpio_bank_1), MOTOR_STOP_PIN);
-	out32(GPIO_CLEARDATAOUT(gpio_bank_1), MOTOR_LEFT_PIN);
-	out32(GPIO_CLEARDATAOUT(gpio_bank_1), MOTOR_RIGHT_PIN);
+void Actuators::motorStop(bool stop) {
+	if(stop)
+		out32(GPIO_SETDATAOUT(gpio_bank_1), MOTOR_STOP_PIN);
+	else
+		out32(GPIO_CLEARDATAOUT(gpio_bank_1), MOTOR_STOP_PIN);
 }
 
 void Actuators::openSwitch() {
