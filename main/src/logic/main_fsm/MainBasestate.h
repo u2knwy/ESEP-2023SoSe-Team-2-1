@@ -29,7 +29,7 @@ protected:
 public:
 	virtual ~MainBasestate(){};
 
-	virtual void setData(std::shared_ptr<MainContextData>) {
+	virtual void setData(std::shared_ptr<MainContextData> data) {
 		this->data = data;
 	}
 	virtual void setAction(std::shared_ptr<MainActions> actions) {
