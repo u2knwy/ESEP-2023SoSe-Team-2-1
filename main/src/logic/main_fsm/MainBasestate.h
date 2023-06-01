@@ -9,6 +9,7 @@
 
 #include "MainActions.h"
 #include "MainContextData.h"
+#include <memory>
 
 enum MainState {
 	MAIN_NONE,
@@ -21,17 +22,17 @@ enum MainState {
 
 class MainBasestate {
 protected:
-	MainContextData* data;
-	MainActions* actions;
 	MainBasestate* substateEStop;
+	std::shared_ptr<MainActions> actions;
+	std::shared_ptr<MainContextData> data;
 
 public:
 	virtual ~MainBasestate(){};
 
-	virtual void setData(MainContextData* data) {
+	virtual void setData(std::shared_ptr<MainContextData>) {
 		this->data = data;
 	}
-	virtual void setAction(MainActions* actions) {
+	virtual void setAction(std::shared_ptr<MainActions> actions) {
 		this->actions = actions;
 	}
 

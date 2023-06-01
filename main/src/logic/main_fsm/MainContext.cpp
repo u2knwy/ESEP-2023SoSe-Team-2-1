@@ -14,12 +14,11 @@
 #include <memory>
 
 MainContext::MainContext(std::shared_ptr<EventManager> mngr) : eventManager(mngr) {
-	this->data = std::unique_ptr<MainContextData>(new MainContextData());
+	this->actions = std::make_shared<MainActions>(mngr);
+	this->data = std::make_shared<MainContextData>();
 	this->state = new Standby();
-	this->actions = std::unique_ptr<MainActions>(new MainActions(mngr));
-	this->data = std::unique_ptr<MainContextData>(new MainContextData());
-	state->setAction(actions.get());
-	state->setData(data.get());
+	state->setAction(actions);
+	state->setData(data);
 	// TODO: @Domi subscribeToEvents funktioniert so nicht (sobald ich mehrere Threads habe die auf Events subscribed sind)
 	// "Process 348184 (main) terminated SIGSEGV code=1 fltno=11 ip=0102cda8(/usr/lib/ldqnx.so.2@_band_get_aligned+0x000002b8) mapaddr=0002cda8. ref=00000000"
 	subscribeToEvents();
