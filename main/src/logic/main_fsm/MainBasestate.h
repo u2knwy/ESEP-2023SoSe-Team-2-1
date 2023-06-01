@@ -23,16 +23,16 @@ enum MainState {
 class MainBasestate {
 protected:
 	MainBasestate* substateEStop;
-	std::shared_ptr<MainActions> actions;
-	std::shared_ptr<MainContextData> data;
+	MainActions* actions;
+	MainContextData* data;
 
 public:
 	virtual ~MainBasestate(){};
 
-	virtual void setData(std::shared_ptr<MainContextData> data) {
+	virtual void setData(MainContextData* data) {
 		this->data = data;
 	}
-	virtual void setAction(std::shared_ptr<MainActions> actions) {
+	virtual void setAction(MainActions* actions) {
 		this->actions = actions;
 	}
 

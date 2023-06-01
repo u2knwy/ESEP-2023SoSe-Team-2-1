@@ -61,8 +61,8 @@ public:
 	void slave_EStop_Released();
 
 private:
-	std::shared_ptr<MainActions> actions;
-	std::shared_ptr<MainContextData> data;
+	MainActions* actions;
+	MainContextData* data;
 	MainBasestate* state;
 	std::shared_ptr<EventManager> eventManager;
 	void subscribeToEvents();

@@ -27,20 +27,17 @@
 
 EventManager::EventManager() : server_coid(-1) {
 	isMaster = Configuration::getInstance().systemIsMaster();
-
 }
 
 EventManager::~EventManager() {
-	// TODO Auto-generated destructor stub
 }
 
 void EventManager::subscribe(EventType type, EventCallback callback) {
-
-		if (subscribers.find(type) == subscribers.end()) {
-			// If event doesn't exist yet, create a new list and add it to the map
-			subscribers[type] = std::vector<EventCallback>();
-		}
-		subscribers[type].push_back(callback);
+	if (subscribers.find(type) == subscribers.end()) {
+		// If event doesn't exist yet, create a new list and add it to the map
+		subscribers[type] = std::vector<EventCallback>();
+	}
+	subscribers[type].push_back(callback);
 }
 
 void EventManager::unsubscribe(EventType type, EventCallback callback) {
@@ -64,7 +61,7 @@ void EventManager::sendEvent(const Event &event) {
 			callback(event);
 		}
 	}else{
-	Logger::debug("No subscribers for Event ");
+		Logger::debug("No subscribers for Event ");
 	}
 }
 
