@@ -19,7 +19,7 @@ Actuators::Actuators(std::shared_ptr<EventManager> mngr) : eventManager(mngr) {
 	// Default: Stop Motor
 	motorStop(true);
 
-	subscribeToEvents();
+	//subscribeToEvents();
 }
 
 Actuators::~Actuators() {

@@ -55,7 +55,7 @@ void EventManager::sendEvent(const Event &event) {
 		ss << ", data: " << std::to_string(event.data);
 	Logger::info(ss.str());
 
-	std::lock_guard<std::mutex> lock(mtx);
+
 	if (subscribers.find(event.type) != subscribers.end()) {
 		Logger::debug("Notifiying subscribers...");
 		int i = 1;
@@ -63,6 +63,8 @@ void EventManager::sendEvent(const Event &event) {
 			Logger::debug("Notifiying subscriber #" + std::to_string(i++));
 			callback(event);
 		}
+	}else{
+	Logger::debug("No subscribers for Event ");
 	}
 }
 

@@ -113,9 +113,7 @@ int main(int argc, char **argv)
 	while (running) {
 		// Sleep to save CPU resources
 		std::this_thread::sleep_for(std::chrono::seconds(1));
-		Event ev;
-		ev.type = EventType::START_M_SHORT;
-		eventManager->sendEvent(ev);
+
 	}
 
 	Logger::info("Sorting Machine was terminated.");
