@@ -15,7 +15,7 @@ enum WorkpieceType {
 	UNKNOWN
 };
 
-enum WorkpieceStatus {
+enum WorkpiecePosition {
 	FBM1_START_HM,
 	FBM1_HM_MD,
 	FBM1_MD_SW,
@@ -89,8 +89,8 @@ public:
 	 */
 	WorkpieceType getType();
 
-	WorkpieceStatus getStatus();
-	void setStatus(WorkpieceStatus newStatus);
+	WorkpiecePosition getStatus();
+	void setStatus(WorkpiecePosition newStatus);
 private:
 	int id{-1};
 	float avgHeightFBM1{0.0};
@@ -99,5 +99,5 @@ private:
 	bool metalFBM2{false};
 	bool flipped{false};
 	WorkpieceType type{UNKNOWN};
-	WorkpieceStatus status{FBM1_START_HM};
+	WorkpiecePosition status{FBM1_START_HM};
 };
