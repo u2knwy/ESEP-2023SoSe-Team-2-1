@@ -9,6 +9,8 @@
 
 #include "events/eventtypes_enum.h"
 #include "configuration/Configuration.h"
+#include "hal/IHeightSensor.h"
+#include <vector>
 
 struct HeightResult {
 	WorkpieceType type{WorkpieceType::UNKNOWN};
@@ -61,9 +63,15 @@ public:
 	 */
 	void resetMeasurement();
 	HeightResult getCurrentResult();
+	HeightResult getCurrentResultV2();
+	static bool isFlat(float value);
+	static bool isHigh(float value);
+	static bool isHole(float value);
+	static bool isUnknown(float value);
 private:
 	WorkpieceType currentType;
 	float avgValue;
 	float maxValue;
 	int nMeasurements;
+	std::vector<float> measurements;
 };
