@@ -7,9 +7,9 @@
 
 #pragma once
 
+#include "IHeightSensor.h"
 #include "adc/ADC.h"
 #include "events/events.h"
-#include "logic/hm/HeightSensorFSM.h"
 #include "configuration/Configuration.h"
 
 #include <sys/mman.h>
@@ -24,18 +24,6 @@
 #include <chrono>
 #include <vector>
 #include <mutex>
-
-/*---------------------------------------------------------------------------
-   HEIGHT SENSOR CONFIGURATION
------------------------------------------------------------------------------ */
-#define HEIGHT_CONV_MAX 2
-#define HEIGHT_FLAT 21
-#define HEIGHT_HIGH 25
-#define HEIGHT_HOLE 6
-#define ADC_DEFAULT_OFFSET 3648
-#define ADC_DEFAULT_HIGH 2323
-// use N samples for averaging / max. value (sliding window)
-#define ADC_SAMPLE_SIZE 100
 
 /*---------------------------------------------------------------------------
    ADC CONFIGURATION
@@ -53,20 +41,21 @@
 // ADC IRQ pin mask
 #define ADC_IRQ_PIN_MASK 0x2
 
-class HeightSensor {
+class HeightSensor : public IHeightSensor {
 public:
-	HeightSensor(std::shared_ptr<HeightSensorFSM> fsm);
+	HeightSensor();
 	virtual ~HeightSensor();
-	void start();
-	void stop();
-	void calibrateOffset(int offsetValue);
-	void calibrateRefHigh(int highValue);
-	float getAverageHeight();
-	float getMaxHeight();
+	void registerMeasurementCallback(HeightCallback callback) override;
+	void unregisterNewMeasurementCallback() override;
+	void start() override;
+	void stop() override;
+	float getAverageHeight() override;
+	float getMaxHeight() override;
+	int getLastRawValue() override;
 private:
-	std::shared_ptr<HeightSensorFSM> fsm;
 	TSCADC tsc;
 	ADC* adc;
+	HeightCallback heightValueCallback = nullptr;
 	int chanID;
 	int conID;
     std::thread measureThread;
@@ -76,7 +65,5 @@ private:
     void addValue(int value);
     bool running{false};
     void threadFunction();
-    int adcOffset;
-    int adcIncPerMillimeter;
     float adcValueToMillimeter(int adcValue);
 };

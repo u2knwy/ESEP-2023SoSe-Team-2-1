@@ -14,6 +14,7 @@
 #include "hal/Sensors.h"
 #include "hal/Actuators.h"
 #include "hal/HeightSensor.h"
+#include "logic/hm/HeightContext.h"
 #include "logic/main_fsm/MainContext.h"
 #include "events/EventManager.h"
 
@@ -54,24 +55,22 @@ void actuatorDemo() {
 
 	actuators->motorStop(false);
 
-	Logger::info("Motor right fast");
-	actuators->motorFast(true);
 	actuators->motorRight();
+	Logger::info("Motor right fast");
+	actuators->motorSlow(false);
 	std::this_thread::sleep_for(std::chrono::seconds(2));
 
 	Logger::info("Motor right slow");
 	actuators->motorSlow(true);
-	actuators->motorRight();
 	std::this_thread::sleep_for(std::chrono::seconds(2));
 
-	Logger::info("Motor left fast");
-	actuators->motorFast(true);
 	actuators->motorLeft();
+	Logger::info("Motor left fast");
+	actuators->motorSlow(false);
 	std::this_thread::sleep_for(std::chrono::seconds(2));
 
 	Logger::info("Motor left slow");
 	actuators->motorSlow(true);
-	actuators->motorLeft();
 	std::this_thread::sleep_for(std::chrono::seconds(2));
 
 	actuators->motorStop(true);
@@ -99,11 +98,13 @@ void adcDemo() {
 	//hal->motorRight();
 	//hal->motorSlow();
 
+	Configuration& conf = Configuration::getInstance();
+	conf.saveCalibration(3648, 2323);
+
 	// HeightSensor with FSM
-	std::shared_ptr<HeightSensorFSM> heightFSM = std::make_shared<HeightSensorFSM>();
-	HeightSensor hm(heightFSM);
-	hm.calibrateOffset(3648);
-	hm.calibrateRefHigh(2323);
+	std::shared_ptr<HeightSensor> heightSensor = std::make_shared<HeightSensor>();
+	std::shared_ptr<HeightContext> heightFSM = std::make_shared<HeightContext>(mngr, heightSensor);
+	HeightSensor hm;
 	hm.start();
 
 #define DEMO_DURATION 5

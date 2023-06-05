@@ -30,6 +30,7 @@ public:
 	void setDesiredWorkpieceOrder(std::vector<WorkpieceType> order);
 	std::vector<WorkpieceType> getDesiredOrder();
 	Calibration getCalibration();
+	void saveCalibration(int offset, int refHigh);
 
 private:
 	Configuration();
@@ -39,6 +40,5 @@ private:
 	std::vector<WorkpieceType> order;
 	bool isMaster{true};
 	bool hasPusher{false};
-	int calOffset{0};
-	int calRefHigh{0};
+	Calibration cal;
 };

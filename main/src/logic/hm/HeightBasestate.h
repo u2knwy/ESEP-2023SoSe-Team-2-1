@@ -14,7 +14,8 @@ enum HeightState {
 	HEIGHT_NONE,
 	WAIT_FOR_WS,
 	HIGH,
-	WAIT_FOR_BELT
+	WAIT_FOR_BELT,
+	PAUSED
 };
 
 class HeightBasestate {
@@ -71,6 +72,20 @@ public:
 	 * Height UNKNOWN was detected
 	 */
 	virtual bool unknownDetected() {
+		return false;
+	}
+
+	/**
+	 * The motor was stopped
+	 */
+	virtual bool motorStopped() {
+		return false;
+	}
+
+	/**
+	 * The motor is running
+	 */
+	virtual bool motorRunning() {
 		return false;
 	}
 };

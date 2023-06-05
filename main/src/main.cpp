@@ -9,7 +9,6 @@
 #include "configuration/options.hpp"
 #include "hal/HeightSensor.h"
 #include "hal/Actuators.h"
-#include "logic/hm/HeightSensorFSM.h"
 #include "logic/main_fsm/MainContext.h"
 #include "events/events.h"
 #include "events/EventManager.h"
@@ -17,6 +16,7 @@
 
 #include <gtest/gtest.h>
 #include <hal/Sensors.h>
+#include <logic/hm/HeightContext.h>
 
 #ifdef SIMULATION
 #include "simulation/simulationadapterqnx/simqnxgpioapi.h" // must be last include !!!
@@ -25,8 +25,8 @@
 using namespace std;
 
 // Components which will be launched in main-function and cleaned up if program is terminated
-std::shared_ptr<HeightSensorFSM> heightFSM;
-std::shared_ptr<HeightSensor> heightSensor;
+std::shared_ptr<HeightContext> heightFSM;
+//std::shared_ptr<HeightSensor> heightSensor;
 std::shared_ptr<Sensors> sensors;
 std::shared_ptr<Actuators> actuators;
 std::shared_ptr<EventManager> eventManager;
@@ -42,7 +42,7 @@ bool running = true;
 void cleanup(int exitCode)
 {
 	Logger::info("Exit code received: " + std::to_string(exitCode));
-	heightSensor->stop();
+//	heightSensor->stop();
 	running = false;
 }
 
@@ -96,18 +96,45 @@ int main(int argc, char **argv)
 	sensors = std::make_shared<Sensors>(eventManager);
 	mainFSM = std::make_shared<MainContext>(eventManager);
 
-	actuators->motorStop(true);
-
-	heightFSM = std::make_shared<HeightSensorFSM>();
-	heightSensor = std::make_shared<HeightSensor>(heightFSM);
-
-	sensors->startEventLoop();
-	heightSensor->start();
-
 	// Register handler function to be called if the program is not terminated properly
 	std::signal(SIGINT, cleanup);
 	std::signal(SIGABRT, cleanup);
 	std::signal(SIGTERM, cleanup);
+
+	actuators->motorStop(true);
+
+	std::shared_ptr<IHeightSensor> heightSensor = std::make_shared<HeightSensor>();
+
+	// ###########################################
+	// TEMPORARY: Calibrate HeightSensor
+/*
+	heightSensor->start();
+	std::string line;
+	Logger::info("Press ENTER to calibrate Conveyor");
+	bool ok = false;
+	int offset, refHigh;
+	while(!ok) {
+		std::getline(std::cin, line);
+		offset = heightSensor->getLastRawValue();
+		Logger::info("Value: " + std::to_string(offset) + " - OK? [y/N]");
+		ok = line == "y";
+	}
+	Logger::info("Press ENTER to calibrate HIGH");
+	ok = false;
+	while(!ok) {
+		std::getline(std::cin, line);
+		refHigh = heightSensor->getLastRawValue();
+		Logger::info("Value: " + std::to_string(refHigh) + " - OK? [y/N]");
+		ok = line == "y";
+	}
+	conf.saveCalibration(offset, refHigh);
+	heightSensor->stop();*/
+	// Calibrate HeightSensor END
+	// ###########################################
+	conf.saveCalibration(3647, 2330);
+
+	sensors->startEventLoop();
+	heightFSM = std::make_shared<HeightContext>(eventManager, heightSensor);
 
 	// Endless loop - wait until termination
 	while (running) {

@@ -18,7 +18,8 @@ HeightState WaitForBelt::getCurrentState() {
 }
 
 bool WaitForBelt::beltDetected() {
-	actions->sendHeightResultFBM1(data->getCurrentType(), data->avgValue);
+	actions->sendHeightResult();
+	actions->setMotorSlow(false);
 	exit();
 	new(this) WaitForWorkpiece;
 	entry();

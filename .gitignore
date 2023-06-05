@@ -3,3 +3,11 @@
 **/build/
 **/__pycache__/
 *.bkp
+
+.project
+.trgtproject
+!main/.project
+!main/.cproject
+!helloworld/.project
+!helloworld/.cproject
+.dtmp

@@ -12,7 +12,7 @@
 #include "../simulation/simulationadapterqnx/simqnxirqapi.h"
 #endif
 
-HeightSensor::HeightSensor(std::shared_ptr<HeightSensorFSM> fsm) : fsm(fsm), chanID(-1), conID(-1) {
+HeightSensor::HeightSensor() : chanID(-1), conID(-1) {
 	adc = new ADC(tsc);
 	windowCapacity = ADC_SAMPLE_SIZE;
 	window.reserve(windowCapacity);
@@ -25,6 +25,14 @@ HeightSensor::HeightSensor(std::shared_ptr<HeightSensorFSM> fsm) : fsm(fsm), cha
 HeightSensor::~HeightSensor() {
 	stop();
 	delete adc;
+}
+
+void HeightSensor::registerMeasurementCallback(HeightCallback callback) {
+	this->heightValueCallback = callback;
+}
+
+void HeightSensor::unregisterNewMeasurementCallback() {
+	this->heightValueCallback = 0;
 }
 
 void HeightSensor::start() {
@@ -91,16 +99,6 @@ void HeightSensor::stop() {
 	}
 }
 
-void HeightSensor::calibrateOffset(int offsetValue) {
-	adcOffset = offsetValue;
-	Logger::debug("Calibrated OFFSET: " + std::to_string(adcOffset) + " inc");
-}
-
-void HeightSensor::calibrateRefHigh(int highValue) {
-	adcIncPerMillimeter = (adcOffset - highValue) / HEIGHT_HIGH;
-	Logger::debug("Calibrated REF High: " + std::to_string(adcIncPerMillimeter) + " inc/mm");
-}
-
 float HeightSensor::adcValueToMillimeter(int adcValue) {
 	int abs = adcOffset-adcValue;
 	float mm = ((float) abs / adcIncPerMillimeter);
@@ -123,6 +121,9 @@ void HeightSensor::threadFunction() {
 	ThreadCtl(_NTO_TCTL_IO, 0); // Request IO privileges for this thread.
 
 	Logger::debug("[HM] ADC receiving routine started...");
+	Calibration adcCal = Configuration::getInstance().getCalibration();
+	calibrateOffset(adcCal.calOffset);
+	calibrateRefHigh(adcCal.calRef);
 
 	using namespace std;
 	_pulse msg;
@@ -149,7 +150,10 @@ void HeightSensor::threadFunction() {
 				addValue(heightRaw);
 				// TODO: Calculate average value of window
 				float heightMillimeter = adcValueToMillimeter(heightRaw);
-				fsm->heightValueReceived(heightMillimeter);
+				//fsm->heightValueReceived(heightMillimeter);
+				if(heightValueCallback != nullptr) {
+					heightValueCallback(heightMillimeter);
+				}
 				//Logger::debug("[HM] Value from ADC: " + std::to_string(heightRaw));
 				//Logger::debug("[HM] Height in mm: " + std::to_string(heightMillimeter));
 				//this_thread::sleep_for(chrono::milliseconds(100));
@@ -180,4 +184,8 @@ float HeightSensor::getMaxHeight() {
 		}
 	}
 	return adcValueToMillimeter(max);
+}
+
+int HeightSensor::getLastRawValue() {
+	return window.back();
 }

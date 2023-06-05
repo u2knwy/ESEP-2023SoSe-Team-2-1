@@ -8,56 +8,54 @@
 #include "HeightActions.h"
 #include "logger/logger.hpp"
 
-HeightActions::HeightActions() {
-	// TODO Auto-generated constructor stub
-
+HeightActions::HeightActions(HeightContextData* data, std::shared_ptr<EventManager> mngr) {
+	this->data = data;
+	this->eventManager = mngr;
+	this->isMaster = Configuration::getInstance().systemIsMaster();;
 }
 
 HeightActions::~HeightActions() {
 	// TODO Auto-generated destructor stub
 }
 
-void HeightActions::newWorkpieceDetected() {
-	// TODO: Send event to indicate the measurement starts now
-	Logger::debug("[HFSM] New workpiece detected");
+void HeightActions::setMotorSlow(bool slow) {
+	Event ev;
+	ev.type = isMaster ? EventType::MOTOR_M_SLOW : EventType::MOTOR_S_SLOW;
+	if(slow) {
+		Logger::debug("[HFSM] Start measurement - motor slow");
+		ev.data = 1;
+	} else {
+		Logger::debug("[HFSM] Stop measurement - motor fast");
+		ev.data = 0;
+	}
+	eventManager->sendEvent(ev);
 }
 
-void HeightActions::sendHeightResultFBM1(WorkpieceType type, int avg) {
-	EventType event;
-	bool master = true; // TODO: Get from config
-	if(master) {
-		switch(type) {
-		case WS_F:
-			event = EventType::HM_M_WS_F;
-			break;
-		case WS_OB:
-			event = EventType::HM_M_WS_OB;
-			break;
-		case WS_BOM:
-			event = EventType::HM_M_WS_BOM;
-			break;
-		default:
-			event = EventType::HM_M_WS_UNKNOWN;
-		}
-	} else {
-		switch(type) {
-		case WS_F:
-			event = EventType::HM_S_WS_F;
-			break;
-		case WS_OB:
-			event = EventType::HM_S_WS_OB;
-			break;
-		case WS_BOM:
-			event = EventType::HM_S_WS_BOM;
-			break;
-		default:
-			event = EventType::HM_S_WS_UNKNOWN;
-		}
+void HeightActions::sendHeightResult() {
+	HeightResult result = data->getCurrentResult();
+	Event event;
+	switch(result.type) {
+	case WS_F:
+		event.type = isMaster ? EventType::HM_M_WS_F : EventType::HM_S_WS_F;
+		break;
+	case WS_OB:
+		event.type = isMaster ? EventType::HM_M_WS_OB : EventType::HM_S_WS_OB;
+		break;
+	case WS_BOM:
+		event.type = isMaster ? EventType::HM_M_WS_BOM : EventType::HM_S_WS_BOM;
+		break;
+	default:
+		event.type = isMaster ? EventType::HM_M_WS_UNKNOWN : EventType::HM_S_WS_UNKNOWN;
 	}
 
-	Logger::debug("[HM] Height Result at FBM1: " + EVENT_TO_STRING(event) + ", average (mm): " + std::to_string(avg));
-}
+	if(isMaster) {
+		event.data = (int) result.average * 10; // master: send average value (1 decimal place)
+		Logger::debug("[HM] Height Result at FBM1: " + EVENT_TO_STRING(event.type) + ", average (mm): " + std::to_string(result.average));
+	} else {
+		event.data = (int) result.max * 10; // slave: send max value (1 decimal place)
+		Logger::debug("[HM] Height Result at FBM2: " + EVENT_TO_STRING(event.type) + ", max (mm): " + std::to_string(result.max));
+	}
 
-void HeightActions::sendHeightResultFBM2(WorkpieceType type, int max) {
-	//Logger::debug("[HM] Height Result at FBM2: " + EVENT_TO_STRING(type) + ", max (mm): " + std::to_string(max)); //error WS Type to string
+	eventManager->sendEvent(event);
+
 }

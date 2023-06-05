@@ -137,29 +137,24 @@ public:
 	void q2LedOff();
 
 	/**
-	 * Sets the 'Motor slow' flag. This does NOT start or stop the motor.
+	 * Sets the 'Motor stop' pin.
+	 */
+	void motorStop(bool stop);
+
+	/**
+	 * Sets the 'Motor slow' pin.
 	 */
 	void motorSlow(bool slow);
 
 	/**
-	 * Clears the 'Motor slow' flag. This does NOT start or stop the motor.
-	 */
-	void motorFast(bool fast);
-
-	/**
-	 * Start motor in right direction.
+	 * Sets the 'Motor right' pin and clears the 'Motor left' pin.
 	 */
 	void motorRight();
 
 	/**
-	 * Start motor in left direction.
+	 * Sets the 'Motor left' pin and clears the 'Motor right' pin.
 	 */
 	void motorLeft();
-
-	/**
-	 * Stops the motor.
-	 */
-	void motorStop(bool stop);
 
 	/**
 	 * Opens the switch to let a workpiece pass.

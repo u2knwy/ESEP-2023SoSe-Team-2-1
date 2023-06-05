@@ -7,7 +7,7 @@
 
 #include "configuration/Configuration.h"
 #include "logger/logger.hpp"
-#include "hal/HeightSensor.h"
+#include "hal/IHeightSensor.h"
 
 #include <iostream>
 #include <fstream>
@@ -15,6 +15,7 @@
 #include <vector>
 
 Configuration::Configuration() {
+	this->cal = Calibration{ .calOffset = ADC_DEFAULT_OFFSET, .calRef = ADC_DEFAULT_HIGH };
 }
 
 Configuration::~Configuration() {
@@ -55,15 +56,15 @@ void Configuration::readConfigFromFile(const std::string filePath) {
 						}
 						Logger::info("Configured workpiece order: " + ss.str());
 					} else if(key == "CAL_OFFSET") {
-						calOffset = std::stoi(value);
+						cal.calOffset = std::stoi(value);
 					} else if(key == "CAL_REF") {
-						calRefHigh = std::stoi(value);
+						cal.calRef = std::stoi(value);
 					}
 				}
 			}
 		}
-		Logger::info("Cal. Offset: " + std::to_string(calOffset));
-		Logger::info("Cal. Ref: " + std::to_string(calRefHigh));
+		Logger::info("Cal. Offset: " + std::to_string(cal.calOffset));
+		Logger::info("Cal. Ref: " + std::to_string(cal.calRef));
 	} else {
 		Logger::warn("Config file " + filePath + " does not exist -> create new and write default values");
 		std::ofstream fileStream;
@@ -99,10 +100,11 @@ std::vector<WorkpieceType> Configuration::getDesiredOrder() {
 	return order;
 }
 
+void Configuration::saveCalibration(int offset, int refHigh) {
+	cal.calOffset = offset;
+	cal.calRef = refHigh;
+}
+
 Calibration Configuration::getCalibration() {
-	Calibration cal = {
-			.calOffset = this->calOffset,
-			.calRef = this->calRefHigh
-	};
 	return cal;
 }

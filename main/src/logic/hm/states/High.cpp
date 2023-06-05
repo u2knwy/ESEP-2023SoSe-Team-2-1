@@ -21,7 +21,8 @@ HeightState High::getCurrentState() {
 bool High::beltDetected() {
 	Logger::debug("[HM] Belt detected -> WS_OB");
 	data->setCurrentType(WorkpieceType::WS_OB);
-	actions->sendHeightResultFBM1(data->getCurrentType(), data->avgValue);
+	actions->sendHeightResult();
+	actions->setMotorSlow(false);
 	exit();
 	new(this) WaitForWorkpiece;
 	entry();
