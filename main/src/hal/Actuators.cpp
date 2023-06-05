@@ -7,12 +7,17 @@
 
 #include "Actuators.h"
 #include "logger/logger.hpp"
+#include "configuration/Configuration.h"
 #ifdef SIMULATION
 #include "../simulation/simulationadapterqnx/simqnxgpioapi.h"
 #include "../simulation/simulationadapterqnx/simqnxirqapi.h"
 #endif
 
 Actuators::Actuators(std::shared_ptr<EventManager> mngr) : eventManager(mngr) {
+	isMaster = Configuration::getInstance().systemIsMaster();
+	greenBlinking = false;
+	yellowBlinking = false;
+	redBlinking = false;
 	gpio_bank_1 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_1);
 	gpio_bank_2 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_2);
 
@@ -58,6 +63,35 @@ void Actuators::configurePins() {
 	out32(GPIO_OE_REGISTER(gpio_bank_2), temp & ~outputs);
 }
 
+void Actuators::subscribeToEvents() {
+	// Subscribe to motor events
+	eventManager->subscribe(EventType::HALmotorStop, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::HALmotorFastRight, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::HALmotorSlowRight, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+
+	// Subscribe to lamp events
+	eventManager->subscribe(EventType::HALroteLampeAn, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::HALroteLampeAus, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::HALgelbeLampeAn, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::HALgelbeLampeAus, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::HALgrueneLampeAn, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::HALgrueneLampeAus, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+
+	// Subscribe to modes
+	eventManager->subscribe(EventType::MODE_STANDBY, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::MODE_RUNNING, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::MODE_SERVICE, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::MODE_ESTOP, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::MODE_ERROR, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+
+	// System-dependent events
+	if(isMaster) {
+		eventManager->subscribe(EventType::WARNING_M, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+	} else {
+		eventManager->subscribe(EventType::WARNING_S, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+	}
+}
+
 void Actuators::handleEvent(Event event) {
 	Logger::debug("Actuators handle Event: " + EVENT_TO_STRING(event.type) + " - data: " + std::to_string(event.data));
 	switch(event.type) {
@@ -85,33 +119,42 @@ void Actuators::handleEvent(Event event) {
 		estopMode(); break;
 	case EventType::MODE_ERROR:
 		errorMode(); break;
+	case EventType::WARNING_M || WARNING_S:
+		setYellowBlinking(event.data == 1);
+		break;
 	default:
 		Logger::warn(EVENT_TO_STRING(event.type) + " was not handled by actuators");
 	}
 }
 
-void Actuators::subscribeToEvents() {
-	// Subscribe to motor events
-	eventManager->subscribe(EventType::HALmotorStop, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::HALmotorFastRight, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::HALmotorSlowRight, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+void Actuators::setGreenBlinking(bool on) {
+	greenBlinking = false;
+	if(greenBlinkingThread.joinable())
+		greenBlinkingThread.join();
 
-	// Subscribe to lamp events
-	eventManager->subscribe(EventType::HALroteLampeAn, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::HALroteLampeAus, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::HALgelbeLampeAn, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::HALgelbeLampeAus, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::HALgrueneLampeAn, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::HALgrueneLampeAus, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-
-	// Subscribe to modes
-	eventManager->subscribe(EventType::MODE_STANDBY, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::MODE_RUNNING, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::MODE_SERVICE, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::MODE_ESTOP, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::MODE_ERROR, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-
+	if(on) {
+		greenBlinkingThread = std::thread(&Actuators::thGreenLampFlashing, this, false);
+	}
 }
+
+void Actuators::setYellowBlinking(bool on) {
+	yellowBlinking = false;
+	if(yellowBlinkingThread.joinable())
+		yellowBlinkingThread.join();
+
+	if(on) {
+		yellowBlinkingThread = std::thread(&Actuators::thYellowLampFlashing, this, false);
+	}
+}
+
+void Actuators::setRedBlinking(bool on, bool fast) {
+	redBlinking = false;
+	if(redBlinkingThread.joinable())
+		redBlinkingThread.join();
+
+	redBlinkingThread = std::thread(&Actuators::thRedLampFlashing, this, fast);
+}
+
 
 void Actuators::standbyMode() {
 	greenLampOff();
@@ -127,7 +170,7 @@ void Actuators::runningMode() {
 }
 
 void Actuators::serviceMode() {
-	greenLampBlinking();
+	setGreenBlinking(true);
 	yellowLampOff();
 	redLampOff();
 	motorStop(true);
@@ -136,7 +179,7 @@ void Actuators::serviceMode() {
 void Actuators::errorMode() {
 	greenLampOff();
 	yellowLampOff();
-	redLampBlinkFast();
+	setRedBlinking(true, true);
 	motorStop(true);
 }
 
@@ -149,10 +192,6 @@ void Actuators::estopMode() {
 
 void Actuators::greenLampOn() {
 	out32(GPIO_SETDATAOUT(gpio_bank_1), LAMP_GREEN_PIN);
-}
-
-void Actuators::greenLampBlinking() {
-	// TODO: Let green lamp blink for ServiceMode
 }
 
 void Actuators::greenLampOff() {
@@ -171,12 +210,40 @@ void Actuators::redLampOn() {
 	out32(GPIO_SETDATAOUT(gpio_bank_1), LAMP_RED_PIN);
 }
 
-void Actuators::redLampBlinkFast() {
-	// TODO: Let red lamp blink with 1Hz
+void Actuators::thRedLampFlashing(bool fast) {
+	int t_ms;
+	t_ms = fast ? ON_TIME_FAST_MS : ON_TIME_SLOW_MS;
+	redBlinking = true;
+	while(redBlinking) {
+		redLampOn();
+		std::this_thread::sleep_for(std::chrono::milliseconds(t_ms));
+		redLampOff();
+		std::this_thread::sleep_for(std::chrono::milliseconds(t_ms));
+	}
 }
 
-void Actuators::redLampBlinkSlow() {
-	// TODO: Let red lamp blink with 0,5Hz
+void Actuators::thYellowLampFlashing(bool fast) {
+	int t_ms;
+	t_ms = fast ? ON_TIME_FAST_MS : ON_TIME_SLOW_MS;
+	yellowBlinking = true;
+	while(yellowBlinking) {
+		yellowLampOn();
+		std::this_thread::sleep_for(std::chrono::milliseconds(t_ms));
+		yellowLampOff();
+		std::this_thread::sleep_for(std::chrono::milliseconds(t_ms));
+	}
+}
+
+void Actuators::thGreenLampFlashing(bool fast) {
+	int t_ms;
+	t_ms = fast ? ON_TIME_FAST_MS : ON_TIME_SLOW_MS;
+	greenBlinking = true;
+	while(greenBlinking) {
+		greenLampOn();
+		std::this_thread::sleep_for(std::chrono::milliseconds(t_ms));
+		greenLampOff();
+		std::this_thread::sleep_for(std::chrono::milliseconds(t_ms));
+	}
 }
 
 void Actuators::redLampOff() {

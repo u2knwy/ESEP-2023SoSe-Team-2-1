@@ -41,6 +41,8 @@ ESTRING(HALmotorSlowRight)
 ESTRING(HALmotorFastLeft)
 ESTRING(HALmotorSlowLeft)
 ESTRING(HALmotorStop)
+ESTRING(WARNING_M)
+ESTRING(WARNING_S)
 
 // Light Barriers
 ESTRING(LBA_M_BLOCKED)

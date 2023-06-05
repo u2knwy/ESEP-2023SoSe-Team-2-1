@@ -10,10 +10,13 @@
 #include "events/EventManager.h"
 
 #include <memory>
+#include <thread>
 #include <sys/neutrino.h>
 #include <sys/procmgr.h>
 #include "Sensors.h"
 
+#define ON_TIME_FAST_MS 500
+#define ON_TIME_SLOW_MS 1000
 
 class Actuators : public IEventHandler {
 public:
@@ -57,19 +60,28 @@ public:
 	void greenLampOn();
 
 	/**
+	 * Lets the green lamp blink or turns it off
+	 *
+	 * @param on Blinking on or off
+	 */
+	void setGreenBlinking(bool on);
+
+	/**
 	 * Turns the green lamp off
 	 */
 	void greenLampOff();
 
 	/**
-	 * Lets the green lamp blink
-	 */
-	void greenLampBlinking();
-
-	/**
 	 * Turns the yellow lamp on
 	 */
 	void yellowLampOn();
+
+	/**
+	 * Lets the yellow lamp blink or turns it off
+	 *
+	 * @param on Blinking on or off
+	 */
+	void setYellowBlinking(bool on);
 
 	/**
 	 * Turns the yellow lamp off
@@ -82,14 +94,12 @@ public:
 	void redLampOn();
 
 	/**
-	 * Lets the red lamp blink fast
+	 * Lets the red lamp blink or turns it off
+	 *
+	 * @param on Blinking on or off
+	 * @param fast Blink fast(1Hz) or slow (0,5Hz)
 	 */
-	void redLampBlinkFast();
-
-	/**
-	 * Lets the red lamp blink slow
-	 */
-	void redLampBlinkSlow();
+	void setRedBlinking(bool on, bool fast);
 
 	/**
 	 * Turns the red lamp off
@@ -165,11 +175,20 @@ public:
 	 * Closes the switch to let a workpiece fall into the slide.
 	 */
 	void closeSwitch();
-
 private:
 	uintptr_t gpio_bank_1;
 	uintptr_t gpio_bank_2;
 	std::shared_ptr<EventManager> eventManager;
+	bool isMaster;
+	bool greenBlinking;
+	std::thread greenBlinkingThread;
+	bool yellowBlinking;
+	std::thread yellowBlinkingThread;
+	bool redBlinking;
+	std::thread redBlinkingThread;
 	void configurePins();
 	void subscribeToEvents();
+	void thGreenLampFlashing(bool fast);
+	void thYellowLampFlashing(bool fast);
+	void thRedLampFlashing(bool fast);
 };

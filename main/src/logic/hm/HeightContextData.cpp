@@ -89,12 +89,12 @@ HeightResult HeightContextData::getCurrentResultV2() {
 		result.type = WorkpieceType::WS_F;
 	} else if(isHigh(begin) && isHigh(middle) && isHigh(end)) {
 		result.type = WorkpieceType::WS_OB;
-	} else if(isFlat(begin) && isHole(middle) && isFlat(end)) {
+	} else if(isHigh(begin) && isHole(middle) && isHigh(end)) {
 		result.type = WorkpieceType::WS_BOM;
 	} else {
 		result.type = WorkpieceType::UNKNOWN;
 	}
-	result.average = avgValue = sum / nValues;
+	result.average = sum / nValues;
 	result.max = maxValue;
 	return result;
 }
