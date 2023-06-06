@@ -2,7 +2,6 @@
 #include <thread>
 #include <csignal>
 
-#include "demo/demos.h"
 #include "logger/logger.hpp"
 #include "common/macros.h"
 
