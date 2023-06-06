@@ -37,6 +37,9 @@ void HeightContext::subscribeToEvents() {
 	eventManager->subscribe(EventType::HALmotorFastRight, std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
 	eventManager->subscribe(EventType::HALmotorSlowRight, std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
 	eventManager->subscribe(EventType::HALmotorStop, std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
+
+//	eventManager->subscribe(EventType::MODE_RUNNING, std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
+//	eventManager->subscribe(EventType::MODE_SERVICE, std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
 }
 
 void HeightContext::handleEvent(Event event) {
@@ -47,6 +50,16 @@ void HeightContext::handleEvent(Event event) {
 	} else if(event.type == EventType::HALmotorStop) {
 		this->running = false;
 		sensor->stop();
+	} /*else if(event.type == EventType::MODE_RUNNING) {
+		sensor = std::make_shared<HeightSensor>();
+		this->running = true;
+		sensor->start();
+	} else if(event.type == EventType::MODE_SERVICE) {
+		this->running = false;
+		sensor->stop();
+		sensor.reset();
+	}*/ else {
+		Logger::warn("Event " + EVENT_TO_STRING(event.type) + " was not handled by HeightFSM");
 	}
 }
 
