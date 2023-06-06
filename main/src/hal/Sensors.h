@@ -19,6 +19,9 @@
 #include "events/IEventHandler.h"
 #include "events/EventManager.h"
 
+// Time in ms where a button press is recognized as "pressed long".
+#define BTN_LONG_PRESSED_TIME_MS 2000
+
 class Sensors : public IEventHandler {
 public:
 	Sensors(std::shared_ptr<EventManager> mngr);
