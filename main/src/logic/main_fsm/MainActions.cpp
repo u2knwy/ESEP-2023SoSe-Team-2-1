@@ -74,3 +74,17 @@ void MainActions::setEStopMode() {
 	event.type = EventType::MODE_ESTOP;
 	eventManager->sendEvent(event);
 }
+
+void MainActions::allActuatorsOn() {
+	Logger::debug("MainActions::allActuatorsOn");
+}
+
+void MainActions::displayWarning() {
+	Event event;
+
+	event.type = EventType::WARNING_M;
+	eventManager->sendEvent(event);
+
+	event.type = EventType::WARNING_S;
+	eventManager->sendEvent(event);
+}

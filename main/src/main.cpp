@@ -78,18 +78,6 @@ int main(int argc, char **argv)
 		Logger::set_level(Logger::level::INFO);
 	}
 
-	if (options.mode == Mode::DEMO)
-	{
-		Logger::info("Starting in Demo Mode...");
-		DELAY_S(1);
-		// Run Demo programs...
-		actuatorDemo();
-		sensorDemo();
-		adcDemo();
-		fsmDemo();
-		return EXIT_SUCCESS;
-	}
-
 	eventManager = std::make_shared<EventManager>();
 	actuators = std::make_shared<Actuators>(eventManager);
 	sensors = std::make_shared<Sensors>(eventManager);

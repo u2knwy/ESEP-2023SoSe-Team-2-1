@@ -24,6 +24,8 @@ public:
 	void setServiceMode();
 	void setErrorMode();
 	void setEStopMode();
+	void allActuatorsOn();
+	void displayWarning();
 private:
 	std::shared_ptr<EventManager> eventManager;
 };
