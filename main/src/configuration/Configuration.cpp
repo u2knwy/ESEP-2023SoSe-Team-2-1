@@ -117,10 +117,40 @@ Calibration Configuration::getCalibration() {
 	return cal;
 }
 
-void Configuration::saveCalibrationToFile() {
-	// TODO: Save current config to file
-	writeLineToConfigFile(2, "CAL_OFFSET=" + std::to_string(cal.calOffset));
-	writeLineToConfigFile(3, "CAL_REF=" + std::to_string(cal.calRef));
+void Configuration::saveCurrentConfigToFile() {
+	std::stringstream ss;
+	for (size_t i = 0; i < order.size(); ++i) {
+		if(order[i] == WorkpieceType::WS_F) {
+			ss << "WS_F";
+		} else if(order[i] == WorkpieceType::WS_BOM) {
+			ss << "WS_BOM";
+		} else if(order[i] == WorkpieceType::WS_BUM) {
+			ss << "WS_BUM";
+		}
+
+		if (i < order.size()-1) {
+			ss << ",";
+		}
+	}
+	const std::string& order = "ORDER=" + ss.str();
+	const std::string& offset = "CAL_OFFSET=" + std::to_string(cal.calOffset);
+	const std::string& ref = "CAL_REF=" + std::to_string(cal.calRef);
+	writeLineToConfigFile(1, order);
+	writeLineToConfigFile(2, offset);
+	writeLineToConfigFile(3, ref);
+
+	std::ofstream outputFile(configFilePath);
+	if (!outputFile) {
+		Logger::error("Error opening config file for writing");
+		return;
+	}
+
+	outputFile << order << std::endl;
+	outputFile << offset << std::endl;
+	outputFile << ref << std::endl;
+	outputFile.close();
+
+    Logger::info("Config file was saved");
 }
 
 void Configuration::writeLineToConfigFile(int lineNumber, const std::string& newContent) {

@@ -35,7 +35,7 @@ public:
 	Calibration getCalibration();
 	void setOffsetCalibration(int offset);
 	void setReferenceCalibration(int refHigh);
-	void saveCalibrationToFile();
+	void saveCurrentConfigToFile();
 private:
 	Configuration();
 	virtual ~Configuration();

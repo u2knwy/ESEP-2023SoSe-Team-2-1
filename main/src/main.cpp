@@ -121,7 +121,7 @@ int main(int argc, char **argv)
 	// ###########################################
 	conf.setOffsetCalibration(3647);
 	conf.setReferenceCalibration(2330);
-	conf.saveCalibrationToFile();
+	conf.saveCurrentConfigToFile();
 
 	sensors->startEventLoop();
 	heightFSM = std::make_shared<HeightContext>(eventManager, heightSensor);

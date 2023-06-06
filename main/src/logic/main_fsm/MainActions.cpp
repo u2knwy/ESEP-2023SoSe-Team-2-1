@@ -128,6 +128,6 @@ void MainActions::calibrateReference() {
 }
 
 void MainActions::saveCalibration() {
-	Configuration::getInstance().saveCalibrationToFile();
+	Configuration::getInstance().saveCurrentConfigToFile();
 	Logger::info("HeightSensor calibration was saved to file");
 }
