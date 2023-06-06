@@ -62,7 +62,9 @@ int main(int argc, char **argv)
 
 	Configuration &conf = Configuration::getInstance();
 	conf.setConfigFilePath("/usr/tmp/conf.txt");
-	conf.readConfigFromFile();
+	if(!conf.readConfigFromFile()) {
+		return EXIT_FAILURE;
+	}
 	conf.setMaster(options.mode == Mode::MASTER);
 	conf.setPusherMounted(options.pusher);
 
@@ -95,7 +97,6 @@ int main(int argc, char **argv)
 
 	// ###########################################
 	// TEMPORARY: Calibrate HeightSensor
-/*
 	heightSensor->start();
 	std::string line;
 	Logger::info("Press ENTER to calibrate Conveyor");
@@ -115,8 +116,7 @@ int main(int argc, char **argv)
 		Logger::info("Value: " + std::to_string(refHigh) + " - OK? [y/N]");
 		ok = line == "y";
 	}
-	conf.saveCalibration(offset, refHigh);
-	heightSensor->stop();*/
+	heightSensor->stop();
 	// Calibrate HeightSensor END
 	// ###########################################
 	conf.setOffsetCalibration(3647);

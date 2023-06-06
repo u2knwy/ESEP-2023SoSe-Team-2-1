@@ -13,7 +13,7 @@
 #include <vector>
 
 struct HeightResult {
-	WorkpieceType type{WorkpieceType::UNKNOWN};
+	WorkpieceType type{WorkpieceType::WS_UNKNOWN};
 	float average{0.0};
 	float max{0.0};
 };

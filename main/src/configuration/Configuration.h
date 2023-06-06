@@ -25,7 +25,7 @@ public:
 		return instance;
 	}
 	void setConfigFilePath(std::string filePath);
-	void readConfigFromFile();
+	bool readConfigFromFile();
 	void setMaster(bool isMaster);
 	bool systemIsMaster();
 	void setPusherMounted(bool pusherIsMounted);

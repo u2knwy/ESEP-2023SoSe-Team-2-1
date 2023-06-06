@@ -26,10 +26,12 @@ void Configuration::setConfigFilePath(std::string filePath) {
 	this->configFilePath = filePath;
 }
 
-void Configuration::readConfigFromFile() {
+bool Configuration::readConfigFromFile() {
+	std::vector<std::string> errors;
 	std::ifstream fileStream(configFilePath);
 	if(fileStream.is_open()) {
 		Logger::info("Read config file: " + configFilePath);
+		std::vector<WorkpieceType> workpieceOrder;
 		std::string line;
 		while (std::getline(fileStream, line)) {
 			std::istringstream iss(line);
@@ -39,27 +41,21 @@ void Configuration::readConfigFromFile() {
 				if(std::getline(iss, value)) {
 					Logger::debug(key + " = " + value);
 					if (key == "ORDER") {
-						std::vector<WorkpieceType> workpieceOrder;
 						std::string wpType;
 						std::istringstream tokenStream(value);
 						while (std::getline(tokenStream, wpType, ',')) {
 							if(wpType == "F") {
-								workpieceOrder.push_back(WorkpieceType::WS_F);
+								order.push_back(WorkpieceType::WS_F);
 							} else if(wpType == "BOM") {
-								workpieceOrder.push_back(WorkpieceType::WS_BOM);
-							}
-							else if(wpType == "BUM") {
-								workpieceOrder.push_back(WorkpieceType::WS_BUM);
-							}
-							else if(wpType == "OB") {
-								workpieceOrder.push_back(WorkpieceType::WS_OB);
+								order.push_back(WorkpieceType::WS_BOM);
+							} else if(wpType == "BUM") {
+								order.push_back(WorkpieceType::WS_BUM);
+							} else if(wpType == "OB") {
+								order.push_back(WorkpieceType::WS_OB);
+							} else {
+								errors.push_back("Unknown workpiece type in config: " + wpType);
 							}
 						}
-						std::stringstream ss;
-						for(auto const& wsType: workpieceOrder) {
-							ss << " - " << wsType;
-						}
-						Logger::info("Configured workpiece order: " + ss.str());
 					} else if(key == "CAL_OFFSET") {
 						cal.calOffset = std::stoi(value);
 					} else if(key == "CAL_REF") {
@@ -67,6 +63,20 @@ void Configuration::readConfigFromFile() {
 					}
 				}
 			}
+		}
+
+		std::stringstream ss;
+		for (size_t i = 0; i < workpieceOrder.size(); ++i) {
+			ss << WP_TYPE_TO_STRING(workpieceOrder[i]);
+			if (i < order.size()-1) {
+				ss << " -> ";
+			}
+		}
+		Logger::info("Configured workpiece order: " + ss.str());
+		if(workpieceOrder.size() != 3) {
+			errors.push_back("Configured workpiece order must contain exactly 3 types (e.g.: F,BOM,OB)");
+		} else {
+			order = std::move(workpieceOrder);
 		}
 		Logger::info("Cal. Offset: " + std::to_string(cal.calOffset));
 		Logger::info("Cal. Ref: " + std::to_string(cal.calRef));
@@ -78,7 +88,18 @@ void Configuration::readConfigFromFile() {
 		fileStream << "CAL_OFFSET=" << ADC_DEFAULT_OFFSET << "\n";
 		fileStream << "CAL_REF=" << ADC_DEFAULT_HIGH << "\n";
 		fileStream.close();
+		return false;
 	}
+
+	if(!errors.empty()) {
+		Logger::error("Config file contains errors. Please fix them:");
+		for(const auto& msg : errors) {
+			Logger::error("- " + msg);
+		}
+		return false;
+	}
+
+	return true;
 }
 
 void Configuration::setMaster(bool isMaster) {

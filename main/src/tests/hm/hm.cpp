@@ -124,7 +124,7 @@ TEST_F(HeightSensor_Test, UnknownDetected) {
 
 	// UNKNOWN WS detected
 	fsm->heightValueReceived(30.0);
-	EXPECT_EQ(WorkpieceType::UNKNOWN, fsm->getCurrentResult().type);
+	EXPECT_EQ(WorkpieceType::WS_UNKNOWN, fsm->getCurrentResult().type);
 	EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
 }
 

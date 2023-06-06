@@ -6,14 +6,17 @@
  */
 
 #pragma once
+#include "workpiecetype_enum.h"
+#include "workpiecetype_stringlist.h"
+#define WP_TYPE_TO_STRING(wp) std::string(WorkpieceTypeString[wp])
 
-enum WorkpieceType {
+/*enum WorkpieceType {
 	WS_F,
 	WS_BOM,
 	WS_BUM,
 	WS_OB,
 	UNKNOWN
-};
+};*/
 
 class Workpiece {
 public:
@@ -75,5 +78,5 @@ private:
 	float maxHeightFBM2{0.0};
 	bool metalFBM2{false};
 	bool flipped{false};
-	WorkpieceType type{UNKNOWN};
+	WorkpieceType type{WS_UNKNOWN};
 };

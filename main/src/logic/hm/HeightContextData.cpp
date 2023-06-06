@@ -10,7 +10,7 @@
 #include "events/events.h"
 
 HeightContextData::HeightContextData() {
-	currentType = WorkpieceType::UNKNOWN;
+	currentType = WorkpieceType::WS_UNKNOWN;
 	measurements = std::vector<float>(100);
 	resetMeasurement();
 }
@@ -92,7 +92,7 @@ HeightResult HeightContextData::getCurrentResultV2() {
 	} else if(isHigh(begin) && isHole(middle) && isHigh(end)) {
 		result.type = WorkpieceType::WS_BOM;
 	} else {
-		result.type = WorkpieceType::UNKNOWN;
+		result.type = WorkpieceType::WS_UNKNOWN;
 	}
 	result.average = sum / nValues;
 	result.max = maxValue;

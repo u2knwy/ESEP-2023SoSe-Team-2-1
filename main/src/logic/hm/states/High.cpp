@@ -39,7 +39,7 @@ bool High::holeDetected() {
 }
 
 bool High::unknownDetected() {
-	data->setCurrentType(WorkpieceType::UNKNOWN);
+	data->setCurrentType(WorkpieceType::WS_UNKNOWN);
 	exit();
 	new(this) WaitForBelt;
 	entry();
