@@ -13,7 +13,4 @@ class SubServiceModeTestsFailed: public MainBasestate {
 	void exit() override;
 
 	bool isSubEndState() override;
-
-	bool master_btnStop_Pressed() override;
-	bool slave_btnStop_Pressed() override;
 };

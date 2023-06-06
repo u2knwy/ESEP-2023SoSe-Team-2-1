@@ -9,7 +9,7 @@
 #include "Standby.h"
 #include "EStop.h"
 #include "logger/logger.hpp"
-#include "SubServiceModeSelftestSensors.h"
+#include "SubServiceModeCalOffset.h"
 
 #include <iostream>
 
@@ -28,7 +28,7 @@ void ServiceMode::exit() {
 }
 
 void ServiceMode::initSubStateServiceMode() {
-	substateServiceMode = new SubServiceModeSelftestSensors;
+	substateServiceMode = new SubServiceModeCalOffset;
 }
 
 bool ServiceMode::master_LBA_Blocked() {
@@ -112,11 +112,17 @@ bool ServiceMode::slave_LBR_Unblocked() {
 }
 
 bool ServiceMode::master_btnStart_PressedShort() {
-	return substateServiceMode->master_btnStart_PressedShort();
+	bool handled = substateServiceMode->master_btnStart_PressedShort();
+	if(substateServiceMode->isSubEndState()) {
+		exit();
+		new(this) Standby;
+		entry();
+		return true;
+	}
+	return handled;
 }
 
 bool ServiceMode::master_btnStop_Pressed() {
-	Logger::debug("ServiceMode::master_btnStop_Pressed");
 	exit();
 	new(this) Standby;
 	entry();
@@ -124,11 +130,25 @@ bool ServiceMode::master_btnStop_Pressed() {
 }
 
 bool ServiceMode::master_btnReset_Pressed() {
-	return substateServiceMode->master_btnReset_Pressed();
+	bool handled = substateServiceMode->master_btnReset_Pressed();
+	if(substateServiceMode->isSubEndState()) {
+		exit();
+		new(this) Standby;
+		entry();
+		return true;
+	}
+	return handled;
 }
 
 bool ServiceMode::slave_btnStart_PressedShort() {
-	return substateServiceMode->master_btnStart_PressedShort();
+	bool handled = substateServiceMode->slave_btnStart_PressedShort();
+	if(substateServiceMode->isSubEndState()) {
+		exit();
+		new(this) Standby;
+		entry();
+		return true;
+	}
+	return handled;
 }
 
 bool ServiceMode::slave_btnStop_Pressed() {
@@ -140,7 +160,14 @@ bool ServiceMode::slave_btnStop_Pressed() {
 }
 
 bool ServiceMode::slave_btnReset_Pressed() {
-	return substateServiceMode->slave_btnReset_Pressed();
+	bool handled = substateServiceMode->slave_btnReset_Pressed();
+	if(substateServiceMode->isSubEndState()) {
+		exit();
+		new(this) Standby;
+		entry();
+		return true;
+	}
+	return handled;
 }
 
 bool ServiceMode::master_EStop_Pressed() {

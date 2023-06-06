@@ -61,7 +61,8 @@ int main(int argc, char **argv)
 	options.pusher ? Logger::info("Hardware uses Pusher for sorting out") : Logger::info("Hardware uses Switch for sorting out");
 
 	Configuration &conf = Configuration::getInstance();
-	conf.readConfigFromFile("/usr/tmp/conf.txt");
+	conf.setConfigFilePath("/usr/tmp/conf.txt");
+	conf.readConfigFromFile();
 	conf.setMaster(options.mode == Mode::MASTER);
 	conf.setPusherMounted(options.pusher);
 
@@ -118,7 +119,9 @@ int main(int argc, char **argv)
 	heightSensor->stop();*/
 	// Calibrate HeightSensor END
 	// ###########################################
-	conf.saveCalibration(3647, 2330);
+	conf.setOffsetCalibration(3647);
+	conf.setReferenceCalibration(2330);
+	conf.saveCalibrationToFile();
 
 	sensors->startEventLoop();
 	heightFSM = std::make_shared<HeightContext>(eventManager, heightSensor);

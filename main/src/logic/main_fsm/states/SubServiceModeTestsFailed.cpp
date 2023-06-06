@@ -24,11 +24,3 @@ bool SubServiceModeTestsFailed::isSubEndState() {
 	return true;
 }
 
-bool SubServiceModeTestsFailed::master_btnStop_Pressed() {
-	return true;
-}
-
-bool SubServiceModeTestsFailed::slave_btnStop_Pressed() {
-	return true;
-}
-

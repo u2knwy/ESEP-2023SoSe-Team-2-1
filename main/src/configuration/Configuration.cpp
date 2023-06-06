@@ -16,15 +16,20 @@
 
 Configuration::Configuration() {
 	this->cal = Calibration{ .calOffset = ADC_DEFAULT_OFFSET, .calRef = ADC_DEFAULT_HIGH };
+	this->configFilePath = std::string(DEFAULT_CONFIG_FILE_PATH);
 }
 
 Configuration::~Configuration() {
 }
 
-void Configuration::readConfigFromFile(const std::string filePath) {
-	std::ifstream fileStream(filePath);
+void Configuration::setConfigFilePath(std::string filePath) {
+	this->configFilePath = filePath;
+}
+
+void Configuration::readConfigFromFile() {
+	std::ifstream fileStream(configFilePath);
 	if(fileStream.is_open()) {
-		Logger::info("Read config file: " + filePath);
+		Logger::info("Read config file: " + configFilePath);
 		std::string line;
 		while (std::getline(fileStream, line)) {
 			std::istringstream iss(line);
@@ -66,9 +71,9 @@ void Configuration::readConfigFromFile(const std::string filePath) {
 		Logger::info("Cal. Offset: " + std::to_string(cal.calOffset));
 		Logger::info("Cal. Ref: " + std::to_string(cal.calRef));
 	} else {
-		Logger::warn("Config file " + filePath + " does not exist -> create new and write default values");
+		Logger::warn("Config file " + configFilePath + " does not exist -> create new and write default values");
 		std::ofstream fileStream;
-		fileStream.open(filePath);
+		fileStream.open(configFilePath);
 		fileStream << "ORDER=F,OB,BOM\n";
 		fileStream << "CAL_OFFSET=" << ADC_DEFAULT_OFFSET << "\n";
 		fileStream << "CAL_REF=" << ADC_DEFAULT_HIGH << "\n";
@@ -100,11 +105,63 @@ std::vector<WorkpieceType> Configuration::getDesiredOrder() {
 	return order;
 }
 
-void Configuration::saveCalibration(int offset, int refHigh) {
+void Configuration::setOffsetCalibration(int offset) {
 	cal.calOffset = offset;
+}
+
+void Configuration::setReferenceCalibration(int refHigh) {
 	cal.calRef = refHigh;
 }
 
 Calibration Configuration::getCalibration() {
 	return cal;
+}
+
+void Configuration::saveCalibrationToFile() {
+	// TODO: Save current config to file
+	writeLineToConfigFile(2, "CAL_OFFSET=" + std::to_string(cal.calOffset));
+	writeLineToConfigFile(3, "CAL_REF=" + std::to_string(cal.calRef));
+}
+
+void Configuration::writeLineToConfigFile(int lineNumber, const std::string& newContent) {
+	std::ifstream inputFile(configFilePath);
+	if (!inputFile) {
+		Logger::error("Error opening config file.");
+		return;
+	}
+
+	const std::string& tempFilePath = configFilePath + ".tmp";
+
+	std::ofstream tempFile(tempFilePath);
+	if (!tempFile) {
+		Logger::error("Error opening temporary file.");
+		inputFile.close();
+		return;
+	}
+
+	std::string line;
+	int currentLine = 1;
+	while (std::getline(inputFile, line)) {
+		if (currentLine == lineNumber) {
+			tempFile << newContent << std::endl;
+		} else {
+			tempFile << line << std::endl;
+		}
+		currentLine++;
+	}
+
+	inputFile.close();
+	tempFile.close();
+
+    if (std::remove(configFilePath.c_str()) != 0) {
+    	Logger::error("Error deleting input file.");
+        return;
+    }
+
+    if (std::rename(tempFilePath.c_str(), configFilePath.c_str()) != 0) {
+    	Logger::error("Error renaming temporary file.");
+        return;
+    }
+
+    Logger::info("Updated line " + std::to_string(lineNumber) + " in config file -> " + newContent);
 }
