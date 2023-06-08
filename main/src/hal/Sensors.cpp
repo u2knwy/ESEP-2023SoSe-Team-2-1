@@ -12,9 +12,9 @@
 #include "common/macros.h"
 #include "configuration/Configuration.h"
 
-#ifdef SIMULATION
-#include "../simulation/simulationadapterqnx/simqnxgpioapi.h"
-#include "../simulation/simulationadapterqnx/simqnxirqapi.h"
+#ifdef SIM_ACTIVE
+#include "simqnxgpioapi.h" // must be last include !!!
+#include "simqnxirqapi.h"
 #endif
 static std::chrono::steady_clock::time_point lastStartBtnPressTime;
 
@@ -90,11 +90,11 @@ void Sensors::initInterrupts()
 
 	// Request interrupt and IO abilities.
 	int procmgr_status = procmgr_ability(0,
-			PROCMGR_ADN_ROOT | PROCMGR_AOP_ALLOW | PROCMGR_AID_INTERRUPT,
-			PROCMGR_ADN_NONROOT | PROCMGR_AOP_ALLOW | PROCMGR_AID_INTERRUPT,
-			PROCMGR_ADN_ROOT | PROCMGR_AOP_ALLOW | PROCMGR_AID_IO,
-			PROCMGR_ADN_NONROOT | PROCMGR_AOP_ALLOW | PROCMGR_AID_IO,
-			PROCMGR_AID_EOL);
+																			 PROCMGR_ADN_ROOT | PROCMGR_AOP_ALLOW | PROCMGR_AID_INTERRUPT,
+																			 PROCMGR_ADN_NONROOT | PROCMGR_AOP_ALLOW | PROCMGR_AID_INTERRUPT,
+																			 PROCMGR_ADN_ROOT | PROCMGR_AOP_ALLOW | PROCMGR_AID_IO,
+																			 PROCMGR_ADN_NONROOT | PROCMGR_AOP_ALLOW | PROCMGR_AID_IO,
+																			 PROCMGR_AID_EOL);
 	if (procmgr_status != EOK)
 	{
 		perror("Requested abilities failed or denied!");
@@ -106,7 +106,7 @@ void Sensors::initInterrupts()
 	/* ### Register interrupts by OS. ### */
 	struct sigevent intr_event;
 	SIGEV_PULSE_INIT(&intr_event, conID, SIGEV_PULSE_PRIO_INHERIT,
-			PULSE_INTR_ON_PORT0, 0);
+									 PULSE_INTR_ON_PORT0, 0);
 	interruptID = InterruptAttachEvent(INTR_GPIO_PORT0, &intr_event, 0);
 	if (interruptID < 0)
 	{
@@ -278,79 +278,122 @@ void Sensors::handleGpioInterrupt()
 	Event event;
 	event.type = (EventType)-1;
 
-	if (BIT_SET(ESTOP_PIN, intrStatusReg)) {
-		if (eStopPressed()) {
+	if (BIT_SET(ESTOP_PIN, intrStatusReg))
+	{
+		if (eStopPressed())
+		{
 			Logger::info("ESTOP pressed");
 			event.type = master ? EventType::ESTOP_M_PRESSED : EventType::ESTOP_S_PRESSED;
-		} else {
+		}
+		else
+		{
 			Logger::info("ESTOP released");
 			event.type = master ? EventType::ESTOP_M_RELEASED : EventType::ESTOP_S_RELEASED;
 		}
-	} else if (BIT_SET(KEY_START_PIN, intrStatusReg)) {
+	}
+	else if (BIT_SET(KEY_START_PIN, intrStatusReg))
+	{
 		using namespace std::chrono;
-		if (startPressed()) {
+		if (startPressed())
+		{
 			Logger::debug("START pressed");
 			lastStartBtnPressTime = steady_clock::now();
-		} else {
+		}
+		else
+		{
 			Logger::debug("START released");
 			const auto now = steady_clock::now();
 			int elapsed_ms = duration_cast<milliseconds>(now - lastStartBtnPressTime).count();
-			if(elapsed_ms >= BTN_LONG_PRESSED_TIME_MS) {
+			if (elapsed_ms >= BTN_LONG_PRESSED_TIME_MS)
+			{
 				Logger::info("START button pressed long");
 				event.type = master ? EventType::START_M_LONG : EventType::START_S_LONG;
-			} else {
+			}
+			else
+			{
 				Logger::info("START button pressed short");
 				event.type = master ? EventType::START_M_SHORT : EventType::START_S_SHORT;
 			}
 		}
-	} else if (BIT_SET(KEY_STOP_PIN, intrStatusReg)) {
-		if (!stopPressed()) {
+	}
+	else if (BIT_SET(KEY_STOP_PIN, intrStatusReg))
+	{
+		if (!stopPressed())
+		{
 			Logger::info("STOP button pressed");
 			event.type = master ? EventType::STOP_M_SHORT : EventType::STOP_S_SHORT;
 		}
-	} else if (BIT_SET(KEY_RESET_PIN, intrStatusReg)) {
-		if (!resetPressed()) {
+	}
+	else if (BIT_SET(KEY_RESET_PIN, intrStatusReg))
+	{
+		if (!resetPressed())
+		{
 			Logger::info("RESET button pressed");
 			event.type = master ? EventType::RESET_M_SHORT : EventType::RESET_S_SHORT;
 		}
-	} else if (BIT_SET(LB_START_PIN, intrStatusReg)) {
-		if (lbStartBlocked()) {
+	}
+	else if (BIT_SET(LB_START_PIN, intrStatusReg))
+	{
+		if (lbStartBlocked())
+		{
 			Logger::debug("LBA blocked");
 			event.type = master ? EventType::LBA_M_BLOCKED : EventType::LBA_S_BLOCKED;
-		} else {
+		}
+		else
+		{
 			Logger::debug("LBA unblocked");
 			event.type = master ? EventType::LBA_M_UNBLOCKED : EventType::LBA_S_UNBLOCKED;
 		}
-	} else if (BIT_SET(LB_SWITCH_PIN, intrStatusReg)) {
-		if (lbSwitchBlocked()) {
+	}
+	else if (BIT_SET(LB_SWITCH_PIN, intrStatusReg))
+	{
+		if (lbSwitchBlocked())
+		{
 			Logger::debug("LBW blocked");
 			event.type = master ? EventType::LBW_M_BLOCKED : EventType::LBW_S_BLOCKED;
-		} else {
+		}
+		else
+		{
 			Logger::debug("LBW unblocked");
 			event.type = master ? EventType::LBW_M_UNBLOCKED : EventType::LBW_S_UNBLOCKED;
 		}
-	} else if (BIT_SET(LB_END_PIN, intrStatusReg)) {
-		if (lbEndBlocked()) {
+	}
+	else if (BIT_SET(LB_END_PIN, intrStatusReg))
+	{
+		if (lbEndBlocked())
+		{
 			Logger::debug("LBE blocked");
 			event.type = master ? EventType::LBE_M_BLOCKED : EventType::LBE_S_BLOCKED;
-		} else {
+		}
+		else
+		{
 			Logger::debug("LBE unblocked");
 			event.type = master ? EventType::LBE_M_UNBLOCKED : EventType::LBE_S_UNBLOCKED;
 		}
-	} else if (BIT_SET(LB_RAMP_PIN, intrStatusReg)) {
-		if (lbRampBlocked()) {
+	}
+	else if (BIT_SET(LB_RAMP_PIN, intrStatusReg))
+	{
+		if (lbRampBlocked())
+		{
 			Logger::debug("LBR blocked");
 			event.type = master ? EventType::LBR_M_BLOCKED : EventType::LBR_S_BLOCKED;
-		} else {
+		}
+		else
+		{
 			Logger::debug("LBR unblocked");
 			event.type = master ? EventType::LBR_M_UNBLOCKED : EventType::LBR_S_UNBLOCKED;
 		}
-	} else if (BIT_SET(SE_METAL_PIN, intrStatusReg)) {
-		if (metalDetected()) {
+	}
+	else if (BIT_SET(SE_METAL_PIN, intrStatusReg))
+	{
+		if (metalDetected())
+		{
 			Logger::debug("Metal detected");
 			event.type = master ? EventType::MD_M_PAYLOAD : EventType::MD_S_PAYLOAD;
 			event.data = 1;
-		} else {
+		}
+		else
+		{
 			Logger::debug("Metal not detected");
 			event.type = master ? EventType::MD_M_PAYLOAD : EventType::MD_S_PAYLOAD;
 			event.data = 0;
@@ -358,7 +401,8 @@ void Sensors::handleGpioInterrupt()
 	}
 
 	// If IRQ is associated to an event, we send it!
-	if ((int)event.type != -1) {
+	if ((int)event.type != -1)
+	{
 		eventManager->sendEvent(event);
 	}
 }

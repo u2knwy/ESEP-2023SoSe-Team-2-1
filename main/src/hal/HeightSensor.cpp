@@ -7,9 +7,9 @@
 
 #include "HeightSensor.h"
 #include "logger/logger.hpp"
-#ifdef SIMULATION
-#include "../simulation/simulationadapterqnx/simqnxgpioapi.h"
-#include "../simulation/simulationadapterqnx/simqnxirqapi.h"
+#ifdef SIM_ACTIVE
+	#include "simqnxgpioapi.h" // must be last include !!!
+	#include "simqnxirqapi.h"
 #endif
 
 HeightSensor::HeightSensor() : chanID(-1), conID(-1) {
@@ -156,6 +156,7 @@ void HeightSensor::threadFunction() {
 					//float heightMillimeter = adcValueToMillimeter(heightRaw);
 					//float heightMillimeter = getAverageHeight();
 					float heightMillimeter = getMedianHeight();
+					//Logger::debug("[HM] New value: " + std::to_string(heightMillimeter));
 					if(heightValueCallback != nullptr) {
 						heightValueCallback(heightMillimeter);
 					}

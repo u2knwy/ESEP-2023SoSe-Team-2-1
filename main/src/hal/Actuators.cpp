@@ -8,9 +8,9 @@
 #include "Actuators.h"
 #include "logger/logger.hpp"
 #include "configuration/Configuration.h"
-#ifdef SIMULATION
-#include "../simulation/simulationadapterqnx/simqnxgpioapi.h"
-#include "../simulation/simulationadapterqnx/simqnxirqapi.h"
+#ifdef SIM_ACTIVE
+	#include "simqnxgpioapi.h" // must be last include !!!
+	#include "simqnxirqapi.h"
 #endif
 
 Actuators::Actuators(std::shared_ptr<EventManager> mngr) : eventManager(mngr) {
@@ -26,9 +26,8 @@ Actuators::Actuators(std::shared_ptr<EventManager> mngr) : eventManager(mngr) {
 	greenBlinking = false;
 	yellowBlinking = false;
 	redBlinking = false;
-	greenLampOff();
-	yellowLampOff();
-	redLampOff();
+
+	standbyMode();
 
 	subscribeToEvents();
 
@@ -201,6 +200,10 @@ void Actuators::standbyMode() {
 	greenLampOff();
 	yellowLampOff();
 	redLampOff();
+	q1LedOff();
+	q2LedOff();
+	startLedOn();
+	resetLedOff();
 	setMotorStop(true);
 	setMotorRight(false);
 	setMotorLeft(false);
@@ -214,6 +217,10 @@ void Actuators::runningMode() {
 	greenLampOn();
 	yellowLampOff();
 	redLampOff();
+	q1LedOff();
+	q2LedOff();
+	startLedOff();
+	resetLedOff();
 	setMotorStop(false);
 	setMotorRight(false);
 	setMotorLeft(false);
@@ -224,6 +231,10 @@ void Actuators::serviceMode() {
 	yellowLampOff();
 	redLampOff();
 	setGreenBlinking(true);
+	q1LedOff();
+	q2LedOff();
+	startLedOff();
+	resetLedOff();
 	setMotorStop(false);
 	setMotorRight(false);
 	setMotorLeft(false);

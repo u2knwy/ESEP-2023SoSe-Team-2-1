@@ -13,14 +13,14 @@ TARGET = $(OUTPUT_DIR)/$(ARTIFACT)
 #Compiler definitions
 CC = qcc -Vgcc_nto$(PLATFORM)
 CXX = qcc -lang-c++ -Vgcc_nto$(PLATFORM)
-#CXX += -DSIMULATION
+#CXX += -DSIM_ACTIVE
 LD = $(CXX)
 
 #User defined include/preprocessor flags and libraries
 
 #INCLUDES += -I/path/to/my/lib/include
 INCLUDES += -Isrc
-SIM_ROOT = src/simulation
+SIM_ROOT = simulation
 INCLUDES += -I$(SIM_ROOT)/simulationadapterqnx
 INCLUDES += -I$(SIM_ROOT)/simulationbase
 INCLUDES += -I$(SIM_ROOT)/simulationcore
@@ -53,6 +53,7 @@ rwildcard = $(wildcard $(addprefix $1/*.,$2)) $(foreach d,$(wildcard $1/*),$(cal
 
 #Source list
 SRCS = $(call rwildcard, src, c cpp)
+SRCS += $(call rwildcard, simulation, c cpp)
 
 #Object files list
 OBJS = $(addprefix $(OUTPUT_DIR)/,$(addsuffix .o, $(basename $(SRCS))))
