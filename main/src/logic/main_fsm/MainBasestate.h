@@ -22,16 +22,13 @@ enum MainState {
 
 class MainBasestate {
 protected:
-	MainBasestate* substateEStop;
-	MainBasestate* substateServiceMode;
+	MainBasestate* substateEStop = nullptr;
+	MainBasestate* substateServiceMode = nullptr;
 	MainActions* actions;
 	MainContextData* data;
 
 public:
-	virtual ~MainBasestate(){
-		delete substateEStop;
-		delete substateServiceMode;
-	};
+	virtual ~MainBasestate(){}
 
 	virtual void setData(MainContextData* data) {
 		this->data = data;

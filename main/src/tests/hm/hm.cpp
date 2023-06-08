@@ -71,7 +71,8 @@ TEST_F(HeightSensor_Test, HighDetected) {
 
 	// HIGH WS detected
 	fsm->heightValueReceived(25.0);
-	EXPECT_EQ(WorkpieceType::WS_OB, fsm->getCurrentResult().type);
+	HeightResult res = fsm->getCurrentResult();
+	EXPECT_EQ(WorkpieceType::WS_OB, res.type);
 	EXPECT_EQ(HeightState::HIGH, fsm->getCurrentState());
 
 	// NEXT COMES BELT
@@ -130,9 +131,14 @@ TEST_F(HeightSensor_Test, UnknownDetected) {
 
 TEST_F(HeightSensor_Test, CalculateAverageAndMaxValue) {
 	Event ev;
+	HeightResult res;
+
 	ev.type = EventType::HALmotorFastRight;
 	fsm->handleEvent(ev);
 	EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
+	res = fsm->getCurrentResult();
+	EXPECT_EQ("0.00", formatFloat(res.average, 2));
+	EXPECT_EQ("0.00", formatFloat(res.max, 2));
 
 	fsm->heightValueReceived(25.3);
 	fsm->heightValueReceived(25.1);
@@ -140,9 +146,25 @@ TEST_F(HeightSensor_Test, CalculateAverageAndMaxValue) {
 	fsm->heightValueReceived(21.2);
 	fsm->heightValueReceived(25.0);
 	fsm->heightValueReceived(24.9);
-	HeightResult res = fsm->getCurrentResult();
+	res = fsm->getCurrentResult();
 	EXPECT_EQ("21.28", formatFloat(res.average, 2));
 	EXPECT_EQ("25.30", formatFloat(res.max, 2));
+
+	ev.type = EventType::HALmotorStop;
+	fsm->handleEvent(ev);
+	EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
+	ev.type = EventType::HALmotorFastRight;
+	fsm->handleEvent(ev);
+	EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
+	res = fsm->getCurrentResult();
+	EXPECT_EQ("0.00", formatFloat(res.average, 2));
+	EXPECT_EQ("0.00", formatFloat(res.max, 2));
+	fsm->heightValueReceived(25.0);
+	EXPECT_EQ(HeightState::WAIT_FOR_BELT, fsm->getCurrentState());
+	res = fsm->getCurrentResult();
+	EXPECT_EQ(WorkpieceType::WS_OB, res.type);
+	EXPECT_EQ("25.00", formatFloat(res.average, 2));
+	EXPECT_EQ("25.00", formatFloat(res.max, 2));
 }
 
 TEST_F(HeightSensor_Test, CalculateAverageAndMaxValueWhenMotorStoppedInBetween) {

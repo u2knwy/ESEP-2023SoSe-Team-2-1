@@ -34,6 +34,7 @@ void HeightContextData::resetMeasurement() {
 	maxValue = 0.0;
 	nMeasurements = 0;
 	measurements.clear();
+	measurements.shrink_to_fit();
 }
 
 void HeightContextData::updateAvgAndMaxValue(float newValue) {
@@ -71,16 +72,15 @@ HeightResult HeightContextData::getCurrentResult() {
 HeightResult HeightContextData::getCurrentResultV2() {
 	HeightResult result;
 
-	// Throw out first x % of measurements
 	int totalValues = measurements.size();
-	Logger::debug("getCurrentResultV2: " + std::to_string(totalValues));
-	if(totalValues < 10) {
+	if(totalValues == 0) {
 		result.type = WorkpieceType::WS_UNKNOWN;
-		result.average = 0;
-		result.max = 0;
+		result.average = 0.0;
+		result.max = 0.0;
 		return result;
 	}
 
+	// Throw out first and last 10 % of measurements
 	int startIndex = totalValues * 0.1;
 	int endIndex = totalValues * 0.9;
 	int nValues = measurements.size() - startIndex;
@@ -93,7 +93,7 @@ HeightResult HeightContextData::getCurrentResultV2() {
 	}
 	float begin = measurements.at(startIndex);
 	float middle = measurements.at(totalValues/2);
-	float end = *(measurements.end());
+	float end = measurements.at(endIndex);
 
 	if(isFlat(begin) && isFlat(middle) && isFlat(end)) {
 		result.type = WorkpieceType::WS_F;

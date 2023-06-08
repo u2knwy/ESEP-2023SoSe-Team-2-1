@@ -25,10 +25,12 @@ void EStop::entry() {
 void EStop::exit() {
 	Logger::debug("EStop::exit");
 	actions->setMotorStop(false);
+	delete substateEStop;
 }
 
 void EStop::initSubStateEStop() {
 	substateEStop = new SubEStopOnePressed;
+	substateEStop->entry();
 }
 
 bool EStop::master_EStop_Pressed() {

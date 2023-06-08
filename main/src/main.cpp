@@ -47,9 +47,18 @@ void cleanup(int exitCode)
 
 int main(int argc, char **argv)
 {
+	// Initialize Logger
+	const char* debugValue = getenv("QNX_DEBUG");
+	const std::string debug = debugValue ? debugValue : "";
+	if (debug == "TRUE") {
+		Logger::set_level(Logger::level::DEBUG);
+		Logger::debug("##### Started in DEBUG mode #####");
+	} else {
+		Logger::set_level(Logger::level::INFO);
+	}
+
 	Options options{argc, argv};
-	if (options.mode == Mode::TESTS)
-	{
+	if (options.mode == Mode::TESTS) {
 		// Run Unit Tests
 		Logger::info("Running tests...");
 		::testing::InitGoogleTest(&argc, argv);
@@ -67,19 +76,6 @@ int main(int argc, char **argv)
 	}
 	conf.setMaster(options.mode == Mode::MASTER);
 	conf.setPusherMounted(options.pusher);
-
-	// Initialize Logger
-	const char* debugValue = getenv("QNX_DEBUG");
-	const std::string debug = debugValue ? debugValue : "";
-	if (debug == "TRUE")
-	{
-		Logger::set_level(Logger::level::DEBUG);
-		Logger::debug("##### Started in DEBUG mode #####");
-	}
-	else
-	{
-		Logger::set_level(Logger::level::INFO);
-	}
 
 	eventManager = std::make_shared<EventManager>();
 	actuators = std::make_shared<Actuators>(eventManager);

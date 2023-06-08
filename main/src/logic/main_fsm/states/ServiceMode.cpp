@@ -25,10 +25,12 @@ void ServiceMode::entry() {
 
 void ServiceMode::exit() {
 	Logger::debug("ServiceMode::exit");
+	delete substateServiceMode;
 }
 
 void ServiceMode::initSubStateServiceMode() {
 	substateServiceMode = new SubServiceModeCalOffset;
+	substateServiceMode->entry();
 }
 
 bool ServiceMode::master_LBA_Blocked() {
