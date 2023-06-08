@@ -11,6 +11,7 @@
 
 #include <memory>
 #include <thread>
+#include <mutex>
 #include <sys/neutrino.h>
 #include <sys/procmgr.h>
 #include "Sensors.h"
@@ -146,25 +147,28 @@ public:
 	 */
 	void q2LedOff();
 
+	void motorStop();
+	void motorSlow();
+	void motorFast();
 	/**
 	 * Sets the 'Motor stop' pin.
 	 */
-	void motorStop(bool stop);
+	void setMotorStop(bool stop);
 
 	/**
 	 * Sets the 'Motor slow' pin.
 	 */
-	void motorSlow(bool slow);
+	void setMotorSlow(bool slow);
 
 	/**
 	 * Sets the 'Motor right' pin and clears the 'Motor left' pin.
 	 */
-	void motorRight();
+	void setMotorRight(bool right);
 
 	/**
 	 * Sets the 'Motor left' pin and clears the 'Motor right' pin.
 	 */
-	void motorLeft();
+	void setMotorLeft(bool left);
 
 	/**
 	 * Opens the switch to let a workpiece pass.
@@ -181,14 +185,19 @@ private:
 	std::shared_ptr<EventManager> eventManager;
 	bool isMaster;
 	bool greenBlinking;
-	std::thread greenBlinkingThread;
+	std::thread th_GreenBlinking;
 	bool yellowBlinking;
-	std::thread yellowBlinkingThread;
+	std::thread th_YellowBlinking;
 	bool redBlinking;
-	std::thread redBlinkingThread;
+	std::thread th_RedBlinking;
 	void configurePins();
 	void subscribeToEvents();
 	void thGreenLampFlashing(bool fast);
 	void thYellowLampFlashing(bool fast);
 	void thRedLampFlashing(bool fast);
+	std::mutex mutex;
+	// TEST
+	int stopCnt;
+	int fastCnt;
+	int slowCnt;
 };

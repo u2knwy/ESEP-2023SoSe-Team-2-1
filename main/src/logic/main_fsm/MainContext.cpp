@@ -14,9 +14,7 @@
 #include <memory>
 
 MainContext::MainContext(std::shared_ptr<EventManager> mngr) : eventManager(mngr) {
-	Logger::debug("EVM use_count MainContext: " + std::to_string(mngr.use_count()));
 	this->actions = new MainActions(mngr);
-	Logger::debug("EVM use_count MainContext after creating MainActions: " + std::to_string(mngr.use_count()));
 	this->data = new MainContextData();
 	this->state = new Standby();
 	state->setAction(actions);
@@ -44,6 +42,9 @@ void MainContext::subscribeToEvents() {
 	eventManager->subscribe(EventType::RESET_S_SHORT, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 	eventManager->subscribe(EventType::ESTOP_S_PRESSED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 	eventManager->subscribe(EventType::ESTOP_S_RELEASED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+
+	eventManager->subscribe(EventType::LBA_M_BLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::LBE_M_BLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 }
 
 void MainContext::handleEvent(Event event) {
@@ -73,6 +74,10 @@ void MainContext::handleEvent(Event event) {
 		state->slave_EStop_Pressed(); break;
 	case EventType::ESTOP_S_RELEASED:
 		state->slave_EStop_Released(); break;
+	case EventType::LBA_M_BLOCKED:
+		state->master_LBA_Blocked(); break;
+	case EventType::LBE_M_BLOCKED:
+		state->master_LBE_Blocked(); break;
 	default:
 		Logger::warn(EVENT_TO_STRING(event.type) + " was not handled by MainFSM");
 	}

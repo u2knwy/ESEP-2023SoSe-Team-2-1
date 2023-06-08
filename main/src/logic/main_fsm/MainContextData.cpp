@@ -9,6 +9,8 @@
 
 MainContextData::MainContextData() {
 	wpManager = new WorkpieceManager();
+	setRampFBM1Blocked(false);
+	setRampFBM2Blocked(false);
 }
 
 MainContextData::~MainContextData() {

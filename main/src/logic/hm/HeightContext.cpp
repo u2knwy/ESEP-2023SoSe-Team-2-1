@@ -34,9 +34,14 @@ HeightContext::~HeightContext() {
 }
 
 void HeightContext::subscribeToEvents() {
-	eventManager->subscribe(EventType::HALmotorFastRight, std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
+/*	eventManager->subscribe(EventType::HALmotorFastRight, std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
 	eventManager->subscribe(EventType::HALmotorSlowRight, std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::HALmotorStop, std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::HALmotorStop, std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));*/
+
+	eventManager->subscribe(EventType::MODE_STANDBY, std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::MODE_RUNNING, std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::MODE_ERROR, std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::MODE_ESTOP, std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
 }
 
 void HeightContext::handleEvent(Event event) {
@@ -47,12 +52,19 @@ void HeightContext::handleEvent(Event event) {
 	} else if(event.type == EventType::HALmotorStop) {
 		this->running = false;
 		sensor->stop();
+	} else if(event.type == EventType::MODE_STANDBY || event.type == EventType::MODE_ERROR || event.type == EventType::MODE_ESTOP) {
+		this->running = false;
+		sensor->stop();
+	} else if(event.type == EventType::MODE_RUNNING) {
+		this->running = true;
+		sensor->start();
 	}
 }
 
 void HeightContext::heightValueReceived(float valueMM) {
 	// Handle new value only if motor is running
 	if(running) {
+		Logger::debug("[hm] Handle new value: " + std::to_string(valueMM));
 		data->updateAvgAndMaxValue(valueMM);
 
 		bool handled;

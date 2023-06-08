@@ -88,7 +88,7 @@ int main(int argc, char **argv)
 	std::signal(SIGABRT, cleanup);
 	std::signal(SIGTERM, cleanup);
 
-	actuators->motorStop(true);
+	actuators->setMotorStop(true);
 
 	std::shared_ptr<IHeightSensor> heightSensor = std::make_shared<HeightSensor>();
 

@@ -49,10 +49,10 @@ void HeightActions::sendHeightResult() {
 	}
 
 	if(isMaster) {
-		event.data = (int) result.average * 10; // master: send average value (1 decimal place)
+		event.data = (int) (result.average * 10); // master: send average value (1 decimal place)
 		Logger::debug("[HM] Height Result at FBM1: " + EVENT_TO_STRING(event.type) + ", average (mm): " + std::to_string(result.average));
 	} else {
-		event.data = (int) result.max * 10; // slave: send max value (1 decimal place)
+		event.data = (int) (result.max * 10); // slave: send max value (1 decimal place)
 		Logger::debug("[HM] Height Result at FBM2: " + EVENT_TO_STRING(event.type) + ", max (mm): " + std::to_string(result.max));
 	}
 
