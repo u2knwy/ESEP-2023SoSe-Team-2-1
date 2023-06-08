@@ -51,6 +51,7 @@ public:
 	void stop() override;
 	float getAverageHeight() override;
 	float getMaxHeight() override;
+	float getMedianHeight() override;
 	int getLastRawValue() override;
 private:
 	TSCADC tsc;
@@ -61,6 +62,7 @@ private:
     std::thread measureThread;
     std::vector<int> window;
     size_t windowCapacity;
+    int nMeasurements;
     std::mutex mtx;
     void addValue(int value);
     bool running{false};

@@ -46,6 +46,7 @@ void HeightContext::subscribeToEvents()
 	eventManager->subscribe(EventType::MODE_RUNNING, std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
 	eventManager->subscribe(EventType::MODE_ERROR, std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
 	eventManager->subscribe(EventType::MODE_ESTOP, std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
+
 }
 
 void HeightContext::handleEvent(Event event)
@@ -54,12 +55,12 @@ void HeightContext::handleEvent(Event event)
 	if (event.type == EventType::HALmotorFastRight || event.type == EventType::HALmotorSlowRight)
 	{
 		this->running = true;
-		sensor->start();
+		//sensor->start();
 	}
 	else if (event.type == EventType::HALmotorStop)
 	{
 		this->running = false;
-		sensor->stop();
+		//sensor->stop();
 	}
 	else if (event.type == EventType::MODE_STANDBY || event.type == EventType::MODE_ERROR || event.type == EventType::MODE_ESTOP)
 	{
@@ -73,8 +74,7 @@ void HeightContext::handleEvent(Event event)
 	}
 }
 
-void HeightContext::heightValueReceived(float valueMM)
-{
+void HeightContext::heightValueReceived(float valueMM) {
 	// Handle new value only if motor is running
 	if (running)
 	{
@@ -103,13 +103,18 @@ void HeightContext::heightValueReceived(float valueMM)
 			handled = state->unknownDetected();
 		}*/
 
+		std::stringstream ss;
+		ss << "New value: " << std::setprecision(2) << valueMM << " mm";
 		if (handled)
 		{
 			HeightResult res = data->getCurrentResult();
-			std::stringstream ss;
-			ss << "New value handled: " << std::setprecision(2) << valueMM << " mm -> type=" << res.type << ", avg=" << res.average << ", max=" << res.max << " mm";
+			ss << " -> type=" << res.type << ", avg=" << res.average << ", max=" << res.max << " mm";
 			Logger::debug(ss.str());
-		}
+		}/* else {
+			ss << " -> not handled!";
+		}*/
+	} else {
+		Logger::debug("[HFSM] New value received -> ignored because motor not running");
 	}
 }
 

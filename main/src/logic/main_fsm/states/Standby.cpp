@@ -28,7 +28,6 @@ void Standby::exit() {
 }
 
 bool Standby::master_btnStart_PressedShort() {
-	Logger::debug("Standby::master_btnStart_PressedShort");
 	exit();
 	new(this) Running;
 	entry();
@@ -36,7 +35,6 @@ bool Standby::master_btnStart_PressedShort() {
 }
 
 bool Standby::master_btnStart_PressedLong() {
-	Logger::debug("Standby::master_btnStart_PressedLong");
 	exit();
 	new(this) ServiceMode;
 	entry();
@@ -44,7 +42,6 @@ bool Standby::master_btnStart_PressedLong() {
 }
 
 bool Standby::master_EStop_Pressed() {
-	Logger::debug("Standby::master_EStop_Pressed");
 	exit();
 	new(this) EStop;
 	entry();
@@ -52,7 +49,6 @@ bool Standby::master_EStop_Pressed() {
 }
 
 bool Standby::slave_btnStart_PressedShort() {
-	Logger::debug("Standby::slave_btnStart_PressedShort");
 	exit();
 	new(this) Running;
 	entry();
@@ -60,7 +56,6 @@ bool Standby::slave_btnStart_PressedShort() {
 }
 
 bool Standby::slave_btnStart_PressedLong() {
-	Logger::debug("Standby::slave_btnStart_PressedLong");
 	exit();
 	new(this) ServiceMode;
 	entry();
@@ -68,7 +63,6 @@ bool Standby::slave_btnStart_PressedLong() {
 }
 
 bool Standby::slave_EStop_Pressed() {
-	Logger::debug("Standby::slave_EStop_Pressed");
 	exit();
 	new(this) EStop;
 	entry();

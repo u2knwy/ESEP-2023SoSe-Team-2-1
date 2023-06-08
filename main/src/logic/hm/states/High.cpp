@@ -11,7 +11,7 @@
 #include "High.h"
 
 void High::entry() {
-	Logger::debug("[HM] High detected - waiting for belt or hole...");
+	Logger::debug("[HFSM] High detected - waiting for belt or hole...");
 }
 
 HeightState High::getCurrentState() {
@@ -19,7 +19,6 @@ HeightState High::getCurrentState() {
 }
 
 bool High::beltDetected() {
-	Logger::debug("[HM] Belt detected -> WS_OB");
 	data->setCurrentType(WorkpieceType::WS_OB);
 	actions->sendHeightResult();
 	actions->setMotorSlow(false);
@@ -30,7 +29,6 @@ bool High::beltDetected() {
 }
 
 bool High::holeDetected() {
-	Logger::debug("[HM] Hole detected -> WS_BOM");
 	data->setCurrentType(WorkpieceType::WS_BOM);
 	exit();
 	new(this) WaitForBelt;

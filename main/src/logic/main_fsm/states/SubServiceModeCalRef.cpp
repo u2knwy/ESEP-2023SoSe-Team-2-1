@@ -13,15 +13,13 @@
 #include <iostream>
 
 void SubServiceModeCalRef::entry() {
-	done = false;
-	Logger::debug("SubServiceModeCalRef::entry");
-	actions->calibrateOffset();
+	Logger::info("[ServiceMode] Calibrating HeightSensor reference (High)");
 	Logger::info("Place a high workpiece below the HeightSensor and press START to calibrate reference.");
 	Logger::info("Press RESET button to continue");
+	done = false;
 }
 
 void SubServiceModeCalRef::exit() {
-	Logger::debug("SubServiceModeCalRef::exit");
 }
 
 bool SubServiceModeCalRef::master_btnStart_PressedShort() {

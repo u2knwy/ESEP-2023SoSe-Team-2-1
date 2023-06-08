@@ -23,7 +23,6 @@ MainActions::~MainActions() {
 
 
 void MainActions::setMotorStop(bool stop) {
-	Logger::debug("MainActions::setMotorStop " + std::to_string(stop));
 	Event event;
 	event.type = EventType::HALmotorStop;
 	event.data = (int) stop;
@@ -31,7 +30,6 @@ void MainActions::setMotorStop(bool stop) {
 }
 
 void MainActions::setMotorFast(bool fast) {
-	Logger::debug("MainActions::setMotorFast " + std::to_string(fast));
 	Event event;
 	event.type = EventType::HALmotorFastRight;
 	event.data = (int) fast;
@@ -39,7 +37,6 @@ void MainActions::setMotorFast(bool fast) {
 }
 
 void MainActions::setMotorSlow(bool slow) {
-	Logger::debug("MainActions::setMotorSlow " + std::to_string(slow));
 	Event event;
 	event.type = EventType::HALmotorSlowRight;
 	event.data = (int) slow;
@@ -47,46 +44,56 @@ void MainActions::setMotorSlow(bool slow) {
 }
 
 void MainActions::setStandbyMode() {
-	Logger::debug("MainActions::setStandbyMode");
 	Event event;
 	event.type = EventType::MODE_STANDBY;
 	eventManager->sendEvent(event);
 }
 
 void MainActions::setRunningMode() {
-	Logger::debug("MainActions::setRunningMode");
 	Event event;
 	event.type = EventType::MODE_RUNNING;
 	eventManager->sendEvent(event);
 }
 
 void MainActions::setServiceMode() {
-	Logger::debug("MainActions::setServiceMode");
 	Event event;
 	event.type = EventType::MODE_SERVICE;
 	eventManager->sendEvent(event);
 }
 
 void MainActions::setErrorMode() {
-	Logger::debug("MainActions::setErrorMode");
 	Event event;
 	event.type = EventType::MODE_ERROR;
 	eventManager->sendEvent(event);
 }
 
 void MainActions::setEStopMode() {
-	Logger::debug("MainActions::setEStopMode");
 	Event event;
 	event.type = EventType::MODE_ESTOP;
 	eventManager->sendEvent(event);
 }
 
 void MainActions::allActuatorsOn() {
-	Logger::debug("MainActions::allActuatorsOn");
+
+}
+
+void MainActions::allActuatorsOff() {
 }
 
 void MainActions::displayWarning() {
 	Event event;
+	event.data = 1;
+
+	event.type = EventType::WARNING_M;
+	eventManager->sendEvent(event);
+
+	event.type = EventType::WARNING_S;
+	eventManager->sendEvent(event);
+}
+
+void MainActions::warningOff() {
+	Event event;
+	event.data = 0;
 
 	event.type = EventType::WARNING_M;
 	eventManager->sendEvent(event);
@@ -96,15 +103,14 @@ void MainActions::displayWarning() {
 }
 
 void MainActions::calibrateOffset() {
+	Logger::info("Calibrating HeightSensor offset...");
 	HeightSensor sensor;
-	Logger::info("Calibrating HeightSensor offset -> waiting for sensor startup...");
 	sensor.start();
-	std::this_thread::sleep_for(std::chrono::seconds(1));
-	Logger::info("Calibrating HeightSensor offset -> in progress...");
+	std::this_thread::sleep_for(std::chrono::milliseconds(500));
 	int sum = 0;
 	for(int i = 0; i < HM_CAL_MEASUREMENTS; i++) {
 		sum += sensor.getLastRawValue();
-		std::this_thread::sleep_for(std::chrono::milliseconds(50));
+		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	}
 	int offset = sum / HM_CAL_MEASUREMENTS;
 	Logger::info("Calibrating HeightSensor offset -> value = " + std::to_string(offset));
@@ -112,15 +118,14 @@ void MainActions::calibrateOffset() {
 }
 
 void MainActions::calibrateReference() {
+	Logger::info("Calibrating HeightSensor reference (high)...");
 	HeightSensor sensor;
-	Logger::info("Calibrating HeightSensor reference (high) -> waiting for sensor startup...");
 	sensor.start();
-	std::this_thread::sleep_for(std::chrono::seconds(1));
-	Logger::info("Calibrating HeightSensor reference (high) -> in progress...");
+	std::this_thread::sleep_for(std::chrono::milliseconds(500));
 	int sum = 0;
-	for(int i = 0; i < 10; i++) {
+	for(int i = 0; i < HM_CAL_MEASUREMENTS; i++) {
 		sum += sensor.getLastRawValue();
-		std::this_thread::sleep_for(std::chrono::milliseconds(50));
+		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	}
 	int ref = sum / HM_CAL_MEASUREMENTS;
 	Logger::info("Calibrating HeightSensor reference (high) -> value = " + std::to_string(ref));
@@ -128,6 +133,11 @@ void MainActions::calibrateReference() {
 }
 
 void MainActions::saveCalibration() {
-	Configuration::getInstance().saveCurrentConfigToFile();
-	Logger::info("HeightSensor calibration was saved to file");
+	Configuration& conf = Configuration::getInstance();
+	conf.saveCurrentConfigToFile();
+	Calibration cal = conf.getCalibration();
+	std::stringstream ss;
+	ss << "HeightSensor calibration: CAL_OFFSET=" << cal.calOffset;
+	ss << "; CAL_REF=" << cal.calRef;
+	ss << " -> saved to file!" << std::endl;
 }

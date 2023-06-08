@@ -34,6 +34,10 @@ float HeightSensorMock::getMaxHeight() {
 	return 0.0;
 }
 
+float HeightSensorMock::getMedianHeight() {
+	return 0.0;
+}
+
 int HeightSensorMock::getLastRawValue() {
 	return 0;
 }

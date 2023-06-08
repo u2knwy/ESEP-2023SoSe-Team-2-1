@@ -25,7 +25,6 @@ HeightState WaitForWorkpiece::getCurrentState() {
 
 bool WaitForWorkpiece::flatDetected() {
 	data->setCurrentType(WorkpieceType::WS_F);
-	Logger::debug("[HFSM] Current type: WS_F");
 	actions->setMotorSlow(true);
 	exit();
 	new(this) WaitForBelt;
@@ -35,7 +34,6 @@ bool WaitForWorkpiece::flatDetected() {
 
 bool WaitForWorkpiece::highDetected() {
 	data->setCurrentType(WorkpieceType::WS_OB);
-	Logger::debug("[HFSM] Current type: WS_OB");
 	actions->setMotorSlow(true);
 	exit();
 	new(this) High;

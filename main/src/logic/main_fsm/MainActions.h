@@ -25,7 +25,9 @@ public:
 	void setErrorMode();
 	void setEStopMode();
 	void allActuatorsOn();
+	void allActuatorsOff();
 	void displayWarning();
+	void warningOff();
 	void calibrateOffset();
 	void calibrateReference();
 	void saveCalibration();

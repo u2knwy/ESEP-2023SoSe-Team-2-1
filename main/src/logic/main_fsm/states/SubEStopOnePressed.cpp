@@ -13,15 +13,13 @@
 #include <iostream>
 
 void SubEStopOnePressed::entry() {
-	Logger::debug("SubEStopOnePressed::entry");
+	Logger::debug("[EStop] One pressed");
 }
 
 void SubEStopOnePressed::exit() {
-	Logger::debug("SubEStopOnePressed::exit");
 }
 
 bool SubEStopOnePressed::master_EStop_Pressed() {
-	Logger::debug("SubEStopOnePressed::master_EStop_Pressed");
 	exit();
 	new(this) SubEStopTwoPressed;
 	entry();
@@ -29,7 +27,6 @@ bool SubEStopOnePressed::master_EStop_Pressed() {
 }
 
 bool SubEStopOnePressed::master_EStop_Released() {
-	Logger::debug("SubEStopOnePressed::master_EStop_Released");
 	exit();
 	new(this) SubEStopBothReleased;
 	entry();
@@ -37,7 +34,6 @@ bool SubEStopOnePressed::master_EStop_Released() {
 }
 
 bool SubEStopOnePressed::slave_EStop_Pressed() {
-	Logger::debug("SubEStopOnePressed::slave_EStop_Pressed");
 	exit();
 	new(this) SubEStopTwoPressed;
 	entry();
@@ -45,7 +41,6 @@ bool SubEStopOnePressed::slave_EStop_Pressed() {
 }
 
 bool SubEStopOnePressed::slave_EStop_Released() {
-	Logger::debug("SubEStopOnePressed::slave_EStop_Released");
 	exit();
 	new(this) SubEStopBothReleased;
 	entry();

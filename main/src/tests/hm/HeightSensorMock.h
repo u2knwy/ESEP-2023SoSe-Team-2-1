@@ -19,6 +19,7 @@ public:
 	void stop() override;
 	float getAverageHeight() override;
 	float getMaxHeight() override;
+	float getMedianHeight() override;
 	int getLastRawValue() override;
 };
 

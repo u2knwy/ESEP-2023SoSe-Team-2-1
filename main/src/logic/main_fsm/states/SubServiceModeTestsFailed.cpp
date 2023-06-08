@@ -11,16 +11,14 @@
 #include <iostream>
 
 void SubServiceModeTestsFailed::entry() {
-	Logger::debug("SubServiceModeTestsFailed::entry");
+	Logger::info("[ServiceMode] Tests have failed. Press RESET to return to Standby mode.");
 	actions->displayWarning();
-	Logger::info("Tests failed. Press STOP to return to Standby mode.");
 }
 
 void SubServiceModeTestsFailed::exit() {
-	Logger::debug("SubServiceModeTestsFailed::exit");
+	actions->warningOff();
 }
 
 bool SubServiceModeTestsFailed::isSubEndState() {
 	return true;
 }
-

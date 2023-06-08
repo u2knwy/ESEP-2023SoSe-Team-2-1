@@ -10,7 +10,7 @@
 #include "WaitForBelt.h"
 
 void WaitForBelt::entry() {
-	Logger::debug("[HM] Waiting for belt...");
+	Logger::debug("[HFSM] Waiting for belt...");
 }
 
 HeightState WaitForBelt::getCurrentState() {

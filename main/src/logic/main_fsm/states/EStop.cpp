@@ -23,7 +23,6 @@ void EStop::entry() {
 }
 
 void EStop::exit() {
-	Logger::debug("EStop::exit");
 	actions->setMotorStop(false);
 	delete substateEStop;
 }
@@ -34,27 +33,22 @@ void EStop::initSubStateEStop() {
 }
 
 bool EStop::master_EStop_Pressed() {
-	Logger::debug("EStop::master_EStop_Pressed");
 	return substateEStop->master_EStop_Pressed();
 }
 
 bool EStop::master_EStop_Released() {
-	Logger::debug("EStop::master_EStop_Released");
 	return substateEStop->master_EStop_Released();
 }
 
 bool EStop::slave_EStop_Pressed() {
-	Logger::debug("EStop::slave_EStop_Pressed");
 	return substateEStop->slave_EStop_Pressed();
 }
 
 bool EStop::slave_EStop_Released() {
-	Logger::debug("EStop::slave_EStop_Released");
 	return substateEStop->slave_EStop_Released();
 }
 
 bool EStop::master_btnReset_Pressed() {
-	Logger::debug("EStop::master_btnReset_Pressed");
 	bool handled = substateEStop->master_btnReset_Pressed();
 	if(substateEStop->isSubEndState()) {
 		exit();
@@ -66,7 +60,6 @@ bool EStop::master_btnReset_Pressed() {
 }
 
 bool EStop::slave_btnReset_Pressed() {
-	Logger::debug("EStop::slave_btnReset_Pressed");
 	bool handled = substateEStop->slave_btnReset_Pressed();
 	if(substateEStop->isSubEndState()) {
 		exit();

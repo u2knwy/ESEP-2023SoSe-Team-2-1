@@ -13,14 +13,13 @@
 #include <iostream>
 
 void SubServiceModeCalOffset::entry() {
-	done = false;
-	Logger::debug("SubServiceModeCalOffset::entry");
+	Logger::info("[ServiceMode] Calibrating HeightSensor offset (Belt)");
 	Logger::info("Make sure no workpiece is below the HeightSensor and press START to calibrate offset.");
 	Logger::info("Press RESET button to continue");
+	done = false;
 }
 
 void SubServiceModeCalOffset::exit() {
-	Logger::debug("SubServiceModeCalOffset::exit");
 }
 
 bool SubServiceModeCalOffset::master_btnStart_PressedShort() {

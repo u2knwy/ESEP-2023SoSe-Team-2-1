@@ -11,7 +11,7 @@
 
 HeightContextData::HeightContextData() {
 	currentType = WorkpieceType::WS_UNKNOWN;
-	measurements = std::vector<float>(100);
+	measurements = std::vector<float>(1000);
 	resetMeasurement();
 }
 
@@ -73,6 +73,7 @@ HeightResult HeightContextData::getCurrentResultV2() {
 	HeightResult result;
 
 	int totalValues = measurements.size();
+	Logger::debug("HeightContextData::getCurrentResultV2 -> n=" + std::to_string(totalValues));
 	if(totalValues == 0) {
 		result.type = WorkpieceType::WS_UNKNOWN;
 		result.average = 0.0;

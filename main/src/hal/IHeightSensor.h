@@ -19,7 +19,8 @@
 #define ADC_DEFAULT_OFFSET 3648
 #define ADC_DEFAULT_HIGH 2323
 // use N samples for averaging / max. value (sliding window)
-#define ADC_SAMPLE_SIZE 100
+#define ADC_SAMPLE_SIZE 10
+#define HM_SEND_INTERVAL 5
 
 class IHeightSensor {
 public:
@@ -31,6 +32,7 @@ public:
 	virtual void stop() = 0;
 	virtual float getAverageHeight() = 0;
 	virtual float getMaxHeight() = 0;
+	virtual float getMedianHeight() = 0;
 	virtual int getLastRawValue() = 0;
 protected:
     int adcOffset;
@@ -39,6 +41,10 @@ protected:
     std::vector<int> window;
     size_t windowCapacity;
     bool running{false};
-	void calibrateOffset(int offsetValue) { adcOffset = offsetValue; }
-	void calibrateRefHigh(int highValue) { adcIncPerMillimeter = (adcOffset - highValue) / HEIGHT_HIGH; }
+	void calibrateOffset(int offsetValue) {
+		adcOffset = offsetValue;
+	}
+	void calibrateRefHigh(int highValue) {
+		adcIncPerMillimeter = (adcOffset - highValue) / HEIGHT_HIGH;
+	}
 };

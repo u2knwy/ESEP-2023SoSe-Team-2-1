@@ -20,6 +20,7 @@ HeightSensor::HeightSensor() : chanID(-1), conID(-1) {
 	Calibration cal = conf.getCalibration();
 	calibrateOffset(cal.calOffset);
 	calibrateRefHigh(cal.calRef);
+	nMeasurements = 0;
 }
 
 HeightSensor::~HeightSensor() {
@@ -148,15 +149,18 @@ void HeightSensor::threadFunction() {
 			if (msg.code == PULSE_ADC_SAMPLING_DONE) {
 				int heightRaw = msg.value.sival_int;
 				addValue(heightRaw);
-				// TODO: Calculate average value of window
-				float heightMillimeter = adcValueToMillimeter(heightRaw);
-				//fsm->heightValueReceived(heightMillimeter);
-				if(heightValueCallback != nullptr) {
-					heightValueCallback(heightMillimeter);
+				nMeasurements++;
+				// Every x measurements -> notify via callback
+				if((nMeasurements % HM_SEND_INTERVAL) == 0) {
+					nMeasurements = 0;
+					//float heightMillimeter = adcValueToMillimeter(heightRaw);
+					//float heightMillimeter = getAverageHeight();
+					float heightMillimeter = getMedianHeight();
+					if(heightValueCallback != nullptr) {
+						heightValueCallback(heightMillimeter);
+					}
 				}
-				//Logger::debug("[HM] Value from ADC: " + std::to_string(heightRaw));
-				//Logger::debug("[HM] Height in mm: " + std::to_string(heightMillimeter));
-				//this_thread::sleep_for(chrono::milliseconds(100));
+				this_thread::sleep_for(chrono::milliseconds(10));
 				adc->sample();
 			}
 
@@ -168,12 +172,28 @@ void HeightSensor::threadFunction() {
 }
 
 float HeightSensor::getAverageHeight() {
+	if(window.empty())
+		return 0.0;
 	long sum = 0;
 	for(int val : window) {
 		sum += val;
 	}
 	int avg = sum / window.size();
 	return adcValueToMillimeter(avg);
+}
+
+float HeightSensor::getMedianHeight() {
+    std::sort(window.begin(), window.end());
+    size_t size = window.size();
+    int median;
+	if (size % 2 == 0) {
+		// Even number of elements, calculate the average of the two middle elements
+		median = (window[size / 2 - 1] + window[size / 2]) / 2.0;
+	} else {
+		// Odd number of elements, return the middle element
+		median = window[size / 2];
+	}
+	return adcValueToMillimeter(median);
 }
 
 float HeightSensor::getMaxHeight() {

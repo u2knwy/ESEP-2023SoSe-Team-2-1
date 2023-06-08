@@ -13,12 +13,11 @@
 #include <iostream>
 
 void SubServiceModeSelftestSensors::entry() {
-	Logger::debug("SubServiceModeSelftestSensors::entry");
+	Logger::info("[ServiceMode] Selftest Sensors");
 	Logger::info("Interrupt all sensors and watch console outputs. Press START button if ok.");
 }
 
 void SubServiceModeSelftestSensors::exit() {
-	Logger::debug("SubServiceModeSelftestSensors::exit");
 }
 
 bool SubServiceModeSelftestSensors::master_btnStart_PressedShort() {
