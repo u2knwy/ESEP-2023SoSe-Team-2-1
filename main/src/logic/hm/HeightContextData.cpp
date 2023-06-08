@@ -10,7 +10,7 @@
 #include "events/events.h"
 
 HeightContextData::HeightContextData() {
-	currentType = WorkpieceType::UNKNOWN;
+	currentType = WorkpieceType::WS_UNKNOWN;
 	measurements = std::vector<float>(100);
 	resetMeasurement();
 }
@@ -69,9 +69,20 @@ HeightResult HeightContextData::getCurrentResult() {
 }
 
 HeightResult HeightContextData::getCurrentResultV2() {
+	HeightResult result;
+
 	// Throw out first x % of measurements
 	int totalValues = measurements.size();
+	Logger::debug("getCurrentResultV2: " + std::to_string(totalValues));
+	if(totalValues < 10) {
+		result.type = WorkpieceType::WS_UNKNOWN;
+		result.average = 0;
+		result.max = 0;
+		return result;
+	}
+
 	int startIndex = totalValues * 0.1;
+	int endIndex = totalValues * 0.9;
 	int nValues = measurements.size() - startIndex;
 	float sum = 0.0;
 	for(auto it = measurements.begin() + startIndex; it != measurements.end(); ++it) {
@@ -84,7 +95,6 @@ HeightResult HeightContextData::getCurrentResultV2() {
 	float middle = measurements.at(totalValues/2);
 	float end = *(measurements.end());
 
-	HeightResult result;
 	if(isFlat(begin) && isFlat(middle) && isFlat(end)) {
 		result.type = WorkpieceType::WS_F;
 	} else if(isHigh(begin) && isHigh(middle) && isHigh(end)) {
@@ -92,7 +102,7 @@ HeightResult HeightContextData::getCurrentResultV2() {
 	} else if(isHigh(begin) && isHole(middle) && isHigh(end)) {
 		result.type = WorkpieceType::WS_BOM;
 	} else {
-		result.type = WorkpieceType::UNKNOWN;
+		result.type = WorkpieceType::WS_UNKNOWN;
 	}
 	result.average = sum / nValues;
 	result.max = maxValue;

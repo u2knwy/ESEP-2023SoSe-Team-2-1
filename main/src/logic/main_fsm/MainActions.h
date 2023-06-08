@@ -24,6 +24,11 @@ public:
 	void setServiceMode();
 	void setErrorMode();
 	void setEStopMode();
+	void allActuatorsOn();
+	void displayWarning();
+	void calibrateOffset();
+	void calibrateReference();
+	void saveCalibration();
 private:
 	std::shared_ptr<EventManager> eventManager;
 };

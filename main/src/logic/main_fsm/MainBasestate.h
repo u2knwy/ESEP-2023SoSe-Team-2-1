@@ -23,11 +23,15 @@ enum MainState {
 class MainBasestate {
 protected:
 	MainBasestate* substateEStop;
+	MainBasestate* substateServiceMode;
 	MainActions* actions;
 	MainContextData* data;
 
 public:
-	virtual ~MainBasestate(){};
+	virtual ~MainBasestate(){
+		delete substateEStop;
+		delete substateServiceMode;
+	};
 
 	virtual void setData(MainContextData* data) {
 		this->data = data;
@@ -44,6 +48,7 @@ public:
 	virtual void exit() {}
 
 	virtual void initSubStateEStop() {}
+	virtual void initSubStateServiceMode() {}
 
 	virtual bool isSubEndState() { return false; };
 

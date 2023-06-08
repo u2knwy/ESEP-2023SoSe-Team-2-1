@@ -10,6 +10,8 @@
 #include <vector>
 #include "data/Workpiece.h"
 
+#define DEFAULT_CONFIG_FILE_PATH "conf.txt"
+
 struct Calibration {
 	int calOffset;
 	int calRef;
@@ -22,7 +24,8 @@ public:
 		static Configuration instance;
 		return instance;
 	}
-	void readConfigFromFile(const std::string filePath);
+	void setConfigFilePath(std::string filePath);
+	bool readConfigFromFile();
 	void setMaster(bool isMaster);
 	bool systemIsMaster();
 	void setPusherMounted(bool pusherIsMounted);
@@ -30,15 +33,18 @@ public:
 	void setDesiredWorkpieceOrder(std::vector<WorkpieceType> order);
 	std::vector<WorkpieceType> getDesiredOrder();
 	Calibration getCalibration();
-	void saveCalibration(int offset, int refHigh);
-
+	void setOffsetCalibration(int offset);
+	void setReferenceCalibration(int refHigh);
+	void saveCurrentConfigToFile();
 private:
 	Configuration();
 	virtual ~Configuration();
 	Configuration(const Configuration &) = delete;
 	Configuration &operator=(const Configuration &) = delete;
+	std::string configFilePath;
 	std::vector<WorkpieceType> order;
 	bool isMaster{true};
 	bool hasPusher{false};
 	Calibration cal;
+	void writeLineToConfigFile(int lineNumber, const std::string& newContent);
 };

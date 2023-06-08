@@ -61,7 +61,10 @@ int main(int argc, char **argv)
 	options.pusher ? Logger::info("Hardware uses Pusher for sorting out") : Logger::info("Hardware uses Switch for sorting out");
 
 	Configuration &conf = Configuration::getInstance();
-	conf.readConfigFromFile("/usr/tmp/conf.txt");
+	conf.setConfigFilePath("/usr/tmp/conf.txt");
+	if(!conf.readConfigFromFile()) {
+		return EXIT_FAILURE;
+	}
 	conf.setMaster(options.mode == Mode::MASTER);
 	conf.setPusherMounted(options.pusher);
 
@@ -94,8 +97,7 @@ int main(int argc, char **argv)
 
 	// ###########################################
 	// TEMPORARY: Calibrate HeightSensor
-/*
-	heightSensor->start();
+/*	heightSensor->start();
 	std::string line;
 	Logger::info("Press ENTER to calibrate Conveyor");
 	bool ok = false;
@@ -114,11 +116,14 @@ int main(int argc, char **argv)
 		Logger::info("Value: " + std::to_string(refHigh) + " - OK? [y/N]");
 		ok = line == "y";
 	}
-	conf.saveCalibration(offset, refHigh);
-	heightSensor->stop();*/
+	heightSensor->stop();
+	conf.setOffsetCalibration(offset);
+	conf.setReferenceCalibration(refHigh);*/
+	//conf.saveCurrentConfigToFile();
 	// Calibrate HeightSensor END
 	// ###########################################
-	conf.saveCalibration(3647, 2330);
+	conf.setOffsetCalibration(3644);
+	conf.setReferenceCalibration(2302);
 
 	sensors->startEventLoop();
 	heightFSM = std::make_shared<HeightContext>(eventManager, heightSensor);
