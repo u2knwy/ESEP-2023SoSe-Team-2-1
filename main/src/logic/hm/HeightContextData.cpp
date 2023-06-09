@@ -34,11 +34,12 @@ void HeightContextData::resetMeasurement() {
 	maxValue = 0.0;
 	nMeasurements = 0;
 	measurements.clear();
-	measurements.shrink_to_fit();
+	//measurements.shrink_to_fit();
 }
 
 void HeightContextData::updateAvgAndMaxValue(float newValue) {
 	measurements.push_back(newValue);
+
 	if(nMeasurements == 0) {
 		avgValue = newValue;
 	} else {
@@ -47,9 +48,9 @@ void HeightContextData::updateAvgAndMaxValue(float newValue) {
 	nMeasurements++;
 	if(newValue > maxValue)
 		maxValue = newValue;
-/*	std::stringstream ss;
-	ss << "New value: " << std::setprecision(2) << newValue << " mm -> n=" << nMeasurements << "avg=" << avgValue << ", max=" << maxValue << " mm";
-	Logger::debug(ss.str());*/
+//	std::stringstream ss;
+//	ss << "New value: " << std::setprecision(2) << newValue << " mm -> n=" << nMeasurements << "avg=" << avgValue << ", max=" << maxValue << " mm";
+//	Logger::debug(ss.str());
 }
 
 float HeightContextData::getAverageValue() {
@@ -82,10 +83,10 @@ HeightResult HeightContextData::getCurrentResultV2() {
 	}
 
 	// Throw out first and last 10 % of measurements
-	int startIndex = totalValues * 0.1;
-	int endIndex = totalValues * 0.9;
-	int nValues = measurements.size() - startIndex;
-	float sum = 0.0;
+	int startIndex = totalValues * 0.05;
+	int endIndex = totalValues * 0.95;
+	int nValues = endIndex - startIndex + 1;
+	double sum = 0;
 	for(auto it = measurements.begin() + startIndex; it != measurements.end(); ++it) {
 		float val = *it;
 		sum += val;
@@ -95,6 +96,9 @@ HeightResult HeightContextData::getCurrentResultV2() {
 	float begin = measurements.at(startIndex);
 	float middle = measurements.at(totalValues/2);
 	float end = measurements.at(endIndex);
+	std::stringstream ss;
+	ss << "[HFSM] GET RESULT -> begin=" << begin << ", middle=" << middle << ", end=" << end;
+	Logger::debug(ss.str());
 
 	if(isFlat(begin) && isFlat(middle) && isFlat(end)) {
 		result.type = WorkpieceType::WS_F;
@@ -105,7 +109,7 @@ HeightResult HeightContextData::getCurrentResultV2() {
 	} else {
 		result.type = WorkpieceType::WS_UNKNOWN;
 	}
-	result.average = sum / nValues;
+	result.average = (float) (sum / nValues);
 	result.max = maxValue;
 	return result;
 }

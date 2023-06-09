@@ -151,17 +151,15 @@ void HeightSensor::threadFunction() {
 				addValue(heightRaw);
 				nMeasurements++;
 				// Every x measurements -> notify via callback
-				if((nMeasurements % HM_SEND_INTERVAL) == 0) {
+				if((nMeasurements % ADC_SAMPLE_SIZE) == 0) {
 					nMeasurements = 0;
 					//float heightMillimeter = adcValueToMillimeter(heightRaw);
-					//float heightMillimeter = getAverageHeight();
-					float heightMillimeter = getMedianHeight();
-					//Logger::debug("[HM] New value: " + std::to_string(heightMillimeter));
+					float heightMillimeter = getAverageHeight();
+					//float heightMillimeter = getMedianHeight();
 					if(heightValueCallback != nullptr) {
 						heightValueCallback(heightMillimeter);
 					}
 				}
-				this_thread::sleep_for(chrono::milliseconds(10));
 				adc->sample();
 			}
 

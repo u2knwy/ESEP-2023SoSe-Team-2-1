@@ -95,7 +95,6 @@ int main(int argc, char **argv)
 	std::signal(SIGABRT, cleanup);
 	std::signal(SIGTERM, cleanup);
 
-
 	std::shared_ptr<IHeightSensor> heightSensor = std::make_shared<HeightSensor>();
 
 	// ###########################################

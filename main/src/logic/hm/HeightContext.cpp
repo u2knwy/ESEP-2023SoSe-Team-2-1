@@ -23,6 +23,7 @@ HeightContext::HeightContext(std::shared_ptr<EventManager> mngr, std::shared_ptr
 	subscribeToEvents();
 	this->sensor = sensor;
 	sensor->registerMeasurementCallback(std::bind(&HeightContext::heightValueReceived, this, std::placeholders::_1));
+	sensor->start();
 }
 
 HeightContext::~HeightContext()
@@ -38,14 +39,12 @@ HeightContext::~HeightContext()
 
 void HeightContext::subscribeToEvents()
 {
-	/*	eventManager->subscribe(EventType::HALmotorFastRight, std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::HALmotorSlowRight, std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::HALmotorStop, std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));*/
-
-	eventManager->subscribe(EventType::MODE_STANDBY, std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::MODE_RUNNING, std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::MODE_ERROR, std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::MODE_ESTOP, std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::MOTOR_M_FAST, std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::MOTOR_S_FAST, std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::MOTOR_M_SLOW, std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::MOTOR_S_SLOW, std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::MOTOR_M_STOP, std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::MOTOR_S_STOP, std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
 
 }
 
@@ -74,8 +73,10 @@ void HeightContext::heightValueReceived(float valueMM) {
 	// Handle new value only if motor is running
 	if (running)
 	{
-		//Logger::debug("[hm] Handle new value: " + std::to_string(valueMM));
-		data->updateAvgAndMaxValue(valueMM);
+		if(getCurrentState() != HeightState::WAIT_FOR_WS) {
+			//Logger::debug("[hm] Handle new value: " + std::to_string(valueMM));
+			data->updateAvgAndMaxValue(valueMM);
+		}
 
 		bool handled;
 		if (valueMM > HEIGHT_FLAT - HEIGHT_TOL && valueMM < HEIGHT_FLAT + HEIGHT_TOL)
@@ -94,23 +95,11 @@ void HeightContext::heightValueReceived(float valueMM) {
 		{
 			handled = state->holeDetected();
 		}
-		/* TODO: We still have problems dealing with some "edge cases" at valid workpieces
-		 *  else {
-			handled = state->unknownDetected();
-		}*/
-
-		std::stringstream ss;
-		ss << "New value: " << std::setprecision(2) << valueMM << " mm";
-		if (handled)
+		else
 		{
-			HeightResult res = data->getCurrentResult();
-			ss << " -> type=" << res.type << ", avg=" << res.average << ", max=" << res.max << " mm";
-			Logger::debug(ss.str());
-		}/* else {
-			ss << " -> not handled!";
-		}*/
-	} else {
-		Logger::debug("[HFSM] New value received -> ignored because motor not running");
+			handled = state->unknownDetected();
+		}
+
 	}
 }
 

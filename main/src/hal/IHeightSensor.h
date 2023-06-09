@@ -19,7 +19,7 @@
 #define ADC_DEFAULT_OFFSET 3648
 #define ADC_DEFAULT_HIGH 2323
 // use N samples for averaging / max. value (sliding window)
-#define ADC_SAMPLE_SIZE 10
+#define ADC_SAMPLE_SIZE 100
 #define HM_SEND_INTERVAL 5
 
 class IHeightSensor {

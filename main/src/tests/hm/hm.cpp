@@ -17,7 +17,6 @@
 #include "hal/IHeightSensor.h"
 #include "logic/hm/HeightBasestate.h"
 #include "logic/hm/states/WaitForWorkpiece.h"
-#include "logic/hm/states/High.h"
 #include "logic/hm/states/WaitForBelt.h"
 #include "events/EventManager.h"
 #include "events/events.h"

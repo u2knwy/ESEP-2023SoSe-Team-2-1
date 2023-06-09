@@ -8,15 +8,14 @@
 #include "WaitForWorkpiece.h"
 #include "hal/HeightSensor.h"
 #include "WaitForBelt.h"
-#include "High.h"
 #include "logger/logger.hpp"
 
 void WaitForWorkpiece::entry() {
-	data->resetMeasurement();
 	Logger::debug("[HFSM] Waiting for new workpiece...");
 }
 
 void WaitForWorkpiece::exit() {
+	data->resetMeasurement();
 }
 
 HeightState WaitForWorkpiece::getCurrentState() {
@@ -36,7 +35,7 @@ bool WaitForWorkpiece::highDetected() {
 	data->setCurrentType(WorkpieceType::WS_OB);
 	actions->setMotorSlow(true);
 	exit();
-	new(this) High;
+	new(this) WaitForBelt;
 	entry();
 	return true;
 }

@@ -25,9 +25,6 @@ MotorState RightFast::getCurrentState() {
 
 bool RightFast::handleFlagsUpdated() {
 	std::stringstream ss;
-	ss << "[MotorFSM] Handle flags: ";
-	ss << "stop=" << data->getStop() << "slow=" << data->getSlow() << "fast=" << data->getFast();
-	Logger::debug(ss.str());
 	if(data->getStop() || (!data->getFast() && !data->getSlow())) {
 		exit();
 		new(this) Stopped;
