@@ -31,6 +31,10 @@ public:
 	void calibrateOffset();
 	void calibrateReference();
 	void saveCalibration();
+	void btnStartLedOn();
+	void btnStartLedOff();
+	void btnResetLedOn();
+	void btnResetLedOff();
 private:
 	std::shared_ptr<EventManager> eventManager;
 };

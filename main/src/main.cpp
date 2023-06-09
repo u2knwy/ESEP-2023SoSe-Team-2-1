@@ -79,20 +79,6 @@ int main(int argc, char **argv)
 
 	eventManager = std::make_shared<EventManager>();
 	actuators = std::make_shared<Actuators>(eventManager);
-/*	while(true) {
-		actuators->redLampOn();
-		actuators->q1LedOn();
-		actuators->q2LedOn();
-		actuators->startLedOn();
-		actuators->resetLedOn();
-		std::this_thread::sleep_for(std::chrono::seconds(1));
-		actuators->redLampOff();
-		actuators->q1LedOff();
-		actuators->q2LedOff();
-		actuators->startLedOff();
-		actuators->resetLedOff();
-		std::this_thread::sleep_for(std::chrono::seconds(1));
-	}*/
 	sensors = std::make_shared<Sensors>(eventManager);
 	mainFSM = std::make_shared<MainContext>(eventManager);
 

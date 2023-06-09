@@ -46,12 +46,10 @@ void EventManager::unsubscribe(EventType type, EventCallback callback) {
 
 void EventManager::sendEvent(const Event &event) {
 	std::stringstream ss;
-	ss << "[EventManager] sendEvent: " << EVENT_TO_STRING(event.type);
+	ss << "[EventManager] sendEvent: " << EVENT_TO_STRING(event.type) << " = " << (int) event.type;
 
 	if(event.data != -1)
 		ss << ", data: " << std::to_string(event.data);
-	Logger::info(ss.str());
-
 
 	if (subscribers.find(event.type) != subscribers.end()) {
 		Logger::debug("Notifiying subscribers...");
@@ -60,9 +58,10 @@ void EventManager::sendEvent(const Event &event) {
 			Logger::debug("Notifiying subscriber #" + std::to_string(i++));
 			callback(event);
 		}
-	}else{
-		Logger::debug("No subscribers for Event ");
+	} else{
+		ss << " -> No subscribers for Event!";
 	}
+	Logger::info(ss.str());
 }
 
 int EventManager::start() {

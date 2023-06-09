@@ -11,38 +11,41 @@
 #include "hal/Sensors.h"
 #include "events/EventManager.h"
 
-class HAL_Test : public ::testing::Test {
+class HAL_Test : public ::testing::Test
+{
 protected:
-/*	std::shared_ptr<EventManager> mngr;
-	//Actuators* actuators;
-	Sensors* sensors;
-	std::shared_ptr<HeightSensorFSM> hmFSM;
-	HeightSensor* hm;
+	/*	std::shared_ptr<EventManager> mngr;
+		//Actuators* actuators;
+		Sensors* sensors;
+		std::shared_ptr<HeightSensorFSM> hmFSM;
+		HeightSensor* hm;
 
-  void SetUp() override {
-	  mngr = std::make_shared<EventManager>();
-	  hmFSM = std::make_shared<HeightSensorFSM>();
-	  hm = new HeightSensor(hmFSM);
-  }
+		void SetUp() override {
+			mngr = std::make_shared<EventManager>();
+			hmFSM = std::make_shared<HeightSensorFSM>();
+			hm = new HeightSensor(hmFSM);
+		}
 
-  void TearDown() override {
-	  //delete actuators;
-	  delete sensors;
-	  delete hm;
-  }*/
+		void TearDown() override {
+			//delete actuators;
+			delete sensors;
+			delete hm;
+		}*/
 };
 
-static bool readPin(uint32_t port, uint32_t pin) {
+static bool readPin(uint32_t port, uint32_t pin)
+{
 	uintptr_t gpio_bank;
-	switch(port) {
+	switch (port)
+	{
 	case 0:
-		gpio_bank = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_0);
+		gpio_bank = mmap_device_io(SIZE_4KB, (uint64_t)GPIO_BANK_0);
 		break;
 	case 1:
-		gpio_bank = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_1);
+		gpio_bank = mmap_device_io(SIZE_4KB, (uint64_t)GPIO_BANK_1);
 		break;
 	case 2:
-		gpio_bank = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_2);
+		gpio_bank = mmap_device_io(SIZE_4KB, (uint64_t)GPIO_BANK_2);
 		break;
 	default:
 		perror("Invalid parameter 'port' for 'readPin' function");
@@ -51,7 +54,7 @@ static bool readPin(uint32_t port, uint32_t pin) {
 	uint32_t reg = (in32(GPIO_DATAIN(gpio_bank)) >> pin);
 	std::cout << "REG: " << std::bitset<32>(reg) << std::endl;
 	bool result = (reg & 0x1) == 0x1;
-	munmap_device_io(gpio_bank, GPIO_SIZE);
+	munmap_device_io(gpio_bank, SIZE_4KB);
 	return result;
 }
 

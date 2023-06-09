@@ -141,3 +141,40 @@ void MainActions::saveCalibration() {
 	ss << "; CAL_REF=" << cal.calRef;
 	ss << " -> saved to file!" << std::endl;
 }
+
+void MainActions::btnStartLedOn() {
+	Event ev;
+	ev.data = 1;
+	ev.type = EventType::LED_M_START;
+	eventManager->sendEvent(ev);
+	ev.type = EventType::LED_S_START;
+	eventManager->sendEvent(ev);
+}
+
+void MainActions::btnResetLedOn() {
+	Event ev;
+	ev.data = 1;
+	ev.type = EventType::LED_M_RESET;
+	eventManager->sendEvent(ev);
+	ev.type = EventType::LED_S_RESET;
+	eventManager->sendEvent(ev);
+}
+
+void MainActions::btnStartLedOff() {
+	Event ev;
+	ev.data = 0;
+	ev.type = EventType::LED_M_START;
+	eventManager->sendEvent(ev);
+	ev.type = EventType::LED_S_START;
+	eventManager->sendEvent(ev);
+}
+
+void MainActions::btnResetLedOff() {
+	Event ev;
+	ev.data = 0;
+	ev.type = EventType::LED_M_RESET;
+	eventManager->sendEvent(ev);
+	ev.type = EventType::LED_S_RESET;
+	eventManager->sendEvent(ev);
+}
+

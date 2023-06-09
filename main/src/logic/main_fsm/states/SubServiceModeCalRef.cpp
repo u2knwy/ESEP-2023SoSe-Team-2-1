@@ -15,7 +15,8 @@
 void SubServiceModeCalRef::entry() {
 	Logger::info("[ServiceMode] Calibrating HeightSensor reference (High)");
 	Logger::info("Place a high workpiece below the HeightSensor and press START to calibrate reference.");
-	Logger::info("Press RESET button to continue");
+	actions->btnStartLedOn();
+	actions->btnResetLedOff();
 	done = false;
 }
 
@@ -24,6 +25,8 @@ void SubServiceModeCalRef::exit() {
 
 bool SubServiceModeCalRef::master_btnStart_PressedShort() {
 	actions->calibrateReference();
+	Logger::info("Calibration done. Press RESET button to continue or START to repeat");
+	actions->btnResetLedOn();
 	done = true;
 	return true;
 }
@@ -42,6 +45,8 @@ bool SubServiceModeCalRef::master_btnReset_Pressed() {
 
 bool SubServiceModeCalRef::slave_btnStart_PressedShort() {
 	actions->calibrateReference();
+	Logger::info("Calibration done. Press RESET button to continue or START to repeat");
+	actions->btnResetLedOn();
 	done = true;
 	return true;
 }

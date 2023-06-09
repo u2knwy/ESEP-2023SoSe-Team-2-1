@@ -9,14 +9,17 @@
 #include "logger/logger.hpp"
 #include "configuration/Configuration.h"
 #ifdef SIM_ACTIVE
-	#include "simqnxgpioapi.h" // must be last include !!!
-	#include "simqnxirqapi.h"
+#include "simqnxgpioapi.h" // must be last include !!!
+#include "simqnxirqapi.h"
 #endif
 
-Actuators::Actuators(std::shared_ptr<EventManager> mngr) : eventManager(mngr) {
+Actuators::Actuators(std::shared_ptr<EventManager> mngr) : eventManager(mngr)
+{
 	isMaster = Configuration::getInstance().systemIsMaster();
-	gpio_bank_1 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_1);
-	gpio_bank_2 = mmap_device_io(GPIO_SIZE, (uint64_t) GPIO_BANK_2);
+	gpio_bank_1 = mmap_device_io(SIZE_4KB, (uint64_t)GPIO_BANK_1);
+	gpio_bank_2 = mmap_device_io(SIZE_4KB, (uint64_t)GPIO_BANK_2);
+
+	configurePins();
 
 	// Default: Stop Motor
 	setMotorStop(true);
@@ -36,12 +39,14 @@ Actuators::Actuators(std::shared_ptr<EventManager> mngr) : eventManager(mngr) {
 	slowCnt = 0;
 }
 
-Actuators::~Actuators() {
-	munmap_device_io(gpio_bank_1, GPIO_SIZE);
-	munmap_device_io(gpio_bank_2, GPIO_SIZE);
+Actuators::~Actuators()
+{
+	munmap_device_io(gpio_bank_1, SIZE_4KB);
+	munmap_device_io(gpio_bank_2, SIZE_4KB);
 }
 
-void Actuators::configurePins() {
+void Actuators::configurePins()
+{
 	ThreadCtl(_NTO_TCTL_IO, 0);
 
 	// Request interrupt and IO abilities.
@@ -51,7 +56,8 @@ void Actuators::configurePins() {
 			PROCMGR_ADN_ROOT | PROCMGR_AOP_ALLOW | PROCMGR_AID_IO,
 			PROCMGR_ADN_NONROOT | PROCMGR_AOP_ALLOW | PROCMGR_AID_IO,
 			PROCMGR_AID_EOL);
-	if (procmgr_status != EOK) {
+	if (procmgr_status != EOK)
+	{
 		perror("Requested abilities failed or denied!");
 		exit(EXIT_FAILURE);
 	}
@@ -70,7 +76,8 @@ void Actuators::configurePins() {
 	out32(GPIO_OE_REGISTER(gpio_bank_2), temp & ~outputs);
 }
 
-void Actuators::subscribeToEvents() {
+void Actuators::subscribeToEvents()
+{
 	// Subscribe to motor events - TODO: Handle right events
 	eventManager->subscribe(EventType::HALmotorStop, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
 	eventManager->subscribe(EventType::HALmotorFastRight, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
@@ -95,42 +102,60 @@ void Actuators::subscribeToEvents() {
 	eventManager->subscribe(EventType::MODE_ERROR, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
 
 	// System-dependent events
-	if(isMaster) {
+	if (isMaster)
+	{
 		eventManager->subscribe(EventType::ESTOP_M_PRESSED, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
 		eventManager->subscribe(EventType::WARNING_M, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	} else {
+		eventManager->subscribe(EventType::LED_M_START, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+		eventManager->subscribe(EventType::LED_M_RESET, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+	}
+	else
+	{
 		eventManager->subscribe(EventType::ESTOP_S_PRESSED, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
 		eventManager->subscribe(EventType::WARNING_S, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+		eventManager->subscribe(EventType::LED_S_START, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+		eventManager->subscribe(EventType::LED_S_RESET, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
 	}
 }
 
-void Actuators::handleEvent(Event event) {
+void Actuators::handleEvent(Event event)
+{
 	std::lock_guard<std::mutex> lock(mutex);
 	Logger::debug("Actuators handle Event: " + EVENT_TO_STRING(event.type) + " - data: " + std::to_string(event.data));
-	switch(event.type) {
+	switch (event.type)
+	{
 	case EventType::HALmotorStop:
 	case EventType::MOTOR_M_STOP:
-		if(event.data == 0 && stopCnt > 0) {
+		if (event.data == 0 && stopCnt > 0)
+		{
 			stopCnt--;
-		} else if(event.data == 1) {
+		}
+		else if (event.data == 1)
+		{
 			stopCnt++;
 		}
 		setMotorStop(stopCnt > 0);
 		break;
 	case EventType::HALmotorFastRight:
 	case EventType::MOTOR_M_FAST:
-		if(event.data == 0 && fastCnt > 0) {
+		if (event.data == 0 && fastCnt > 0)
+		{
 			fastCnt--;
-		} else if(event.data == 1) {
+		}
+		else if (event.data == 1)
+		{
 			fastCnt++;
 		}
 		setMotorRight(fastCnt > 0);
 		break;
 	case EventType::HALmotorSlowRight:
 	case EventType::MOTOR_M_SLOW:
-		if(event.data == 0 && slowCnt > 0) {
+		if (event.data == 0 && slowCnt > 0)
+		{
 			slowCnt--;
-		} else if(event.data == 1) {
+		}
+		else if (event.data == 1)
+		{
 			slowCnt++;
 		}
 		setMotorSlow(slowCnt > 0);
@@ -140,60 +165,82 @@ void Actuators::handleEvent(Event event) {
 		motorStop();
 		break;
 	case EventType::MODE_STANDBY:
-		standbyMode(); break;
+		standbyMode();
+		break;
 	case EventType::MODE_RUNNING:
-		runningMode(); break;
+		runningMode();
+		break;
 	case EventType::MODE_SERVICE:
-		serviceMode(); break;
+		serviceMode();
+		break;
 	case EventType::MODE_ESTOP:
-		estopMode(); break;
+		estopMode();
+		break;
 	case EventType::MODE_ERROR:
-		errorMode(); break;
+		errorMode();
+		break;
 	case EventType::WARNING_M:
 	case EventType::WARNING_S:
 		setYellowBlinking(event.data == 1);
+		break;
+	case EventType::LED_M_START:
+	case EventType::LED_S_START:
+		event.data == 1 ? startLedOn() : startLedOff();
+		break;
+	case EventType::LED_M_RESET:
+	case EventType::LED_S_RESET:
+		event.data == 1 ? resetLedOn() : resetLedOff();
 		break;
 	default:
 		Logger::warn(EVENT_TO_STRING(event.type) + " was not handled by actuators");
 	}
 }
 
-void Actuators::setGreenBlinking(bool on) {
-	if(th_GreenBlinking.joinable()) {
+void Actuators::setGreenBlinking(bool on)
+{
+	if (th_GreenBlinking.joinable())
+	{
 		greenBlinking = false;
 		th_GreenBlinking.join();
 	}
 
-	if(on) {
+	if (on)
+	{
 		th_GreenBlinking = std::thread(&Actuators::thGreenLampFlashing, this, false);
 	}
 }
 
-void Actuators::setYellowBlinking(bool on) {
-	if(th_YellowBlinking.joinable()) {
+void Actuators::setYellowBlinking(bool on)
+{
+	if (th_YellowBlinking.joinable())
+	{
 		yellowBlinking = false;
 		th_YellowBlinking.join();
 	}
 
-	if(on) {
+	if (on)
+	{
 		th_YellowBlinking = std::thread(&Actuators::thYellowLampFlashing, this, false);
 	}
 }
 
-void Actuators::setRedBlinking(bool on, bool fast) {
-	if(redBlinking) {
+void Actuators::setRedBlinking(bool on, bool fast)
+{
+	if (redBlinking)
+	{
 		redBlinking = false;
-		if(th_RedBlinking.joinable())
+		if (th_RedBlinking.joinable())
 			th_RedBlinking.join();
 	}
 
-	if(on) {
+	if (on)
+	{
 		th_RedBlinking = std::thread(&Actuators::thRedLampFlashing, this, fast);
 	}
 }
 
-
-void Actuators::standbyMode() {
+void Actuators::standbyMode()
+{
 	setGreenBlinking(false);
 	setYellowBlinking(false);
 	setRedBlinking(false, false);
@@ -210,7 +257,8 @@ void Actuators::standbyMode() {
 	setMotorSlow(false);
 }
 
-void Actuators::runningMode() {
+void Actuators::runningMode()
+{
 	setGreenBlinking(false);
 	setYellowBlinking(false);
 	setRedBlinking(false, false);
@@ -227,7 +275,8 @@ void Actuators::runningMode() {
 	setMotorSlow(false);
 }
 
-void Actuators::serviceMode() {
+void Actuators::serviceMode()
+{
 	yellowLampOff();
 	redLampOff();
 	setGreenBlinking(true);
@@ -241,7 +290,8 @@ void Actuators::serviceMode() {
 	setMotorSlow(false);
 }
 
-void Actuators::errorMode() {
+void Actuators::errorMode()
+{
 	greenLampOff();
 	yellowLampOff();
 	setRedBlinking(true, true);
@@ -251,7 +301,11 @@ void Actuators::errorMode() {
 	setMotorSlow(false);
 }
 
-void Actuators::estopMode() {
+void Actuators::estopMode()
+{
+	setGreenBlinking(false);
+	setYellowBlinking(false);
+	setRedBlinking(false, false);
 	greenLampOff();
 	yellowLampOff();
 	redLampOff();
@@ -261,35 +315,43 @@ void Actuators::estopMode() {
 	setMotorSlow(false);
 }
 
-void Actuators::greenLampOn() {
+void Actuators::greenLampOn()
+{
 	out32(GPIO_SETDATAOUT(gpio_bank_1), LAMP_GREEN_PIN);
 }
 
-void Actuators::greenLampOff() {
+void Actuators::greenLampOff()
+{
 	out32(GPIO_CLEARDATAOUT(gpio_bank_1), LAMP_GREEN_PIN);
 }
 
-void Actuators::yellowLampOn() {
+void Actuators::yellowLampOn()
+{
 	out32(GPIO_SETDATAOUT(gpio_bank_1), LAMP_YELLOW_PIN);
 }
 
-void Actuators::yellowLampOff() {
+void Actuators::yellowLampOff()
+{
 	out32(GPIO_CLEARDATAOUT(gpio_bank_1), LAMP_YELLOW_PIN);
 }
 
-void Actuators::redLampOn() {
+void Actuators::redLampOn()
+{
 	out32(GPIO_SETDATAOUT(gpio_bank_1), LAMP_RED_PIN);
 }
 
-void Actuators::redLampOff() {
+void Actuators::redLampOff()
+{
 	out32(GPIO_CLEARDATAOUT(gpio_bank_1), LAMP_RED_PIN);
 }
 
-void Actuators::thRedLampFlashing(bool fast) {
+void Actuators::thRedLampFlashing(bool fast)
+{
 	int t_ms;
 	t_ms = fast ? ON_TIME_FAST_MS : ON_TIME_SLOW_MS;
 	redBlinking = true;
-	while(redBlinking) {
+	while (redBlinking)
+	{
 		redLampOn();
 		std::this_thread::sleep_for(std::chrono::milliseconds(t_ms));
 		redLampOff();
@@ -297,11 +359,13 @@ void Actuators::thRedLampFlashing(bool fast) {
 	}
 }
 
-void Actuators::thYellowLampFlashing(bool fast) {
+void Actuators::thYellowLampFlashing(bool fast)
+{
 	int t_ms;
 	t_ms = fast ? ON_TIME_FAST_MS : ON_TIME_SLOW_MS;
 	yellowBlinking = true;
-	while(yellowBlinking) {
+	while (yellowBlinking)
+	{
 		yellowLampOn();
 		std::this_thread::sleep_for(std::chrono::milliseconds(t_ms));
 		yellowLampOff();
@@ -309,11 +373,13 @@ void Actuators::thYellowLampFlashing(bool fast) {
 	}
 }
 
-void Actuators::thGreenLampFlashing(bool fast) {
+void Actuators::thGreenLampFlashing(bool fast)
+{
 	int t_ms;
 	t_ms = fast ? ON_TIME_FAST_MS : ON_TIME_SLOW_MS;
 	greenBlinking = true;
-	while(greenBlinking) {
+	while (greenBlinking)
+	{
 		greenLampOn();
 		std::this_thread::sleep_for(std::chrono::milliseconds(t_ms));
 		greenLampOff();
@@ -321,92 +387,112 @@ void Actuators::thGreenLampFlashing(bool fast) {
 	}
 }
 
-void Actuators::startLedOn() {
+void Actuators::startLedOn()
+{
 	out32(GPIO_SETDATAOUT(gpio_bank_2), LED_START_PIN);
 }
 
-void Actuators::startLedOff() {
+void Actuators::startLedOff()
+{
 	out32(GPIO_CLEARDATAOUT(gpio_bank_2), LED_START_PIN);
 }
 
-void Actuators::resetLedOn() {
+void Actuators::resetLedOn()
+{
 	out32(GPIO_SETDATAOUT(gpio_bank_2), LED_RESET_PIN);
 }
 
-void Actuators::resetLedOff() {
+void Actuators::resetLedOff()
+{
 	out32(GPIO_CLEARDATAOUT(gpio_bank_2), LED_RESET_PIN);
 }
 
-void Actuators::q1LedOn() {
+void Actuators::q1LedOn()
+{
 	out32(GPIO_SETDATAOUT(gpio_bank_2), LED_Q1_PIN);
 }
 
-void Actuators::q1LedOff() {
+void Actuators::q1LedOff()
+{
 	out32(GPIO_CLEARDATAOUT(gpio_bank_2), LED_Q1_PIN);
 }
 
-void Actuators::q2LedOn() {
+void Actuators::q2LedOn()
+{
 	out32(GPIO_SETDATAOUT(gpio_bank_2), LED_Q2_PIN);
 }
 
-void Actuators::q2LedOff() {
+void Actuators::q2LedOff()
+{
 	out32(GPIO_CLEARDATAOUT(gpio_bank_2), LED_Q2_PIN);
 }
 
-void Actuators::setMotorStop(bool stop) {
-	if(stop) {
+void Actuators::setMotorStop(bool stop)
+{
+	if (stop)
+	{
 		out32(GPIO_SETDATAOUT(gpio_bank_1), MOTOR_STOP_PIN);
-	} else {
-		out32( GPIO_CLEARDATAOUT(gpio_bank_1), MOTOR_STOP_PIN);
+	}
+	else
+	{
+		out32(GPIO_CLEARDATAOUT(gpio_bank_1), MOTOR_STOP_PIN);
 	}
 	out32(GPIO_CLEARDATAOUT(gpio_bank_1), MOTOR_RIGHT_PIN);
 	out32(GPIO_CLEARDATAOUT(gpio_bank_1), MOTOR_LEFT_PIN);
 }
 
-void Actuators::setMotorSlow(bool slow) {
-	if(slow)
+void Actuators::setMotorSlow(bool slow)
+{
+	if (slow)
 		out32(GPIO_SETDATAOUT(gpio_bank_1), MOTOR_SLOW_PIN);
 	else
 		out32(GPIO_CLEARDATAOUT(gpio_bank_1), MOTOR_SLOW_PIN);
 }
 
-void Actuators::setMotorRight(bool right) {
-	if(right)
+void Actuators::setMotorRight(bool right)
+{
+	if (right)
 		out32(GPIO_SETDATAOUT(gpio_bank_1), MOTOR_RIGHT_PIN);
 	else
 		out32(GPIO_CLEARDATAOUT(gpio_bank_1), MOTOR_RIGHT_PIN);
 }
 
-void Actuators::setMotorLeft(bool left) {
-	if(left)
+void Actuators::setMotorLeft(bool left)
+{
+	if (left)
 		out32(GPIO_SETDATAOUT(gpio_bank_1), MOTOR_LEFT_PIN);
 	else
 		out32(GPIO_CLEARDATAOUT(gpio_bank_1), MOTOR_LEFT_PIN);
 }
 
-void Actuators::openSwitch() {
+void Actuators::openSwitch()
+{
 	out32(GPIO_SETDATAOUT(gpio_bank_1), SWITCH_PIN);
 }
 
-void Actuators::closeSwitch() {
+void Actuators::closeSwitch()
+{
 	out32(GPIO_CLEARDATAOUT(gpio_bank_1), SWITCH_PIN);
 }
 
-void Actuators::motorStop() {
+void Actuators::motorStop()
+{
 	setMotorStop(true);
 	setMotorSlow(false);
 	setMotorRight(false);
 	setMotorLeft(false);
 }
 
-void Actuators::motorSlow() {
+void Actuators::motorSlow()
+{
 	setMotorStop(false);
 	setMotorSlow(true);
 	setMotorRight(true);
 	setMotorLeft(false);
 }
 
-void Actuators::motorFast() {
+void Actuators::motorFast()
+{
 	setMotorStop(false);
 	setMotorSlow(false);
 	setMotorRight(true);

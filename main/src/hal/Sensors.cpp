@@ -20,7 +20,7 @@ static std::chrono::steady_clock::time_point lastStartBtnPressTime;
 
 Sensors::Sensors(std::shared_ptr<EventManager> mngr) : eventManager(mngr)
 {
-	gpio_bank_0 = mmap_device_io(GPIO_SIZE, (uint64_t)GPIO_BANK_0);
+	gpio_bank_0 = mmap_device_io(SIZE_4KB, (uint64_t)GPIO_BANK_0);
 
 	/* ### Create channel to receive interrupt pulse messages ### */
 	chanID = ChannelCreate(0);
@@ -60,7 +60,7 @@ Sensors::~Sensors()
 		exit(EXIT_FAILURE);
 	}
 
-	munmap_device_io(gpio_bank_0, GPIO_SIZE);
+	munmap_device_io(gpio_bank_0, SIZE_4KB);
 }
 
 void Sensors::configurePins()

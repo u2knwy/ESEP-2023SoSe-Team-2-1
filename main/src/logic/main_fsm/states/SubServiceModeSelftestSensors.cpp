@@ -15,6 +15,8 @@
 void SubServiceModeSelftestSensors::entry() {
 	Logger::info("[ServiceMode] Selftest Sensors");
 	Logger::info("Interrupt all sensors and watch console outputs. Press START button if ok.");
+	actions->btnStartLedOn();
+	actions->btnResetLedOff();
 }
 
 void SubServiceModeSelftestSensors::exit() {

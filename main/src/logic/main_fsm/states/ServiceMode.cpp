@@ -99,6 +99,12 @@ bool ServiceMode::slave_LBR_Unblocked() {
 
 bool ServiceMode::master_btnStart_PressedShort() {
 	bool handled = substateServiceMode->master_btnStart_PressedShort();
+	if(substateServiceMode->isSubEndState()) {
+		exit();
+		new(this) Standby;
+		entry();
+		return true;
+	}
 	return handled;
 }
 
@@ -122,6 +128,12 @@ bool ServiceMode::master_btnReset_Pressed() {
 
 bool ServiceMode::slave_btnStart_PressedShort() {
 	bool handled = substateServiceMode->slave_btnStart_PressedShort();
+	if(substateServiceMode->isSubEndState()) {
+		exit();
+		new(this) Standby;
+		entry();
+		return true;
+	}
 	return handled;
 }
 

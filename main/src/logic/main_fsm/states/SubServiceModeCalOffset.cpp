@@ -15,7 +15,8 @@
 void SubServiceModeCalOffset::entry() {
 	Logger::info("[ServiceMode] Calibrating HeightSensor offset (Belt)");
 	Logger::info("Make sure no workpiece is below the HeightSensor and press START to calibrate offset.");
-	Logger::info("Press RESET button to continue");
+	actions->btnStartLedOn();
+	actions->btnResetLedOff();
 	done = false;
 }
 
@@ -24,6 +25,8 @@ void SubServiceModeCalOffset::exit() {
 
 bool SubServiceModeCalOffset::master_btnStart_PressedShort() {
 	actions->calibrateOffset();
+	Logger::info("Calibration done. Press RESET button to continue or START to repeat");
+	actions->btnResetLedOn();
 	done = true;
 	return true;
 }
@@ -41,6 +44,7 @@ bool SubServiceModeCalOffset::master_btnReset_Pressed() {
 
 bool SubServiceModeCalOffset::slave_btnStart_PressedShort() {
 	actions->calibrateOffset();
+	Logger::info("Calibration done. Press RESET button to continue or START to repeat");
 	done = true;
 	return true;
 }

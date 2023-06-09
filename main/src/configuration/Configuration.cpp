@@ -39,7 +39,6 @@ bool Configuration::readConfigFromFile() {
 			if(std::getline(iss, key, '=')) {
 				std::string value;
 				if(std::getline(iss, value)) {
-					Logger::debug(key + " = " + value);
 					if (key == "ORDER") {
 						std::string wpType;
 						std::istringstream tokenStream(value);
