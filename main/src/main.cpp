@@ -48,6 +48,10 @@ void cleanup(int exitCode)
 	running = false;
 }
 
+void startEvMgr(shared_ptr<EventManager> EventMgr){
+	EventMgr->start();
+}
+
 int main(int argc, char **argv)
 {
 	// Initialize Logger
@@ -81,6 +85,7 @@ int main(int argc, char **argv)
 	conf.setPusherMounted(options.pusher);
 
 	eventManager = std::make_shared<EventManager>();
+	thread thread_ev(startEvMgr, eventManager);
 	sensors = std::make_shared<Sensors>(eventManager);
 	actuators = std::make_shared<Actuators>(eventManager);
 	actuators->setMotorStop(true);
@@ -136,7 +141,7 @@ int main(int argc, char **argv)
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 
 	}
-
+	thread_ev.join();
 	Logger::info("Sorting Machine was terminated.");
 	return EXIT_SUCCESS;
 }
