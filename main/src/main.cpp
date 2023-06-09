@@ -9,6 +9,7 @@
 #include "hal/HeightSensor.h"
 #include "hal/Actuators.h"
 #include "logic/main_fsm/MainContext.h"
+#include "logic/motor_fsm/MotorContext.h"
 #include "events/events.h"
 #include "events/EventManager.h"
 #include "configuration/Configuration.h"
@@ -30,6 +31,8 @@ std::shared_ptr<Sensors> sensors;
 std::shared_ptr<Actuators> actuators;
 std::shared_ptr<EventManager> eventManager;
 std::shared_ptr<MainContext> mainFSM;
+std::shared_ptr<MotorContext> motorFSM_Master;
+std::shared_ptr<MotorContext> motorFSM_Slave;
 
 // Set this variable to false to stop main function from executing...
 bool running = true;
@@ -78,16 +81,20 @@ int main(int argc, char **argv)
 	conf.setPusherMounted(options.pusher);
 
 	eventManager = std::make_shared<EventManager>();
-	actuators = std::make_shared<Actuators>(eventManager);
 	sensors = std::make_shared<Sensors>(eventManager);
+	actuators = std::make_shared<Actuators>(eventManager);
+	actuators->setMotorStop(true);
+
+	// Run FSM's
 	mainFSM = std::make_shared<MainContext>(eventManager);
+	motorFSM_Master = std::make_shared<MotorContext>(eventManager, true);
+	motorFSM_Slave = std::make_shared<MotorContext>(eventManager, false);
 
 	// Register handler function to be called if the program is not terminated properly
 	std::signal(SIGINT, cleanup);
 	std::signal(SIGABRT, cleanup);
 	std::signal(SIGTERM, cleanup);
 
-	actuators->setMotorStop(true);
 
 	std::shared_ptr<IHeightSensor> heightSensor = std::make_shared<HeightSensor>();
 

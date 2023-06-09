@@ -19,12 +19,12 @@ MainState Standby::getCurrentState() {
 
 void Standby::entry() {
 	Logger::info("Entered Standby mode");
-	actions->setMotorStop(true);
+	actions->setMotorStopMaster(true);
+	actions->setMotorStopSlave(true);
 	actions->setStandbyMode();
 }
 
 void Standby::exit() {
-	Logger::debug("Standby::exit");
 }
 
 bool Standby::master_btnStart_PressedShort() {

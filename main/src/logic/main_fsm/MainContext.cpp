@@ -19,6 +19,7 @@ MainContext::MainContext(std::shared_ptr<EventManager> mngr) : eventManager(mngr
 	this->state = new Standby();
 	state->setAction(actions);
 	state->setData(data);
+	state->entry();
 	subscribeToEvents();
 }
 

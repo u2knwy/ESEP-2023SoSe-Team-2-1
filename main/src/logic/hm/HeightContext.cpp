@@ -52,25 +52,21 @@ void HeightContext::subscribeToEvents()
 void HeightContext::handleEvent(Event event)
 {
 	Logger::debug("[HFSM] handleEvent: " + EVENT_TO_STRING(event.type));
-	if (event.type == EventType::HALmotorFastRight || event.type == EventType::HALmotorSlowRight)
-	{
+	switch(event.type) {
+	case EventType::MOTOR_M_FAST:
+	case EventType::MOTOR_S_FAST:
+	case EventType::MOTOR_M_SLOW:
+	case EventType::MOTOR_S_SLOW:
 		this->running = true;
 		//sensor->start();
-	}
-	else if (event.type == EventType::HALmotorStop)
-	{
+		break;
+	case EventType::MOTOR_M_STOP:
+	case EventType::MOTOR_S_STOP:
 		this->running = false;
 		//sensor->stop();
-	}
-	else if (event.type == EventType::MODE_STANDBY || event.type == EventType::MODE_ERROR || event.type == EventType::MODE_ESTOP)
-	{
-		this->running = false;
-		sensor->stop();
-	}
-	else if (event.type == EventType::MODE_RUNNING)
-	{
-		this->running = true;
-		sensor->start();
+		break;
+	default:
+		Logger::warn("[HFSM] Event was not handled: " + EVENT_TO_STRING(event.type));
 	}
 }
 

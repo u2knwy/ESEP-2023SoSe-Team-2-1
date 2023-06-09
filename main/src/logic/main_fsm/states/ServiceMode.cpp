@@ -19,8 +19,8 @@ MainState ServiceMode::getCurrentState() {
 
 void ServiceMode::entry() {
 	Logger::info("Entered Service mode");
-	initSubStateServiceMode();
 	actions->setServiceMode();
+	initSubStateServiceMode();
 }
 
 void ServiceMode::exit() {

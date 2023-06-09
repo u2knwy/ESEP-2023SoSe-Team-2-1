@@ -16,9 +16,12 @@ class MainActions {
 public:
 	MainActions(std::shared_ptr<EventManager> mngr);
 	virtual ~MainActions();
-	void setMotorStop(bool stop);
-	void setMotorFast(bool fast);
-	void setMotorSlow(bool slow);
+	void setMotorStopMaster(bool stop);
+	void setMotorFastMaster(bool fast);
+	void setMotorSlowMaster(bool slow);
+	void setMotorStopSlave(bool stop);
+	void setMotorFastSlave(bool fast);
+	void setMotorSlowSlave(bool slow);
 	void setStandbyMode();
 	void setRunningMode();
 	void setServiceMode();

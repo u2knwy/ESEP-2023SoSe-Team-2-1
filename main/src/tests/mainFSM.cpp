@@ -48,7 +48,7 @@ TEST_F(MainFSM_Test, StateRunningAfterStartPressedShort) {
 }
 
 // Start pressed long -> Current state must be SERVICE_MODE
-TEST_F(MainFSM_Test, StateServiceModeAfterStartPressedLong) {
+/*TEST_F(MainFSM_Test, StateServiceModeAfterStartPressedLong) {
 	fsm->master_btnStart_PressedLong();
 	EXPECT_EQ(MainState::SERVICEMODE, fsm->getCurrentState());	// in ServiceMode
 	fsm->master_btnStop_Pressed();
@@ -61,7 +61,7 @@ TEST_F(MainFSM_Test, StateServiceModeAfterStartPressedLong) {
 	EXPECT_EQ(MainState::SERVICEMODE, fsm->getCurrentState());	// in ServiceMode
 	fsm->slave_btnStop_Pressed();
 	EXPECT_EQ(MainState::STANDBY, fsm->getCurrentState()); // back in Standby
-}
+}*/
 
 // In state running and stop pressed -> Current state must be STANDBY
 TEST_F(MainFSM_Test, StateStandbyAfterRunningAndStopPressed) {

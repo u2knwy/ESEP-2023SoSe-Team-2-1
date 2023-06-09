@@ -78,13 +78,6 @@ void Actuators::configurePins()
 
 void Actuators::subscribeToEvents()
 {
-	// Subscribe to motor events - TODO: Handle right events
-	eventManager->subscribe(EventType::HALmotorStop, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::HALmotorFastRight, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::HALmotorSlowRight, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::MOTOR_M_STOP, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::MOTOR_M_FAST, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::MOTOR_M_SLOW, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
 
 	// Subscribe to lamp events
 	eventManager->subscribe(EventType::HALroteLampeAn, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
@@ -108,6 +101,9 @@ void Actuators::subscribeToEvents()
 		eventManager->subscribe(EventType::WARNING_M, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
 		eventManager->subscribe(EventType::LED_M_START, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
 		eventManager->subscribe(EventType::LED_M_RESET, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+		eventManager->subscribe(EventType::MOTOR_M_STOP, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+		eventManager->subscribe(EventType::MOTOR_M_FAST, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+		eventManager->subscribe(EventType::MOTOR_M_SLOW, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
 	}
 	else
 	{
@@ -115,6 +111,9 @@ void Actuators::subscribeToEvents()
 		eventManager->subscribe(EventType::WARNING_S, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
 		eventManager->subscribe(EventType::LED_S_START, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
 		eventManager->subscribe(EventType::LED_S_RESET, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+		eventManager->subscribe(EventType::MOTOR_S_STOP, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+		eventManager->subscribe(EventType::MOTOR_S_FAST, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
+		eventManager->subscribe(EventType::MOTOR_S_SLOW, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
 	}
 }
 
@@ -124,41 +123,17 @@ void Actuators::handleEvent(Event event)
 	Logger::debug("Actuators handle Event: " + EVENT_TO_STRING(event.type) + " - data: " + std::to_string(event.data));
 	switch (event.type)
 	{
-	case EventType::HALmotorStop:
 	case EventType::MOTOR_M_STOP:
-		if (event.data == 0 && stopCnt > 0)
-		{
-			stopCnt--;
-		}
-		else if (event.data == 1)
-		{
-			stopCnt++;
-		}
-		setMotorStop(stopCnt > 0);
+	case EventType::MOTOR_S_STOP:
+		motorStop();
 		break;
-	case EventType::HALmotorFastRight:
 	case EventType::MOTOR_M_FAST:
-		if (event.data == 0 && fastCnt > 0)
-		{
-			fastCnt--;
-		}
-		else if (event.data == 1)
-		{
-			fastCnt++;
-		}
-		setMotorRight(fastCnt > 0);
+	case EventType::MOTOR_S_FAST:
+		motorFast();
 		break;
-	case EventType::HALmotorSlowRight:
 	case EventType::MOTOR_M_SLOW:
-		if (event.data == 0 && slowCnt > 0)
-		{
-			slowCnt--;
-		}
-		else if (event.data == 1)
-		{
-			slowCnt++;
-		}
-		setMotorSlow(slowCnt > 0);
+	case EventType::MOTOR_S_SLOW:
+		motorSlow();
 		break;
 	case EventType::ESTOP_M_PRESSED:
 	case EventType::ESTOP_S_PRESSED:

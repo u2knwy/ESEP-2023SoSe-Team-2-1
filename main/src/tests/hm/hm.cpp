@@ -50,22 +50,22 @@ TEST_F(HeightSensor_Test, InitialStateAfterStartup) {
 
 TEST_F(HeightSensor_Test, WaitForWorkpieceWhenMotorRunning) {
 	Event ev;
-	ev.type = EventType::HALmotorFastRight;
+	ev.type = EventType::MOTOR_M_FAST;
 	fsm->handleEvent(ev);
 	EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
 
-	ev.type = EventType::HALmotorStop;
+	ev.type = EventType::MOTOR_M_STOP;
 	fsm->handleEvent(ev);
 	EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
 
-	ev.type = EventType::HALmotorSlowRight;
+	ev.type = EventType::MOTOR_M_SLOW;
 	fsm->handleEvent(ev);
 	EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
 }
 
 TEST_F(HeightSensor_Test, HighDetected) {
 	Event ev;
-	ev.type = EventType::HALmotorFastRight;
+	ev.type = EventType::MOTOR_M_FAST;
 	fsm->handleEvent(ev);
 	EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
 
@@ -82,7 +82,7 @@ TEST_F(HeightSensor_Test, HighDetected) {
 
 TEST_F(HeightSensor_Test, FlatDetected) {
 	Event ev;
-	ev.type = EventType::HALmotorFastRight;
+	ev.type = EventType::MOTOR_M_FAST;
 	fsm->handleEvent(ev);
 	EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
 
@@ -98,7 +98,7 @@ TEST_F(HeightSensor_Test, FlatDetected) {
 
 TEST_F(HeightSensor_Test, HighWithHoleDetected) {
 	Event ev;
-	ev.type = EventType::HALmotorFastRight;
+	ev.type = EventType::MOTOR_M_FAST;
 	fsm->handleEvent(ev);
 	EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
 
@@ -119,7 +119,7 @@ TEST_F(HeightSensor_Test, HighWithHoleDetected) {
 
 TEST_F(HeightSensor_Test, UnknownDetected) {
 	Event ev;
-	ev.type = EventType::HALmotorFastRight;
+	ev.type = EventType::MOTOR_M_FAST;
 	fsm->handleEvent(ev);
 	EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
 
@@ -133,7 +133,7 @@ TEST_F(HeightSensor_Test, CalculateAverageAndMaxValue) {
 	Event ev;
 	HeightResult res;
 
-	ev.type = EventType::HALmotorFastRight;
+	ev.type = EventType::MOTOR_M_FAST;
 	fsm->handleEvent(ev);
 	EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
 	res = fsm->getCurrentResult();
@@ -150,10 +150,10 @@ TEST_F(HeightSensor_Test, CalculateAverageAndMaxValue) {
 	EXPECT_EQ("21.28", formatFloat(res.average, 2));
 	EXPECT_EQ("25.30", formatFloat(res.max, 2));
 
-	ev.type = EventType::HALmotorStop;
+	ev.type = EventType::MOTOR_M_STOP;
 	fsm->handleEvent(ev);
 	EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
-	ev.type = EventType::HALmotorFastRight;
+	ev.type = EventType::MOTOR_M_FAST;
 	fsm->handleEvent(ev);
 	EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
 	res = fsm->getCurrentResult();
@@ -171,7 +171,7 @@ TEST_F(HeightSensor_Test, CalculateAverageAndMaxValueWhenMotorStoppedInBetween) 
 	HeightResult res;
 
 	Event ev;
-	ev.type = EventType::HALmotorFastRight;
+	ev.type = EventType::MOTOR_M_FAST;
 	fsm->handleEvent(ev);
 	EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
 
@@ -181,7 +181,7 @@ TEST_F(HeightSensor_Test, CalculateAverageAndMaxValueWhenMotorStoppedInBetween) 
 	EXPECT_EQ(HeightState::WAIT_FOR_BELT, fsm->getCurrentState());
 
 	// Motor is stopped -> HM should be "paused"
-	ev.type = EventType::HALmotorStop;
+	ev.type = EventType::MOTOR_M_STOP;
 	fsm->handleEvent(ev);
 	// The following measurements should not influence the current average and max values
 	fsm->heightValueReceived(25.0);
@@ -191,7 +191,7 @@ TEST_F(HeightSensor_Test, CalculateAverageAndMaxValueWhenMotorStoppedInBetween) 
 	EXPECT_EQ("21.8", formatFloat(res.max, 1));
 
 	// Motor is running again
-	ev.type = EventType::HALmotorFastRight;
+	ev.type = EventType::MOTOR_M_FAST;
 	fsm->handleEvent(ev);
 	// the following values should influence the current average and max values
 	fsm->heightValueReceived(22.0);
@@ -200,7 +200,7 @@ TEST_F(HeightSensor_Test, CalculateAverageAndMaxValueWhenMotorStoppedInBetween) 
 	EXPECT_EQ("22.0", formatFloat(res.max, 1));
 
 	// Motor is stopped -> HM should be "paused"
-	ev.type = EventType::HALmotorStop;
+	ev.type = EventType::MOTOR_M_STOP;
 	fsm->handleEvent(ev);
 	// The following measurements should not influence the current average and max values
 	fsm->heightValueReceived(25.0);
@@ -210,7 +210,7 @@ TEST_F(HeightSensor_Test, CalculateAverageAndMaxValueWhenMotorStoppedInBetween) 
 	EXPECT_EQ("22.0", formatFloat(res.max, 1));
 
 	// Motor is running again (in slow speed)
-	ev.type = EventType::HALmotorSlowRight;
+	ev.type = EventType::MOTOR_M_SLOW;
 	fsm->handleEvent(ev);
 	// the following values should influence the current average and max values
 	fsm->heightValueReceived(22.4); // 87,2

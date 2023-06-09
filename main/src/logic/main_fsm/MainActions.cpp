@@ -22,23 +22,44 @@ MainActions::~MainActions() {
 }
 
 
-void MainActions::setMotorStop(bool stop) {
+void MainActions::setMotorStopMaster(bool stop) {
 	Event event;
-	event.type = EventType::HALmotorStop;
+	event.type = EventType::MOTOR_M_SET_STOP;
 	event.data = (int) stop;
 	eventManager->sendEvent(event);
 }
 
-void MainActions::setMotorFast(bool fast) {
+void MainActions::setMotorFastMaster(bool fast) {
 	Event event;
-	event.type = EventType::HALmotorFastRight;
+	event.type = EventType::MOTOR_M_SET_FAST;
 	event.data = (int) fast;
 	eventManager->sendEvent(event);
 }
 
-void MainActions::setMotorSlow(bool slow) {
+void MainActions::setMotorSlowMaster(bool slow) {
 	Event event;
-	event.type = EventType::HALmotorSlowRight;
+	event.type = EventType::MOTOR_M_SET_SLOW;
+	event.data = (int) slow;
+	eventManager->sendEvent(event);
+}
+
+void MainActions::setMotorStopSlave(bool stop) {
+	Event event;
+	event.type = EventType::MOTOR_S_SET_STOP;
+	event.data = (int) stop;
+	eventManager->sendEvent(event);
+}
+
+void MainActions::setMotorFastSlave(bool fast) {
+	Event event;
+	event.type = EventType::MOTOR_S_SET_FAST;
+	event.data = (int) fast;
+	eventManager->sendEvent(event);
+}
+
+void MainActions::setMotorSlowSlave(bool slow) {
+	Event event;
+	event.type = EventType::MOTOR_S_SET_SLOW;
 	event.data = (int) slow;
 	eventManager->sendEvent(event);
 }

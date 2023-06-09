@@ -232,7 +232,8 @@ void Sensors::eventLoop()
 	using namespace std;
 	ThreadCtl(_NTO_TCTL_IO, 0); // Request IO privileges for this thread.
 
-	cout << "Receiving routine started." << endl;
+	Logger::debug("[Sensors] EventLoop has started");
+
 	_pulse msg;
 	receivingRunning = true;
 	while (receivingRunning)
@@ -263,7 +264,7 @@ void Sensors::eventLoop()
 		}
 	}
 
-	cout << "Message thread stops..." << endl;
+	Logger::debug("[Sensors] EventLoop has stopped");
 }
 
 void Sensors::handleGpioInterrupt()

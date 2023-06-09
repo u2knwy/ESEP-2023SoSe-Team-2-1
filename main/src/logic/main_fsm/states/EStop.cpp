@@ -18,12 +18,12 @@ MainState EStop::getCurrentState() {
 void EStop::entry() {
 	Logger::info("Entered EStop mode");
 	initSubStateEStop();
+	actions->setMotorStopMaster(true);
+	actions->setMotorStopSlave(true);
 	actions->setEStopMode();
-	actions->setMotorStop(true);
 }
 
 void EStop::exit() {
-	actions->setMotorStop(false);
 	delete substateEStop;
 }
 
