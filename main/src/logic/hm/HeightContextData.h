@@ -63,7 +63,6 @@ public:
 	 */
 	void resetMeasurement();
 	HeightResult getCurrentResult();
-	HeightResult getCurrentResultV2();
 	static bool isFlat(float value);
 	static bool isHigh(float value);
 	static bool isHole(float value);

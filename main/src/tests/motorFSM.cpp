@@ -12,12 +12,14 @@
 
 class MotorFSM_Test : public ::testing::Test {
 protected:
-	std::shared_ptr<MotorContext> fsm;
+	std::shared_ptr<MotorContext> motorfsm_master;
+	std::shared_ptr<MotorContext> motorfsm_slave;
 	std::shared_ptr<EventManager> eventManager;
 
   void SetUp() override {
 	  eventManager = std::make_shared<EventManager>();
-	  fsm = std::make_shared<MotorContext>(eventManager, true);
+	  motorfsm_master = std::make_shared<MotorContext>(eventManager, true);
+	  motorfsm_slave = std::make_shared<MotorContext>(eventManager, false);
 	  Configuration::getInstance().setMaster(true);
   }
 
@@ -26,7 +28,7 @@ protected:
 
 };
 
-static Event createEvent(EventType type, bool motorFlag) {
+static Event createMotorRequest(EventType type, bool motorFlag) {
 	Event ev;
 	ev.type = type;
 	ev.data = (int) motorFlag;
@@ -35,50 +37,70 @@ static Event createEvent(EventType type, bool motorFlag) {
 
 // When launching the FSM -> Current state must be STOPPED
 TEST_F(MotorFSM_Test, StartStateStopped) {
-	EXPECT_EQ(MotorState::STOPPED, fsm->getCurrentState());
+	EXPECT_EQ(MotorState::STOPPED, motorfsm_master->getCurrentState());
+	EXPECT_EQ(MotorState::STOPPED, motorfsm_slave->getCurrentState());
 	// Clear "Stop" flag -> still stopped
-	fsm->handleEvent(createEvent(EventType::MOTOR_M_SET_STOP, false));
-	EXPECT_EQ(MotorState::STOPPED, fsm->getCurrentState());
+	motorfsm_master->handleEvent(createMotorRequest(EventType::MOTOR_M_STOP_REQ, false));
+	motorfsm_slave->handleEvent(createMotorRequest(EventType::MOTOR_S_STOP_REQ, false));
+	EXPECT_EQ(MotorState::STOPPED, motorfsm_master->getCurrentState());
+	EXPECT_EQ(MotorState::STOPPED, motorfsm_slave->getCurrentState());
 }
 
-// STOPPED -> FAST
-TEST_F(MotorFSM_Test, StoppedToFast) {
+// STOPPED -> FAST -> STOPPED
+TEST_F(MotorFSM_Test, StoppedToFastToStopped) {
+	EXPECT_EQ(MotorState::STOPPED, motorfsm_master->getCurrentState());
+	EXPECT_EQ(MotorState::STOPPED, motorfsm_slave->getCurrentState());
+
 	// Clear "Stop" flag and set "Fast" flag -> must be in state "right fast"
-	fsm->handleEvent(createEvent(EventType::MOTOR_M_SET_STOP, false));
-	fsm->handleEvent(createEvent(EventType::MOTOR_M_SET_FAST, true));
-	EXPECT_EQ(MotorState::RIGHT_FAST, fsm->getCurrentState());
+	motorfsm_master->handleEvent(createMotorRequest(EventType::MOTOR_M_STOP_REQ, false));
+	motorfsm_slave->handleEvent(createMotorRequest(EventType::MOTOR_S_STOP_REQ, false));
+	motorfsm_master->handleEvent(createMotorRequest(EventType::MOTOR_M_RIGHT_REQ, true));
+	motorfsm_slave->handleEvent(createMotorRequest(EventType::MOTOR_S_RIGHT_REQ, false));
+	EXPECT_EQ(MotorState::RIGHT_FAST, motorfsm_master->getCurrentState());
+	EXPECT_EQ(MotorState::STOPPED, motorfsm_slave->getCurrentState());
+
+	motorfsm_master->handleEvent(createMotorRequest(EventType::MOTOR_M_RIGHT_REQ, false));
+	motorfsm_slave->handleEvent(createMotorRequest(EventType::MOTOR_S_RIGHT_REQ, true));
+	EXPECT_EQ(MotorState::STOPPED, motorfsm_master->getCurrentState());
+	EXPECT_EQ(MotorState::RIGHT_FAST, motorfsm_slave->getCurrentState());
 }
 
 // STOPPED -> SLOW
-TEST_F(MotorFSM_Test, StoppedToSlow) {
+TEST_F(MotorFSM_Test, StoppedToSlowToStopped) {
+	EXPECT_EQ(MotorState::STOPPED, motorfsm_master->getCurrentState());
+
 	// Clear "Stop" flag and set "Slow" flag -> must be in state "right slow"
-	fsm->handleEvent(createEvent(EventType::MOTOR_M_SET_STOP, false));
-	EXPECT_EQ(MotorState::STOPPED, fsm->getCurrentState());
-	fsm->handleEvent(createEvent(EventType::MOTOR_M_SET_SLOW, true));
-	EXPECT_EQ(MotorState::RIGHT_SLOW, fsm->getCurrentState());
+	motorfsm_master->handleEvent(createMotorRequest(EventType::MOTOR_M_STOP_REQ, false));
+	motorfsm_master->handleEvent(createMotorRequest(EventType::MOTOR_M_SLOW_REQ, true));
+	motorfsm_master->handleEvent(createMotorRequest(EventType::MOTOR_M_RIGHT_REQ, true));
+	EXPECT_EQ(MotorState::RIGHT_SLOW, motorfsm_master->getCurrentState());
+
+	motorfsm_master->handleEvent(createMotorRequest(EventType::MOTOR_M_RIGHT_REQ, false));
+	EXPECT_EQ(MotorState::STOPPED, motorfsm_master->getCurrentState());
 }
 
 // FAST -> SLOW
 TEST_F(MotorFSM_Test, FastToSlow) {
 	// Clear "Stop" flag and set "Fast" flag -> must be in state "right fast"
-	fsm->handleEvent(createEvent(EventType::MOTOR_M_SET_STOP, false));
-	fsm->handleEvent(createEvent(EventType::MOTOR_M_SET_FAST, true));
-	EXPECT_EQ(MotorState::RIGHT_FAST, fsm->getCurrentState());
+	motorfsm_master->handleEvent(createMotorRequest(EventType::MOTOR_M_STOP_REQ, false));
+	EXPECT_EQ(MotorState::STOPPED, motorfsm_master->getCurrentState());
+	motorfsm_master->handleEvent(createMotorRequest(EventType::MOTOR_M_RIGHT_REQ, true));
+	EXPECT_EQ(MotorState::RIGHT_FAST, motorfsm_master->getCurrentState());
 
 	// Set "Slow" flag -> must be in state "right slow"
-	fsm->handleEvent(createEvent(EventType::MOTOR_M_SET_SLOW, true));
-	EXPECT_EQ(MotorState::RIGHT_SLOW, fsm->getCurrentState());
+	motorfsm_master->handleEvent(createMotorRequest(EventType::MOTOR_M_SLOW_REQ, true));
+	EXPECT_EQ(MotorState::RIGHT_SLOW, motorfsm_master->getCurrentState());
 }
 
 // SLOW -> FAST
 TEST_F(MotorFSM_Test, SlowToFast) {
 	// Clear "Stop" flag and set "Fast" and "Slow" flag -> must be in state "right slow"
-	fsm->handleEvent(createEvent(EventType::MOTOR_M_SET_STOP, false));
-	fsm->handleEvent(createEvent(EventType::MOTOR_M_SET_FAST, true));
-	fsm->handleEvent(createEvent(EventType::MOTOR_M_SET_SLOW, true));
-	EXPECT_EQ(MotorState::RIGHT_SLOW, fsm->getCurrentState());
+	motorfsm_master->handleEvent(createMotorRequest(EventType::MOTOR_M_STOP_REQ, false));
+	motorfsm_master->handleEvent(createMotorRequest(EventType::MOTOR_M_RIGHT_REQ, true));
+	motorfsm_master->handleEvent(createMotorRequest(EventType::MOTOR_M_SLOW_REQ, true));
+	EXPECT_EQ(MotorState::RIGHT_SLOW, motorfsm_master->getCurrentState());
 
 	// Clear "Slow" flag -> must be in state "right fast"
-	fsm->handleEvent(createEvent(EventType::MOTOR_M_SET_SLOW, false));
-	EXPECT_EQ(MotorState::RIGHT_FAST, fsm->getCurrentState());
+	motorfsm_master->handleEvent(createMotorRequest(EventType::MOTOR_M_SLOW_REQ, false));
+	EXPECT_EQ(MotorState::RIGHT_FAST, motorfsm_master->getCurrentState());
 }

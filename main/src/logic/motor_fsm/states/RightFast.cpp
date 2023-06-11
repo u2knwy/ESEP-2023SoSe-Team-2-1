@@ -25,12 +25,12 @@ MotorState RightFast::getCurrentState() {
 
 bool RightFast::handleFlagsUpdated() {
 	std::stringstream ss;
-	if(data->getStop() || (!data->getFast() && !data->getSlow())) {
+	if(data->getStop() || !data->getRight()) {
 		exit();
 		new(this) Stopped;
 		entry();
 		return true;
-	} else if(!data->getStop() && data->getSlow()) {
+	} else if(!data->getStop() && data->getRight() && data->getSlow()) {
 		exit();
 		new(this) RightSlow;
 		entry();

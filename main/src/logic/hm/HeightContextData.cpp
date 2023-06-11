@@ -16,7 +16,7 @@ HeightContextData::HeightContextData() {
 }
 
 HeightContextData::~HeightContextData() {
-	// TODO Auto-generated destructor stub
+	measurements.clear();
 }
 
 WorkpieceType HeightContextData::getCurrentType() {
@@ -29,12 +29,10 @@ void HeightContextData::setCurrentType(WorkpieceType type) {
 }
 
 void HeightContextData::resetMeasurement() {
-	Logger::debug("Measurements were resetted.");
 	avgValue = 0.0;
 	maxValue = 0.0;
 	nMeasurements = 0;
 	measurements.clear();
-	//measurements.shrink_to_fit();
 }
 
 void HeightContextData::updateAvgAndMaxValue(float newValue) {
@@ -48,9 +46,6 @@ void HeightContextData::updateAvgAndMaxValue(float newValue) {
 	nMeasurements++;
 	if(newValue > maxValue)
 		maxValue = newValue;
-//	std::stringstream ss;
-//	ss << "New value: " << std::setprecision(2) << newValue << " mm -> n=" << nMeasurements << "avg=" << avgValue << ", max=" << maxValue << " mm";
-//	Logger::debug(ss.str());
 }
 
 float HeightContextData::getAverageValue() {
@@ -62,15 +57,6 @@ float HeightContextData::getMaximumValue() {
 }
 
 HeightResult HeightContextData::getCurrentResult() {
-/*	HeightResult result;
-	result.type = currentType;
-	result.average = avgValue;
-	result.max = maxValue;
-	return result;*/
-	return getCurrentResultV2();
-}
-
-HeightResult HeightContextData::getCurrentResultV2() {
 	HeightResult result;
 
 	int totalValues = measurements.size();

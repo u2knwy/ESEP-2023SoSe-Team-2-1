@@ -9,7 +9,7 @@
 
 MotorContextData::MotorContextData() {
 	stop = false;
-	fast = false;
+	right = false;
 	slow = false;
 }
 
@@ -25,16 +25,16 @@ void MotorContextData::setSlowFlag(bool slow) {
 	this->slow = slow;
 }
 
-void MotorContextData::setFastFlag(bool fast) {
-	this->fast = fast;
+void MotorContextData::setRightFlag(bool right) {
+	this->right = right;
 }
 
 bool MotorContextData::getStop() {
 	return stop;
 }
 
-bool MotorContextData::getFast() {
-	return fast;
+bool MotorContextData::getRight() {
+	return right;
 }
 
 bool MotorContextData::getSlow() {

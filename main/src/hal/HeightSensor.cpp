@@ -37,8 +37,6 @@ void HeightSensor::unregisterNewMeasurementCallback() {
 }
 
 void HeightSensor::start() {
-	Logger::info("[HM] Starting...");
-
 	/* ### Create channel to receive ADC values ### */
 	chanID = ChannelCreate(0);
 	if (chanID < 0) {
@@ -121,7 +119,7 @@ void HeightSensor::addValue(int value) {
 void HeightSensor::threadFunction() {
 	ThreadCtl(_NTO_TCTL_IO, 0); // Request IO privileges for this thread.
 
-	Logger::debug("[HM] ADC receiving routine started...");
+	Logger::info("[HM] Height sensor started!");
 	Calibration adcCal = Configuration::getInstance().getCalibration();
 	calibrateOffset(adcCal.calOffset);
 	calibrateRefHigh(adcCal.calRef);

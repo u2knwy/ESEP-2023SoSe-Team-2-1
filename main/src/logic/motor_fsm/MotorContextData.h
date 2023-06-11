@@ -11,13 +11,13 @@ public:
 	MotorContextData();
 	virtual ~MotorContextData();
 	void setStopFlag(bool stop);
-	void setSlowFlag(bool stop);
-	void setFastFlag(bool stop);
+	void setSlowFlag(bool slow);
+	void setRightFlag(bool right);
 	bool getStop();
-	bool getFast();
+	bool getRight();
 	bool getSlow();
 private:
 	bool stop;
-	bool fast;
+	bool right;
 	bool slow;
 };

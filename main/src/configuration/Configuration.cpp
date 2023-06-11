@@ -87,7 +87,7 @@ bool Configuration::readConfigFromFile() {
 		fileStream << "CAL_OFFSET=" << ADC_DEFAULT_OFFSET << "\n";
 		fileStream << "CAL_REF=" << ADC_DEFAULT_HIGH << "\n";
 		fileStream.close();
-		return false;
+		return true;
 	}
 
 	if(!errors.empty()) {

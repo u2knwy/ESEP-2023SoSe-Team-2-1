@@ -74,7 +74,6 @@ void HeightContext::heightValueReceived(float valueMM) {
 	if (running)
 	{
 		if(getCurrentState() != HeightState::WAIT_FOR_WS) {
-			//Logger::debug("[hm] Handle new value: " + std::to_string(valueMM));
 			data->updateAvgAndMaxValue(valueMM);
 		}
 

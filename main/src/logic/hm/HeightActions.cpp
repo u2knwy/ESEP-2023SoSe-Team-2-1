@@ -20,7 +20,7 @@ HeightActions::~HeightActions() {
 
 void HeightActions::setMotorSlow(bool slow) {
 	Event ev;
-	ev.type = isMaster ? EventType::MOTOR_M_SET_SLOW : EventType::MOTOR_S_SET_SLOW;
+	ev.type = isMaster ? EventType::MOTOR_M_SLOW_REQ : EventType::MOTOR_S_SLOW_REQ;
 	if(slow) {
 		Logger::debug("[HFSM] Start measurement - motor slow");
 		ev.data = 1;

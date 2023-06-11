@@ -13,9 +13,7 @@
 enum HeightState {
 	HEIGHT_NONE,
 	WAIT_FOR_WS,
-	HIGH,
-	WAIT_FOR_BELT,
-	PAUSED
+	WAIT_FOR_BELT
 };
 
 class HeightBasestate {

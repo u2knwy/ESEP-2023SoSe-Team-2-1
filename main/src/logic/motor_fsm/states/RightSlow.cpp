@@ -24,12 +24,12 @@ MotorState RightSlow::getCurrentState() {
 };
 
 bool RightSlow::handleFlagsUpdated() {
-	if(!data->getStop() && data->getFast() && !data->getSlow()) {
+	if(!data->getStop() && data->getRight() && !data->getSlow()) {
 		exit();
 		new(this) RightFast;
 		entry();
 		return true;
-	} else if(data->getStop() || (!data->getFast() && !data->getSlow())) {
+	} else if(data->getStop() || !data->getRight()) {
 		exit();
 		new(this) Stopped;
 		entry();

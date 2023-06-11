@@ -70,9 +70,18 @@ TEST_F(HeightSensor_Test, HighDetected) {
 
 	// HIGH WS detected
 	fsm->heightValueReceived(25.0);
+	fsm->heightValueReceived(25.0);
+	fsm->heightValueReceived(25.0);
+	fsm->heightValueReceived(25.0);
+	fsm->heightValueReceived(25.0);
+	fsm->heightValueReceived(25.0);
+	fsm->heightValueReceived(25.0);
+	fsm->heightValueReceived(25.0);
+	fsm->heightValueReceived(25.0);
+	fsm->heightValueReceived(25.0);
 	HeightResult res = fsm->getCurrentResult();
 	EXPECT_EQ(WorkpieceType::WS_OB, res.type);
-	EXPECT_EQ(HeightState::HIGH, fsm->getCurrentState());
+	EXPECT_EQ(HeightState::WAIT_FOR_BELT, fsm->getCurrentState());
 
 	// NEXT COMES BELT
 	fsm->heightValueReceived(1.0);
@@ -87,12 +96,18 @@ TEST_F(HeightSensor_Test, FlatDetected) {
 
 	// FLAT WS detected
 	fsm->heightValueReceived(21.0);
-	EXPECT_EQ(WorkpieceType::WS_F, fsm->getCurrentResult().type);
 	EXPECT_EQ(HeightState::WAIT_FOR_BELT, fsm->getCurrentState());
+	fsm->heightValueReceived(21.0);
+	fsm->heightValueReceived(21.0);
+	fsm->heightValueReceived(21.0);
+	fsm->heightValueReceived(21.0);
+
+	EXPECT_EQ(WorkpieceType::WS_F, fsm->getCurrentResult().type);
 
 	// NEXT COMES BELT
 	fsm->heightValueReceived(1.0);
 	EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
+
 }
 
 TEST_F(HeightSensor_Test, HighWithHoleDetected) {
@@ -103,15 +118,13 @@ TEST_F(HeightSensor_Test, HighWithHoleDetected) {
 
 	// HIGH WS detected
 	fsm->heightValueReceived(25.0);
-	EXPECT_EQ(WorkpieceType::WS_OB, fsm->getCurrentResult().type);
-	EXPECT_EQ(HeightState::HIGH, fsm->getCurrentState());
-
-	// NEXT COMES HOLE
-	fsm->heightValueReceived(6.0);
-	EXPECT_EQ(WorkpieceType::WS_BOM, fsm->getCurrentResult().type);
 	EXPECT_EQ(HeightState::WAIT_FOR_BELT, fsm->getCurrentState());
+	// Next comes HOLE
+	fsm->heightValueReceived(6.0);
+	// And HIGH again
+	fsm->heightValueReceived(25.0);
 
-	// NEXT COMES BELT
+	// Next comes BELT
 	fsm->heightValueReceived(1.0);
 	EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
 }
@@ -124,6 +137,8 @@ TEST_F(HeightSensor_Test, UnknownDetected) {
 
 	// UNKNOWN WS detected
 	fsm->heightValueReceived(30.0);
+	// Next comes BELT
+	fsm->heightValueReceived(1.0);
 	EXPECT_EQ(WorkpieceType::WS_UNKNOWN, fsm->getCurrentResult().type);
 	EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
 }
@@ -139,12 +154,30 @@ TEST_F(HeightSensor_Test, CalculateAverageAndMaxValue) {
 	EXPECT_EQ("0.00", formatFloat(res.average, 2));
 	EXPECT_EQ("0.00", formatFloat(res.max, 2));
 
+	// measurements that will be discarded
+	fsm->heightValueReceived(11.0);
+	fsm->heightValueReceived(11.0);
+
 	fsm->heightValueReceived(25.3);
 	fsm->heightValueReceived(25.1);
 	fsm->heightValueReceived(6.2);
 	fsm->heightValueReceived(21.2);
 	fsm->heightValueReceived(25.0);
 	fsm->heightValueReceived(24.9);
+
+	fsm->heightValueReceived(21.28);
+	fsm->heightValueReceived(21.28);
+	fsm->heightValueReceived(21.28);
+	fsm->heightValueReceived(21.28);
+	fsm->heightValueReceived(21.28);
+	fsm->heightValueReceived(21.28);
+	fsm->heightValueReceived(21.28);
+	fsm->heightValueReceived(21.28);
+	fsm->heightValueReceived(21.28);
+	fsm->heightValueReceived(21.28);
+	fsm->heightValueReceived(21.28);
+	fsm->heightValueReceived(21.28);
+	fsm->heightValueReceived(21.28);
 	res = fsm->getCurrentResult();
 	EXPECT_EQ("21.28", formatFloat(res.average, 2));
 	EXPECT_EQ("25.30", formatFloat(res.max, 2));
