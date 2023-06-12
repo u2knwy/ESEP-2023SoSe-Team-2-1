@@ -19,10 +19,10 @@ MainState Running::getCurrentState() {
 void Running::entry() {
 	Logger::info("Entered Running mode");
 	actions->setRunningMode();
-	actions->setMotorFastMaster(false);
-	actions->setMotorFastSlave(false);
-	actions->setMotorStopMaster(false);
-	actions->setMotorStopSlave(false);
+	actions->master_sendMotorRightRequest(false);
+	actions->slave_sendMotorRightRequest(false);
+	actions->master_sendMotorStopRequest(false);
+	actions->slave_sendMotorStopRequest(false);
 }
 
 void Running::exit() {
@@ -32,7 +32,7 @@ void Running::exit() {
 bool Running::master_LBA_Blocked() {
 	Workpiece* wp = data->wpManager->addWorkpiece();
 	Logger::info("New workpiece inserted: " + wp->getId());
-	actions->setMotorFastMaster(true);
+	actions->master_sendMotorRightRequest(true);
 	return true;
 }
 
@@ -49,18 +49,18 @@ bool Running::master_LBW_Unblocked() {
 }
 
 bool Running::master_LBE_Blocked() {
-	actions->setMotorStopMaster(true);
+	actions->master_sendMotorStopRequest(true);
 	return true;
 }
 
 bool Running::master_LBE_Unblocked() {
-	actions->setMotorStopMaster(false);
+	actions->master_sendMotorStopRequest(false);
 	return true;
 }
 
 bool Running::master_LBR_Blocked() {
 	data->setRampFBM1Blocked(true);
-	actions->setMotorFastMaster(false);
+	actions->master_sendMotorRightRequest(false);
 	return true;
 }
 

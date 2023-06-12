@@ -1,0 +1,87 @@
+@startuml
+interface IEventHandler {
+  #handleEvent(Event event)
+}
+
+class IHeightSensor << HAL >> {
+  -int adcOffset
+  -int adcIncPerMillimeter
+  -std::function<void(float)> newValueCallback
+  -std::vector<int> window
+  -bool running
+  #calibrateOffset(int offsetValue)
+  #calibrateReference(int refValue)
+}
+
+class HeightSensor << HAL >> {
+	-TSCADC tsc
+	-ADC* adc
+	-bool running
+	-std::function<void(float)> onNewValueCallback
+	-int nMeasurements
+	-addValue(int value)
+	-threadFunction()
+	-float adcValueToMillimeter(int adcValue)
+	+registerOnNewValueCallback(std::function<void(float)> cb)
+	+unregisterOnNewValueCallback()
+	+start()
+	+stop()
+	+float getAverageHeight()
+	+int getLastRawValue()
+}
+
+IHeightSensor <|.. HeightSensor
+
+class HeightContext {
+	-HeightActions* actions
+	-HeightContextData* data
+	-HeightBasestate* state
+  -EventManager* eventManager
+	-IHeightSensor* sensor
+	-bool running
+	+HeightContext(EventManager* mngr, IHeightSensor* sensor)
+	-subscribeToEvents()
+	+handleEvent(Event event)
+	+heightValueReceived(float value)
+	+HeightResult getCurrentResult()
+}
+
+class HeightActions {
+	-HeightContextData* data
+	-EventManager* eventManager
+  -bool isMaster
+	+HeightActions(HeightContextData* data, EventManager* mngr)
+	+sendMotorSlowRequest(bool slow)
+	+sendHeightResult()
+}
+
+struct HeightResult {
+	+WorkpieceType type
+	+float averageValue
+}
+
+class HeightContextData {
+	-float avgValue
+	-int nMeasurements
+	-std::vector<float> measurements
+  +HeightContextData()
+	+resetMeasurement()
+	+WorkpieceType getCurrentType()
+	+setCurrentType(WorkpieceType type)
+	+addValue(float value)
+	+float getAverageValue()
+	+HeightResult getCurrentResult()
+	+{static} bool isFlat(float value)
+	+{static} bool isHigh(float value)
+	+{static} bool isHole(float value)
+	+{static} bool isUnknown(float value)
+}
+
+HeightResult -* HeightContextData
+HeightActions -o HeightContext
+HeightContextData --o HeightContext
+HeightContextData --o HeightActions
+HeightContext *- HeightSensor
+IEventHandler <|.. HeightContext
+
+@enduml

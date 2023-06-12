@@ -26,8 +26,8 @@ class IHeightSensor {
 public:
 	using HeightCallback = std::function<void(float)>;
 	virtual ~IHeightSensor() {};
-	virtual void registerMeasurementCallback(HeightCallback callback) = 0;
-	virtual void unregisterNewMeasurementCallback() = 0;
+	virtual void registerOnNewValueCallback(HeightCallback callback) = 0;
+	virtual void unregisterOnNewValueCallback() = 0;
 	virtual void start() = 0;
 	virtual void stop() = 0;
 	virtual float getAverageHeight() = 0;

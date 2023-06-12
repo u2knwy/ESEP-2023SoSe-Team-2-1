@@ -22,7 +22,7 @@ HeightContext::HeightContext(std::shared_ptr<EventManager> mngr, std::shared_ptr
 	running = false;
 	subscribeToEvents();
 	this->sensor = sensor;
-	sensor->registerMeasurementCallback(std::bind(&HeightContext::heightValueReceived, this, std::placeholders::_1));
+	sensor->registerOnNewValueCallback(std::bind(&HeightContext::heightValueReceived, this, std::placeholders::_1));
 	sensor->start();
 }
 
@@ -74,7 +74,7 @@ void HeightContext::heightValueReceived(float valueMM) {
 	if (running)
 	{
 		if(getCurrentState() != HeightState::WAIT_FOR_WS) {
-			data->updateAvgAndMaxValue(valueMM);
+			data->addValue(valueMM);
 		}
 
 		bool handled;

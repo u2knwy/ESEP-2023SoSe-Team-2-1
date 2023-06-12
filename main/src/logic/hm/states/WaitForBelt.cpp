@@ -19,7 +19,7 @@ HeightState WaitForBelt::getCurrentState() {
 
 bool WaitForBelt::beltDetected() {
 	actions->sendHeightResult();
-	actions->setMotorSlow(false);
+	actions->sendMotorSlowRequest(false);
 	exit();
 	new(this) WaitForWorkpiece;
 	entry();

@@ -10,11 +10,11 @@
 HeightSensorMock::HeightSensorMock() {
 }
 
-void HeightSensorMock::registerMeasurementCallback(HeightCallback callback) {
+void HeightSensorMock::registerOnNewValueCallback(HeightCallback callback) {
 	this->heightValueCallback = callback;
 }
 
-void HeightSensorMock::unregisterNewMeasurementCallback() {
+void HeightSensorMock::unregisterOnNewValueCallback() {
 
 }
 

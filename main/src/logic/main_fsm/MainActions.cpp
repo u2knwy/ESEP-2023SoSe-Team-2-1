@@ -22,42 +22,42 @@ MainActions::~MainActions() {
 }
 
 
-void MainActions::setMotorStopMaster(bool stop) {
+void MainActions::master_sendMotorStopRequest(bool stop) {
 	Event event;
 	event.type = EventType::MOTOR_M_STOP_REQ;
 	event.data = (int) stop;
 	eventManager->sendEvent(event);
 }
 
-void MainActions::setMotorFastMaster(bool fast) {
+void MainActions::master_sendMotorRightRequest(bool right) {
 	Event event;
 	event.type = EventType::MOTOR_M_RIGHT_REQ;
-	event.data = (int) fast;
+	event.data = (int) right;
 	eventManager->sendEvent(event);
 }
 
-void MainActions::setMotorSlowMaster(bool slow) {
+void MainActions::master_sendMotorSlowRequest(bool slow) {
 	Event event;
 	event.type = EventType::MOTOR_M_SLOW_REQ;
 	event.data = (int) slow;
 	eventManager->sendEvent(event);
 }
 
-void MainActions::setMotorStopSlave(bool stop) {
+void MainActions::slave_sendMotorStopRequest(bool stop) {
 	Event event;
 	event.type = EventType::MOTOR_S_STOP_REQ;
 	event.data = (int) stop;
 	eventManager->sendEvent(event);
 }
 
-void MainActions::setMotorFastSlave(bool fast) {
+void MainActions::slave_sendMotorRightRequest(bool right) {
 	Event event;
 	event.type = EventType::MOTOR_S_RIGHT_REQ;
-	event.data = (int) fast;
+	event.data = (int) right;
 	eventManager->sendEvent(event);
 }
 
-void MainActions::setMotorSlowSlave(bool slow) {
+void MainActions::slave_sendMotorSlowRequest(bool slow) {
 	Event event;
 	event.type = EventType::MOTOR_S_SLOW_REQ;
 	event.data = (int) slow;

@@ -19,7 +19,7 @@ class HeightActions {
 public:
 	HeightActions(HeightContextData* data, std::shared_ptr<EventManager> mngr);
 	virtual ~HeightActions();
-	void setMotorSlow(bool slow);
+	void sendMotorSlowRequest(bool slow);
 	void sendHeightResult();
 private:
 	HeightContextData* data;

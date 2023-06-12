@@ -18,7 +18,7 @@ HeightActions::~HeightActions() {
 	// TODO Auto-generated destructor stub
 }
 
-void HeightActions::setMotorSlow(bool slow) {
+void HeightActions::sendMotorSlowRequest(bool slow) {
 	Event ev;
 	ev.type = isMaster ? EventType::MOTOR_M_SLOW_REQ : EventType::MOTOR_S_SLOW_REQ;
 	if(slow) {

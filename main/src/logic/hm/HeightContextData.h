@@ -42,7 +42,7 @@ public:
 	 *
 	 * @param value New value received
 	 */
-	void updateAvgAndMaxValue(float value);
+	void addValue(float value);
 
 	/**
 	 * Get the current average value

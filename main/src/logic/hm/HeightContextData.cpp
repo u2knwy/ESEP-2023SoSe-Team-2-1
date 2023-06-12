@@ -35,7 +35,7 @@ void HeightContextData::resetMeasurement() {
 	measurements.clear();
 }
 
-void HeightContextData::updateAvgAndMaxValue(float newValue) {
+void HeightContextData::addValue(float newValue) {
 	measurements.push_back(newValue);
 
 	if(nMeasurements == 0) {

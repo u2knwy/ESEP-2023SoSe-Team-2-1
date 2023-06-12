@@ -28,11 +28,11 @@ HeightSensor::~HeightSensor() {
 	delete adc;
 }
 
-void HeightSensor::registerMeasurementCallback(HeightCallback callback) {
+void HeightSensor::registerOnNewValueCallback(HeightCallback callback) {
 	this->heightValueCallback = callback;
 }
 
-void HeightSensor::unregisterNewMeasurementCallback() {
+void HeightSensor::unregisterOnNewValueCallback() {
 	this->heightValueCallback = 0;
 }
 

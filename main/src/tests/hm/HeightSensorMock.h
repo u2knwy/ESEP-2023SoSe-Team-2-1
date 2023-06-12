@@ -13,8 +13,8 @@
 class HeightSensorMock: public IHeightSensor {
 public:
 	HeightSensorMock();
-	void registerMeasurementCallback(HeightCallback callback) override;
-	void unregisterNewMeasurementCallback() override;
+	void registerOnNewValueCallback(HeightCallback callback) override;
+	void unregisterOnNewValueCallback() override;
 	void start() override;
 	void stop() override;
 	float getAverageHeight() override;
