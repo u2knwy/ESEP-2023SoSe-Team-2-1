@@ -8,6 +8,7 @@
 
 #include "events/IEventHandler.h"
 #include "events/EventManager.h"
+#include "events/events.h"
 
 #include <memory>
 #include <thread>
@@ -18,6 +19,8 @@
 
 #define ON_TIME_FAST_MS 500
 #define ON_TIME_SLOW_MS 1000
+#define ON_TIME_PUSHER_MS 300
+#define ON_TIME_SWITCH_MS 1000
 
 class Actuators : public IEventHandler {
 public:
@@ -147,9 +150,57 @@ public:
 	 */
 	void q2LedOff();
 
+	/**
+	 * Stops the motor
+	 */
 	void motorStop();
+
+	/**
+	 * Lets the motor run in slow speed
+	 */
 	void motorSlow();
+
+	/**
+	 * Lets the motor run in fast speed
+	 */
 	void motorFast();
+
+	/**
+	 * Opens the switch to let a workpiece pass.
+	 */
+	void openSwitch();
+
+	/**
+	 * Closes the switch to let a workpiece fall into the slide.
+	 */
+	void closeSwitch();
+
+	/**
+	 * Lets the switch or pusher sort out workpiece to ramp.
+	 * If switch is mounted: Do nothing, so workpiece will go to ramp
+	 * If pusher is mounted: activate for {ON_TIME_PUSHER_MS} ms, then deactivate again
+	 */
+	void sortOut();
+
+	/**
+	 * Lets the switch or pusher pass a workpiece to the end of the belt.
+	 * If switch is mounted: Open for {ON_TIME_SWITCH_MS} ms, then close again
+	 * If pusher is mounted: Do nothing, so workpiece will pass.
+	 */
+	void letPass();
+private:
+	uintptr_t gpio_bank_1;
+	uintptr_t gpio_bank_2;
+	std::shared_ptr<EventManager> eventManager;
+	std::mutex mutex;
+	bool isMaster;
+	bool greenBlinking;
+	bool yellowBlinking;
+	bool redBlinking;
+	bool hasPusher;
+	std::thread th_GreenBlinking;
+	std::thread th_YellowBlinking;
+	std::thread th_RedBlinking;
 	/**
 	 * Sets the 'Motor stop' pin.
 	 */
@@ -169,35 +220,10 @@ public:
 	 * Sets the 'Motor left' pin and clears the 'Motor right' pin.
 	 */
 	void setMotorLeft(bool left);
-
-	/**
-	 * Opens the switch to let a workpiece pass.
-	 */
-	void openSwitch();
-
-	/**
-	 * Closes the switch to let a workpiece fall into the slide.
-	 */
-	void closeSwitch();
-private:
-	uintptr_t gpio_bank_1;
-	uintptr_t gpio_bank_2;
-	std::shared_ptr<EventManager> eventManager;
-	bool isMaster;
-	bool greenBlinking;
-	std::thread th_GreenBlinking;
-	bool yellowBlinking;
-	std::thread th_YellowBlinking;
-	bool redBlinking;
-	std::thread th_RedBlinking;
 	void configurePins();
 	void subscribeToEvents();
 	void thGreenLampFlashing(bool fast);
 	void thYellowLampFlashing(bool fast);
 	void thRedLampFlashing(bool fast);
-	std::mutex mutex;
-	// TEST
-	int stopCnt;
-	int fastCnt;
-	int slowCnt;
+	bool handleLampEvent(EventType event, LampState state);
 };

@@ -84,43 +84,46 @@ $(function() {
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment"> */</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#pragma once</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="keyword">enum</span> WorkpieceType {</div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>    WS_F,</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>    WS_BOM,</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    WS_BUM,</div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    WS_OB,</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    UNKNOWN</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>};</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="class_workpiece.html">   18</a></span><span class="keyword">class </span><a class="code hl_class" href="class_workpiece.html">Workpiece</a> {</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <a class="code hl_class" href="class_workpiece.html">Workpiece</a>(<span class="keywordtype">int</span> <span class="keywordtype">id</span>);</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    <span class="keyword">virtual</span> <a class="code hl_class" href="class_workpiece.html">~Workpiece</a>() {};</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    <span class="keywordtype">int</span> <a class="code hl_function" href="class_workpiece.html#a114e397d2fd1e25d849d9a300f6f0f90">getId</a>();</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_workpiece.html#a119b23da7f5807d911942edf7ae508ba">setAvgHeightFBM1</a>(<span class="keywordtype">float</span> height);</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_workpiece.html#ac2ed2f657598a59233ab8ecc77e7eb65">setMetalFBM1</a>(<span class="keywordtype">bool</span> metal);</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_workpiece.html#a7ac1fa8ade3ef4bf2af424e72942d169">setMaxHeightFBM2</a>(<span class="keywordtype">float</span> height);</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_workpiece.html#a313d03e9378810274d3024eb60e9f48d">setMetalFBM2</a>(<span class="keywordtype">bool</span> metal);</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_workpiece.html#a44ee73dcb087aeb279595de49bbd0fcb">setFlipped</a>(<span class="keywordtype">bool</span> flipped);</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span> </div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    WorkpieceType <a class="code hl_function" href="class_workpiece.html#a4d9930a796baef2756211a36662311df">getType</a>();</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <span class="keywordtype">int</span> <span class="keywordtype">id</span>{-1};</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    <span class="keywordtype">float</span> avgHeightFBM1{0.0};</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    <span class="keywordtype">bool</span> metalFBM1{<span class="keyword">false</span>};</div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    <span class="keywordtype">float</span> maxHeightFBM2{0.0};</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    <span class="keywordtype">bool</span> metalFBM2{<span class="keyword">false</span>};</div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    <span class="keywordtype">bool</span> flipped{<span class="keyword">false</span>};</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    WorkpieceType type{UNKNOWN};</div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>};</div>
-<div class="ttc" id="aclass_workpiece_html"><div class="ttname"><a href="class_workpiece.html">Workpiece</a></div><div class="ttdef"><b>Definition:</b> Workpiece.h:18</div></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &quot;workpiecetype_enum.h&quot;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;workpiecetype_stringlist.h&quot;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#define WP_TYPE_TO_STRING(wp) std::string(WorkpieceTypeString[wp])</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="comment">/*enum WorkpieceType {</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="comment">    WS_F,</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="comment">    WS_BOM,</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="comment">    WS_BUM,</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment">    WS_OB,</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="comment">    UNKNOWN</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment">};*/</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="class_workpiece.html">   21</a></span><span class="keyword">class </span><a class="code hl_class" href="class_workpiece.html">Workpiece</a> {</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <a class="code hl_class" href="class_workpiece.html">Workpiece</a>(<span class="keywordtype">int</span> <span class="keywordtype">id</span>);</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    <span class="keyword">virtual</span> <a class="code hl_class" href="class_workpiece.html">~Workpiece</a>() {};</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <span class="keywordtype">int</span> <a class="code hl_function" href="class_workpiece.html#a114e397d2fd1e25d849d9a300f6f0f90">getId</a>();</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_workpiece.html#a119b23da7f5807d911942edf7ae508ba">setAvgHeightFBM1</a>(<span class="keywordtype">float</span> height);</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_workpiece.html#ac2ed2f657598a59233ab8ecc77e7eb65">setMetalFBM1</a>(<span class="keywordtype">bool</span> metal);</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_workpiece.html#a7ac1fa8ade3ef4bf2af424e72942d169">setMaxHeightFBM2</a>(<span class="keywordtype">float</span> height);</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_workpiece.html#a313d03e9378810274d3024eb60e9f48d">setMetalFBM2</a>(<span class="keywordtype">bool</span> metal);</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_workpiece.html#a44ee73dcb087aeb279595de49bbd0fcb">setFlipped</a>(<span class="keywordtype">bool</span> flipped);</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    WorkpieceType <a class="code hl_function" href="class_workpiece.html#a4d9930a796baef2756211a36662311df">getType</a>();</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    <span class="keywordtype">int</span> <span class="keywordtype">id</span>{-1};</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    <span class="keywordtype">float</span> avgHeightFBM1{0.0};</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    <span class="keywordtype">bool</span> metalFBM1{<span class="keyword">false</span>};</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    <span class="keywordtype">float</span> maxHeightFBM2{0.0};</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    <span class="keywordtype">bool</span> metalFBM2{<span class="keyword">false</span>};</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    <span class="keywordtype">bool</span> flipped{<span class="keyword">false</span>};</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    WorkpieceType type{WS_UNKNOWN};</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>};</div>
+<div class="ttc" id="aclass_workpiece_html"><div class="ttname"><a href="class_workpiece.html">Workpiece</a></div><div class="ttdef"><b>Definition:</b> Workpiece.h:21</div></div>
 <div class="ttc" id="aclass_workpiece_html_a114e397d2fd1e25d849d9a300f6f0f90"><div class="ttname"><a href="class_workpiece.html#a114e397d2fd1e25d849d9a300f6f0f90">Workpiece::getId</a></div><div class="ttdeci">int getId()</div><div class="ttdef"><b>Definition:</b> Workpiece.cpp:14</div></div>
 <div class="ttc" id="aclass_workpiece_html_a119b23da7f5807d911942edf7ae508ba"><div class="ttname"><a href="class_workpiece.html#a119b23da7f5807d911942edf7ae508ba">Workpiece::setAvgHeightFBM1</a></div><div class="ttdeci">void setAvgHeightFBM1(float height)</div><div class="ttdef"><b>Definition:</b> Workpiece.cpp:18</div></div>
 <div class="ttc" id="aclass_workpiece_html_a313d03e9378810274d3024eb60e9f48d"><div class="ttname"><a href="class_workpiece.html#a313d03e9378810274d3024eb60e9f48d">Workpiece::setMetalFBM2</a></div><div class="ttdeci">void setMetalFBM2(bool metal)</div><div class="ttdef"><b>Definition:</b> Workpiece.cpp:30</div></div>

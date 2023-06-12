@@ -11,6 +11,8 @@
 #include "events.h"
 
 struct Event {
+	Event() {}
+	Event(EventType evType, int evData) : type(evType), data(evData) {}
     EventType type;
     int data{-1};
 };

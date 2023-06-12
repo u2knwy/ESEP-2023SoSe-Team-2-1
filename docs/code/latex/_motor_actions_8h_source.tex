@@ -1,0 +1,29 @@
+\hypertarget{_motor_actions_8h_source}{}\doxysection{Motor\+Actions.\+h}
+\label{_motor_actions_8h_source}\index{main/src/logic/motor\_fsm/MotorActions.h@{main/src/logic/motor\_fsm/MotorActions.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ MotorActions.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ *\ \ Created\ on:\ 09.06.2023}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *\ \ \ \ \ \ Author:\ Maik}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}events/EventManager.h"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_motor_actions}{MotorActions}}\ \{}
+\DoxyCodeLine{00013\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00014\ \ \ \ \ \mbox{\hyperlink{class_motor_actions}{MotorActions}}(std::shared\_ptr<EventManager>\ mngr,\ \textcolor{keywordtype}{bool}\ master);}
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_motor_actions}{\string~MotorActions}}();}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keywordtype}{void}\ motorStop();}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keywordtype}{void}\ motorRightFast();}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{void}\ motorRightSlow();}
+\DoxyCodeLine{00019\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00020\ \ \ \ \ std::shared\_ptr<EventManager>\ eventManager;}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{bool}\ isMaster;}
+\DoxyCodeLine{00022\ \};}
+\DoxyCodeLine{00023\ }
+
+\end{DoxyCode}

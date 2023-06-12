@@ -1,0 +1,29 @@
+\hypertarget{class_event_manager}{}\doxysection{Event\+Manager Class Reference}
+\label{class_event_manager}\index{EventManager@{EventManager}}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_event_manager_ae9351f7422b2da351976102aa153f085}\label{class_event_manager_ae9351f7422b2da351976102aa153f085}} 
+using {\bfseries Event\+Callback} = std\+::function$<$ void(const \mbox{\hyperlink{struct_event}{Event}} \&)$>$
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_event_manager_ae4a43097be2de90e5bc704706342a931}\label{class_event_manager_ae4a43097be2de90e5bc704706342a931}} 
+void {\bfseries subscribe} (Event\+Type type, Event\+Callback callback)
+\item 
+\mbox{\Hypertarget{class_event_manager_a2fda2833bdeb5927366d6a4aac9a889b}\label{class_event_manager_a2fda2833bdeb5927366d6a4aac9a889b}} 
+void {\bfseries unsubscribe} (Event\+Type type, Event\+Callback callback)
+\item 
+\mbox{\Hypertarget{class_event_manager_aaf50027616ae687bca1bd0ee9815b932}\label{class_event_manager_aaf50027616ae687bca1bd0ee9815b932}} 
+void {\bfseries send\+Event} (const \mbox{\hyperlink{struct_event}{Event}} \&event)
+\item 
+\mbox{\Hypertarget{class_event_manager_a0e5215c719820f72044874a57daf6f55}\label{class_event_manager_a0e5215c719820f72044874a57daf6f55}} 
+int {\bfseries start} ()
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+main/src/events/Event\+Manager.\+h\item 
+main/src/events/Event\+Manager.\+cpp\end{DoxyCompactItemize}

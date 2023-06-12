@@ -1,0 +1,41 @@
+\hypertarget{_a_d_c_8h_source}{}\doxysection{ADC.\+h}
+\label{_a_d_c_8h_source}\index{main/src/hal/adc/ADC.h@{main/src/hal/adc/ADC.h}}
+\mbox{\hyperlink{_a_d_c_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ }
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ <sys/siginfo.h>}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_t_s_c_a_d_c_8h}{TSCADC.h}}"{}}}
+\DoxyCodeLine{00021\ }
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#define\ ADC\_TYPE\ \ \ 16}}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_a_d_c}{ADC}}\{}
+\DoxyCodeLine{00025\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00026\ \ \ \ \ \mbox{\hyperlink{class_a_d_c}{ADC}}(\textcolor{keywordtype}{void})\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00027\ \ \ \ \ \mbox{\hyperlink{class_a_d_c}{ADC}}(\mbox{\hyperlink{class_t_s_c_a_d_c}{TSCADC}}\&\ tscadc);}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_a_d_c}{\string~ADC}}();}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{void}\ registerAdcISR(\textcolor{keywordtype}{int}\ connectionID,\ \textcolor{keywordtype}{char}\ msgType);}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{void}\ unregisterAdcISR(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_a_d_c_ad6159c6bd20d435322fb825f7efbb6cf}{sample}}(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{void}\ adcDisable(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keyword}{const}\ \textcolor{keyword}{struct\ }sigevent*\ adcISR(\textcolor{keywordtype}{void}*\ arg,\ \textcolor{keywordtype}{int}\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{void}\ init(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keywordtype}{void}\ initInterrupts(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{void}\ stepConfigure(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ stepSel,\ Fifo\ fifo,\ PositiveInput\ positiveInpChannel);}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{void}\ cleanUpInterrupts(\textcolor{keywordtype}{void});}
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{void}\ adcEnableSequence(\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{int}\ steps);}
+\DoxyCodeLine{00043\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00044\ \ \ \ \ \mbox{\hyperlink{class_t_s_c_a_d_c}{TSCADC}}*\ tscadc;}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keyword}{struct\ }sigevent\ event;}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{int}\ interruptID;}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \};}
+\DoxyCodeLine{00050\ }
+
+\end{DoxyCode}

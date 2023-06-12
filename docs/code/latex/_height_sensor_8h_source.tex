@@ -1,0 +1,77 @@
+\hypertarget{_height_sensor_8h_source}{}\doxysection{Height\+Sensor.\+h}
+\label{_height_sensor_8h_source}\index{main/src/hal/HeightSensor.h@{main/src/hal/HeightSensor.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ HeightSensor.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ *\ \ Created\ on:\ 11.05.2023}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *\ \ \ \ \ \ Author:\ Maik}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}IHeightSensor.h"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{_a_d_c_8h}{adc/ADC.h}}"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}events/events.h"{}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ "{}configuration/Configuration.h"{}}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <sys/mman.h>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ <hw/inout.h>}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#include\ <errno.h>}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#include\ <sys/neutrino.h>}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#include\ <sys/procmgr.h>}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#include\ <thread>}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#include\ <chrono>}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#include\ <mutex>}}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \textcolor{comment}{/*-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00029\ \textcolor{comment}{\ \ \ ADC\ CONFIGURATION}}
+\DoxyCodeLine{00030\ \textcolor{comment}{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ */}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#define\ ADC\_BASE\ 0x44E0D000}}
+\DoxyCodeLine{00032\ \textcolor{preprocessor}{\#define\ ADC\_LENGTH\ 0x2000}}
+\DoxyCodeLine{00033\ }
+\DoxyCodeLine{00034\ \textcolor{comment}{//\ TSC\_ADC\ register\ offsets\ (spruh73l.pdf\ S.1747)}}
+\DoxyCodeLine{00035\ \textcolor{preprocessor}{\#define\ ADC\_IRQ\_ENABLE\_SET\ 0x2c}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#define\ ADC\_IRQ\_ENABLE\_CLR\ 0x30}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#define\ ADC\_IRQ\_STATUS\ 0x28}}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#define\ ADC\_CTRL\ 0x40}}
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#define\ ADC\_DATA\ 0x100}}
+\DoxyCodeLine{00040\ }
+\DoxyCodeLine{00041\ \textcolor{comment}{//\ ADC\ IRQ\ pin\ mask}}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#define\ ADC\_IRQ\_PIN\_MASK\ 0x2}}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00044\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_height_sensor}{HeightSensor}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_i_height_sensor}{IHeightSensor}}\ \{}
+\DoxyCodeLine{00045\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00046\ \ \ \ \ \mbox{\hyperlink{class_height_sensor}{HeightSensor}}();}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_height_sensor}{\string~HeightSensor}}();}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{void}\ registerOnNewValueCallback(HeightCallback\ callback)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{void}\ unregisterOnNewValueCallback()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{void}\ start()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00051\ \ \ \ \ \textcolor{keywordtype}{void}\ stop()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{float}\ getAverageHeight()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keywordtype}{float}\ getMaxHeight()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{float}\ getMedianHeight()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{int}\ getLastRawValue()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00056\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00057\ \ \ \ \ \mbox{\hyperlink{class_t_s_c_a_d_c}{TSCADC}}\ tsc;}
+\DoxyCodeLine{00058\ \ \ \ \ \mbox{\hyperlink{class_a_d_c}{ADC}}*\ adc;}
+\DoxyCodeLine{00059\ \ \ \ \ HeightCallback\ heightValueCallback\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00060\ \ \ \ \ \textcolor{keywordtype}{int}\ chanID;}
+\DoxyCodeLine{00061\ \ \ \ \ \textcolor{keywordtype}{int}\ conID;}
+\DoxyCodeLine{00062\ \ \ \ \ std::thread\ measureThread;}
+\DoxyCodeLine{00063\ \ \ \ \ std::vector<int>\ window;}
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ windowCapacity;}
+\DoxyCodeLine{00065\ \ \ \ \ \textcolor{keywordtype}{int}\ nMeasurements;}
+\DoxyCodeLine{00066\ \ \ \ \ std::mutex\ mtx;}
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keywordtype}{void}\ addValue(\textcolor{keywordtype}{int}\ value);}
+\DoxyCodeLine{00068\ \ \ \ \ \textcolor{keywordtype}{bool}\ running\{\textcolor{keyword}{false}\};}
+\DoxyCodeLine{00069\ \ \ \ \ \textcolor{keywordtype}{void}\ threadFunction();}
+\DoxyCodeLine{00070\ \ \ \ \ \textcolor{keywordtype}{float}\ adcValueToMillimeter(\textcolor{keywordtype}{int}\ adcValue);}
+\DoxyCodeLine{00071\ \};}
+
+\end{DoxyCode}

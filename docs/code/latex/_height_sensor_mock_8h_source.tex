@@ -1,0 +1,32 @@
+\hypertarget{_height_sensor_mock_8h_source}{}\doxysection{Height\+Sensor\+Mock.\+h}
+\label{_height_sensor_mock_8h_source}\index{main/src/tests/hm/HeightSensorMock.h@{main/src/tests/hm/HeightSensorMock.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ HeightSensorMock.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ *\ \ Created\ on:\ 05.06.2023}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *\ \ \ \ \ \ Author:\ Maik}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#ifndef\ SRC\_TESTS\_HEIGHTSENSORMOCK\_H\_}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#define\ SRC\_TESTS\_HEIGHTSENSORMOCK\_H\_}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}hal/IHeightSensor.h"{}}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_height_sensor_mock}{HeightSensorMock}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_i_height_sensor}{IHeightSensor}}\ \{}
+\DoxyCodeLine{00014\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00015\ \ \ \ \ \mbox{\hyperlink{class_height_sensor_mock}{HeightSensorMock}}();}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keywordtype}{void}\ registerOnNewValueCallback(HeightCallback\ callback)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keywordtype}{void}\ unregisterOnNewValueCallback()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{void}\ start()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{void}\ stop()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00020\ \ \ \ \ \textcolor{keywordtype}{float}\ getAverageHeight()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{float}\ getMaxHeight()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{float}\ getMedianHeight()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{int}\ getLastRawValue()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00024\ \};}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#endif\ }\textcolor{comment}{/*\ SRC\_TESTS\_HEIGHTSENSORMOCK\_H\_\ */}\textcolor{preprocessor}{}}
+
+\end{DoxyCode}

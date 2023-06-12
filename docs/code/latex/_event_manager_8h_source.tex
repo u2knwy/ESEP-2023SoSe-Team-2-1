@@ -1,0 +1,37 @@
+\hypertarget{_event_manager_8h_source}{}\doxysection{Event\+Manager.\+h}
+\label{_event_manager_8h_source}\index{main/src/events/EventManager.h@{main/src/events/EventManager.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ EventManager.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ *\ \ Created\ on:\ 25.05.2023}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *\ \ \ \ \ \ Author:\ Maik}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}events.h"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <functional>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <map>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <mutex>}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_event_manager}{EventManager}}\ \{}
+\DoxyCodeLine{00017\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keyword}{using\ }EventCallback\ =\ std::function<void(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_event}{Event}}\ \&)>;}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{comment}{//typedef\ void\ (*EventCallback)(Event);}}
+\DoxyCodeLine{00020\ \ \ \ \ \mbox{\hyperlink{class_event_manager}{EventManager}}();}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_event_manager}{\string~EventManager}}();}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keywordtype}{void}\ subscribe(EventType\ type,\ EventCallback\ callback);}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{void}\ unsubscribe(EventType\ type,\ EventCallback\ callback);}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keywordtype}{void}\ sendEvent(\textcolor{keyword}{const}\ \mbox{\hyperlink{struct_event}{Event}}\ \&event);}
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{int}\ start();}
+\DoxyCodeLine{00026\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{bool}\ isMaster;}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{int}\ server\_coid;}
+\DoxyCodeLine{00029\ \ \ \ \ std::map<EventType,\ std::vector<EventCallback>>\ subscribers;}
+\DoxyCodeLine{00030\ \ \ \ \ std::mutex\ mtx;}
+\DoxyCodeLine{00031\ \};}
+
+\end{DoxyCode}

@@ -82,14 +82,20 @@ Inheritance diagram for MainBasestate:</div>
  <div class="center">
   <img src="class_main_basestate.png" usemap="#MainBasestate_map" alt=""/>
   <map id="MainBasestate_map" name="MainBasestate_map">
-<area href="class_e_stop.html" alt="EStop" shape="rect" coords="154,56,298,80"/>
-<area href="class_running.html" alt="Running" shape="rect" coords="154,112,298,136"/>
-<area href="class_service_mode.html" alt="ServiceMode" shape="rect" coords="154,168,298,192"/>
-<area href="class_standby.html" alt="Standby" shape="rect" coords="154,224,298,248"/>
-<area href="class_sub_e_stop_both_released.html" alt="SubEStopBothReleased" shape="rect" coords="154,280,298,304"/>
-<area href="class_sub_e_stop_end_state.html" alt="SubEStopEndState" shape="rect" coords="154,336,298,360"/>
-<area href="class_sub_e_stop_one_pressed.html" alt="SubEStopOnePressed" shape="rect" coords="154,392,298,416"/>
-<area href="class_sub_e_stop_two_pressed.html" alt="SubEStopTwoPressed" shape="rect" coords="154,448,298,472"/>
+<area href="class_e_stop.html" alt="EStop" shape="rect" coords="215,56,420,80"/>
+<area href="class_running.html" alt="Running" shape="rect" coords="215,112,420,136"/>
+<area href="class_service_mode.html" alt="ServiceMode" shape="rect" coords="215,168,420,192"/>
+<area href="class_standby.html" alt="Standby" shape="rect" coords="215,224,420,248"/>
+<area href="class_sub_e_stop_both_released.html" alt="SubEStopBothReleased" shape="rect" coords="215,280,420,304"/>
+<area href="class_sub_e_stop_end_state.html" alt="SubEStopEndState" shape="rect" coords="215,336,420,360"/>
+<area href="class_sub_e_stop_one_pressed.html" alt="SubEStopOnePressed" shape="rect" coords="215,392,420,416"/>
+<area href="class_sub_e_stop_two_pressed.html" alt="SubEStopTwoPressed" shape="rect" coords="215,448,420,472"/>
+<area href="class_sub_service_mode_cal_offset.html" alt="SubServiceModeCalOffset" shape="rect" coords="215,504,420,528"/>
+<area href="class_sub_service_mode_cal_ref.html" alt="SubServiceModeCalRef" shape="rect" coords="215,560,420,584"/>
+<area href="class_sub_service_mode_end_state.html" alt="SubServiceModeEndState" shape="rect" coords="215,616,420,640"/>
+<area href="class_sub_service_mode_selftest_actuators.html" alt="SubServiceModeSelftestActuators" shape="rect" coords="215,672,420,696"/>
+<area href="class_sub_service_mode_selftest_sensors.html" alt="SubServiceModeSelftestSensors" shape="rect" coords="215,728,420,752"/>
+<area href="class_sub_service_mode_tests_failed.html" alt="SubServiceModeTestsFailed" shape="rect" coords="215,784,420,808"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -113,6 +119,9 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>exit</b> ()</
 <tr class="memitem:a7a7bb1861a1ce441c592af2d1361fb1d"><td class="memItemLeft" align="right" valign="top"><a id="a7a7bb1861a1ce441c592af2d1361fb1d" name="a7a7bb1861a1ce441c592af2d1361fb1d"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>initSubStateEStop</b> ()</td></tr>
 <tr class="separator:a7a7bb1861a1ce441c592af2d1361fb1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc0279ac47b3568f4a1ec0a8c68ad515"><td class="memItemLeft" align="right" valign="top"><a id="abc0279ac47b3568f4a1ec0a8c68ad515" name="abc0279ac47b3568f4a1ec0a8c68ad515"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>initSubStateServiceMode</b> ()</td></tr>
+<tr class="separator:abc0279ac47b3568f4a1ec0a8c68ad515"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53513249a075f2d4bd519ee987999f9e"><td class="memItemLeft" align="right" valign="top"><a id="a53513249a075f2d4bd519ee987999f9e" name="a53513249a075f2d4bd519ee987999f9e"></a>
 virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>isSubEndState</b> ()</td></tr>
 <tr class="separator:a53513249a075f2d4bd519ee987999f9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -203,15 +212,18 @@ virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>slave_EStop_R
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:a8037a908b94f546af7b07eb6c7746f46"><td class="memItemLeft" align="right" valign="top"><a id="a8037a908b94f546af7b07eb6c7746f46" name="a8037a908b94f546af7b07eb6c7746f46"></a>
-<a class="el" href="class_main_context_data.html">MainContextData</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>data</b></td></tr>
-<tr class="separator:a8037a908b94f546af7b07eb6c7746f46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e25e673d55619d9b7ea6be9bc1094de"><td class="memItemLeft" align="right" valign="top"><a id="a2e25e673d55619d9b7ea6be9bc1094de" name="a2e25e673d55619d9b7ea6be9bc1094de"></a>
+<a class="el" href="class_main_basestate.html">MainBasestate</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>substateEStop</b> = nullptr</td></tr>
+<tr class="separator:a2e25e673d55619d9b7ea6be9bc1094de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade33c522924d79a3e77ba404f48bd213"><td class="memItemLeft" align="right" valign="top"><a id="ade33c522924d79a3e77ba404f48bd213" name="ade33c522924d79a3e77ba404f48bd213"></a>
+<a class="el" href="class_main_basestate.html">MainBasestate</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>substateServiceMode</b> = nullptr</td></tr>
+<tr class="separator:ade33c522924d79a3e77ba404f48bd213"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a97154d5abf5e5e9b76b05379ad318989"><td class="memItemLeft" align="right" valign="top"><a id="a97154d5abf5e5e9b76b05379ad318989" name="a97154d5abf5e5e9b76b05379ad318989"></a>
 <a class="el" href="class_main_actions.html">MainActions</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>actions</b></td></tr>
 <tr class="separator:a97154d5abf5e5e9b76b05379ad318989"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e25e673d55619d9b7ea6be9bc1094de"><td class="memItemLeft" align="right" valign="top"><a id="a2e25e673d55619d9b7ea6be9bc1094de" name="a2e25e673d55619d9b7ea6be9bc1094de"></a>
-<a class="el" href="class_main_basestate.html">MainBasestate</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>substateEStop</b></td></tr>
-<tr class="separator:a2e25e673d55619d9b7ea6be9bc1094de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8037a908b94f546af7b07eb6c7746f46"><td class="memItemLeft" align="right" valign="top"><a id="a8037a908b94f546af7b07eb6c7746f46" name="a8037a908b94f546af7b07eb6c7746f46"></a>
+<a class="el" href="class_main_context_data.html">MainContextData</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>data</b></td></tr>
+<tr class="separator:a8037a908b94f546af7b07eb6c7746f46"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>main/src/logic/main_fsm/<a class="el" href="_main_basestate_8h_source.html">MainBasestate.h</a></li>

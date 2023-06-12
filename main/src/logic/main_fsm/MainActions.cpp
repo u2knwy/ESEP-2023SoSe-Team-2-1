@@ -95,32 +95,55 @@ void MainActions::setEStopMode() {
 }
 
 void MainActions::allActuatorsOn() {
+	eventManager->sendEvent(Event{EventType::LAMP_M_GREEN, (int) LampState::ON});
+	eventManager->sendEvent(Event{EventType::LAMP_M_YELLOW, (int) LampState::ON});
+	eventManager->sendEvent(Event{EventType::LAMP_M_RED, (int) LampState::ON});
+	eventManager->sendEvent(Event{EventType::LED_M_START, (int) LampState::ON});
+	eventManager->sendEvent(Event{EventType::LED_M_RESET, (int) LampState::ON});
+	eventManager->sendEvent(Event{EventType::LED_M_Q1, (int) LampState::ON});
+	eventManager->sendEvent(Event{EventType::LED_M_Q2, (int) LampState::ON});
 
+	eventManager->sendEvent(Event{EventType::LAMP_S_GREEN, (int) LampState::ON});
+	eventManager->sendEvent(Event{EventType::LAMP_S_YELLOW, (int) LampState::ON});
+	eventManager->sendEvent(Event{EventType::LAMP_S_RED, (int) LampState::ON});
+	eventManager->sendEvent(Event{EventType::LED_S_START, (int) LampState::ON});
+	eventManager->sendEvent(Event{EventType::LED_S_RESET, (int) LampState::ON});
+	eventManager->sendEvent(Event{EventType::LED_S_Q1, (int) LampState::ON});
+	eventManager->sendEvent(Event{EventType::LED_S_Q2, (int) LampState::ON});
 }
 
 void MainActions::allActuatorsOff() {
+	eventManager->sendEvent(Event{EventType::LAMP_M_GREEN, (int) LampState::OFF});
+	eventManager->sendEvent(Event{EventType::LAMP_M_YELLOW, (int) LampState::OFF});
+	eventManager->sendEvent(Event{EventType::LAMP_M_RED, (int) LampState::OFF});
+	eventManager->sendEvent(Event{EventType::LED_M_START, (int) LampState::OFF});
+	eventManager->sendEvent(Event{EventType::LED_M_RESET, (int) LampState::OFF});
+	eventManager->sendEvent(Event{EventType::LED_M_Q1, (int) LampState::OFF});
+	eventManager->sendEvent(Event{EventType::LED_M_Q2, (int) LampState::OFF});
+
+	eventManager->sendEvent(Event{EventType::LAMP_S_GREEN, (int) LampState::OFF});
+	eventManager->sendEvent(Event{EventType::LAMP_S_YELLOW, (int) LampState::OFF});
+	eventManager->sendEvent(Event{EventType::LAMP_S_RED, (int) LampState::OFF});
+	eventManager->sendEvent(Event{EventType::LED_S_START, (int) LampState::OFF});
+	eventManager->sendEvent(Event{EventType::LED_S_RESET, (int) LampState::OFF});
+	eventManager->sendEvent(Event{EventType::LED_S_Q1, (int) LampState::OFF});
+	eventManager->sendEvent(Event{EventType::LED_S_Q2, (int) LampState::OFF});
 }
 
-void MainActions::displayWarning() {
-	Event event;
-	event.data = 1;
-
-	event.type = EventType::WARNING_M;
-	eventManager->sendEvent(event);
-
-	event.type = EventType::WARNING_S;
-	eventManager->sendEvent(event);
+void MainActions::master_warningOn() {
+	eventManager->sendEvent(Event{EventType::LAMP_M_YELLOW, (int) LampState::FLASHING_SLOW});
 }
 
-void MainActions::warningOff() {
-	Event event;
-	event.data = 0;
+void MainActions::master_warningOff() {
+	eventManager->sendEvent(Event{EventType::LAMP_M_YELLOW, (int) LampState::OFF});
+}
 
-	event.type = EventType::WARNING_M;
-	eventManager->sendEvent(event);
+void MainActions::slave_warningOn() {
+	eventManager->sendEvent(Event{EventType::LAMP_S_YELLOW, (int) LampState::FLASHING_SLOW});
+}
 
-	event.type = EventType::WARNING_S;
-	eventManager->sendEvent(event);
+void MainActions::slave_warningOff() {
+	eventManager->sendEvent(Event{EventType::LAMP_S_YELLOW, (int) LampState::OFF});
 }
 
 void MainActions::calibrateOffset() {
@@ -164,38 +187,22 @@ void MainActions::saveCalibration() {
 }
 
 void MainActions::btnStartLedOn() {
-	Event ev;
-	ev.data = 1;
-	ev.type = EventType::LED_M_START;
-	eventManager->sendEvent(ev);
-	ev.type = EventType::LED_S_START;
-	eventManager->sendEvent(ev);
+	eventManager->sendEvent(Event{EventType::LED_M_START, (int) LampState::ON});
+	eventManager->sendEvent(Event{EventType::LED_S_START, (int) LampState::ON});
 }
 
 void MainActions::btnResetLedOn() {
-	Event ev;
-	ev.data = 1;
-	ev.type = EventType::LED_M_RESET;
-	eventManager->sendEvent(ev);
-	ev.type = EventType::LED_S_RESET;
-	eventManager->sendEvent(ev);
+	eventManager->sendEvent(Event{EventType::LED_M_RESET, (int) LampState::ON});
+	eventManager->sendEvent(Event{EventType::LED_S_RESET, (int) LampState::ON});
 }
 
 void MainActions::btnStartLedOff() {
-	Event ev;
-	ev.data = 0;
-	ev.type = EventType::LED_M_START;
-	eventManager->sendEvent(ev);
-	ev.type = EventType::LED_S_START;
-	eventManager->sendEvent(ev);
+	eventManager->sendEvent(Event{EventType::LED_M_START, (int) LampState::OFF});
+	eventManager->sendEvent(Event{EventType::LED_S_START, (int) LampState::OFF});
 }
 
 void MainActions::btnResetLedOff() {
-	Event ev;
-	ev.data = 0;
-	ev.type = EventType::LED_M_RESET;
-	eventManager->sendEvent(ev);
-	ev.type = EventType::LED_S_RESET;
-	eventManager->sendEvent(ev);
+	eventManager->sendEvent(Event{EventType::LED_M_RESET, (int) LampState::OFF});
+	eventManager->sendEvent(Event{EventType::LED_S_RESET, (int) LampState::OFF});
 }
 

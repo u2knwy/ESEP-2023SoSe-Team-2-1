@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['openswitch_0',['openSwitch',['../class_actuators.html#a88b06c9e847bbd58f0167208e119bf64',1,'Actuators']]]
+  ['nworkpiecesonfbm1_0',['nWorkpiecesOnFBM1',['../class_workpiece_manager.html#a99e1255ffde447d5b149af13aac46244',1,'WorkpieceManager']]]
 ];

@@ -1,0 +1,39 @@
+\hypertarget{_motor_context_8h_source}{}\doxysection{Motor\+Context.\+h}
+\label{_motor_context_8h_source}\index{main/src/logic/motor\_fsm/MotorContext.h@{main/src/logic/motor\_fsm/MotorContext.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ MotorContext.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ *\ \ Created\ on:\ 09.06.2023}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *\ \ \ \ \ \ Author:\ Maik}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}MotorActions.h"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}MotorContextData.h"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}MotorBasestate.h"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}events/IEventHandler.h"{}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ "{}events/EventManager.h"{}}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ "{}events/events.h"{}}}
+\DoxyCodeLine{00015\ }
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_motor_context}{MotorContext}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_i_event_handler}{IEventHandler}}\ \{}
+\DoxyCodeLine{00019\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00020\ \ \ \ \ \mbox{\hyperlink{class_motor_context}{MotorContext}}(std::shared\_ptr<EventManager>\ mngr,\ \textcolor{keywordtype}{bool}\ master);}
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_motor_context}{\string~MotorContext}}();}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{void}\ handleEvent(\mbox{\hyperlink{struct_event}{Event}}\ event)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00024\ \ \ \ \ MotorState\ getCurrentState();}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00027\ \ \ \ \ \mbox{\hyperlink{class_motor_actions}{MotorActions}}*\ actions;}
+\DoxyCodeLine{00028\ \ \ \ \ \mbox{\hyperlink{class_motor_context_data}{MotorContextData}}*\ data;}
+\DoxyCodeLine{00029\ \ \ \ \ \mbox{\hyperlink{class_motor_basestate}{MotorBasestate}}*\ state;}
+\DoxyCodeLine{00030\ \ \ \ \ std::shared\_ptr<EventManager>\ eventManager;}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{void}\ subscribeToEvents();}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{bool}\ isMaster;}
+\DoxyCodeLine{00033\ \};}
+
+\end{DoxyCode}

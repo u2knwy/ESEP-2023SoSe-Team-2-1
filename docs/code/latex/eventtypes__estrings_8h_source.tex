@@ -1,0 +1,105 @@
+\hypertarget{eventtypes__estrings_8h_source}{}\doxysection{eventtypes\+\_\+estrings.\+h}
+\label{eventtypes__estrings_8h_source}\index{main/src/events/eventtypes\_estrings.h@{main/src/events/eventtypes\_estrings.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{//}}
+\DoxyCodeLine{00002\ \textcolor{comment}{//\ Created\ by\ domxs\ on\ 17.04.2023.}}
+\DoxyCodeLine{00003\ \textcolor{comment}{//}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{comment}{//\ Used\ for\ interrupts\ and\ "{}thread\ control"{}}}
+\DoxyCodeLine{00006\ ESTRING(PULSE\_STOP\_THREAD)}
+\DoxyCodeLine{00007\ ESTRING(PULSE\_ADC\_SAMPLING\_DONE)}
+\DoxyCodeLine{00008\ ESTRING(PULSE\_INTR\_ON\_PORT0)}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{comment}{//\ Buttons\ and\ EStop}}
+\DoxyCodeLine{00011\ ESTRING(START\_M\_SHORT)}
+\DoxyCodeLine{00012\ ESTRING(START\_M\_LONG)}
+\DoxyCodeLine{00013\ ESTRING(STOP\_M\_SHORT)}
+\DoxyCodeLine{00014\ ESTRING(RESET\_M\_SHORT)}
+\DoxyCodeLine{00015\ ESTRING(START\_S\_SHORT)}
+\DoxyCodeLine{00016\ ESTRING(START\_S\_LONG)}
+\DoxyCodeLine{00017\ ESTRING(STOP\_S\_SHORT)}
+\DoxyCodeLine{00018\ ESTRING(RESET\_S\_SHORT)}
+\DoxyCodeLine{00019\ ESTRING(ESTOP\_M\_PRESSED)}
+\DoxyCodeLine{00020\ ESTRING(ESTOP\_S\_PRESSED)}
+\DoxyCodeLine{00021\ ESTRING(ESTOP\_M\_RELEASED)}
+\DoxyCodeLine{00022\ ESTRING(ESTOP\_S\_RELEASED)}
+\DoxyCodeLine{00023\ }
+\DoxyCodeLine{00024\ \textcolor{comment}{//\ Events\ for\ requests\ to\ MotorFSM}}
+\DoxyCodeLine{00025\ ESTRING(MOTOR\_M\_STOP\_REQ)}
+\DoxyCodeLine{00026\ ESTRING(MOTOR\_M\_SLOW\_REQ)}
+\DoxyCodeLine{00027\ ESTRING(MOTOR\_M\_RIGHT\_REQ)}
+\DoxyCodeLine{00028\ ESTRING(MOTOR\_S\_STOP\_REQ)}
+\DoxyCodeLine{00029\ ESTRING(MOTOR\_S\_SLOW\_REQ)}
+\DoxyCodeLine{00030\ ESTRING(MOTOR\_S\_RIGHT\_REQ)}
+\DoxyCodeLine{00031\ \textcolor{comment}{//\ Events\ where\ Actuators\ are\ subscribed\ to\ and\ lets\ the\ motor\ immediately\ run\ fast/slow/stop}}
+\DoxyCodeLine{00032\ ESTRING(MOTOR\_M\_STOP)}
+\DoxyCodeLine{00033\ ESTRING(MOTOR\_M\_SLOW)}
+\DoxyCodeLine{00034\ ESTRING(MOTOR\_M\_FAST)}
+\DoxyCodeLine{00035\ ESTRING(MOTOR\_S\_STOP)}
+\DoxyCodeLine{00036\ ESTRING(MOTOR\_S\_SLOW)}
+\DoxyCodeLine{00037\ ESTRING(MOTOR\_S\_FAST)}
+\DoxyCodeLine{00038\ \textcolor{comment}{//\ Events\ to\ control\ the\ switch}}
+\DoxyCodeLine{00039\ ESTRING(SWITCH\_M\_SORTOUT)}
+\DoxyCodeLine{00040\ ESTRING(SWITCH\_S\_SORTOUT)}
+\DoxyCodeLine{00041\ }
+\DoxyCodeLine{00042\ \textcolor{comment}{//\ Actuators}}
+\DoxyCodeLine{00043\ ESTRING(LAMP\_M\_GREEN)}
+\DoxyCodeLine{00044\ ESTRING(LAMP\_S\_GREEN)}
+\DoxyCodeLine{00045\ ESTRING(LAMP\_M\_YELLOW)}
+\DoxyCodeLine{00046\ ESTRING(LAMP\_S\_YELLOW)}
+\DoxyCodeLine{00047\ ESTRING(LAMP\_M\_RED)}
+\DoxyCodeLine{00048\ ESTRING(LAMP\_S\_RED)}
+\DoxyCodeLine{00049\ ESTRING(LED\_M\_START)}
+\DoxyCodeLine{00050\ ESTRING(LED\_S\_START)}
+\DoxyCodeLine{00051\ ESTRING(LED\_M\_RESET)}
+\DoxyCodeLine{00052\ ESTRING(LED\_S\_RESET)}
+\DoxyCodeLine{00053\ ESTRING(LED\_M\_Q1)}
+\DoxyCodeLine{00054\ ESTRING(LED\_S\_Q1)}
+\DoxyCodeLine{00055\ ESTRING(LED\_M\_Q2)}
+\DoxyCodeLine{00056\ ESTRING(LED\_S\_Q2)}
+\DoxyCodeLine{00057\ }
+\DoxyCodeLine{00058\ \textcolor{comment}{//\ Light\ Barriers}}
+\DoxyCodeLine{00059\ ESTRING(LBA\_M\_BLOCKED)}
+\DoxyCodeLine{00060\ ESTRING(LBA\_S\_BLOCKED)}
+\DoxyCodeLine{00061\ ESTRING(LBA\_M\_UNBLOCKED)}
+\DoxyCodeLine{00062\ ESTRING(LBA\_S\_UNBLOCKED)}
+\DoxyCodeLine{00063\ ESTRING(LBW\_M\_BLOCKED)}
+\DoxyCodeLine{00064\ ESTRING(LBW\_S\_BLOCKED)}
+\DoxyCodeLine{00065\ ESTRING(LBW\_M\_UNBLOCKED)}
+\DoxyCodeLine{00066\ ESTRING(LBW\_S\_UNBLOCKED)}
+\DoxyCodeLine{00067\ ESTRING(LBE\_M\_BLOCKED)}
+\DoxyCodeLine{00068\ ESTRING(LBE\_S\_BLOCKED)}
+\DoxyCodeLine{00069\ ESTRING(LBE\_M\_UNBLOCKED)}
+\DoxyCodeLine{00070\ ESTRING(LBE\_S\_UNBLOCKED)}
+\DoxyCodeLine{00071\ ESTRING(LBR\_M\_BLOCKED)}
+\DoxyCodeLine{00072\ ESTRING(LBR\_S\_BLOCKED)}
+\DoxyCodeLine{00073\ ESTRING(LBR\_M\_UNBLOCKED)}
+\DoxyCodeLine{00074\ ESTRING(LBR\_S\_UNBLOCKED)}
+\DoxyCodeLine{00075\ }
+\DoxyCodeLine{00076\ \textcolor{comment}{//\ HeightSensor}}
+\DoxyCodeLine{00077\ ESTRING(HM\_M\_WS\_UNKNOWN)}
+\DoxyCodeLine{00078\ ESTRING(HM\_M\_WS\_F)}
+\DoxyCodeLine{00079\ ESTRING(HM\_M\_WS\_OB)}
+\DoxyCodeLine{00080\ ESTRING(HM\_M\_WS\_BOM)}
+\DoxyCodeLine{00081\ ESTRING(HM\_S\_WS\_UNKNOWN)}
+\DoxyCodeLine{00082\ ESTRING(HM\_S\_WS\_F)}
+\DoxyCodeLine{00083\ ESTRING(HM\_S\_WS\_OB)}
+\DoxyCodeLine{00084\ ESTRING(HM\_S\_WS\_BOM)}
+\DoxyCodeLine{00085\ }
+\DoxyCodeLine{00086\ \textcolor{comment}{//\ Metal\ Sensor}}
+\DoxyCodeLine{00087\ ESTRING(MD\_M\_PAYLOAD)}
+\DoxyCodeLine{00088\ ESTRING(MD\_S\_PAYLOAD)}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00090\ \textcolor{comment}{//\ Modes}}
+\DoxyCodeLine{00091\ ESTRING(MODE\_STANDBY)}
+\DoxyCodeLine{00092\ ESTRING(MODE\_RUNNING)}
+\DoxyCodeLine{00093\ ESTRING(MODE\_SERVICE)}
+\DoxyCodeLine{00094\ ESTRING(MODE\_ESTOP)}
+\DoxyCodeLine{00095\ ESTRING(MODE\_ERROR)}
+\DoxyCodeLine{00096\ }
+\DoxyCodeLine{00097\ \textcolor{comment}{//\ Watchdog}}
+\DoxyCodeLine{00098\ ESTRING(WatchDogHeartbeat)}
+\DoxyCodeLine{00099\ ESTRING(WatchDogHeartbeatTimeOut)}
+
+\end{DoxyCode}

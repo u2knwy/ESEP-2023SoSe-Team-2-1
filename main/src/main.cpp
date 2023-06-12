@@ -91,7 +91,6 @@ int main(int argc, char **argv)
 	eventManager = std::make_shared<EventManager>();
 	sensors = std::make_shared<Sensors>(eventManager);
 	actuators = std::make_shared<Actuators>(eventManager);
-	actuators->setMotorStop(true);
 
 	// Run FSM's
 	mainFSM = std::make_shared<MainContext>(eventManager);

@@ -1,0 +1,56 @@
+\hypertarget{_configuration_8h_source}{}\doxysection{Configuration.\+h}
+\label{_configuration_8h_source}\index{main/src/configuration/Configuration.h@{main/src/configuration/Configuration.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ Configuration.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ *\ \ Created\ on:\ 07.05.2023}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *\ \ \ \ \ \ Author:\ Maik}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}data/Workpiece.h"{}}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#define\ DEFAULT\_CONFIG\_FILE\_PATH\ "{}conf.txt"{}}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_calibration}{Calibration}}\ \{}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keywordtype}{int}\ calOffset;}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keywordtype}{int}\ calRef;}
+\DoxyCodeLine{00018\ \};}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_configuration}{Configuration}}\ \{}
+\DoxyCodeLine{00021\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00022\ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{class_configuration}{Configuration}}\ \&getInstance()}
+\DoxyCodeLine{00023\ \ \ \ \ \{}
+\DoxyCodeLine{00024\ \ \ \ \ \ \ \ \ \textcolor{keyword}{static}\ \mbox{\hyperlink{class_configuration}{Configuration}}\ instance;}
+\DoxyCodeLine{00025\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ instance;}
+\DoxyCodeLine{00026\ \ \ \ \ \}}
+\DoxyCodeLine{00027\ \ \ \ \ \textcolor{keywordtype}{void}\ setConfigFilePath(std::string\ filePath);}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keywordtype}{bool}\ readConfigFromFile();}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{void}\ setMaster(\textcolor{keywordtype}{bool}\ isMaster);}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{bool}\ systemIsMaster();}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{void}\ setPusherMounted(\textcolor{keywordtype}{bool}\ pusherIsMounted);}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keywordtype}{bool}\ pusherMounted();}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keywordtype}{void}\ setDesiredWorkpieceOrder(std::vector<WorkpieceType>\ order);}
+\DoxyCodeLine{00034\ \ \ \ \ std::vector<WorkpieceType>\ getDesiredOrder();}
+\DoxyCodeLine{00035\ \ \ \ \ \mbox{\hyperlink{struct_calibration}{Calibration}}\ getCalibration();}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{void}\ setOffsetCalibration(\textcolor{keywordtype}{int}\ offset);}
+\DoxyCodeLine{00037\ \ \ \ \ \textcolor{keywordtype}{void}\ setReferenceCalibration(\textcolor{keywordtype}{int}\ refHigh);}
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{void}\ saveCurrentConfigToFile();}
+\DoxyCodeLine{00039\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00040\ \ \ \ \ \mbox{\hyperlink{class_configuration}{Configuration}}();}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_configuration}{\string~Configuration}}();}
+\DoxyCodeLine{00042\ \ \ \ \ \mbox{\hyperlink{class_configuration}{Configuration}}(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_configuration}{Configuration}}\ \&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00043\ \ \ \ \ \mbox{\hyperlink{class_configuration}{Configuration}}\ \&operator=(\textcolor{keyword}{const}\ \mbox{\hyperlink{class_configuration}{Configuration}}\ \&)\ =\ \textcolor{keyword}{delete};}
+\DoxyCodeLine{00044\ \ \ \ \ std::string\ configFilePath;}
+\DoxyCodeLine{00045\ \ \ \ \ std::vector<WorkpieceType>\ order;}
+\DoxyCodeLine{00046\ \ \ \ \ \textcolor{keywordtype}{bool}\ isMaster\{\textcolor{keyword}{true}\};}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{keywordtype}{bool}\ hasPusher\{\textcolor{keyword}{false}\};}
+\DoxyCodeLine{00048\ \ \ \ \ \mbox{\hyperlink{struct_calibration}{Calibration}}\ cal;}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{keywordtype}{void}\ writeLineToConfigFile(\textcolor{keywordtype}{int}\ lineNumber,\ \textcolor{keyword}{const}\ std::string\&\ newContent);}
+\DoxyCodeLine{00050\ \};}
+
+\end{DoxyCode}

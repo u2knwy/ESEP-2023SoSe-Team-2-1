@@ -1,10 +1,12 @@
 var searchData=
 [
-  ['festo_20transfer_20system_20qnx_2dsimulation_0',['Festo Transfer System QNX-Simulation',['../md_main_src_simulation_doc__festo__q_n_x__simulation.html',1,'']]],
-  ['festo_20transfer_20system_20simulation_1',['Festo Transfer System Simulation',['../md_main_src_simulation__r_e_a_d_m_e.html',1,'']]],
-  ['festo_20transfer_20system_20simulation_20visualisation_2',['Festo Transfer System Simulation Visualisation',['../md_main_src_simulation_utils_gui__read_me.html',1,'']]],
-  ['festovisualisation_3',['festovisualisation',['../namespacefestovisualisation.html',1,'']]],
-  ['fifoadcdataread_4',['fifoADCDataRead',['../class_t_s_c_a_d_c.html#a8c2bd0f7cc62132c827d1cd8f236f7ce',1,'TSCADC']]],
-  ['fifoirqthresholdlevelconfig_5',['fifoIRQThresholdLevelConfig',['../class_t_s_c_a_d_c.html#a7d3c87015cc31cfcb3d7d5fdf79ce39c',1,'TSCADC']]],
-  ['flatdetected_6',['flatDetected',['../class_height_basestate.html#a36057a2e55e937990f67c42709158acb',1,'HeightBasestate']]]
+  ['getaveragevalue_0',['getAverageValue',['../class_height_context_data.html#a01414656e57f44980ae713fe783bdf6b',1,'HeightContextData']]],
+  ['getcurrenttype_1',['getCurrentType',['../class_height_context_data.html#aa0cfc121862bd4a79cd855cda57dfad3',1,'HeightContextData']]],
+  ['getid_2',['getId',['../class_workpiece.html#a114e397d2fd1e25d849d9a300f6f0f90',1,'Workpiece']]],
+  ['getmaximumvalue_3',['getMaximumValue',['../class_height_context_data.html#ae6de081ca1e8282b0de354de74738c62',1,'HeightContextData']]],
+  ['getrevision_4',['getRevision',['../class_t_s_c_a_d_c.html#aba48d5e2bf84838b8614d1a5a9f76ff7',1,'TSCADC']]],
+  ['gettype_5',['getType',['../class_workpiece.html#a4d9930a796baef2756211a36662311df',1,'Workpiece']]],
+  ['gratuitous_5fargument_5ffor_5foption_6',['gratuitous_argument_for_option',['../classcxxopts_1_1exceptions_1_1gratuitous__argument__for__option.html',1,'cxxopts::exceptions']]],
+  ['greenlampoff_7',['greenLampOff',['../class_actuators.html#a5c94ce5ae938550a7431d7e3ae8eaa52',1,'Actuators']]],
+  ['greenlampon_8',['greenLampOn',['../class_actuators.html#a5331d1408f77191d69c3c28a167488dd',1,'Actuators']]]
 ];

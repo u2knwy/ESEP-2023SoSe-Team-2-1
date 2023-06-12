@@ -1,0 +1,99 @@
+\hypertarget{class_height_basestate}{}\doxysection{Height\+Basestate Class Reference}
+\label{class_height_basestate}\index{HeightBasestate@{HeightBasestate}}
+Inheritance diagram for Height\+Basestate\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_height_basestate}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_height_basestate_a272cf65aa98151b265deb971737f2512}\label{class_height_basestate_a272cf65aa98151b265deb971737f2512}} 
+virtual void {\bfseries set\+Data} (\mbox{\hyperlink{class_height_context_data}{Height\+Context\+Data}} $\ast$data)
+\item 
+\mbox{\Hypertarget{class_height_basestate_a95cc6fd03396dd8d5835442cbf040498}\label{class_height_basestate_a95cc6fd03396dd8d5835442cbf040498}} 
+virtual void {\bfseries set\+Action} (\mbox{\hyperlink{class_height_actions}{Height\+Actions}} $\ast$actions)
+\item 
+\mbox{\Hypertarget{class_height_basestate_a22cfa5bb36dcd26a462debba2176d4bf}\label{class_height_basestate_a22cfa5bb36dcd26a462debba2176d4bf}} 
+virtual Height\+State {\bfseries get\+Current\+State} ()
+\item 
+\mbox{\Hypertarget{class_height_basestate_a2cff55af8e504b16f86e72a137be68c9}\label{class_height_basestate_a2cff55af8e504b16f86e72a137be68c9}} 
+virtual void {\bfseries entry} ()
+\item 
+\mbox{\Hypertarget{class_height_basestate_a7ddc96961568ba4f52d853650b9bc6a2}\label{class_height_basestate_a7ddc96961568ba4f52d853650b9bc6a2}} 
+virtual void {\bfseries exit} ()
+\item 
+virtual bool \mbox{\hyperlink{class_height_basestate_a295d9538b002592f583d2f5cf78665b3}{belt\+Detected}} ()
+\item 
+virtual bool \mbox{\hyperlink{class_height_basestate_a36057a2e55e937990f67c42709158acb}{flat\+Detected}} ()
+\item 
+virtual bool \mbox{\hyperlink{class_height_basestate_a3405f37765ea8634f07104afafb155ff}{high\+Detected}} ()
+\item 
+virtual bool \mbox{\hyperlink{class_height_basestate_aad61f9a01341a2a9fe83dc8f3a8d8cdc}{hole\+Detected}} ()
+\item 
+virtual bool \mbox{\hyperlink{class_height_basestate_a3c3d9d08d1e751cdd155aeeeb2add140}{unknown\+Detected}} ()
+\item 
+virtual bool \mbox{\hyperlink{class_height_basestate_a0c6510bc98e6cdb95db068af8a386f0d}{motor\+Stopped}} ()
+\item 
+virtual bool \mbox{\hyperlink{class_height_basestate_aedf5b8f6a9ad0f3fad307395a58b0089}{motor\+Running}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_height_basestate_aeab029757c45b69992d47e3ae1cd623f}\label{class_height_basestate_aeab029757c45b69992d47e3ae1cd623f}} 
+\mbox{\hyperlink{class_height_context_data}{Height\+Context\+Data}} $\ast$ {\bfseries data}
+\item 
+\mbox{\Hypertarget{class_height_basestate_aa9d16080a7d6bd761f7a896d907621fa}\label{class_height_basestate_aa9d16080a7d6bd761f7a896d907621fa}} 
+\mbox{\hyperlink{class_height_actions}{Height\+Actions}} $\ast$ {\bfseries actions}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_height_basestate_a295d9538b002592f583d2f5cf78665b3}\label{class_height_basestate_a295d9538b002592f583d2f5cf78665b3}} 
+\index{HeightBasestate@{HeightBasestate}!beltDetected@{beltDetected}}
+\index{beltDetected@{beltDetected}!HeightBasestate@{HeightBasestate}}
+\doxysubsubsection{\texorpdfstring{beltDetected()}{beltDetected()}}
+{\footnotesize\ttfamily virtual bool Height\+Basestate\+::belt\+Detected (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+Height BELT was detected \mbox{\Hypertarget{class_height_basestate_a36057a2e55e937990f67c42709158acb}\label{class_height_basestate_a36057a2e55e937990f67c42709158acb}} 
+\index{HeightBasestate@{HeightBasestate}!flatDetected@{flatDetected}}
+\index{flatDetected@{flatDetected}!HeightBasestate@{HeightBasestate}}
+\doxysubsubsection{\texorpdfstring{flatDetected()}{flatDetected()}}
+{\footnotesize\ttfamily virtual bool Height\+Basestate\+::flat\+Detected (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+Height FLAT was detected \mbox{\Hypertarget{class_height_basestate_a3405f37765ea8634f07104afafb155ff}\label{class_height_basestate_a3405f37765ea8634f07104afafb155ff}} 
+\index{HeightBasestate@{HeightBasestate}!highDetected@{highDetected}}
+\index{highDetected@{highDetected}!HeightBasestate@{HeightBasestate}}
+\doxysubsubsection{\texorpdfstring{highDetected()}{highDetected()}}
+{\footnotesize\ttfamily virtual bool Height\+Basestate\+::high\+Detected (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+Height HIGH was detected \mbox{\Hypertarget{class_height_basestate_aad61f9a01341a2a9fe83dc8f3a8d8cdc}\label{class_height_basestate_aad61f9a01341a2a9fe83dc8f3a8d8cdc}} 
+\index{HeightBasestate@{HeightBasestate}!holeDetected@{holeDetected}}
+\index{holeDetected@{holeDetected}!HeightBasestate@{HeightBasestate}}
+\doxysubsubsection{\texorpdfstring{holeDetected()}{holeDetected()}}
+{\footnotesize\ttfamily virtual bool Height\+Basestate\+::hole\+Detected (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+Height HOLE was detected \mbox{\Hypertarget{class_height_basestate_aedf5b8f6a9ad0f3fad307395a58b0089}\label{class_height_basestate_aedf5b8f6a9ad0f3fad307395a58b0089}} 
+\index{HeightBasestate@{HeightBasestate}!motorRunning@{motorRunning}}
+\index{motorRunning@{motorRunning}!HeightBasestate@{HeightBasestate}}
+\doxysubsubsection{\texorpdfstring{motorRunning()}{motorRunning()}}
+{\footnotesize\ttfamily virtual bool Height\+Basestate\+::motor\+Running (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+The motor is running \mbox{\Hypertarget{class_height_basestate_a0c6510bc98e6cdb95db068af8a386f0d}\label{class_height_basestate_a0c6510bc98e6cdb95db068af8a386f0d}} 
+\index{HeightBasestate@{HeightBasestate}!motorStopped@{motorStopped}}
+\index{motorStopped@{motorStopped}!HeightBasestate@{HeightBasestate}}
+\doxysubsubsection{\texorpdfstring{motorStopped()}{motorStopped()}}
+{\footnotesize\ttfamily virtual bool Height\+Basestate\+::motor\+Stopped (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+The motor was stopped \mbox{\Hypertarget{class_height_basestate_a3c3d9d08d1e751cdd155aeeeb2add140}\label{class_height_basestate_a3c3d9d08d1e751cdd155aeeeb2add140}} 
+\index{HeightBasestate@{HeightBasestate}!unknownDetected@{unknownDetected}}
+\index{unknownDetected@{unknownDetected}!HeightBasestate@{HeightBasestate}}
+\doxysubsubsection{\texorpdfstring{unknownDetected()}{unknownDetected()}}
+{\footnotesize\ttfamily virtual bool Height\+Basestate\+::unknown\+Detected (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+Height UNKNOWN was detected 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+main/src/logic/hm/Height\+Basestate.\+h\end{DoxyCompactItemize}

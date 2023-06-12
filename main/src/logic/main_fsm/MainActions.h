@@ -29,8 +29,10 @@ public:
 	void setEStopMode();
 	void allActuatorsOn();
 	void allActuatorsOff();
-	void displayWarning();
-	void warningOff();
+	void master_warningOn();
+	void master_warningOff();
+	void slave_warningOn();
+	void slave_warningOff();
 	void calibrateOffset();
 	void calibrateReference();
 	void saveCalibration();

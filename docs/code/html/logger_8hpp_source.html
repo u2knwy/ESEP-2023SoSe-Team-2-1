@@ -127,8 +127,8 @@ $(function() {
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>            getInstance().minimal_log_level = log_level;</div>
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        }</div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        <span class="keywordtype">void</span> handleEvent(EventType eventType)<span class="keyword"> override </span>{</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>            info(<span class="stringliteral">&quot;Event occurred: &quot;</span> + EVENT_TO_STRING(eventType));</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        <span class="keywordtype">void</span> handleEvent(<a class="code hl_struct" href="struct_event.html">Event</a> event)<span class="keyword"> override </span>{</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>            info(<span class="stringliteral">&quot;Event occurred: &quot;</span> + EVENT_TO_STRING(event.type));</div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        }</div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    <span class="keyword">private</span>:</div>
@@ -180,8 +180,9 @@ $(function() {
 <div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>            std::cout &lt;&lt; stringstream.str() &lt;&lt; std::endl;</div>
 <div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>        }</div>
 <div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>};</div>
-<div class="ttc" id="aclass_i_event_handler_html"><div class="ttname"><a href="class_i_event_handler.html">IEventHandler</a></div><div class="ttdef"><b>Definition:</b> IEventHandler.h:12</div></div>
+<div class="ttc" id="aclass_i_event_handler_html"><div class="ttname"><a href="class_i_event_handler.html">IEventHandler</a></div><div class="ttdef"><b>Definition:</b> IEventHandler.h:20</div></div>
 <div class="ttc" id="aclass_logger_html"><div class="ttname"><a href="class_logger.html">Logger</a></div><div class="ttdef"><b>Definition:</b> logger.hpp:18</div></div>
+<div class="ttc" id="astruct_event_html"><div class="ttname"><a href="struct_event.html">Event</a></div><div class="ttdef"><b>Definition:</b> IEventHandler.h:13</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

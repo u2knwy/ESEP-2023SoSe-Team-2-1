@@ -1,0 +1,119 @@
+\hypertarget{_actuators_8h_source}{}\doxysection{Actuators.\+h}
+\label{_actuators_8h_source}\index{main/src/hal/Actuators.h@{main/src/hal/Actuators.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ Actuators.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ *\ \ Created\ on:\ 26.05.2023}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *\ \ \ \ \ \ Author:\ Maik}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}events/IEventHandler.h"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}events/EventManager.h"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}events/events.h"{}}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <thread>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <mutex>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ <sys/neutrino.h>}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ <sys/procmgr.h>}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ "{}Sensors.h"{}}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#define\ ON\_TIME\_FAST\_MS\ 500}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#define\ ON\_TIME\_SLOW\_MS\ 1000}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#define\ ON\_TIME\_PUSHER\_MS\ 300}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#define\ ON\_TIME\_SWITCH\_MS\ 1000}}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_actuators}{Actuators}}\ :\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_i_event_handler}{IEventHandler}}\ \{}
+\DoxyCodeLine{00026\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00027\ \ \ \ \ \mbox{\hyperlink{class_actuators}{Actuators}}(std::shared\_ptr<EventManager>\ mngr);}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_actuators}{\string~Actuators}}();}
+\DoxyCodeLine{00029\ }
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keywordtype}{void}\ handleEvent(\mbox{\hyperlink{struct_event}{Event}}\ event)\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00031\ }
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_actuators_ac9df438b3266dd959a1cadd960127b5f}{standbyMode}}();}
+\DoxyCodeLine{00037\ }
+\DoxyCodeLine{00042\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_actuators_ad8d2ac087bc1cd8e4a7d91bb44851598}{runningMode}}();}
+\DoxyCodeLine{00043\ }
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_actuators_a9e5a5a242687a8669c230d6c6b7731a5}{serviceMode}}();}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_actuators_a99c9a8585eaf74e66b71c7eb08d626f9}{errorMode}}();}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_actuators_a2920de3f5f7b3d8e2e4c8f008a176e17}{estopMode}}();}
+\DoxyCodeLine{00060\ }
+\DoxyCodeLine{00064\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_actuators_a5331d1408f77191d69c3c28a167488dd}{greenLampOn}}();}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_actuators_acddcaeff350772137e44f4cff0d3c2e6}{setGreenBlinking}}(\textcolor{keywordtype}{bool}\ on);}
+\DoxyCodeLine{00072\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_actuators_a5c94ce5ae938550a7431d7e3ae8eaa52}{greenLampOff}}();}
+\DoxyCodeLine{00077\ }
+\DoxyCodeLine{00081\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_actuators_a3f3fc25604051d93f5e5ef78687f953b}{yellowLampOn}}();}
+\DoxyCodeLine{00082\ }
+\DoxyCodeLine{00088\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_actuators_a7ef36b8221bc1803b259e2993b48bf2b}{setYellowBlinking}}(\textcolor{keywordtype}{bool}\ on);}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00093\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_actuators_a9324311ce37d92a2a822fb5af4ab7f10}{yellowLampOff}}();}
+\DoxyCodeLine{00094\ }
+\DoxyCodeLine{00098\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_actuators_ab854f349f9d628324286bdd86df68a4e}{redLampOn}}();}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00106\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_actuators_a22c84fc59cad111733cffa94be51a188}{setRedBlinking}}(\textcolor{keywordtype}{bool}\ on,\ \textcolor{keywordtype}{bool}\ fast);}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00111\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_actuators_aa204edfadb32dda874e8fb0b57dc3631}{redLampOff}}();}
+\DoxyCodeLine{00112\ }
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_actuators_a9b68264254fd3810300df0f475707efb}{startLedOn}}();}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_actuators_af52819aca72d8e45bda618dd23a7acd1}{startLedOff}}();}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00126\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_actuators_aaa6989a28c4275edc90796e074e2f43b}{resetLedOn}}();}
+\DoxyCodeLine{00127\ }
+\DoxyCodeLine{00131\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_actuators_ac193881ca102cf991b2a10b2b183d8fe}{resetLedOff}}();}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00136\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_actuators_a161e0ca68af6368c4856c5b331256cbe}{q1LedOn}}();}
+\DoxyCodeLine{00137\ }
+\DoxyCodeLine{00141\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_actuators_ab152d2a4c0434b10d8337fc0d778173d}{q1LedOff}}();}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00146\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_actuators_aa091c4130542d092d05ab97997ab7af3}{q2LedOn}}();}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00151\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_actuators_a2f61e2f5b4b2a8235d46d27e976a63d3}{q2LedOff}}();}
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00156\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_actuators_a8596f49e04e29ea6837d298d3340f178}{motorStop}}();}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00161\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_actuators_a50f2e70a409a70ed8e0974123a55c7e2}{motorSlow}}();}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00166\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_actuators_a3acf7b7592204a394b98e23ebdad4978}{motorFast}}();}
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00171\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_actuators_a88b06c9e847bbd58f0167208e119bf64}{openSwitch}}();}
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00176\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_actuators_a51527e5f1f13ff3a7bd2d6cc66002d32}{closeSwitch}}();}
+\DoxyCodeLine{00177\ }
+\DoxyCodeLine{00183\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_actuators_aed712758b11125b69c2d9447898753a4}{sortOut}}();}
+\DoxyCodeLine{00184\ }
+\DoxyCodeLine{00190\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_actuators_ad845be7c88ba60abf9293f84c6aeea2e}{letPass}}();}
+\DoxyCodeLine{00191\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00192\ \ \ \ \ uintptr\_t\ gpio\_bank\_1;}
+\DoxyCodeLine{00193\ \ \ \ \ uintptr\_t\ gpio\_bank\_2;}
+\DoxyCodeLine{00194\ \ \ \ \ std::shared\_ptr<EventManager>\ eventManager;}
+\DoxyCodeLine{00195\ \ \ \ \ std::mutex\ mutex;}
+\DoxyCodeLine{00196\ \ \ \ \ \textcolor{keywordtype}{bool}\ isMaster;}
+\DoxyCodeLine{00197\ \ \ \ \ \textcolor{keywordtype}{bool}\ greenBlinking;}
+\DoxyCodeLine{00198\ \ \ \ \ \textcolor{keywordtype}{bool}\ yellowBlinking;}
+\DoxyCodeLine{00199\ \ \ \ \ \textcolor{keywordtype}{bool}\ redBlinking;}
+\DoxyCodeLine{00200\ \ \ \ \ \textcolor{keywordtype}{bool}\ hasPusher;}
+\DoxyCodeLine{00201\ \ \ \ \ std::thread\ th\_GreenBlinking;}
+\DoxyCodeLine{00202\ \ \ \ \ std::thread\ th\_YellowBlinking;}
+\DoxyCodeLine{00203\ \ \ \ \ std::thread\ th\_RedBlinking;}
+\DoxyCodeLine{00207\ \ \ \ \ \textcolor{keywordtype}{void}\ setMotorStop(\textcolor{keywordtype}{bool}\ stop);}
+\DoxyCodeLine{00208\ }
+\DoxyCodeLine{00212\ \ \ \ \ \textcolor{keywordtype}{void}\ setMotorSlow(\textcolor{keywordtype}{bool}\ slow);}
+\DoxyCodeLine{00213\ }
+\DoxyCodeLine{00217\ \ \ \ \ \textcolor{keywordtype}{void}\ setMotorRight(\textcolor{keywordtype}{bool}\ right);}
+\DoxyCodeLine{00218\ }
+\DoxyCodeLine{00222\ \ \ \ \ \textcolor{keywordtype}{void}\ setMotorLeft(\textcolor{keywordtype}{bool}\ left);}
+\DoxyCodeLine{00223\ \ \ \ \ \textcolor{keywordtype}{void}\ configurePins();}
+\DoxyCodeLine{00224\ \ \ \ \ \textcolor{keywordtype}{void}\ subscribeToEvents();}
+\DoxyCodeLine{00225\ \ \ \ \ \textcolor{keywordtype}{void}\ thGreenLampFlashing(\textcolor{keywordtype}{bool}\ fast);}
+\DoxyCodeLine{00226\ \ \ \ \ \textcolor{keywordtype}{void}\ thYellowLampFlashing(\textcolor{keywordtype}{bool}\ fast);}
+\DoxyCodeLine{00227\ \ \ \ \ \textcolor{keywordtype}{void}\ thRedLampFlashing(\textcolor{keywordtype}{bool}\ fast);}
+\DoxyCodeLine{00228\ \ \ \ \ \textcolor{keywordtype}{bool}\ handleLampEvent(EventType\ event,\ LampState\ state);}
+\DoxyCodeLine{00229\ \};}
+
+\end{DoxyCode}
