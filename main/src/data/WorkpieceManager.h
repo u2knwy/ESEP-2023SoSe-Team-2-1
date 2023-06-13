@@ -1,57 +1,146 @@
 /*
  * WorkpieceManager.h
  *
- *  Created on: 24.05.2023
- *      Author: Maik
+ *  Created on: 9.06.2023
+ *      Author: Sulaiman
  */
 
 #pragma once
 
 #include "Workpiece.h"
+#include <iostream>
 
-#include <vector>
+#include <queue>
 
 class WorkpieceManager {
+private:
+	std::queue<Workpiece> Area_A;
+	std::queue<Workpiece> Area_B;
+	std::queue<Workpiece> Area_C;
+	std::queue<Workpiece> Area_D;
+	int nextId;
 public:
 	WorkpieceManager();
 	virtual ~WorkpieceManager();
 
 	/**
-	 * Add a new Workpiece to the start of FBM1.
+	 * creats a new Workpiece with default values.
 	 *
 	 * @return Workpiece* Reference to the created workpiece
 	 */
 	Workpiece* addWorkpiece();
 
 	/**
-	 * Get the current number of workpieces of FBM1
-	 *
-	 * @return number of workpieces on FBM1
+	 * Adds Workpeice to the Lists(fifo principle) (Area_A,Area_B,Area_C,Area_D);
 	 */
-	int nWorkpiecesOnFBM1();
+
+    void addToArea_A(const Workpiece& wp);
+
+    void addToArea_B(const Workpiece& wp);
+
+    void addToArea_C(const Workpiece& wp);
+
+    void addToArea_D(const Workpiece& wp);
+
+    /**
+	 * Removes Workpeice from one area and adds to another area;
+	 */
+
+	void moveFromArea_AtoArea_B();
+
+	void moveFromArea_BtoArea_C();
+
+	void moveFromArea_CtoArea_D();
+
+    /**
+	 * Removes Workpiece from the Lists(fifo principle) (Area_A,Area_B,Area_C,Area_D);
+	 */
+
+    Workpiece removeFromArea_A();
+
+    Workpiece removeFromArea_B();
+
+    Workpiece removeFromArea_C();
+
+    Workpiece removeFromArea_D();
+
+    /**
+	 * setter for the Workpieces that are in the Queue's ;
+	 */
+    void setHeight_M(int height);
+
+    void setHeight_S(int height);
+
+    void setMetal_M();
+
+    void setMetal_S();
+
+    void setType_M(WorkpieceType type);
+
+    void setType_S(WorkpieceType type);
+
+    void setSortOut_M(bool input);
+
+    void setSortOut_S(bool input);
+
+    bool getSortOut_M();
+
+    bool getSortOut_S();
+
+    void setflipped();
+
+    /**
+	 * Prints the information of Workpiece that comes at the end of FBM_S;
+	 */
+
+    void print_WP();
+
+    /**
+	 * @return boolean if there is/are Workpiece/s on FBM1
+	 */
+	bool WP_ON_FBM_M();
 
 	/**
 	 * Checks the "occupied" status of FBM2
 	 *
 	 * @return true if FBM2 is occupied (one workpiece on belt(
 	 */
-	bool isFBM2Occupied();
+	bool fbm_S_Occupied();
 
-	/**
-	 * Remove the current workpiece from FBM2 (was sorted out or taken at the end)
-	 *
-	 * @return true if workpiece was removed, false if no workpiece is currently on FBM2
+    /**
+	 * shows the ammount of elements in each list;
 	 */
-	bool removeWpOnFBM2();
 
-	/**
-	 * Transfer the oldest workpiece on FBM1 to FBM2.
-	 *
-	 * @return true if the transfer was successful, false if there are no workpieces on FBM1.
-	 */
-	bool wpTransferredToFBM2();
-private:
-	int nextId;
-	std::vector<Workpiece*> workpiecesOnFBM1;
-	Workpiece* workpieceOnFBM2;
+	 void showAllLists(){
+        std::cout << "Area_A= ";
+        while (!Area_A.empty()) {
+            std::cout << Area_A.front().id << ", ";;
+            Area_A.pop();
+        }
+        std::cout << "\nArea_B= " ;
+        while (!Area_B.empty()) {
+            std::cout << Area_B.front().id << ", ";;
+            Area_B.pop();
+        }
+        std::cout << "\nArea_C= " ;
+        while (!Area_C.empty()) {
+            std::cout << Area_C.front().id << ", ";;
+            Area_C.pop();
+        }
+        std::cout << "\nArea_d= ";
+        while (!Area_D.empty()) {
+            std::cout << Area_D.front().id << ", ";;
+            Area_D.pop();
+        }
+        std::cout << std::endl;
+
+     }
+
+
+    /**
+     * tmp method for test purposes
+     */
+    void testWorkpieceManager();
+
+
 };
