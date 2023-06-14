@@ -103,6 +103,37 @@ bool Running::slave_LBR_Unblocked() {
 	return true;
 }
 
+bool Running::master_heightResultReceived(EventType event, float average) {
+	Logger::debug("[MainFSM] Received FBM1 height result: " + EVENT_TO_STRING(event) + " - avg: " + std::to_string(average) + " mm");
+	// TODO: Handle height result -> convert EventType to WorkpieceType and update workpiece data
+	if(event == EventType::HM_M_WS_F) {
+		//wp.setFBM1Type(WorkpieceType::WS_F);
+	} else if(event == EventType::HM_M_WS_OB) {
+		//wp.setFBM1Type(WorkpieceType::WS_OB);
+	} else if(event == EventType::HM_M_WS_BOM) {
+		//wp.setFBM1Type(WorkpieceType::WS_BOM);
+	} else if(event == EventType::HM_M_WS_UNKNOWN) {
+		//wp.setFBM1Type(WorkpieceType::WS_UNKNOWN);
+	}
+	return true;
+}
+
+bool Running::slave_heightResultReceived(EventType event, float average) {
+	Logger::debug("[MainFSM] Received FBM1 height result: " + EVENT_TO_STRING(event) + " - avg: " + std::to_string(average) + " mm");
+	// TODO: Handle height result -> convert EventType to WorkpieceType and update workpiece data
+	return true;
+}
+
+bool Running::master_metalDetected() {
+	// TODO: Update workpiece: metal was detected at FBM1
+	return true;
+}
+
+bool Running::slave_metalDetected() {
+	// TODO: Update workpiece: metal was detected at FBM2
+	return true;
+}
+
 bool Running::master_btnStop_Pressed() {
 	exit();
 	new(this) Standby;

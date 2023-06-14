@@ -59,6 +59,14 @@ public:
 	virtual bool master_LBR_Blocked() 	{ return false; }	// Rampe blockiert
 	virtual bool master_LBR_Unblocked() { return false; }	// Rampe wieder frei
 
+	// Höhenmessung Events
+	virtual bool master_heightResultReceived(EventType event, float average) { return false; }
+	virtual bool slave_heightResultReceived(EventType event, float average) { return false; }
+
+	// Metall erkannt
+	virtual bool master_metalDetected() { return false; }
+	virtual bool slave_metalDetected() { return false; }
+
 	virtual bool slave_LBA_Blocked() 	{ return false; }	// Anfang blockiert
 	virtual bool slave_LBA_Unblocked() 	{ return false; }	// Anfang wieder frei
 	virtual bool slave_LBW_Blocked() 	{ return false; }	// Weiche blockiert

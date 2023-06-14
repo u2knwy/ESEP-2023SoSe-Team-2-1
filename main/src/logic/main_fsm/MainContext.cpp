@@ -92,13 +92,15 @@ void MainContext::handleEvent(Event event) {
 	case EventType::HM_M_WS_F:
 	case EventType::HM_M_WS_OB:
 	case EventType::HM_M_WS_BOM:
-	case EventType::HM_M_WS_UNKNOWN:
+	case EventType::HM_M_WS_UNKNOWN: {
+		state->master_heightResultReceived(event.type, ((float) event.data) / 10);
+		break;
+	}
 	case EventType::HM_S_WS_F:
 	case EventType::HM_S_WS_OB:
 	case EventType::HM_S_WS_BOM:
 	case EventType::HM_S_WS_UNKNOWN: {
-		float avgHeight = ((float) event.data) / 10;
-		Logger::debug("[MainFSM] Received height result: " + EVENT_TO_STRING(event.type) + " - avg: " + std::to_string(avgHeight) + " mm");
+		state->slave_heightResultReceived(event.type, ((float) event.data) / 10);
 		break;
 	}
 	default:
