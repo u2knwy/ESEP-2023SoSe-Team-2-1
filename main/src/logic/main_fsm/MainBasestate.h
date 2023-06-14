@@ -24,6 +24,7 @@ class MainBasestate {
 protected:
 	MainBasestate* substateEStop = nullptr;
 	MainBasestate* substateServiceMode = nullptr;
+	MainBasestate* substateError = nullptr;
 	MainActions* actions;
 	MainContextData* data;
 
@@ -46,6 +47,7 @@ public:
 
 	virtual void initSubStateEStop() {}
 	virtual void initSubStateServiceMode() {}
+	virtual void initSubStateError() {}
 
 	virtual bool isSubEndState() { return false; };
 
@@ -93,4 +95,8 @@ public:
 
 	virtual bool slave_EStop_Pressed() 		{ return false; }
 	virtual bool slave_EStop_Released() 	{ return false; }
+
+	virtual bool selfSolvableErrorOccurred() { return false; }
+	virtual bool errorSelfSolved() { return false; }
+	virtual bool nonSelfSolvableErrorOccurred() { return false; }
 };
