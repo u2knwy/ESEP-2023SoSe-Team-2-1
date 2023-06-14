@@ -17,6 +17,12 @@
 Configuration::Configuration() {
 	this->cal = Calibration{ .calOffset = ADC_DEFAULT_OFFSET, .calRef = ADC_DEFAULT_HIGH };
 	this->configFilePath = std::string(DEFAULT_CONFIG_FILE_PATH);
+	this->order = std::vector<WorkpieceType>(3);
+
+	// Set default order: FLAT -> HIGH -> HIGH WITH HOLE
+	this->order.push_back(WorkpieceType::WS_F);
+	this->order.push_back(WorkpieceType::WS_OB);
+	this->order.push_back(WorkpieceType::WS_BOM);
 }
 
 Configuration::~Configuration() {

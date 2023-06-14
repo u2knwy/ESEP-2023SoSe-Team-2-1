@@ -16,6 +16,9 @@ public:
 	WorkpieceManager();
 	virtual ~WorkpieceManager();
 
+	void rotateNextWorkpieces();
+	WorkpieceType getNextWorkpieceType();
+
 	/**
 	 * Add a new Workpiece to the start of FBM1.
 	 *
@@ -54,4 +57,5 @@ private:
 	int nextId;
 	std::vector<Workpiece*> workpiecesOnFBM1;
 	Workpiece* workpieceOnFBM2;
+	WorkpieceType desiredOrder[3];
 };
