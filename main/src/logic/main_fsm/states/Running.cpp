@@ -167,6 +167,7 @@ bool Running::selfSolvableErrorOccurred() {
 	exit();
 	new(this) Error;
 	entry();
+	selfSolvableErrorOccurred();
 	return true;
 }
 
@@ -174,5 +175,6 @@ bool Running::nonSelfSolvableErrorOccurred() {
 	exit();
 	new(this) Error;
 	entry();
+	nonSelfSolvableErrorOccurred();
 	return true;
 }

@@ -48,7 +48,7 @@ TEST_F(MainFSM_Test, StateRunningAfterStartPressedShort) {
 }
 
 // Start pressed long -> Current state must be SERVICE_MODE
-/*TEST_F(MainFSM_Test, StateServiceModeAfterStartPressedLong) {
+TEST_F(MainFSM_Test, StateServiceModeAfterStartPressedLong) {
 	fsm->master_btnStart_PressedLong();
 	EXPECT_EQ(MainState::SERVICEMODE, fsm->getCurrentState());	// in ServiceMode
 	fsm->master_btnStop_Pressed();
@@ -61,7 +61,7 @@ TEST_F(MainFSM_Test, StateRunningAfterStartPressedShort) {
 	EXPECT_EQ(MainState::SERVICEMODE, fsm->getCurrentState());	// in ServiceMode
 	fsm->slave_btnStop_Pressed();
 	EXPECT_EQ(MainState::STANDBY, fsm->getCurrentState()); // back in Standby
-}*/
+}
 
 // In state running and stop pressed -> Current state must be STANDBY
 TEST_F(MainFSM_Test, StateStandbyAfterRunningAndStopPressed) {
@@ -111,4 +111,42 @@ TEST_F(MainFSM_Test, StateEStopAfterRunningAndEStopPressed) {
 	EXPECT_EQ(MainState::ESTOP, fsm->getCurrentState()); // still in EStop
 	fsm->slave_btnReset_Pressed();
 	EXPECT_EQ(MainState::STANDBY, fsm->getCurrentState()); // now in Standby
+}
+
+TEST_F(MainFSM_Test, ErrorManualSolvedAfterRunning) {
+	EXPECT_EQ(MainState::STANDBY, fsm->getCurrentState());
+	fsm->master_btnStart_PressedShort();
+	EXPECT_EQ(MainState::RUNNING, fsm->getCurrentState());
+
+	fsm->nonSelfSolvableErrorOccurred();
+	EXPECT_EQ(MainState::ERROR, fsm->getCurrentState());
+	fsm->master_btnStart_PressedShort();
+	EXPECT_EQ(MainState::ERROR, fsm->getCurrentState());
+	fsm->master_btnReset_Pressed();
+	EXPECT_EQ(MainState::ERROR, fsm->getCurrentState());
+	fsm->master_btnStart_PressedShort();
+	EXPECT_EQ(MainState::STANDBY, fsm->getCurrentState());
+}
+
+TEST_F(MainFSM_Test, ErrorSelfSolvedAfterRunning) {
+	// Running -> Error
+	EXPECT_EQ(MainState::STANDBY, fsm->getCurrentState());
+	fsm->master_btnStart_PressedShort();
+	EXPECT_EQ(MainState::RUNNING, fsm->getCurrentState());
+
+	// Self-solvable error -> Error Pending Unresigned
+	// selfSolving=true, manSolving=false
+	fsm->selfSolvableErrorOccurred();
+	EXPECT_EQ(MainState::ERROR, fsm->getCurrentState());
+	fsm->master_btnStart_PressedShort();
+	fsm->master_btnReset_Pressed();
+	EXPECT_EQ(MainState::ERROR, fsm->getCurrentState());
+
+	// Error was solved -> Solved unresigned
+	// selfSolving=false, manSolving=false
+	fsm->errorSelfSolved();
+	EXPECT_EQ(MainState::ERROR, fsm->getCurrentState());
+	// Reset pressed -> Leave Error mode
+	fsm->master_btnReset_Pressed();
+	EXPECT_EQ(MainState::STANDBY, fsm->getCurrentState());
 }

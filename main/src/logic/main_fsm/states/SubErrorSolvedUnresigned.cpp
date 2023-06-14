@@ -6,6 +6,7 @@
  */
 
 #include "SubErrorSolvedUnresigned.h"
+#include "SubErrorEndState.h"
 #include "logger/logger.hpp"
 
 void SubErrorSolvedUnresigned::entry(){
@@ -17,30 +18,16 @@ void SubErrorSolvedUnresigned::exit(){
 
 }
 
-bool SubErrorSolvedUnresigned::selfSolvableErrorOccurred(){
-	return true;
-}
-
-bool SubErrorSolvedUnresigned::nonSelfSolvableErrorOccurred(){
-	return true;
-}
-
-bool SubErrorSolvedUnresigned::errorSelfSolved(){
-	return true;
-}
-
 bool SubErrorSolvedUnresigned::master_btnReset_Pressed(){
+	exit();
+	new(this) SubErrorEndState;
+	entry();
 	return true;
 }
 
 bool SubErrorSolvedUnresigned::slave_btnReset_Pressed(){
-	return true;
-}
-
-bool SubErrorSolvedUnresigned::master_btnStart_PressedShort(){
-	return true;
-}
-
-bool SubErrorSolvedUnresigned::slave_btnStart_PressedShort(){
+	exit();
+	new(this) SubErrorEndState;
+	entry();
 	return true;
 }

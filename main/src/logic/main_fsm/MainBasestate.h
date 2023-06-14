@@ -49,7 +49,7 @@ public:
 	virtual void initSubStateServiceMode() {}
 	virtual void initSubStateError() {}
 
-	virtual bool isSubEndState() { return false; };
+	virtual bool isSubEndState() { return false; }
 
 	// Light Barriers
 	virtual bool master_LBA_Blocked() 	{ return false; }	// Anfang blockiert

@@ -37,11 +37,11 @@ bool Error::selfSolvableErrorOccurred() {
 }
 
 bool Error::errorSelfSolved() {
-	return true;
+	return substateError->errorSelfSolved();
 }
 
 bool Error::nonSelfSolvableErrorOccurred() {
-	return true;
+	return substateError->nonSelfSolvableErrorOccurred();
 }
 
 bool Error::master_btnReset_Pressed() {
