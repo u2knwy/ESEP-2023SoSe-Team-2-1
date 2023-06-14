@@ -12,6 +12,7 @@
 
 struct Event {
 	Event() {}
+	Event(EventType evType) : type(evType), data(-1) {}
 	Event(EventType evType, int evData) : type(evType), data(evData) {}
     EventType type;
     int data{-1};

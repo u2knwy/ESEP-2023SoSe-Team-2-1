@@ -27,9 +27,41 @@
 
 EventManager::EventManager() : server_coid(-1) {
 	isMaster = Configuration::getInstance().systemIsMaster();
+	connectGNS();
 }
 
 EventManager::~EventManager() {
+	disconnectGNS();
+}
+
+void EventManager::connectGNS() {
+	if(isMaster) {
+		// create service
+		if( (attachedServer = name_attach(NULL, "SERVICE", NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
+			Logger::error("name_attach failed");
+		}
+		Logger::info("Master created GNS Service");
+	} else {
+		// connect to master service
+		if( (server_coid = name_open("SERVICE", NAME_FLAG_ATTACH_GLOBAL)) == -1 ) {
+			throw runtime_error("failed to connect to service");
+		}
+		Logger::info("Slave attached to GNS Service @Master");
+	}
+}
+
+void EventManager::disconnectGNS() {
+	if(isMaster) {
+		// terminate service
+		if( name_detach(attachedServer, 0) == -1 ) {
+			Logger::error("failed detaching server");
+		}
+	} else {
+		// disconnect from master
+		if( name_close(server_coid) == -1 ) {
+			Logger::error("failed detaching client");
+		}
+	}
 }
 
 void EventManager::subscribe(EventType type, EventCallback callback) {

@@ -12,6 +12,7 @@
 #include <map>
 #include <mutex>
 
+#include <sys/dispatch.h>
 
 class EventManager {
 public:
@@ -28,4 +29,7 @@ private:
 	int server_coid;
 	std::map<EventType, std::vector<EventCallback>> subscribers;
 	std::mutex mtx;
+	name_attach_t *attachedServer;
+	void connectGNS();
+	void disconnectGNS();
 };

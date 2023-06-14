@@ -206,3 +206,12 @@ void MainActions::btnResetLedOff() {
 	eventManager->sendEvent(Event{EventType::LED_S_RESET, (int) LampState::OFF});
 }
 
+void MainActions::redLampFlashingFast() {
+	eventManager->sendEvent(Event{EventType::LAMP_M_RED, (int) LampState::FLASHING_FAST});
+	eventManager->sendEvent(Event{EventType::LAMP_S_RED, (int) LampState::FLASHING_FAST});
+}
+
+void MainActions::redLampFlashingSlow() {
+	eventManager->sendEvent(Event{EventType::LAMP_M_RED, (int) LampState::FLASHING_SLOW});
+	eventManager->sendEvent(Event{EventType::LAMP_S_RED, (int) LampState::FLASHING_SLOW});
+}

@@ -7,6 +7,7 @@
 #pragma once
 #include <functional>
 #include <vector>
+#include <mutex>
 
 /*---------------------------------------------------------------------------
    HEIGHT SENSOR CONFIGURATION
@@ -40,11 +41,14 @@ protected:
 	HeightCallback heightValueCallback = nullptr;
     std::vector<int> window;
     size_t windowCapacity;
+    std::mutex mutex_cal;
     bool running{false};
 	void calibrateOffset(int offsetValue) {
+		std::lock_guard<std::mutex> lock(mutex_cal);
 		adcOffset = offsetValue;
 	}
 	void calibrateRefHigh(int highValue) {
+		std::lock_guard<std::mutex> lock(mutex_cal);
 		adcIncPerMillimeter = (adcOffset - highValue) / HEIGHT_HIGH;
 	}
 };

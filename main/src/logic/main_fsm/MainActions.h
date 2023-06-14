@@ -40,6 +40,8 @@ public:
 	void btnStartLedOff();
 	void btnResetLedOn();
 	void btnResetLedOff();
+	void redLampFlashingFast();
+	void redLampFlashingSlow();
 private:
 	std::shared_ptr<EventManager> eventManager;
 };

@@ -13,6 +13,7 @@
 #include "events/events.h"
 #include "events/EventManager.h"
 #include "configuration/Configuration.h"
+#include "watchdog/Watchdog.h"
 
 #include <gtest/gtest.h>
 #include <hal/Sensors.h>
@@ -89,6 +90,11 @@ int main(int argc, char **argv)
 	conf.setPusherMounted(options.pusher);
 
 	eventManager = std::make_shared<EventManager>();
+
+	Watchdog wd(eventManager);
+	wd.start();
+	std::this_thread::sleep_for(std::chrono::seconds(5));
+
 	sensors = std::make_shared<Sensors>(eventManager);
 	actuators = std::make_shared<Actuators>(eventManager);
 
