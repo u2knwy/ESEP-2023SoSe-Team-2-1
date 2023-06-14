@@ -14,6 +14,7 @@
 
 MainState Running::getCurrentState() {
 	return MainState::RUNNING;
+
 };
 
 void Running::entry() {
@@ -23,6 +24,7 @@ void Running::entry() {
 	actions->setMotorFastSlave(false);
 	actions->setMotorStopMaster(false);
 	actions->setMotorStopSlave(false);
+
 }
 
 void Running::exit() {
@@ -30,41 +32,87 @@ void Running::exit() {
 }
 
 bool Running::master_LBA_Blocked() {
-	Workpiece* wp = data->wpManager->addWorkpiece();
-	Logger::info("New workpiece inserted: " + wp->getId());
 	actions->setMotorFastMaster(true);
 	return true;
 }
 
 bool Running::master_LBA_Unblocked() {
+	Workpiece* wp = data->wpManager->addWorkpiece();
+	Logger::info("New workpiece created: " + std::to_string(wp->id) );
+
+	data->wpManager->addToArea_A(wp);
+	Logger::info("Workpiece with id: " + std::to_string(wp->id) + " added to Area_A");
 	return true;
 }
 
+/*bool Running::heightAtMasterReceived_M(Eventmanger type , float height){
+	Workpiece* wp = data->wpManager->getter_head_Area_A();
+	wp->avgHeight = height;
+	wp->WP_M_type = type;
+	return true;
+}
+*/
+
+/*bool Running::metalDetected_M(){
+	Workpiece* wp = data->wpManager->getter_head_Area_A();
+	wp->Metal = height;
+	return true;
+}
+*/
+
 bool Running::master_LBW_Blocked() {
+	Workpiece* wp = data->wpManager->getter_head_Area_A();
+	//data->wpManager->setType_M(type);
+	Logger::info("Workpiece with id: " + std::to_string(wp->id) +" master Type set to: ");
+	//data->wpManager->setSortOut_M()
+	if(data->wpManager->getSortOut_M()){
+		//closegate()
+		Logger::info("Workpiece with id: " + std::to_string(wp->id) +" you shall not Pass throungh Master switch");
+	}
+	else
+		//opengate();
+		Logger::info("Workpiece with id: " + std::to_string(wp->id)+"Passed through Master switch");
+		data->wpManager->moveFromArea_BtoArea_C();
+		Logger::info("Workpiece with id: " + std::to_string(wp->id) +" transfered to Area_C");
+
 	return true;
 }
 
 bool Running::master_LBW_Unblocked() {
+
 	return true;
 }
 
 bool Running::master_LBE_Blocked() {
-	actions->setMotorStopMaster(true);
+	Workpiece* wp = data->wpManager->getter_head_Area_A();
+	if(data->wpManager->fbm_S_Occupied()){
+		actions->setMotorFastMaster(false);
+		Logger::info("Workpiece with id: " + std::to_string(wp->id) +" setMotorFastMaster(false)");
+	}
+	while(data->wpManager->fbm_S_Occupied()){
+		//wait
+		Logger::info("Workpiece with id: " + std::to_string(wp->id) +" waiting for fbm_S to get free");
+	}
+	actions->setMotorFastMaster(true);
+	Logger::info("Workpiece with id: " + std::to_string(wp->id) +" setMotorFastMaster(true)");
 	return true;
 }
 
 bool Running::master_LBE_Unblocked() {
-	actions->setMotorStopMaster(false);
+	data->wpManager->moveFromArea_CtoArea_D();
+	actions->setMotorFastSlave(true);
 	return true;
 }
 
 bool Running::master_LBR_Blocked() {
-	data->setRampFBM1Blocked(true);
-	actions->setMotorFastMaster(false);
+	data->wpManager->removeFromArea_B();
+	if(data->wpManager->WP_ON_FBM_M())
+		actions->setMotorFastMaster(false);
 	return true;
 }
 
 bool Running::master_LBR_Unblocked() {
+
 	data->setRampFBM1Blocked(false);
 	return true;
 }
