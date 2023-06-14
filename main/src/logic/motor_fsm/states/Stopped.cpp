@@ -11,7 +11,6 @@
 #include "logger/logger.hpp"
 
 void Stopped::entry() {
-	Logger::debug("[MotorFSM] Stopped entry");
 	actions->motorStop();
 }
 

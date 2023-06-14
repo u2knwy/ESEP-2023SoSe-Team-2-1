@@ -46,6 +46,16 @@ void MainContext::subscribeToEvents() {
 
 	eventManager->subscribe(EventType::LBA_M_BLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 	eventManager->subscribe(EventType::LBE_M_BLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+
+	// Height Sensor
+	eventManager->subscribe(EventType::HM_M_WS_UNKNOWN, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::HM_M_WS_F, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::HM_M_WS_OB, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::HM_M_WS_BOM, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::HM_S_WS_UNKNOWN, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::HM_S_WS_F, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::HM_S_WS_OB, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::HM_S_WS_BOM, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 }
 
 void MainContext::handleEvent(Event event) {
@@ -79,8 +89,21 @@ void MainContext::handleEvent(Event event) {
 		state->master_LBA_Blocked(); break;
 	case EventType::LBE_M_BLOCKED:
 		state->master_LBE_Blocked(); break;
+	case EventType::HM_M_WS_F:
+	case EventType::HM_M_WS_OB:
+	case EventType::HM_M_WS_BOM:
+	case EventType::HM_M_WS_UNKNOWN:
+	case EventType::HM_S_WS_F:
+	case EventType::HM_S_WS_OB:
+	case EventType::HM_S_WS_BOM:
+	case EventType::HM_S_WS_UNKNOWN: {
+		float avgHeight = ((float) event.data) / 10;
+		Logger::debug("[MainFSM] Received height result: " + EVENT_TO_STRING(event.type) + " - avg: " + std::to_string(avgHeight) + " mm");
+		break;
+	}
 	default:
 		Logger::warn(EVENT_TO_STRING(event.type) + " was not handled by MainFSM");
+		break;
 	}
 }
 
