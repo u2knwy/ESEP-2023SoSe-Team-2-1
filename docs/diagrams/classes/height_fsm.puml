@@ -6,24 +6,32 @@ interface IEventHandler {
 class IHeightSensor << HAL >> {
   -int adcOffset
   -int adcIncPerMillimeter
-  -std::function<void(float)> newValueCallback
+  -std::function<void(float)> onNewValueCallback
   -std::vector<int> window
   -bool running
   #calibrateOffset(int offsetValue)
   #calibrateReference(int refValue)
 }
 
+enum WorkpieceType {
+	WS_F
+	WS_OB
+	WS_BOM
+	WS_BUM
+	WS_UNKNOWN
+}
+
 class HeightSensor << HAL >> {
 	-TSCADC tsc
 	-ADC* adc
 	-bool running
-	-std::function<void(float)> onNewValueCallback
 	-int nMeasurements
 	-addValue(int value)
 	-threadFunction()
 	-float adcValueToMillimeter(int adcValue)
 	+registerOnNewValueCallback(std::function<void(float)> cb)
 	+unregisterOnNewValueCallback()
+	+handleEvent(Event event)
 	+start()
 	+stop()
 	+float getAverageHeight()
@@ -40,10 +48,10 @@ class HeightContext {
 	-IHeightSensor* sensor
 	-bool running
 	+HeightContext(EventManager* mngr, IHeightSensor* sensor)
-	-subscribeToEvents()
 	+handleEvent(Event event)
 	+heightValueReceived(float value)
 	+HeightResult getCurrentResult()
+	-subscribeToEvents()
 }
 
 class HeightActions {
@@ -66,8 +74,6 @@ class HeightContextData {
 	-std::vector<float> measurements
   +HeightContextData()
 	+resetMeasurement()
-	+WorkpieceType getCurrentType()
-	+setCurrentType(WorkpieceType type)
 	+addValue(float value)
 	+float getAverageValue()
 	+HeightResult getCurrentResult()
@@ -81,7 +87,9 @@ HeightResult -* HeightContextData
 HeightActions -o HeightContext
 HeightContextData --o HeightContext
 HeightContextData --o HeightActions
+WorkpieceType .. HeightContextData
 HeightContext *- HeightSensor
 IEventHandler <|.. HeightContext
+IEventHandler <|.. HeightSensor
 
 @enduml

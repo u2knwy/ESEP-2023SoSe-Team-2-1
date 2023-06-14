@@ -27,7 +27,7 @@ using namespace std;
 
 // Components which will be launched in main-function and cleaned up if program is terminated
 std::shared_ptr<HeightContext> heightFSM;
-//std::shared_ptr<HeightSensor> heightSensor;
+std::shared_ptr<IHeightSensor> heightSensor;
 std::shared_ptr<Sensors> sensors;
 std::shared_ptr<Actuators> actuators;
 std::shared_ptr<EventManager> eventManager;
@@ -70,8 +70,39 @@ int main(int argc, char **argv)
 		return result;
 	}
 
-	options.mode == Mode::MASTER ? Logger::info("Program started as MASTER") : Logger::info("Program started as SLAVE");
-	options.pusher ? Logger::info("Hardware uses Pusher for sorting out") : Logger::info("Hardware uses Switch for sorting out");
+	Configuration &conf = Configuration::getInstance();
+	conf.setConfigFilePath("/usr/tmp/conf.txt");
+	if(!conf.readConfigFromFile()) {
+		Logger::error("Error reading config file - terminating...");
+		return EXIT_FAILURE;
+	}
+
+	if(options.pusher) {
+		Logger::info("Hardware uses Pusher for sorting out");
+		conf.setPusherMounted(true);
+	} else {
+		Logger::info("Hardware uses Switch for sorting out");
+		conf.setPusherMounted(false);
+	}
+
+	// Create components running on Master AND Slave
+	eventManager = std::make_shared<EventManager>();
+	actuators = std::make_shared<Actuators>(eventManager);
+	sensors = std::make_shared<Sensors>(eventManager);
+	heightSensor = std::make_shared<HeightSensor>(eventManager);
+	heightFSM = std::make_shared<HeightContext>(eventManager, heightSensor);
+
+	if(options.mode == Mode::MASTER) {
+		Logger::info("Program started as MASTER");
+		conf.setMaster(true);
+		// Run FSM's only at Master
+		motorFSM_Master = std::make_shared<MotorContext>(eventManager, true);
+		motorFSM_Slave = std::make_shared<MotorContext>(eventManager, false);
+		mainFSM = std::make_shared<MainContext>(eventManager);
+	} else {
+		Logger::info("Program started as SLAVE");
+		conf.setMaster(false);
+	}
 
 	// Register handler function to be called if the program is not terminated properly
 	std::signal(SIGINT, cleanup);
@@ -79,33 +110,13 @@ int main(int argc, char **argv)
 	std::signal(SIGTERM, cleanup);
 	std::signal(SIGKILL, cleanup);
 
-	Configuration &conf = Configuration::getInstance();
-	conf.setConfigFilePath("/usr/tmp/conf.txt");
-	if(!conf.readConfigFromFile()) {
-		Logger::error("Error reading config file - terminating...");
-		return EXIT_FAILURE;
-	}
-	conf.setMaster(options.mode == Mode::MASTER);
-	conf.setPusherMounted(options.pusher);
-
-	eventManager = std::make_shared<EventManager>();
-	sensors = std::make_shared<Sensors>(eventManager);
-	actuators = std::make_shared<Actuators>(eventManager);
-
-	// Run FSM's
-	mainFSM = std::make_shared<MainContext>(eventManager);
-	motorFSM_Master = std::make_shared<MotorContext>(eventManager, true);
-	motorFSM_Slave = std::make_shared<MotorContext>(eventManager, false);
-
-	std::shared_ptr<IHeightSensor> heightSensor = std::make_shared<HeightSensor>();
-
+	// Start threads...
 	sensors->startEventLoop();
-	heightFSM = std::make_shared<HeightContext>(eventManager, heightSensor);
 
 	// Endless loop - wait until termination
 	while (running) {
 		// Sleep to save CPU resources
-		std::this_thread::sleep_for(std::chrono::seconds(1));
+		std::this_thread::sleep_for(std::chrono::seconds(10));
 	}
 
 	Logger::info("Sorting Machine was terminated.");

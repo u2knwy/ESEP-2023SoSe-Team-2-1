@@ -157,9 +157,6 @@ void Configuration::saveCurrentConfigToFile() {
 	const std::string& order = "ORDER=" + ss.str();
 	const std::string& offset = "CAL_OFFSET=" + std::to_string(cal.calOffset);
 	const std::string& ref = "CAL_REF=" + std::to_string(cal.calRef);
-/*	writeLineToConfigFile(1, order);
-	writeLineToConfigFile(2, offset);
-	writeLineToConfigFile(3, ref);*/
 
 	std::ofstream outputFile(configFilePath);
 	if (!outputFile) {
@@ -211,7 +208,8 @@ void Configuration::writeLineToConfigFile(int lineNumber, const std::string& new
     }
 
     if (std::rename(tempFilePath.c_str(), configFilePath.c_str()) != 0) {
-    	Logger::error("Error renaming temporary file.");
+    	Logger::error("Error renaming temporary file: " + tempFilePath + " -> " + configFilePath);
+    	perror( "Error renaming file" );
         return;
     }
 

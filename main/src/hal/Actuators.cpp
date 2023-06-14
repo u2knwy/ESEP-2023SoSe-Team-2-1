@@ -13,7 +13,7 @@
 #include "simqnxirqapi.h"
 #endif
 
-Actuators::Actuators(std::shared_ptr<EventManager> mngr) : eventManager(mngr)
+Actuators::Actuators(std::shared_ptr<EventManager> mngr) : IActuators(mngr)
 {
 	Configuration& conf = Configuration::getInstance();
 	isMaster = conf.systemIsMaster();
@@ -23,16 +23,11 @@ Actuators::Actuators(std::shared_ptr<EventManager> mngr) : eventManager(mngr)
 
 	configurePins();
 
-	// Default: Stop Motor
-	motorStop();
-
 	greenBlinking = false;
 	yellowBlinking = false;
 	redBlinking = false;
 
 	standbyMode();
-
-	subscribeToEvents();
 }
 
 Actuators::~Actuators()
@@ -70,120 +65,6 @@ void Actuators::configurePins()
 	outputs = LED_Q1_PIN | LED_Q2_PIN | LED_RESET_PIN | LED_START_PIN;
 	temp = in32(GPIO_OE_REGISTER(gpio_bank_2));
 	out32(GPIO_OE_REGISTER(gpio_bank_2), temp & ~outputs);
-}
-
-void Actuators::subscribeToEvents()
-{
-
-	// Subscribe to lamp events
-
-	// Subscribe to modes
-	eventManager->subscribe(EventType::MODE_STANDBY, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::MODE_RUNNING, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::MODE_SERVICE, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::MODE_ESTOP, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::MODE_ERROR, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-
-	// System-dependent events
-	if (isMaster)
-	{
-		eventManager->subscribe(EventType::LAMP_M_RED, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::LAMP_M_YELLOW, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::LAMP_M_GREEN, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::ESTOP_M_PRESSED, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::LED_M_START, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::LED_M_RESET, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::LED_M_Q1, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::LED_M_Q2, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::MOTOR_M_STOP, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::MOTOR_M_FAST, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::MOTOR_M_SLOW, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::SORT_M_OUT, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	}
-	else
-	{
-		eventManager->subscribe(EventType::LAMP_S_RED, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::LAMP_S_YELLOW, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::LAMP_S_GREEN, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::ESTOP_S_PRESSED, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::LED_S_START, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::LED_S_RESET, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::LED_S_Q1, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::LED_S_Q2, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::MOTOR_S_STOP, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::MOTOR_S_FAST, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::MOTOR_S_SLOW, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::SORT_S_OUT, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	}
-}
-
-void Actuators::handleEvent(Event event)
-{
-	std::lock_guard<std::mutex> lock(mutex);
-	Logger::debug("Actuators handle Event: " + EVENT_TO_STRING(event.type) + " - data: " + std::to_string(event.data));
-
-	bool handled = true;
-
-	switch (event.type)
-	{
-	case EventType::MOTOR_M_STOP:
-	case EventType::MOTOR_S_STOP:
-		motorStop();
-		break;
-	case EventType::MOTOR_M_FAST:
-	case EventType::MOTOR_S_FAST:
-		motorFast();
-		break;
-	case EventType::MOTOR_M_SLOW:
-	case EventType::MOTOR_S_SLOW:
-		motorSlow();
-		break;
-	case EventType::ESTOP_M_PRESSED:
-	case EventType::ESTOP_S_PRESSED:
-		motorStop();
-		break;
-	case EventType::MODE_STANDBY:
-		standbyMode();
-		break;
-	case EventType::MODE_RUNNING:
-		runningMode();
-		break;
-	case EventType::MODE_SERVICE:
-		serviceMode();
-		break;
-	case EventType::MODE_ESTOP:
-		estopMode();
-		break;
-	case EventType::MODE_ERROR:
-		errorMode();
-		break;
-	case EventType::LAMP_M_GREEN:
-	case EventType::LAMP_S_GREEN:
-	case EventType::LAMP_M_YELLOW:
-	case EventType::LAMP_S_YELLOW:
-	case EventType::LAMP_M_RED:
-	case EventType::LAMP_S_RED:
-	case EventType::LED_M_START:
-	case EventType::LED_S_START:
-	case EventType::LED_M_RESET:
-	case EventType::LED_S_RESET:
-	case EventType::LED_M_Q1:
-	case EventType::LED_S_Q1:
-	case EventType::LED_M_Q2:
-	case EventType::LED_S_Q2:
-		handled = handleLampEvent(event.type, (LampState) event.data);
-		break;
-	case EventType::SORT_M_OUT:
-	case EventType::SORT_S_OUT:
-		event.data == 1 ? sortOut() : letPass();
-		break;
-	default:
-		handled = false;
-	}
-
-	if(!handled) {
-		Logger::warn(EVENT_TO_STRING(event.type) + " was not handled by actuators");
-	}
 }
 
 void Actuators::setGreenBlinking(bool on)
@@ -231,6 +112,7 @@ void Actuators::setRedBlinking(bool on, bool fast)
 
 void Actuators::standbyMode()
 {
+	motorStop();
 	setGreenBlinking(false);
 	setYellowBlinking(false);
 	setRedBlinking(false, false);
@@ -241,10 +123,6 @@ void Actuators::standbyMode()
 	q2LedOff();
 	startLedOn();
 	resetLedOff();
-	setMotorStop(true);
-	setMotorRight(false);
-	setMotorLeft(false);
-	setMotorSlow(false);
 }
 
 void Actuators::runningMode()
@@ -519,69 +397,4 @@ void Actuators::motorFast()
 	setMotorSlow(false);
 	setMotorRight(true);
 	setMotorLeft(false);
-}
-
-bool Actuators::handleLampEvent(EventType event, LampState state) {
-	bool handled = true;
-
-	switch(event) {
-	case LAMP_M_GREEN:
-	case LAMP_S_GREEN:
-		setGreenBlinking(false);
-		if(state == LampState::OFF)
-			greenLampOff();
-		else if(state == LampState::ON)
-			greenLampOn();
-		else if(state == LampState::FLASHING_SLOW)
-			setGreenBlinking(true);
-		else
-			handled = false;
-		break;
-	case LAMP_M_YELLOW:
-	case LAMP_S_YELLOW:
-		setYellowBlinking(false);
-		if(state == LampState::OFF)
-			yellowLampOff();
-		else if(state == LampState::ON)
-			yellowLampOn();
-		else if(state == LampState::FLASHING_SLOW)
-			setYellowBlinking(true);
-		else
-			handled = false;
-		break;
-	case LAMP_M_RED:
-	case LAMP_S_RED:
-		setRedBlinking(false, false);
-		if(state == LampState::OFF)
-			redLampOff();
-		else if(state == LampState::ON)
-			redLampOn();
-		else if(state == LampState::FLASHING_SLOW)
-			setRedBlinking(true, false);
-		else if(state == LampState::FLASHING_FAST)
-			setRedBlinking(true, true);
-		else
-			handled = false;
-		break;
-	case LED_M_START:
-	case LED_S_START:
-		state == LampState::ON ? startLedOn() : startLedOff();
-		break;
-	case LED_M_RESET:
-	case LED_S_RESET:
-		state == LampState::ON ? resetLedOn() : resetLedOff();
-		break;
-	case LED_M_Q1:
-	case LED_S_Q1:
-		state == LampState::ON ? q1LedOn() : q1LedOff();
-		break;
-	case LED_M_Q2:
-	case LED_S_Q2:
-		state == LampState::ON ? q2LedOn() : q2LedOff();
-		break;
-	default:
-		handled = false;
-	}
-
-	return handled;
 }

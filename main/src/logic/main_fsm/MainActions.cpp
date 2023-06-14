@@ -8,6 +8,7 @@
 #include "MainActions.h"
 #include "logger/logger.hpp"
 #include "hal/HeightSensor.h"
+#include "hal/IActuators.h"
 #include "configuration/Configuration.h"
 #include <thread>
 #include <chrono>
@@ -148,32 +149,14 @@ void MainActions::slave_warningOff() {
 
 void MainActions::calibrateOffset() {
 	Logger::info("Calibrating HeightSensor offset...");
-	HeightSensor sensor;
-	sensor.start();
-	std::this_thread::sleep_for(std::chrono::milliseconds(500));
-	int sum = 0;
-	for(int i = 0; i < HM_CAL_MEASUREMENTS; i++) {
-		sum += sensor.getLastRawValue();
-		std::this_thread::sleep_for(std::chrono::milliseconds(10));
-	}
-	int offset = sum / HM_CAL_MEASUREMENTS;
-	Logger::info("Calibrating HeightSensor offset -> value = " + std::to_string(offset));
-	Configuration::getInstance().setOffsetCalibration(offset);
+	eventManager->sendEvent(Event{HM_M_CAL_OFFSET});
+	eventManager->sendEvent(Event{HM_S_CAL_OFFSET});
 }
 
 void MainActions::calibrateReference() {
 	Logger::info("Calibrating HeightSensor reference (high)...");
-	HeightSensor sensor;
-	sensor.start();
-	std::this_thread::sleep_for(std::chrono::milliseconds(500));
-	int sum = 0;
-	for(int i = 0; i < HM_CAL_MEASUREMENTS; i++) {
-		sum += sensor.getLastRawValue();
-		std::this_thread::sleep_for(std::chrono::milliseconds(10));
-	}
-	int ref = sum / HM_CAL_MEASUREMENTS;
-	Logger::info("Calibrating HeightSensor reference (high) -> value = " + std::to_string(ref));
-	Configuration::getInstance().setReferenceCalibration(ref);
+	eventManager->sendEvent(Event{HM_M_CAL_REF});
+	eventManager->sendEvent(Event{HM_S_CAL_REF});
 }
 
 void MainActions::saveCalibration() {
@@ -184,6 +167,7 @@ void MainActions::saveCalibration() {
 	ss << "HeightSensor calibration: CAL_OFFSET=" << cal.calOffset;
 	ss << "; CAL_REF=" << cal.calRef;
 	ss << " -> saved to file!" << std::endl;
+	Logger::debug(ss.str());
 }
 
 void MainActions::btnStartLedOn() {

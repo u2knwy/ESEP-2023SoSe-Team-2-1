@@ -1,0 +1,521 @@
+\hypertarget{class_actuator_mock}{}\doxysection{Actuator\+Mock Class Reference}
+\label{class_actuator_mock}\index{ActuatorMock@{ActuatorMock}}
+Inheritance diagram for Actuator\+Mock\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_actuator_mock}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_actuator_mock_a81341f31019871004b4d1aa53ed2ad83}\label{class_actuator_mock_a81341f31019871004b4d1aa53ed2ad83}} 
+{\bfseries Actuator\+Mock} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_event_manager}{Event\+Manager}} $>$ mngr)
+\item 
+void \mbox{\hyperlink{class_actuator_mock_a375de17662f49528727cf1c56c5a306b}{standby\+Mode}} () override
+\item 
+void \mbox{\hyperlink{class_actuator_mock_ae21c0fa1aae5e93966ab610ce812582e}{running\+Mode}} () override
+\item 
+void \mbox{\hyperlink{class_actuator_mock_a20e87cf0dfc9804fda39400e1b5e9a32}{service\+Mode}} () override
+\item 
+void \mbox{\hyperlink{class_actuator_mock_af230380ba75657ff5f7843f4ebeebe5d}{error\+Mode}} () override
+\item 
+void \mbox{\hyperlink{class_actuator_mock_a78ef1576f036ac445d904a7c8253e5a5}{estop\+Mode}} () override
+\item 
+void \mbox{\hyperlink{class_actuator_mock_a597ce419b16fc76ddf4d732c346f9343}{green\+Lamp\+On}} () override
+\item 
+void \mbox{\hyperlink{class_actuator_mock_ad0fd9955a526ef5d09c0f134150af642}{set\+Green\+Blinking}} (bool on) override
+\item 
+void \mbox{\hyperlink{class_actuator_mock_a12bfbe386df6182bfde8baa8af685be7}{green\+Lamp\+Off}} () override
+\item 
+void \mbox{\hyperlink{class_actuator_mock_a102a95565fafdeb9091387648760d0e3}{yellow\+Lamp\+On}} () override
+\item 
+void \mbox{\hyperlink{class_actuator_mock_a15c888a200e659bc3775c1b333ea7aae}{set\+Yellow\+Blinking}} (bool on) override
+\item 
+void \mbox{\hyperlink{class_actuator_mock_ad0f76c58046e29e3e713f0d85dbb23dd}{yellow\+Lamp\+Off}} () override
+\item 
+void \mbox{\hyperlink{class_actuator_mock_ac9c46925b0b663aa3ca400a8be7b788e}{red\+Lamp\+On}} () override
+\item 
+void \mbox{\hyperlink{class_actuator_mock_a6d88a902aac33735813358563a0af9d5}{set\+Red\+Blinking}} (bool on, bool fast) override
+\item 
+void \mbox{\hyperlink{class_actuator_mock_a7d4baccd7e492a4a6c7414f054ec9316}{red\+Lamp\+Off}} () override
+\item 
+void \mbox{\hyperlink{class_actuator_mock_a8b014f80ab749875e57999e8aa39864a}{start\+Led\+On}} () override
+\item 
+void \mbox{\hyperlink{class_actuator_mock_a00e28ec5c3ddc83e9d9c25bd10bf3575}{start\+Led\+Off}} () override
+\item 
+void \mbox{\hyperlink{class_actuator_mock_a903e048f7ec5b24b36ac19cbfd398aec}{reset\+Led\+On}} () override
+\item 
+void \mbox{\hyperlink{class_actuator_mock_a6c8fb30ec10b5bff086d34acecd93c9b}{reset\+Led\+Off}} () override
+\item 
+void \mbox{\hyperlink{class_actuator_mock_ab36cc003173bdb14b3ab97fbefd2b0aa}{q1\+Led\+On}} () override
+\item 
+void \mbox{\hyperlink{class_actuator_mock_abd5dbc5e84a6cc6ad68f4becbd93d9f7}{q1\+Led\+Off}} () override
+\item 
+void \mbox{\hyperlink{class_actuator_mock_ab6580909284e95586557967ca9d12941}{q2\+Led\+On}} () override
+\item 
+void \mbox{\hyperlink{class_actuator_mock_ae56547fa1c1e5ae31b165fa027db5f1b}{q2\+Led\+Off}} () override
+\item 
+void \mbox{\hyperlink{class_actuator_mock_abcac5a4528a57c6c07db30b478c82412}{motor\+Stop}} () override
+\item 
+void \mbox{\hyperlink{class_actuator_mock_a706ccce3a7c4bc8e154584cc9155940a}{motor\+Slow}} () override
+\item 
+void \mbox{\hyperlink{class_actuator_mock_a9d60103e5b1d5c3549152e8b29d0530d}{motor\+Fast}} () override
+\item 
+void \mbox{\hyperlink{class_actuator_mock_a2356f3ad4ef3056b44577447f90f112a}{open\+Switch}} () override
+\item 
+void \mbox{\hyperlink{class_actuator_mock_a181eec228a38fc59b6ac9a866e714ef9}{close\+Switch}} () override
+\item 
+void \mbox{\hyperlink{class_actuator_mock_aea5045dc747e5537ce8f5711ff02246f}{sort\+Out}} () override
+\item 
+void \mbox{\hyperlink{class_actuator_mock_a74ba8b4bfaf274a50fe64a96bded39f8}{let\+Pass}} () override
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions inherited from \mbox{\hyperlink{class_i_actuators}{IActuators}}}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_af51238bc1df28e7da51c1e7941250d27}{standby\+Mode}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a84f9fbf9ce54a3a1a208810d825fe553}{running\+Mode}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a8ada57b70efce7f9144d9401fcf0bcd0}{service\+Mode}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_aff7fc5c82f5ea6b43771b23ec4a5d65a}{error\+Mode}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_aa2e83e6dfb7e625daefb1fe778db57e5}{estop\+Mode}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_aee54d8fcb0c1bf157db404ffca757116}{green\+Lamp\+On}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a7284026a272063e15b45aae12f46953d}{set\+Green\+Blinking}} (bool on)=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a17122e73f56d3575748bb04eaa9d3400}{green\+Lamp\+Off}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a73d557655264abe290d0fc9e9c7e5791}{yellow\+Lamp\+On}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a316e1dd2466a85a75990e0d9e92b5628}{set\+Yellow\+Blinking}} (bool on)=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a343eab508c560ea9066aa429bdded39a}{yellow\+Lamp\+Off}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a70505b6bbce7e944ad45fe09420a8ab3}{red\+Lamp\+On}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a4dda6ccb974394b3069816aa3eda51bc}{set\+Red\+Blinking}} (bool on, bool fast)=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a5a3391197d414a033bfd86838bd9e26f}{red\+Lamp\+Off}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a0df6dc71932cb7dc7ae1835b35cd6322}{start\+Led\+On}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a349a4b1d84fe7b20958a8135b4dcd1f8}{start\+Led\+Off}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a1d2ba78125df059f47a7ba83089adfa3}{reset\+Led\+On}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a83241316a1d4f79d84259d8669f04400}{reset\+Led\+Off}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a7cfcc4b7d54a8f79ab9f9eb8bde5db89}{q1\+Led\+On}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a96eaa9ec125ab749a3704f3f5c7e5a0f}{q1\+Led\+Off}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a3c1764cc05c9155ac1b6c603a6bc1eaa}{q2\+Led\+On}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a931c1b06d03ec415c9225542fc6acff6}{q2\+Led\+Off}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a0c113300056d325ba62c357bd8f46fc1}{motor\+Stop}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a52ac7a7aac279499298ee97ade3a16e5}{motor\+Slow}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a53c51253220adecc8ed49625b706b60d}{motor\+Fast}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a119a641b147abb43e0ed530f716849c8}{open\+Switch}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a5fd2cd4100dee70bc24900f07da8e41c}{close\+Switch}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a4e6953017f6b66225a4a878991eeeb49}{sort\+Out}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_abefa0ecaeef1fe1425338f1017c4f4bb}{let\+Pass}} ()=0
+\item 
+void \mbox{\hyperlink{class_i_actuators_aabfbb10bcb1eb63a7960f9984da88e76}{handle\+Event}} (\mbox{\hyperlink{struct_event}{Event}} event) override
+\item 
+\mbox{\Hypertarget{class_i_actuators_a8fc4df1ace5168c962802a5e031ac64c}\label{class_i_actuators_a8fc4df1ace5168c962802a5e031ac64c}} 
+bool {\bfseries handle\+Lamp\+Event} (Event\+Type event, Lamp\+State state)
+\end{DoxyCompactItemize}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_i_event_handler_a63c61e6208dacfac9efe636a60802267}\label{class_i_event_handler_a63c61e6208dacfac9efe636a60802267}} 
+virtual void {\bfseries handle\+Event} (\mbox{\hyperlink{struct_event}{Event}} event)=0
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_actuator_mock_a987068cd6a92fa2fb027f2770be5fe8a}\label{class_actuator_mock_a987068cd6a92fa2fb027f2770be5fe8a}} 
+Lamp\+State {\bfseries green\+Lamp} \{OFF\}
+\item 
+\mbox{\Hypertarget{class_actuator_mock_ac8652d372716564c41bee07094e06867}\label{class_actuator_mock_ac8652d372716564c41bee07094e06867}} 
+Lamp\+State {\bfseries yellow\+Lamp} \{OFF\}
+\item 
+\mbox{\Hypertarget{class_actuator_mock_a77f82e30c4e947d935b9f1dc4dea31f4}\label{class_actuator_mock_a77f82e30c4e947d935b9f1dc4dea31f4}} 
+Lamp\+State {\bfseries red\+Lamp} \{OFF\}
+\item 
+\mbox{\Hypertarget{class_actuator_mock_a289fa11502ac4464391173ac5c89215a}\label{class_actuator_mock_a289fa11502ac4464391173ac5c89215a}} 
+Lamp\+State {\bfseries start\+Led} \{OFF\}
+\item 
+\mbox{\Hypertarget{class_actuator_mock_a8fcba5c465fa909185055de08294eddb}\label{class_actuator_mock_a8fcba5c465fa909185055de08294eddb}} 
+Lamp\+State {\bfseries reset\+Led} \{OFF\}
+\item 
+\mbox{\Hypertarget{class_actuator_mock_a4e2c739f9cfc5bfa19033cfbb24ceaa1}\label{class_actuator_mock_a4e2c739f9cfc5bfa19033cfbb24ceaa1}} 
+Lamp\+State {\bfseries q1\+Led} \{OFF\}
+\item 
+\mbox{\Hypertarget{class_actuator_mock_a4ae1749c5be23424588e5a4f6a47bd58}\label{class_actuator_mock_a4ae1749c5be23424588e5a4f6a47bd58}} 
+Lamp\+State {\bfseries q2\+Led} \{OFF\}
+\item 
+\mbox{\Hypertarget{class_actuator_mock_aee3a6371fa5e8b17c86ab1b730a11167}\label{class_actuator_mock_aee3a6371fa5e8b17c86ab1b730a11167}} 
+Motor\+State {\bfseries motor} \{STOPPED\}
+\item 
+\mbox{\Hypertarget{class_actuator_mock_a44b84d42dfd4db4fbfb56b0e81378e6e}\label{class_actuator_mock_a44b84d42dfd4db4fbfb56b0e81378e6e}} 
+bool {\bfseries switch\+Open} \{false\}
+\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+\doxysubsubsection*{Protected Member Functions inherited from \mbox{\hyperlink{class_i_actuators}{IActuators}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_i_actuators_a86de60b4e96c0fdff8ed90f818b0c897}\label{class_i_actuators_a86de60b4e96c0fdff8ed90f818b0c897}} 
+{\bfseries IActuators} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_event_manager}{Event\+Manager}} $>$ mngr)
+\item 
+\mbox{\Hypertarget{class_i_actuators_af9b8119a25fbebb184e89345fae85d33}\label{class_i_actuators_af9b8119a25fbebb184e89345fae85d33}} 
+void {\bfseries subscribe\+To\+Events} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_actuator_mock_a181eec228a38fc59b6ac9a866e714ef9}\label{class_actuator_mock_a181eec228a38fc59b6ac9a866e714ef9}} 
+\index{ActuatorMock@{ActuatorMock}!closeSwitch@{closeSwitch}}
+\index{closeSwitch@{closeSwitch}!ActuatorMock@{ActuatorMock}}
+\doxysubsubsection{\texorpdfstring{closeSwitch()}{closeSwitch()}}
+{\footnotesize\ttfamily void Actuator\+Mock\+::close\+Switch (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Closes the switch to let a workpiece fall into the slide. 
+
+Implements \mbox{\hyperlink{class_i_actuators_a5fd2cd4100dee70bc24900f07da8e41c}{IActuators}}.
+
+\mbox{\Hypertarget{class_actuator_mock_af230380ba75657ff5f7843f4ebeebe5d}\label{class_actuator_mock_af230380ba75657ff5f7843f4ebeebe5d}} 
+\index{ActuatorMock@{ActuatorMock}!errorMode@{errorMode}}
+\index{errorMode@{errorMode}!ActuatorMock@{ActuatorMock}}
+\doxysubsubsection{\texorpdfstring{errorMode()}{errorMode()}}
+{\footnotesize\ttfamily void Actuator\+Mock\+::error\+Mode (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Sets all actuators when Error mode is entered
+\begin{DoxyItemize}
+\item red lamp flashing fast
+\item motor stop 
+\end{DoxyItemize}
+
+Implements \mbox{\hyperlink{class_i_actuators_aff7fc5c82f5ea6b43771b23ec4a5d65a}{IActuators}}.
+
+\mbox{\Hypertarget{class_actuator_mock_a78ef1576f036ac445d904a7c8253e5a5}\label{class_actuator_mock_a78ef1576f036ac445d904a7c8253e5a5}} 
+\index{ActuatorMock@{ActuatorMock}!estopMode@{estopMode}}
+\index{estopMode@{estopMode}!ActuatorMock@{ActuatorMock}}
+\doxysubsubsection{\texorpdfstring{estopMode()}{estopMode()}}
+{\footnotesize\ttfamily void Actuator\+Mock\+::estop\+Mode (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Sets all actuators when \mbox{\hyperlink{class_e_stop}{EStop}} mode is entered\+:
+\begin{DoxyItemize}
+\item all off 
+\end{DoxyItemize}
+
+Implements \mbox{\hyperlink{class_i_actuators_aa2e83e6dfb7e625daefb1fe778db57e5}{IActuators}}.
+
+\mbox{\Hypertarget{class_actuator_mock_a12bfbe386df6182bfde8baa8af685be7}\label{class_actuator_mock_a12bfbe386df6182bfde8baa8af685be7}} 
+\index{ActuatorMock@{ActuatorMock}!greenLampOff@{greenLampOff}}
+\index{greenLampOff@{greenLampOff}!ActuatorMock@{ActuatorMock}}
+\doxysubsubsection{\texorpdfstring{greenLampOff()}{greenLampOff()}}
+{\footnotesize\ttfamily void Actuator\+Mock\+::green\+Lamp\+Off (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Turns the green lamp off 
+
+Implements \mbox{\hyperlink{class_i_actuators_a17122e73f56d3575748bb04eaa9d3400}{IActuators}}.
+
+\mbox{\Hypertarget{class_actuator_mock_a597ce419b16fc76ddf4d732c346f9343}\label{class_actuator_mock_a597ce419b16fc76ddf4d732c346f9343}} 
+\index{ActuatorMock@{ActuatorMock}!greenLampOn@{greenLampOn}}
+\index{greenLampOn@{greenLampOn}!ActuatorMock@{ActuatorMock}}
+\doxysubsubsection{\texorpdfstring{greenLampOn()}{greenLampOn()}}
+{\footnotesize\ttfamily void Actuator\+Mock\+::green\+Lamp\+On (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Turns the green lamp on 
+
+Implements \mbox{\hyperlink{class_i_actuators_aee54d8fcb0c1bf157db404ffca757116}{IActuators}}.
+
+\mbox{\Hypertarget{class_actuator_mock_a74ba8b4bfaf274a50fe64a96bded39f8}\label{class_actuator_mock_a74ba8b4bfaf274a50fe64a96bded39f8}} 
+\index{ActuatorMock@{ActuatorMock}!letPass@{letPass}}
+\index{letPass@{letPass}!ActuatorMock@{ActuatorMock}}
+\doxysubsubsection{\texorpdfstring{letPass()}{letPass()}}
+{\footnotesize\ttfamily void Actuator\+Mock\+::let\+Pass (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Lets the switch or pusher pass a workpiece to the end of the belt. If switch is mounted\+: Open for \{ON\+\_\+\+TIME\+\_\+\+SWITCH\+\_\+\+MS\} ms, then close again If pusher is mounted\+: Do nothing, so workpiece will pass. 
+
+Implements \mbox{\hyperlink{class_i_actuators_abefa0ecaeef1fe1425338f1017c4f4bb}{IActuators}}.
+
+\mbox{\Hypertarget{class_actuator_mock_a9d60103e5b1d5c3549152e8b29d0530d}\label{class_actuator_mock_a9d60103e5b1d5c3549152e8b29d0530d}} 
+\index{ActuatorMock@{ActuatorMock}!motorFast@{motorFast}}
+\index{motorFast@{motorFast}!ActuatorMock@{ActuatorMock}}
+\doxysubsubsection{\texorpdfstring{motorFast()}{motorFast()}}
+{\footnotesize\ttfamily void Actuator\+Mock\+::motor\+Fast (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Lets the motor run in fast speed 
+
+Implements \mbox{\hyperlink{class_i_actuators_a53c51253220adecc8ed49625b706b60d}{IActuators}}.
+
+\mbox{\Hypertarget{class_actuator_mock_a706ccce3a7c4bc8e154584cc9155940a}\label{class_actuator_mock_a706ccce3a7c4bc8e154584cc9155940a}} 
+\index{ActuatorMock@{ActuatorMock}!motorSlow@{motorSlow}}
+\index{motorSlow@{motorSlow}!ActuatorMock@{ActuatorMock}}
+\doxysubsubsection{\texorpdfstring{motorSlow()}{motorSlow()}}
+{\footnotesize\ttfamily void Actuator\+Mock\+::motor\+Slow (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Lets the motor run in slow speed 
+
+Implements \mbox{\hyperlink{class_i_actuators_a52ac7a7aac279499298ee97ade3a16e5}{IActuators}}.
+
+\mbox{\Hypertarget{class_actuator_mock_abcac5a4528a57c6c07db30b478c82412}\label{class_actuator_mock_abcac5a4528a57c6c07db30b478c82412}} 
+\index{ActuatorMock@{ActuatorMock}!motorStop@{motorStop}}
+\index{motorStop@{motorStop}!ActuatorMock@{ActuatorMock}}
+\doxysubsubsection{\texorpdfstring{motorStop()}{motorStop()}}
+{\footnotesize\ttfamily void Actuator\+Mock\+::motor\+Stop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Stops the motor 
+
+Implements \mbox{\hyperlink{class_i_actuators_a0c113300056d325ba62c357bd8f46fc1}{IActuators}}.
+
+\mbox{\Hypertarget{class_actuator_mock_a2356f3ad4ef3056b44577447f90f112a}\label{class_actuator_mock_a2356f3ad4ef3056b44577447f90f112a}} 
+\index{ActuatorMock@{ActuatorMock}!openSwitch@{openSwitch}}
+\index{openSwitch@{openSwitch}!ActuatorMock@{ActuatorMock}}
+\doxysubsubsection{\texorpdfstring{openSwitch()}{openSwitch()}}
+{\footnotesize\ttfamily void Actuator\+Mock\+::open\+Switch (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Opens the switch to let a workpiece pass. 
+
+Implements \mbox{\hyperlink{class_i_actuators_a119a641b147abb43e0ed530f716849c8}{IActuators}}.
+
+\mbox{\Hypertarget{class_actuator_mock_abd5dbc5e84a6cc6ad68f4becbd93d9f7}\label{class_actuator_mock_abd5dbc5e84a6cc6ad68f4becbd93d9f7}} 
+\index{ActuatorMock@{ActuatorMock}!q1LedOff@{q1LedOff}}
+\index{q1LedOff@{q1LedOff}!ActuatorMock@{ActuatorMock}}
+\doxysubsubsection{\texorpdfstring{q1LedOff()}{q1LedOff()}}
+{\footnotesize\ttfamily void Actuator\+Mock\+::q1\+Led\+Off (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Turns the \textquotesingle{}Q1\textquotesingle{} LED off 
+
+Implements \mbox{\hyperlink{class_i_actuators_a96eaa9ec125ab749a3704f3f5c7e5a0f}{IActuators}}.
+
+\mbox{\Hypertarget{class_actuator_mock_ab36cc003173bdb14b3ab97fbefd2b0aa}\label{class_actuator_mock_ab36cc003173bdb14b3ab97fbefd2b0aa}} 
+\index{ActuatorMock@{ActuatorMock}!q1LedOn@{q1LedOn}}
+\index{q1LedOn@{q1LedOn}!ActuatorMock@{ActuatorMock}}
+\doxysubsubsection{\texorpdfstring{q1LedOn()}{q1LedOn()}}
+{\footnotesize\ttfamily void Actuator\+Mock\+::q1\+Led\+On (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Turns the \textquotesingle{}Q1\textquotesingle{} LED on 
+
+Implements \mbox{\hyperlink{class_i_actuators_a7cfcc4b7d54a8f79ab9f9eb8bde5db89}{IActuators}}.
+
+\mbox{\Hypertarget{class_actuator_mock_ae56547fa1c1e5ae31b165fa027db5f1b}\label{class_actuator_mock_ae56547fa1c1e5ae31b165fa027db5f1b}} 
+\index{ActuatorMock@{ActuatorMock}!q2LedOff@{q2LedOff}}
+\index{q2LedOff@{q2LedOff}!ActuatorMock@{ActuatorMock}}
+\doxysubsubsection{\texorpdfstring{q2LedOff()}{q2LedOff()}}
+{\footnotesize\ttfamily void Actuator\+Mock\+::q2\+Led\+Off (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Turns the \textquotesingle{}Q2\textquotesingle{} LED off 
+
+Implements \mbox{\hyperlink{class_i_actuators_a931c1b06d03ec415c9225542fc6acff6}{IActuators}}.
+
+\mbox{\Hypertarget{class_actuator_mock_ab6580909284e95586557967ca9d12941}\label{class_actuator_mock_ab6580909284e95586557967ca9d12941}} 
+\index{ActuatorMock@{ActuatorMock}!q2LedOn@{q2LedOn}}
+\index{q2LedOn@{q2LedOn}!ActuatorMock@{ActuatorMock}}
+\doxysubsubsection{\texorpdfstring{q2LedOn()}{q2LedOn()}}
+{\footnotesize\ttfamily void Actuator\+Mock\+::q2\+Led\+On (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Turns the \textquotesingle{}Q2\textquotesingle{} LED on 
+
+Implements \mbox{\hyperlink{class_i_actuators_a3c1764cc05c9155ac1b6c603a6bc1eaa}{IActuators}}.
+
+\mbox{\Hypertarget{class_actuator_mock_a7d4baccd7e492a4a6c7414f054ec9316}\label{class_actuator_mock_a7d4baccd7e492a4a6c7414f054ec9316}} 
+\index{ActuatorMock@{ActuatorMock}!redLampOff@{redLampOff}}
+\index{redLampOff@{redLampOff}!ActuatorMock@{ActuatorMock}}
+\doxysubsubsection{\texorpdfstring{redLampOff()}{redLampOff()}}
+{\footnotesize\ttfamily void Actuator\+Mock\+::red\+Lamp\+Off (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Turns the red lamp off 
+
+Implements \mbox{\hyperlink{class_i_actuators_a5a3391197d414a033bfd86838bd9e26f}{IActuators}}.
+
+\mbox{\Hypertarget{class_actuator_mock_ac9c46925b0b663aa3ca400a8be7b788e}\label{class_actuator_mock_ac9c46925b0b663aa3ca400a8be7b788e}} 
+\index{ActuatorMock@{ActuatorMock}!redLampOn@{redLampOn}}
+\index{redLampOn@{redLampOn}!ActuatorMock@{ActuatorMock}}
+\doxysubsubsection{\texorpdfstring{redLampOn()}{redLampOn()}}
+{\footnotesize\ttfamily void Actuator\+Mock\+::red\+Lamp\+On (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Turns the red lamp on 
+
+Implements \mbox{\hyperlink{class_i_actuators_a70505b6bbce7e944ad45fe09420a8ab3}{IActuators}}.
+
+\mbox{\Hypertarget{class_actuator_mock_a6c8fb30ec10b5bff086d34acecd93c9b}\label{class_actuator_mock_a6c8fb30ec10b5bff086d34acecd93c9b}} 
+\index{ActuatorMock@{ActuatorMock}!resetLedOff@{resetLedOff}}
+\index{resetLedOff@{resetLedOff}!ActuatorMock@{ActuatorMock}}
+\doxysubsubsection{\texorpdfstring{resetLedOff()}{resetLedOff()}}
+{\footnotesize\ttfamily void Actuator\+Mock\+::reset\+Led\+Off (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Turns the LED at the \textquotesingle{}Reset\textquotesingle{} button off 
+
+Implements \mbox{\hyperlink{class_i_actuators_a83241316a1d4f79d84259d8669f04400}{IActuators}}.
+
+\mbox{\Hypertarget{class_actuator_mock_a903e048f7ec5b24b36ac19cbfd398aec}\label{class_actuator_mock_a903e048f7ec5b24b36ac19cbfd398aec}} 
+\index{ActuatorMock@{ActuatorMock}!resetLedOn@{resetLedOn}}
+\index{resetLedOn@{resetLedOn}!ActuatorMock@{ActuatorMock}}
+\doxysubsubsection{\texorpdfstring{resetLedOn()}{resetLedOn()}}
+{\footnotesize\ttfamily void Actuator\+Mock\+::reset\+Led\+On (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Turns the LED at the \textquotesingle{}Reset\textquotesingle{} button on 
+
+Implements \mbox{\hyperlink{class_i_actuators_a1d2ba78125df059f47a7ba83089adfa3}{IActuators}}.
+
+\mbox{\Hypertarget{class_actuator_mock_ae21c0fa1aae5e93966ab610ce812582e}\label{class_actuator_mock_ae21c0fa1aae5e93966ab610ce812582e}} 
+\index{ActuatorMock@{ActuatorMock}!runningMode@{runningMode}}
+\index{runningMode@{runningMode}!ActuatorMock@{ActuatorMock}}
+\doxysubsubsection{\texorpdfstring{runningMode()}{runningMode()}}
+{\footnotesize\ttfamily void Actuator\+Mock\+::running\+Mode (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Sets all actuators when \mbox{\hyperlink{class_running}{Running}} mode is entered\+:
+\begin{DoxyItemize}
+\item green lamp on 
+\end{DoxyItemize}
+
+Implements \mbox{\hyperlink{class_i_actuators_a84f9fbf9ce54a3a1a208810d825fe553}{IActuators}}.
+
+\mbox{\Hypertarget{class_actuator_mock_a20e87cf0dfc9804fda39400e1b5e9a32}\label{class_actuator_mock_a20e87cf0dfc9804fda39400e1b5e9a32}} 
+\index{ActuatorMock@{ActuatorMock}!serviceMode@{serviceMode}}
+\index{serviceMode@{serviceMode}!ActuatorMock@{ActuatorMock}}
+\doxysubsubsection{\texorpdfstring{serviceMode()}{serviceMode()}}
+{\footnotesize\ttfamily void Actuator\+Mock\+::service\+Mode (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Sets all actuators when Service mode is entered
+\begin{DoxyItemize}
+\item green lamp flashing 
+\end{DoxyItemize}
+
+Implements \mbox{\hyperlink{class_i_actuators_a8ada57b70efce7f9144d9401fcf0bcd0}{IActuators}}.
+
+\mbox{\Hypertarget{class_actuator_mock_ad0fd9955a526ef5d09c0f134150af642}\label{class_actuator_mock_ad0fd9955a526ef5d09c0f134150af642}} 
+\index{ActuatorMock@{ActuatorMock}!setGreenBlinking@{setGreenBlinking}}
+\index{setGreenBlinking@{setGreenBlinking}!ActuatorMock@{ActuatorMock}}
+\doxysubsubsection{\texorpdfstring{setGreenBlinking()}{setGreenBlinking()}}
+{\footnotesize\ttfamily void Actuator\+Mock\+::set\+Green\+Blinking (\begin{DoxyParamCaption}\item[{bool}]{on }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Lets the green lamp blink or turns it off
+
+
+\begin{DoxyParams}{Parameters}
+{\em on} & Blinking on or off \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{class_i_actuators_a7284026a272063e15b45aae12f46953d}{IActuators}}.
+
+\mbox{\Hypertarget{class_actuator_mock_a6d88a902aac33735813358563a0af9d5}\label{class_actuator_mock_a6d88a902aac33735813358563a0af9d5}} 
+\index{ActuatorMock@{ActuatorMock}!setRedBlinking@{setRedBlinking}}
+\index{setRedBlinking@{setRedBlinking}!ActuatorMock@{ActuatorMock}}
+\doxysubsubsection{\texorpdfstring{setRedBlinking()}{setRedBlinking()}}
+{\footnotesize\ttfamily void Actuator\+Mock\+::set\+Red\+Blinking (\begin{DoxyParamCaption}\item[{bool}]{on,  }\item[{bool}]{fast }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Lets the red lamp blink or turns it off
+
+
+\begin{DoxyParams}{Parameters}
+{\em on} & Blinking on or off \\
+\hline
+{\em fast} & Blink fast(1\+Hz) or slow (0,5Hz) \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{class_i_actuators_a4dda6ccb974394b3069816aa3eda51bc}{IActuators}}.
+
+\mbox{\Hypertarget{class_actuator_mock_a15c888a200e659bc3775c1b333ea7aae}\label{class_actuator_mock_a15c888a200e659bc3775c1b333ea7aae}} 
+\index{ActuatorMock@{ActuatorMock}!setYellowBlinking@{setYellowBlinking}}
+\index{setYellowBlinking@{setYellowBlinking}!ActuatorMock@{ActuatorMock}}
+\doxysubsubsection{\texorpdfstring{setYellowBlinking()}{setYellowBlinking()}}
+{\footnotesize\ttfamily void Actuator\+Mock\+::set\+Yellow\+Blinking (\begin{DoxyParamCaption}\item[{bool}]{on }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Lets the yellow lamp blink or turns it off
+
+
+\begin{DoxyParams}{Parameters}
+{\em on} & Blinking on or off \\
+\hline
+\end{DoxyParams}
+
+
+Implements \mbox{\hyperlink{class_i_actuators_a316e1dd2466a85a75990e0d9e92b5628}{IActuators}}.
+
+\mbox{\Hypertarget{class_actuator_mock_aea5045dc747e5537ce8f5711ff02246f}\label{class_actuator_mock_aea5045dc747e5537ce8f5711ff02246f}} 
+\index{ActuatorMock@{ActuatorMock}!sortOut@{sortOut}}
+\index{sortOut@{sortOut}!ActuatorMock@{ActuatorMock}}
+\doxysubsubsection{\texorpdfstring{sortOut()}{sortOut()}}
+{\footnotesize\ttfamily void Actuator\+Mock\+::sort\+Out (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Lets the switch or pusher sort out workpiece to ramp. If switch is mounted\+: Do nothing, so workpiece will go to ramp If pusher is mounted\+: activate for \{ON\+\_\+\+TIME\+\_\+\+PUSHER\+\_\+\+MS\} ms, then deactivate again 
+
+Implements \mbox{\hyperlink{class_i_actuators_a4e6953017f6b66225a4a878991eeeb49}{IActuators}}.
+
+\mbox{\Hypertarget{class_actuator_mock_a375de17662f49528727cf1c56c5a306b}\label{class_actuator_mock_a375de17662f49528727cf1c56c5a306b}} 
+\index{ActuatorMock@{ActuatorMock}!standbyMode@{standbyMode}}
+\index{standbyMode@{standbyMode}!ActuatorMock@{ActuatorMock}}
+\doxysubsubsection{\texorpdfstring{standbyMode()}{standbyMode()}}
+{\footnotesize\ttfamily void Actuator\+Mock\+::standby\+Mode (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Sets all actuators when \mbox{\hyperlink{class_standby}{Standby}} mode is entered\+:
+\begin{DoxyItemize}
+\item all off 
+\end{DoxyItemize}
+
+Implements \mbox{\hyperlink{class_i_actuators_af51238bc1df28e7da51c1e7941250d27}{IActuators}}.
+
+\mbox{\Hypertarget{class_actuator_mock_a00e28ec5c3ddc83e9d9c25bd10bf3575}\label{class_actuator_mock_a00e28ec5c3ddc83e9d9c25bd10bf3575}} 
+\index{ActuatorMock@{ActuatorMock}!startLedOff@{startLedOff}}
+\index{startLedOff@{startLedOff}!ActuatorMock@{ActuatorMock}}
+\doxysubsubsection{\texorpdfstring{startLedOff()}{startLedOff()}}
+{\footnotesize\ttfamily void Actuator\+Mock\+::start\+Led\+Off (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Turns the LED at the \textquotesingle{}Start\textquotesingle{} button off 
+
+Implements \mbox{\hyperlink{class_i_actuators_a349a4b1d84fe7b20958a8135b4dcd1f8}{IActuators}}.
+
+\mbox{\Hypertarget{class_actuator_mock_a8b014f80ab749875e57999e8aa39864a}\label{class_actuator_mock_a8b014f80ab749875e57999e8aa39864a}} 
+\index{ActuatorMock@{ActuatorMock}!startLedOn@{startLedOn}}
+\index{startLedOn@{startLedOn}!ActuatorMock@{ActuatorMock}}
+\doxysubsubsection{\texorpdfstring{startLedOn()}{startLedOn()}}
+{\footnotesize\ttfamily void Actuator\+Mock\+::start\+Led\+On (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Turns the LED at the \textquotesingle{}Start\textquotesingle{} button on 
+
+Implements \mbox{\hyperlink{class_i_actuators_a0df6dc71932cb7dc7ae1835b35cd6322}{IActuators}}.
+
+\mbox{\Hypertarget{class_actuator_mock_ad0f76c58046e29e3e713f0d85dbb23dd}\label{class_actuator_mock_ad0f76c58046e29e3e713f0d85dbb23dd}} 
+\index{ActuatorMock@{ActuatorMock}!yellowLampOff@{yellowLampOff}}
+\index{yellowLampOff@{yellowLampOff}!ActuatorMock@{ActuatorMock}}
+\doxysubsubsection{\texorpdfstring{yellowLampOff()}{yellowLampOff()}}
+{\footnotesize\ttfamily void Actuator\+Mock\+::yellow\+Lamp\+Off (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Turns the yellow lamp off 
+
+Implements \mbox{\hyperlink{class_i_actuators_a343eab508c560ea9066aa429bdded39a}{IActuators}}.
+
+\mbox{\Hypertarget{class_actuator_mock_a102a95565fafdeb9091387648760d0e3}\label{class_actuator_mock_a102a95565fafdeb9091387648760d0e3}} 
+\index{ActuatorMock@{ActuatorMock}!yellowLampOn@{yellowLampOn}}
+\index{yellowLampOn@{yellowLampOn}!ActuatorMock@{ActuatorMock}}
+\doxysubsubsection{\texorpdfstring{yellowLampOn()}{yellowLampOn()}}
+{\footnotesize\ttfamily void Actuator\+Mock\+::yellow\+Lamp\+On (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Turns the yellow lamp on 
+
+Implements \mbox{\hyperlink{class_i_actuators_a73d557655264abe290d0fc9e9c7e5791}{IActuators}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+main/src/tests/hal/Actuator\+Mock.\+h\item 
+main/src/tests/hal/Actuator\+Mock.\+cpp\end{DoxyCompactItemize}

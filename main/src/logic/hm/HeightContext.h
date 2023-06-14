@@ -10,13 +10,14 @@
 #include "HeightActions.h"
 #include "HeightBasestate.h"
 #include "HeightContextData.h"
+#include "hal/HeightSensor.h"
 #include "hal/IHeightSensor.h"
 #include "events/IEventHandler.h"
 #include "events/EventManager.h"
 #include "events/events.h"
+#include "tests/hm/HeightSensorMock.h"
 
 #include <memory>
-
 
 class HeightContext : public IEventHandler {
 public:

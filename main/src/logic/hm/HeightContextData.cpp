@@ -10,22 +10,12 @@
 #include "events/events.h"
 
 HeightContextData::HeightContextData() {
-	currentType = WorkpieceType::WS_UNKNOWN;
 	measurements = std::vector<float>(1000);
 	resetMeasurement();
 }
 
 HeightContextData::~HeightContextData() {
 	measurements.clear();
-}
-
-WorkpieceType HeightContextData::getCurrentType() {
-	return currentType;
-}
-
-void HeightContextData::setCurrentType(WorkpieceType type) {
-	Logger::debug("[HFSM] Current type changed: " + std::to_string(type));
-	this->currentType = type;
 }
 
 void HeightContextData::resetMeasurement() {
@@ -71,9 +61,9 @@ HeightResult HeightContextData::getCurrentResult() {
 	// Throw out first and last 10 % of measurements
 	int startIndex = totalValues * 0.05;
 	int endIndex = totalValues * 0.95;
-	int nValues = endIndex - startIndex + 1;
+	int nValues = endIndex - startIndex;
 	double sum = 0;
-	for(auto it = measurements.begin() + startIndex; it != measurements.end(); ++it) {
+	for(auto it = measurements.begin() + startIndex; it != measurements.begin() + endIndex; ++it) {
 		float val = *it;
 		sum += val;
 		if(val > maxValue)
