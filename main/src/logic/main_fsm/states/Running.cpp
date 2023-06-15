@@ -9,6 +9,8 @@
 #include "Standby.h"
 #include "EStop.h"
 #include "logger/logger.hpp"
+#include <chrono>
+#include <thread>
 
 #include <iostream>
 
@@ -30,17 +32,68 @@ void Running::exit() {
 }
 
 bool Running::master_LBA_Blocked() {
-	Workpiece* wp = data->wpManager->addWorkpiece();
-	Logger::info("New workpiece inserted: " + wp->getId());
 	actions->master_sendMotorRightRequest(true);
 	return true;
 }
 
 bool Running::master_LBA_Unblocked() {
+	Workpiece* wp = data->wpManager->addWorkpiece();
+	data->wpManager->addToArea_A(wp);
+	Logger::info("Workpiece with id: " + std::to_string(wp->id) + " created and added to Area_A");
+	return true;
+}
+
+bool Running::master_heightResultReceived(EventType event, float average) {
+	Logger::debug("[MainFSM] Received FBM1 height result: " + EVENT_TO_STRING(event) + " - avg: " + std::to_string(average) + " mm");
+	// TODO: Handle height result -> convert EventType to WorkpieceType and update workpiece data
+	Workpiece* wp = data->wpManager->getter_head_Area_A();
+
+	// setHeight()
+	wp->avgHeight=average/10;
+
+	//setType()
+	if(event == EventType::HM_M_WS_F) {
+		wp->WP_M_type=WorkpieceType::WS_F;
+	} else if(event == EventType::HM_M_WS_OB) {
+		wp->WP_M_type=WorkpieceType::WS_OB;
+	} else if(event == EventType::HM_M_WS_BOM) {
+		wp->WP_M_type=WorkpieceType::WS_BOM;
+	} else if(event == EventType::HM_M_WS_UNKNOWN) {
+		wp->WP_M_type=WorkpieceType::WS_UNKNOWN;
+	}
+
+	//moveFromArea_AtoArea_B()
+	data->wpManager->moveFromArea_AtoArea_B();
+	wp = data->wpManager->getter_head_Area_B();
+	Logger::info("Workpiece with id: " + std::to_string(wp->id) + "type= "+ std::to_string(wp->WP_M_type) +
+			" height= " + std::to_string(wp->avgHeight));
+	return true;
+}
+
+bool Running::master_metalDetected() {
+	Workpiece* wp= data->wpManager->getter_head_Area_B();
+	wp->metal=true;
+
+	//if(wp->metal)wp->metal
 	return true;
 }
 
 bool Running::master_LBW_Blocked() {
+
+	Workpiece* wp = data->wpManager->getter_head_Area_B();
+
+
+	//Logger::info("Workpiece with id: " + std::to_string(wp->id) +" master Type set to: ");
+	//data->wpManager->setSortOut_M()
+	if(data->wpManager->getSortOut_M()){
+		//closegate()
+		Logger::info("Workpiece with id: " + std::to_string(wp->id) +" you shall not Pass throungh Master switch");
+	}
+	else
+		//opengate();
+		Logger::info("Workpiece with id: " + std::to_string(wp->id)+"Passed through Master switch");
+		data->wpManager->moveFromArea_BtoArea_C();
+		Logger::info("Workpiece with id: " + std::to_string(wp->id) +" transfered to Area_C");
 	return true;
 }
 
@@ -49,7 +102,19 @@ bool Running::master_LBW_Unblocked() {
 }
 
 bool Running::master_LBE_Blocked() {
-	actions->master_sendMotorStopRequest(true);
+	Workpiece* wp = data->wpManager->getter_head_Area_C();
+		if(data->wpManager->fbm_S_Occupied()){
+			actions->master_sendMotorStopRequest(false);
+			Logger::info("Workpiece with id: " + std::to_string(wp->id) +" setMotorFastMaster(false)");
+		}
+		while(data->wpManager->fbm_S_Occupied()){
+			//wait
+			std::this_thread::sleep_for(std::chrono::seconds(2));
+			Logger::info("Workpiece with id: " + std::to_string(wp->id) +" waiting for fbm_S to get free");
+		}
+		actions->master_sendMotorStopRequest(true);
+		Logger::info("Workpiece with id: " + std::to_string(wp->id) +" actions->master_sendMotorStopRequest(true)");
+
 	return true;
 }
 
@@ -103,20 +168,7 @@ bool Running::slave_LBR_Unblocked() {
 	return true;
 }
 
-bool Running::master_heightResultReceived(EventType event, float average) {
-	Logger::debug("[MainFSM] Received FBM1 height result: " + EVENT_TO_STRING(event) + " - avg: " + std::to_string(average) + " mm");
-	// TODO: Handle height result -> convert EventType to WorkpieceType and update workpiece data
-	if(event == EventType::HM_M_WS_F) {
-		//wp.setFBM1Type(WorkpieceType::WS_F);
-	} else if(event == EventType::HM_M_WS_OB) {
-		//wp.setFBM1Type(WorkpieceType::WS_OB);
-	} else if(event == EventType::HM_M_WS_BOM) {
-		//wp.setFBM1Type(WorkpieceType::WS_BOM);
-	} else if(event == EventType::HM_M_WS_UNKNOWN) {
-		//wp.setFBM1Type(WorkpieceType::WS_UNKNOWN);
-	}
-	return true;
-}
+
 
 bool Running::slave_heightResultReceived(EventType event, float average) {
 	Logger::debug("[MainFSM] Received FBM1 height result: " + EVENT_TO_STRING(event) + " - avg: " + std::to_string(average) + " mm");
@@ -124,10 +176,6 @@ bool Running::slave_heightResultReceived(EventType event, float average) {
 	return true;
 }
 
-bool Running::master_metalDetected() {
-	// TODO: Update workpiece: metal was detected at FBM1
-	return true;
-}
 
 bool Running::slave_metalDetected() {
 	// TODO: Update workpiece: metal was detected at FBM2
