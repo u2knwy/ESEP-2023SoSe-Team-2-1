@@ -91,7 +91,7 @@ bool Running::master_LBW_Blocked() {
 		Logger::info("Workpiece with id: " + std::to_string(wp->id) +" you shall not Pass throungh Master switch");
 	}
 	else
-		actions->master_openGate(false);
+		actions->master_openGate(true);
 		data->wpManager->moveFromArea_BtoArea_C();
 		Logger::info("Workpiece with id: " + std::to_string(wp->id) +" Passed through Master switch and transfered to Area_C");
 	return true;
