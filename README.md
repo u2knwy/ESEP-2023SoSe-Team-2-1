@@ -24,7 +24,6 @@ Der positionale Parameter `mode` ist dabei obligatorisch und muss einer der folg
 - `master`: Starten des Programms im "Master" Betrieb
 - `slave`: Starten des Programms im "Slave" Betrieb
 - `tests`: Ausführen der Tests mit GoogleTest Suite
-- `demo`: Starten des "Demo-Mode"
 
 Die optionalen Parameter haben folgende Bedeutung:
 
