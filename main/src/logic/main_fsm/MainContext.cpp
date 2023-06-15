@@ -45,6 +45,7 @@ void MainContext::subscribeToEvents() {
 	eventManager->subscribe(EventType::ESTOP_S_RELEASED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 
 	eventManager->subscribe(EventType::LBA_M_BLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::LBA_M_UNBLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 	eventManager->subscribe(EventType::LBE_M_BLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 
 	// Height Sensor
@@ -99,6 +100,9 @@ void MainContext::handleEvent(Event event) {
 		break;
 	case EventType::LBA_M_BLOCKED:
 		state->master_LBA_Blocked();
+		break;
+	case EventType::LBA_M_UNBLOCKED:
+		state->master_LBA_Unblocked();
 		break;
 	case EventType::LBE_M_BLOCKED:
 		state->master_LBE_Blocked();
