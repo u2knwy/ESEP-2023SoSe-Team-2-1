@@ -87,6 +87,21 @@ void MainActions::setErrorMode() {
 	eventManager->sendEvent(event);
 }
 
+void MainActions::redLampFlashingFast() {
+	eventManager->sendEvent(Event{EventType::LAMP_M_RED, (int)LampState::FLASHING_FAST});
+	eventManager->sendEvent(Event{EventType::LAMP_S_RED, (int)LampState::FLASHING_FAST});
+}
+
+void MainActions::redLampFlashingSlow() {
+	eventManager->sendEvent(Event{EventType::LAMP_M_RED, (int)LampState::FLASHING_SLOW});
+	eventManager->sendEvent(Event{EventType::LAMP_S_RED, (int)LampState::FLASHING_SLOW});
+}
+
+void MainActions::redLampOn() {
+	eventManager->sendEvent(Event{EventType::LAMP_M_RED, (int)LampState::ON});
+	eventManager->sendEvent(Event{EventType::LAMP_S_RED, (int)LampState::ON});
+}
+
 void MainActions::setEStopMode() {
 	Event event;
 	event.type = EventType::MODE_ESTOP;

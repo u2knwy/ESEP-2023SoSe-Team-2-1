@@ -8,6 +8,7 @@
 #include "Running.h"
 #include "Standby.h"
 #include "EStop.h"
+#include "Error.h"
 #include "logger/logger.hpp"
 #include <chrono>
 #include <thread>
@@ -215,5 +216,21 @@ bool Running::slave_EStop_Pressed() {
 	exit();
 	new(this) EStop;
 	entry();
+	return true;
+}
+
+bool Running::selfSolvableErrorOccurred() {
+	exit();
+	new(this) Error;
+	entry();
+	selfSolvableErrorOccurred();
+	return true;
+}
+
+bool Running::nonSelfSolvableErrorOccurred() {
+	exit();
+	new(this) Error;
+	entry();
+	nonSelfSolvableErrorOccurred();
 	return true;
 }

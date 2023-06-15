@@ -26,6 +26,9 @@ public:
 	void setRunningMode();
 	void setServiceMode();
 	void setErrorMode();
+	void redLampOn();
+	void redLampFlashingFast();
+	void redLampFlashingSlow();
 	void setEStopMode();
 	void allActuatorsOn();
 	void allActuatorsOff();

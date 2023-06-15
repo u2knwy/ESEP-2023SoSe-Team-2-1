@@ -43,4 +43,7 @@ class Running: public MainBasestate {
 
 	bool master_EStop_Pressed() override;
 	bool slave_EStop_Pressed() override;
+
+	bool selfSolvableErrorOccurred() override;
+	bool nonSelfSolvableErrorOccurred() override;
 };

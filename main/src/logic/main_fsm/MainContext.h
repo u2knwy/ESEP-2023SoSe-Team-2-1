@@ -64,6 +64,10 @@ public:
 	void slave_EStop_Pressed();
 	void slave_EStop_Released();
 
+	void selfSolvableErrorOccurred();
+	void errorSelfSolved();
+	void nonSelfSolvableErrorOccurred();
+
 private:
 	MainActions* actions;
 	MainContextData* data;
