@@ -46,7 +46,21 @@ void MainContext::subscribeToEvents() {
 
 	eventManager->subscribe(EventType::LBA_M_BLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 	eventManager->subscribe(EventType::LBA_M_UNBLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::LBW_M_BLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::LBW_M_UNBLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 	eventManager->subscribe(EventType::LBE_M_BLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::LBE_M_UNBLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::LBR_M_BLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::LBR_M_UNBLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+
+	eventManager->subscribe(EventType::LBA_S_BLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::LBA_S_UNBLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::LBW_S_BLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::LBW_S_UNBLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::LBE_S_BLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::LBE_S_UNBLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::LBR_S_BLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::LBR_S_UNBLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 
 	// Height Sensor
 	eventManager->subscribe(EventType::HM_M_WS_UNKNOWN, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
@@ -104,8 +118,47 @@ void MainContext::handleEvent(Event event) {
 	case EventType::LBA_M_UNBLOCKED:
 		state->master_LBA_Unblocked();
 		break;
+	case EventType::LBW_M_BLOCKED:
+		state->master_LBW_Blocked();
+		break;
+	case EventType::LBW_M_UNBLOCKED:
+		state->master_LBW_Unblocked();
+		break;
 	case EventType::LBE_M_BLOCKED:
 		state->master_LBE_Blocked();
+		break;
+	case EventType::LBE_M_UNBLOCKED:
+		state->master_LBE_Unblocked();
+		break;
+	case EventType::LBR_M_BLOCKED:
+		state->master_LBR_Blocked();
+		break;
+	case EventType::LBR_M_UNBLOCKED:
+		state->master_LBR_Unblocked();
+		break;
+	case EventType::LBA_S_BLOCKED:
+		state->slave_LBA_Blocked();
+		break;
+	case EventType::LBA_S_UNBLOCKED:
+		state->slave_LBA_Unblocked();
+		break;
+	case EventType::LBW_S_BLOCKED:
+		state->slave_LBW_Blocked();
+		break;
+	case EventType::LBW_S_UNBLOCKED:
+		state->slave_LBW_Unblocked();
+		break;
+	case EventType::LBE_S_BLOCKED:
+		state->slave_LBE_Blocked();
+		break;
+	case EventType::LBE_S_UNBLOCKED:
+		state->slave_LBE_Unblocked();
+		break;
+	case EventType::LBR_S_BLOCKED:
+		state->slave_LBR_Blocked();
+		break;
+	case EventType::LBR_S_UNBLOCKED:
+		state->slave_LBR_Unblocked();
 		break;
 	case EventType::HM_M_WS_F:
 	case EventType::HM_M_WS_OB:
