@@ -127,20 +127,32 @@ bool Running::master_LBE_Unblocked() {
 }
 
 bool Running::master_LBR_Blocked() {
+	data->setRampFBM1Blocked(true);
+
 	data->wpManager->removeFromArea_A();
 	if(!data->wpManager->WP_ON_FBM_M()){
 		actions->master_sendMotorRightRequest(false);
 	}
 
-	// code was allready there
-	data->setRampFBM1Blocked(true);
-	actions->master_sendMotorRightRequest(false);
+	// If still blocked after 1s -> display warning
+    std::thread t([=]() {
+    	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    	if(data->isRampFBM1Blocked()) {
+    		actions->master_warningOn();
+    	}
+    });
+    t.detach();
+
 	return true;
 }
 
 bool Running::master_LBR_Unblocked() {
-	data->setRampFBM1Blocked(false);
-	return true;
+	if(data->isRampFBM1Blocked()) {
+		data->setRampFBM1Blocked(false);
+		actions->master_warningOff();
+		return true;
+	}
+	return false;
 }
 
 bool Running::slave_LBA_Blocked() {
@@ -169,12 +181,26 @@ bool Running::slave_LBE_Unblocked() {
 
 bool Running::slave_LBR_Blocked() {
 	data->setRampFBM2Blocked(true);
+
+	// If still blocked after 1s -> display warning
+    std::thread t([=]() {
+    	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    	if(data->isRampFBM2Blocked()) {
+    		actions->slave_warningOn();
+    	}
+    });
+    t.detach();
+
 	return true;
 }
 
 bool Running::slave_LBR_Unblocked() {
-	data->setRampFBM2Blocked(false);
-	return true;
+	if(data->isRampFBM2Blocked()) {
+		data->setRampFBM2Blocked(false);
+		actions->slave_warningOff();
+		return true;
+	}
+	return false;
 }
 
 
