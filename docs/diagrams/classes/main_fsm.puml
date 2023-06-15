@@ -1,13 +1,14 @@
 @startuml
 interface IEventHandler {
-  #notify(Event event)
+  #handleEvent(Event event)
 }
 
 enum WorkpieceType {
-  UNKNOWN
-  TYPE_A
-  TYPE_B
-  TYPE_C
+  WS_UNKNOWN
+  WS_F
+  WS_OB
+  WS_BOM
+  WS_BUM
 }
 
 enum Position {
@@ -42,11 +43,6 @@ class Workpiece {
 Workpiece *-- Position
 Workpiece *- WorkpieceType
 
-enum SystemType {
-  MASTER
-  SLAVE
-}
-
 class WorkpieceManager {
   -WorkpieceType[3] desiredOrder
   -std::vector<Workpiece> workpieces
@@ -55,58 +51,96 @@ class WorkpieceManager {
   +Workpiece getWorkpieceByPosition(Position pos)
   +bool sortOutNextWorkpiece()
   ... Handlers for updating workpiece info ...
-  +wpAtStart(SystemType sys)
-  +wpAtHeightSensor(SystemType sys)
-  +handleHeightResult(SystemType sys, WorkpieceType type)
-  +handleMetalDetected(SystemType sys, bool isMetal)
-  +wpAtSwitch(SystemType sys)
-  +wpAtRamp(SystemType sys)
-  +wpAtEnd(SystemType sys)
+  +wpAtStart(bool atMaster)
+  +wpAtHeightSensor(bool atMaster)
+  +handleHeightResult(bool atMaster, WorkpieceType type)
+  +handleMetalDetected(bool atMaster, bool isMetal)
+  +wpAtSwitch(bool atMaster)
+  +wpAtRamp(bool atMaster)
+  +wpAtEnd(bool atMaster)
   +wpRemoved()
 }
 
 WorkpieceManager o- Workpiece
-SystemType .. WorkpieceManager
 
-class MainFSM {
+class MainContext {
+  -MainActions* actions
+	-MainContextData* data
+	-MainBasestate* state
   -WorkpieceManager* wpManager
   -EventManager* eventManager
-  +notify(Event event)
+  +MainContext(EventManager* mngr)
+  +handleEvent(Event event)
+  -subscribeToEvents()
+  .. Handler for errors ..
+  +errorOccured()
+  +errorSolved()
   .. Handler for button events ..
-  -startPressedShort()
-  -startPressedLong()
-  -stopPressed()
-  -resetPressed()
-  -estopPressedFBM1()
-  -estopPressedFBM2()
-  -errorOccured()
-  -errorSolved()
+  +master_btnStart_PressedShort()
+  +master_btnStart_PressedLong()
+  +master_btnStop_Pressed()
+  +master_btnReset_Pressed()
+  +master_EStop_Pressed()
+	+master_EStop_Released()
+  +slave_btnStart_PressedShort()
+  +slave_btnStart_PressedLong()
+  +slave_btnStop_Pressed()
+  +slave_btnReset_Pressed()
+  +slave_EStop_Pressed()
+	+slave_EStop_Released()
   .. Handler for sensor events from master ..
-  -master_lb1Blocked()
-  -master_lb1Unblocked()
-  -master_lb2Blocked()
-  -master_lb2Unblocked()
-  -master_lb3Blocked()
-  -master_lb3Unblocked()
-  -master_lb4Blocked()
-  -master_lb4Unblocked()
-  -master_metalDetected()
-  -master_newHeightResult(int mm)
+  +master_LBA_Blocked()
+  +master_LBA_Unblocked()
+  +master_LBW_Blocked()
+  +master_LBW_Unblocked()
+  +master_LBR_Blocked()
+  +master_LBR_Unblocked()
+  +master_LBE_Blocked()
+  +master_LBE_Unblocked()
+  +master_newHeightResult(WorkpieceType type, float avgHeight)
+  +master_metalDetected()
   .. Handler for sensor events from slave ..
-  -slave_lb1Blocked()
-  -slave_lb1Unblocked()
-  -slave_lb2Blocked()
-  -slave_lb2Unblocked()
-  -slave_lb3Blocked()
-  -slave_lb3Unblocked()
-  -slave_lb4Blocked()
-  -slave_lb4Unblocked()
-  -slave_metalDetected()
-  -slave_newHeightResult(int mm)
+  +slave_LBA_Blocked()
+  +slave_LBA_Unblocked()
+  +slave_LBW_Blocked()
+  +slave_LBW_Unblocked()
+  +slave_LBR_Blocked()
+  +slave_LBR_Unblocked()
+  +slave_LBE_Blocked()
+  +slave_LBE_Unblocked()
+  +master_newHeightResult(WorkpieceType type, float avgHeight)
+  +slave_metalDetected()
 }
 
-IEventHandler <|.. MainFSM
-MainFSM o- WorkpieceManager
+MainActions -o MainContext
+
+class MainActions {
+  -EventManager* eventManager
+  +MainActions(EventManager* mngr)
+	+master_sendMotorStopRequest(bool stop)
+	+master_sendMotorRightRequest(bool right)
+	+slave_sendMotorStopRequest(bool stop)
+	+slave_sendMotorRightRequest(bool right)
+	+setStandbyMode()
+	+setRunningMode()
+	+setServiceMode()
+	+setErrorMode()
+	+setEStopMode()
+	+allActuatorsOn()
+	+allActuatorsOff()
+	+displayWarning()
+	+warningOff()
+	+calibrateOffset()
+	+calibrateReference()
+	+saveCalibration()
+	+btnStartLedOn()
+	+btnStartLedOff()
+	+btnResetLedOn()
+	+btnResetLedOff()
+}
+
+IEventHandler <|.. MainContext
+MainContext o- WorkpieceManager
 
 
 @enduml

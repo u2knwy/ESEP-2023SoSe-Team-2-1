@@ -24,25 +24,11 @@ public:
 	virtual ~HeightContextData();
 
 	/**
-	 * Gets the currently detected workpiece type
-	 *
-	 * @return current type
-	 */
-	WorkpieceType getCurrentType();
-
-	/**
-	 * Updates the currently detected workpiece type
-	 *
-	 * @return new type
-	 */
-	void setCurrentType(WorkpieceType type);
-
-	/**
 	 * Adds a new measurement value and recalculate the actual average and maximum value
 	 *
 	 * @param value New value received
 	 */
-	void updateAvgAndMaxValue(float value);
+	void addValue(float value);
 
 	/**
 	 * Get the current average value
@@ -63,13 +49,11 @@ public:
 	 */
 	void resetMeasurement();
 	HeightResult getCurrentResult();
-	HeightResult getCurrentResultV2();
 	static bool isFlat(float value);
 	static bool isHigh(float value);
 	static bool isHole(float value);
 	static bool isUnknown(float value);
 private:
-	WorkpieceType currentType;
 	float avgValue;
 	float maxValue;
 	int nMeasurements;

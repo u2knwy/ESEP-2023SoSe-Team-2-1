@@ -94,6 +94,10 @@ int EventManager::sendtoMaster(const Event &ev){
 }
 
 void EventManager::sendEvent(const Event &event) {
+		if(!isMaster){
+		    Logger::debug("Sending message to master");
+			sendtoMaster(event);
+		}
 	std::stringstream ss;
 	ss << "[EventManager] sendEvent: " << EVENT_TO_STRING(event.type); // << " = " << (int) event.type;
 
@@ -101,10 +105,6 @@ void EventManager::sendEvent(const Event &event) {
 		ss << ", data: " << std::to_string(event.data);
 
 	if (subscribers.find(event.type) != subscribers.end()) {
-		if(!isMaster){
-		    Logger::debug("Sending message to master");
-			sendtoMaster(event);
-		}
 		Logger::debug("Notifiying subscribers...");
 		int i = 1;
 		for(const auto& callback : subscribers[event.type]) {
@@ -144,13 +144,9 @@ void EventManager::handle_app_msg(header_t hdr, int rcvid)
 
 
 		switch(app_header.eventnr){
-		case EventType::HALgelbeLampeAn:
-			printf("received HALgelbeLampeAn\n");
-//			hal->YellowLampOn();
-			break;
 
 		default:
-			printf("EventType unknown\n");
+			printf("Received EventType %s\n", EVENT_TO_STRING(app_header.eventnr));
 
 		}
 

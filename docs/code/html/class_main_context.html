@@ -75,12 +75,23 @@ $(function() {
   <div class="headertitle"><div class="title">MainContext Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+<div class="dynheader">
+Inheritance diagram for MainContext:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="class_main_context.png" usemap="#MainContext_map" alt=""/>
+  <map id="MainContext_map" name="MainContext_map">
+<area href="class_i_event_handler.html" alt="IEventHandler" shape="rect" coords="0,0,92,24"/>
+  </map>
+</div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:aa7a7625d870cbd02f443c31dafd6ad38"><td class="memItemLeft" align="right" valign="top"><a id="aa7a7625d870cbd02f443c31dafd6ad38" name="aa7a7625d870cbd02f443c31dafd6ad38"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>MainContext</b> (std::shared_ptr&lt; <a class="el" href="class_event_manager.html">EventManager</a> &gt; mngr)</td></tr>
 <tr class="separator:aa7a7625d870cbd02f443c31dafd6ad38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac2983d63c665fe10d1777dcc077e1743"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_main_context.html#ac2983d63c665fe10d1777dcc077e1743">handleEvent</a> (<a class="el" href="struct_event.html">Event</a> event) override</td></tr>
+<tr class="separator:ac2983d63c665fe10d1777dcc077e1743"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3a2897269f547a760d806874e17530af"><td class="memItemLeft" align="right" valign="top"><a id="a3a2897269f547a760d806874e17530af" name="a3a2897269f547a760d806874e17530af"></a>
 MainState&#160;</td><td class="memItemRight" valign="bottom"><b>getCurrentState</b> ()</td></tr>
 <tr class="separator:a3a2897269f547a760d806874e17530af"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -168,7 +179,39 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>slave_EStop_Pressed</
 <tr class="memitem:a5d7e4f1eb4fbbfbcf9ff7236db057b97"><td class="memItemLeft" align="right" valign="top"><a id="a5d7e4f1eb4fbbfbcf9ff7236db057b97" name="a5d7e4f1eb4fbbfbcf9ff7236db057b97"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>slave_EStop_Released</b> ()</td></tr>
 <tr class="separator:a5d7e4f1eb4fbbfbcf9ff7236db057b97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63c61e6208dacfac9efe636a60802267"><td class="memItemLeft" align="right" valign="top"><a id="a63c61e6208dacfac9efe636a60802267" name="a63c61e6208dacfac9efe636a60802267"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>handleEvent</b> (<a class="el" href="struct_event.html">Event</a> event)=0</td></tr>
+<tr class="separator:a63c61e6208dacfac9efe636a60802267"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ac2983d63c665fe10d1777dcc077e1743" name="ac2983d63c665fe10d1777dcc077e1743"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac2983d63c665fe10d1777dcc077e1743">&#9670;&#160;</a></span>handleEvent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void MainContext::handleEvent </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_event.html">Event</a>&#160;</td>
+          <td class="paramname"><em>event</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="class_i_event_handler.html">IEventHandler</a>.</p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>main/src/logic/main_fsm/<a class="el" href="_main_context_8h_source.html">MainContext.h</a></li>
 <li>main/src/logic/main_fsm/MainContext.cpp</li>

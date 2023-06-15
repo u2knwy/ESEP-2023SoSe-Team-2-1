@@ -13,30 +13,21 @@
 #include "simqnxirqapi.h"
 #endif
 
-Actuators::Actuators(std::shared_ptr<EventManager> mngr) : eventManager(mngr)
+Actuators::Actuators(std::shared_ptr<EventManager> mngr) : IActuators(mngr)
 {
-	isMaster = Configuration::getInstance().systemIsMaster();
+	Configuration& conf = Configuration::getInstance();
+	isMaster = conf.systemIsMaster();
+	hasPusher = conf.pusherMounted();
 	gpio_bank_1 = mmap_device_io(SIZE_4KB, (uint64_t)GPIO_BANK_1);
 	gpio_bank_2 = mmap_device_io(SIZE_4KB, (uint64_t)GPIO_BANK_2);
 
 	configurePins();
-
-	// Default: Stop Motor
-	setMotorStop(true);
-	setMotorSlow(false);
-	setMotorRight(false);
 
 	greenBlinking = false;
 	yellowBlinking = false;
 	redBlinking = false;
 
 	standbyMode();
-
-	subscribeToEvents();
-
-	stopCnt = 0;
-	fastCnt = 0;
-	slowCnt = 0;
 }
 
 Actuators::~Actuators()
@@ -74,101 +65,6 @@ void Actuators::configurePins()
 	outputs = LED_Q1_PIN | LED_Q2_PIN | LED_RESET_PIN | LED_START_PIN;
 	temp = in32(GPIO_OE_REGISTER(gpio_bank_2));
 	out32(GPIO_OE_REGISTER(gpio_bank_2), temp & ~outputs);
-}
-
-void Actuators::subscribeToEvents()
-{
-
-	// Subscribe to lamp events
-	eventManager->subscribe(EventType::HALroteLampeAn, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::HALroteLampeAus, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::HALgelbeLampeAn, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::HALgelbeLampeAus, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::HALgrueneLampeAn, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::HALgrueneLampeAus, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-
-	// Subscribe to modes
-	eventManager->subscribe(EventType::MODE_STANDBY, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::MODE_RUNNING, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::MODE_SERVICE, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::MODE_ESTOP, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::MODE_ERROR, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-
-	// System-dependent events
-	if (isMaster)
-	{
-		eventManager->subscribe(EventType::ESTOP_M_PRESSED, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::WARNING_M, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::LED_M_START, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::LED_M_RESET, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::MOTOR_M_STOP, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::MOTOR_M_FAST, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::MOTOR_M_SLOW, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	}
-	else
-	{
-		eventManager->subscribe(EventType::ESTOP_S_PRESSED, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::WARNING_S, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::LED_S_START, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::LED_S_RESET, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::MOTOR_S_STOP, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::MOTOR_S_FAST, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::MOTOR_S_SLOW, std::bind(&Actuators::handleEvent, this, std::placeholders::_1));
-	}
-}
-
-void Actuators::handleEvent(Event event)
-{
-	std::lock_guard<std::mutex> lock(mutex);
-	Logger::debug("Actuators handle Event: " + EVENT_TO_STRING(event.type) + " - data: " + std::to_string(event.data));
-	switch (event.type)
-	{
-	case EventType::MOTOR_M_STOP:
-	case EventType::MOTOR_S_STOP:
-		motorStop();
-		break;
-	case EventType::MOTOR_M_FAST:
-	case EventType::MOTOR_S_FAST:
-		motorFast();
-		break;
-	case EventType::MOTOR_M_SLOW:
-	case EventType::MOTOR_S_SLOW:
-		motorSlow();
-		break;
-	case EventType::ESTOP_M_PRESSED:
-	case EventType::ESTOP_S_PRESSED:
-		motorStop();
-		break;
-	case EventType::MODE_STANDBY:
-		standbyMode();
-		break;
-	case EventType::MODE_RUNNING:
-		runningMode();
-		break;
-	case EventType::MODE_SERVICE:
-		serviceMode();
-		break;
-	case EventType::MODE_ESTOP:
-		estopMode();
-		break;
-	case EventType::MODE_ERROR:
-		errorMode();
-		break;
-	case EventType::WARNING_M:
-	case EventType::WARNING_S:
-		setYellowBlinking(event.data == 1);
-		break;
-	case EventType::LED_M_START:
-	case EventType::LED_S_START:
-		event.data == 1 ? startLedOn() : startLedOff();
-		break;
-	case EventType::LED_M_RESET:
-	case EventType::LED_S_RESET:
-		event.data == 1 ? resetLedOn() : resetLedOff();
-		break;
-	default:
-		Logger::warn(EVENT_TO_STRING(event.type) + " was not handled by actuators");
-	}
 }
 
 void Actuators::setGreenBlinking(bool on)
@@ -216,6 +112,7 @@ void Actuators::setRedBlinking(bool on, bool fast)
 
 void Actuators::standbyMode()
 {
+	motorStop();
 	setGreenBlinking(false);
 	setYellowBlinking(false);
 	setRedBlinking(false, false);
@@ -226,10 +123,6 @@ void Actuators::standbyMode()
 	q2LedOff();
 	startLedOn();
 	resetLedOff();
-	setMotorStop(true);
-	setMotorRight(false);
-	setMotorLeft(false);
-	setMotorSlow(false);
 }
 
 void Actuators::runningMode()
@@ -448,6 +341,38 @@ void Actuators::openSwitch()
 void Actuators::closeSwitch()
 {
 	out32(GPIO_CLEARDATAOUT(gpio_bank_1), SWITCH_PIN);
+}
+
+void Actuators::sortOut() {
+	// Has pusher -> push out for 500ms, then return to default position
+	// No pusher -> nothing to do, workpiece will be sorted out!
+	if(hasPusher) {
+	    std::thread t([=]() {
+	    	closeSwitch();
+	    	std::this_thread::sleep_for(std::chrono::milliseconds(ON_TIME_PUSHER_MS));
+	    	openSwitch();
+	    });
+	    t.detach();
+	    Logger::debug("[Actuators] Push out for 500ms");
+	} else {
+		Logger::debug("[Actuators] Let switch sort out workpiece...");
+	}
+}
+
+void Actuators::letPass() {
+	// No pusher -> open for 1s, then close again!
+	// Has pusher -> nothing to do, workpiece will pass!
+	if(!hasPusher) {
+	    std::thread t([=]() {
+	    	openSwitch();
+	    	std::this_thread::sleep_for(std::chrono::milliseconds(ON_TIME_SWITCH_MS));
+	    	closeSwitch();
+	    });
+	    t.detach();
+	    Logger::debug("[Actuators] Open switch for 1s");
+	} else {
+		Logger::debug("[Actuators] Let pusher pass workpiece...");
+	}
 }
 
 void Actuators::motorStop()

@@ -1,0 +1,31 @@
+\hypertarget{_i_event_handler_8h_source}{}\doxysection{IEvent\+Handler.\+h}
+\label{_i_event_handler_8h_source}\index{main/src/events/IEventHandler.h@{main/src/events/IEventHandler.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ IEventHandler.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ *\ \ Created\ on:\ 04.05.2023}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *\ \ \ \ \ \ Author:\ Maik}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}eventtypes\_enum.h"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}events.h"{}}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_event}{Event}}\ \{}
+\DoxyCodeLine{00014\ \ \ \ \ \mbox{\hyperlink{struct_event}{Event}}()\ \{\}}
+\DoxyCodeLine{00015\ \ \ \ \ \mbox{\hyperlink{struct_event}{Event}}(EventType\ evType)\ :\ type(evType),\ data(-\/1)\ \{\}}
+\DoxyCodeLine{00016\ \ \ \ \ \mbox{\hyperlink{struct_event}{Event}}(EventType\ evType,\ \textcolor{keywordtype}{int}\ evData)\ :\ type(evType),\ data(evData)\ \{\}}
+\DoxyCodeLine{00017\ \ \ \ \ EventType\ type;}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{int}\ data\{-\/1\};}
+\DoxyCodeLine{00019\ \};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_i_event_handler}{IEventHandler}}\ \{}
+\DoxyCodeLine{00022\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_i_event_handler}{\string~IEventHandler}}()\ \{\};}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ handleEvent(\mbox{\hyperlink{struct_event}{Event}}\ event)\ =\ 0;}
+\DoxyCodeLine{00025\ \};}
+
+\end{DoxyCode}

@@ -10,6 +10,7 @@
 #include "IHeightSensor.h"
 #include "adc/ADC.h"
 #include "events/events.h"
+#include "events/EventManager.h"
 #include "configuration/Configuration.h"
 
 #include <sys/mman.h>
@@ -41,12 +42,13 @@
 // ADC IRQ pin mask
 #define ADC_IRQ_PIN_MASK 0x2
 
-class HeightSensor : public IHeightSensor {
+class HeightSensor : public IHeightSensor, public IEventHandler {
 public:
-	HeightSensor();
+	HeightSensor(std::shared_ptr<EventManager> mngr);
 	virtual ~HeightSensor();
-	void registerMeasurementCallback(HeightCallback callback) override;
-	void unregisterNewMeasurementCallback() override;
+	void handleEvent(Event event) override;
+	void registerOnNewValueCallback(HeightCallback callback) override;
+	void unregisterOnNewValueCallback() override;
 	void start() override;
 	void stop() override;
 	float getAverageHeight() override;
@@ -61,7 +63,6 @@ private:
 	int conID;
     std::thread measureThread;
     std::vector<int> window;
-    size_t windowCapacity;
     int nMeasurements;
     std::mutex mtx;
     void addValue(int value);

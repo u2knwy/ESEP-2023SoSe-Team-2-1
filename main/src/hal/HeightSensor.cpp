@@ -12,15 +12,24 @@
 	#include "simqnxirqapi.h"
 #endif
 
-HeightSensor::HeightSensor() : chanID(-1), conID(-1) {
+HeightSensor::HeightSensor(std::shared_ptr<EventManager> mngr) : chanID(-1), conID(-1) {
+	Logger::debug("HeightSensor created");
 	adc = new ADC(tsc);
-	windowCapacity = ADC_SAMPLE_SIZE;
-	window.reserve(windowCapacity);
+	window.reserve(ADC_SAMPLE_SIZE);
 	Configuration &conf = Configuration::getInstance();
 	Calibration cal = conf.getCalibration();
 	calibrateOffset(cal.calOffset);
 	calibrateRefHigh(cal.calRef);
 	nMeasurements = 0;
+
+	// Master and Slave receive commands to do calibration
+	if(conf.systemIsMaster()) {
+		mngr->subscribe(EventType::HM_M_CAL_OFFSET, std::bind(&HeightSensor::handleEvent, this, std::placeholders::_1));
+		mngr->subscribe(EventType::HM_M_CAL_REF, std::bind(&HeightSensor::handleEvent, this, std::placeholders::_1));
+	} else {
+		mngr->subscribe(EventType::HM_S_CAL_OFFSET, std::bind(&HeightSensor::handleEvent, this, std::placeholders::_1));
+		mngr->subscribe(EventType::HM_S_CAL_REF, std::bind(&HeightSensor::handleEvent, this, std::placeholders::_1));
+	}
 }
 
 HeightSensor::~HeightSensor() {
@@ -28,17 +37,42 @@ HeightSensor::~HeightSensor() {
 	delete adc;
 }
 
-void HeightSensor::registerMeasurementCallback(HeightCallback callback) {
+void HeightSensor::handleEvent(Event event) {
+	Configuration &conf = Configuration::getInstance();
+	switch(event.type) {
+	case EventType::HM_M_CAL_OFFSET:
+	case EventType::HM_S_CAL_OFFSET: {
+		Logger::debug("[HM] Calibrating offset");
+		int offset = getLastRawValue();
+		calibrateOffset(offset);
+		conf.setOffsetCalibration(offset);
+		conf.saveCurrentConfigToFile();
+		break;
+	}
+	case EventType::HM_M_CAL_REF:
+	case EventType::HM_S_CAL_REF: {
+		Logger::debug("[HM] Calibrating reference");
+		int ref = getLastRawValue();
+		calibrateRefHigh(ref);
+		conf.setReferenceCalibration(ref);
+		conf.saveCurrentConfigToFile();
+		break;
+	}
+	default:
+		Logger::warn("[HeightSensor] Event was not handled: " + EVENT_TO_STRING(event.type));
+		break;
+	}
+}
+
+void HeightSensor::registerOnNewValueCallback(HeightCallback callback) {
 	this->heightValueCallback = callback;
 }
 
-void HeightSensor::unregisterNewMeasurementCallback() {
+void HeightSensor::unregisterOnNewValueCallback() {
 	this->heightValueCallback = 0;
 }
 
 void HeightSensor::start() {
-	Logger::info("[HM] Starting...");
-
 	/* ### Create channel to receive ADC values ### */
 	chanID = ChannelCreate(0);
 	if (chanID < 0) {
@@ -121,7 +155,7 @@ void HeightSensor::addValue(int value) {
 void HeightSensor::threadFunction() {
 	ThreadCtl(_NTO_TCTL_IO, 0); // Request IO privileges for this thread.
 
-	Logger::debug("[HM] ADC receiving routine started...");
+	Logger::info("[HM] Height sensor started!");
 	Calibration adcCal = Configuration::getInstance().getCalibration();
 	calibrateOffset(adcCal.calOffset);
 	calibrateRefHigh(adcCal.calRef);

@@ -8,6 +8,7 @@
 #include "MainActions.h"
 #include "logger/logger.hpp"
 #include "hal/HeightSensor.h"
+#include "hal/IActuators.h"
 #include "configuration/Configuration.h"
 #include <thread>
 #include <chrono>
@@ -22,46 +23,44 @@ MainActions::~MainActions() {
 }
 
 
-void MainActions::setMotorStopMaster(bool stop) {
+void MainActions::master_sendMotorStopRequest(bool stop) {
 	Event event;
-	event.type = EventType::MOTOR_M_SET_STOP;
+	event.type = EventType::MOTOR_M_STOP_REQ;
 	event.data = (int) stop;
 	eventManager->sendEvent(event);
 }
 
-void MainActions::setMotorFastMaster(bool fast) {
+void MainActions::master_sendMotorRightRequest(bool right) {
 	Event event;
-	event.type = EventType::MOTOR_M_SET_FAST;
-	event.data = (int) fast;
+	event.type = EventType::MOTOR_M_RIGHT_REQ;
+	event.data = (int) right;
 	eventManager->sendEvent(event);
 }
 
-void MainActions::setMotorSlowMaster(bool slow) {
+void MainActions::slave_sendMotorStopRequest(bool stop) {
 	Event event;
-	event.type = EventType::MOTOR_M_SET_SLOW;
-	event.data = (int) slow;
-	eventManager->sendEvent(event);
-}
-
-void MainActions::setMotorStopSlave(bool stop) {
-	Event event;
-	event.type = EventType::MOTOR_S_SET_STOP;
+	event.type = EventType::MOTOR_S_STOP_REQ;
 	event.data = (int) stop;
 	eventManager->sendEvent(event);
 }
 
-void MainActions::setMotorFastSlave(bool fast) {
+void MainActions::slave_sendMotorRightRequest(bool right) {
 	Event event;
-	event.type = EventType::MOTOR_S_SET_FAST;
-	event.data = (int) fast;
+	event.type = EventType::MOTOR_S_RIGHT_REQ;
+	event.data = (int) right;
 	eventManager->sendEvent(event);
 }
 
-void MainActions::setMotorSlowSlave(bool slow) {
-	Event event;
-	event.type = EventType::MOTOR_S_SET_SLOW;
-	event.data = (int) slow;
-	eventManager->sendEvent(event);
+void MainActions::master_openGate(bool open) {
+	// (EventData) 0: sort out, 1: open gate
+	int eventData = open ? 0 : 1;
+	eventManager->sendEvent(Event{SORT_M_OUT, eventData});
+}
+
+void MainActions::slave_openGate(bool open) {
+	// (EventData) 0: sort out, 1: open gate
+	int eventData = open ? 0 : 1;
+	eventManager->sendEvent(Event{SORT_S_OUT, eventData});
 }
 
 void MainActions::setStandbyMode() {
@@ -88,6 +87,21 @@ void MainActions::setErrorMode() {
 	eventManager->sendEvent(event);
 }
 
+void MainActions::redLampFlashingFast() {
+	eventManager->sendEvent(Event{EventType::LAMP_M_RED, (int)LampState::FLASHING_FAST});
+	eventManager->sendEvent(Event{EventType::LAMP_S_RED, (int)LampState::FLASHING_FAST});
+}
+
+void MainActions::redLampFlashingSlow() {
+	eventManager->sendEvent(Event{EventType::LAMP_M_RED, (int)LampState::FLASHING_SLOW});
+	eventManager->sendEvent(Event{EventType::LAMP_S_RED, (int)LampState::FLASHING_SLOW});
+}
+
+void MainActions::redLampOn() {
+	eventManager->sendEvent(Event{EventType::LAMP_M_RED, (int)LampState::ON});
+	eventManager->sendEvent(Event{EventType::LAMP_S_RED, (int)LampState::ON});
+}
+
 void MainActions::setEStopMode() {
 	Event event;
 	event.type = EventType::MODE_ESTOP;
@@ -95,62 +109,67 @@ void MainActions::setEStopMode() {
 }
 
 void MainActions::allActuatorsOn() {
+	eventManager->sendEvent(Event{EventType::LAMP_M_GREEN, (int) LampState::ON});
+	eventManager->sendEvent(Event{EventType::LAMP_M_YELLOW, (int) LampState::ON});
+	eventManager->sendEvent(Event{EventType::LAMP_M_RED, (int) LampState::ON});
+	eventManager->sendEvent(Event{EventType::LED_M_START, (int) LampState::ON});
+	eventManager->sendEvent(Event{EventType::LED_M_RESET, (int) LampState::ON});
+	eventManager->sendEvent(Event{EventType::LED_M_Q1, (int) LampState::ON});
+	eventManager->sendEvent(Event{EventType::LED_M_Q2, (int) LampState::ON});
 
+	eventManager->sendEvent(Event{EventType::LAMP_S_GREEN, (int) LampState::ON});
+	eventManager->sendEvent(Event{EventType::LAMP_S_YELLOW, (int) LampState::ON});
+	eventManager->sendEvent(Event{EventType::LAMP_S_RED, (int) LampState::ON});
+	eventManager->sendEvent(Event{EventType::LED_S_START, (int) LampState::ON});
+	eventManager->sendEvent(Event{EventType::LED_S_RESET, (int) LampState::ON});
+	eventManager->sendEvent(Event{EventType::LED_S_Q1, (int) LampState::ON});
+	eventManager->sendEvent(Event{EventType::LED_S_Q2, (int) LampState::ON});
 }
 
 void MainActions::allActuatorsOff() {
+	eventManager->sendEvent(Event{EventType::LAMP_M_GREEN, (int) LampState::OFF});
+	eventManager->sendEvent(Event{EventType::LAMP_M_YELLOW, (int) LampState::OFF});
+	eventManager->sendEvent(Event{EventType::LAMP_M_RED, (int) LampState::OFF});
+	eventManager->sendEvent(Event{EventType::LED_M_START, (int) LampState::OFF});
+	eventManager->sendEvent(Event{EventType::LED_M_RESET, (int) LampState::OFF});
+	eventManager->sendEvent(Event{EventType::LED_M_Q1, (int) LampState::OFF});
+	eventManager->sendEvent(Event{EventType::LED_M_Q2, (int) LampState::OFF});
+
+	eventManager->sendEvent(Event{EventType::LAMP_S_GREEN, (int) LampState::OFF});
+	eventManager->sendEvent(Event{EventType::LAMP_S_YELLOW, (int) LampState::OFF});
+	eventManager->sendEvent(Event{EventType::LAMP_S_RED, (int) LampState::OFF});
+	eventManager->sendEvent(Event{EventType::LED_S_START, (int) LampState::OFF});
+	eventManager->sendEvent(Event{EventType::LED_S_RESET, (int) LampState::OFF});
+	eventManager->sendEvent(Event{EventType::LED_S_Q1, (int) LampState::OFF});
+	eventManager->sendEvent(Event{EventType::LED_S_Q2, (int) LampState::OFF});
 }
 
-void MainActions::displayWarning() {
-	Event event;
-	event.data = 1;
-
-	event.type = EventType::WARNING_M;
-	eventManager->sendEvent(event);
-
-	event.type = EventType::WARNING_S;
-	eventManager->sendEvent(event);
+void MainActions::master_warningOn() {
+	eventManager->sendEvent(Event{EventType::LAMP_M_YELLOW, (int) LampState::FLASHING_SLOW});
 }
 
-void MainActions::warningOff() {
-	Event event;
-	event.data = 0;
+void MainActions::master_warningOff() {
+	eventManager->sendEvent(Event{EventType::LAMP_M_YELLOW, (int) LampState::OFF});
+}
 
-	event.type = EventType::WARNING_M;
-	eventManager->sendEvent(event);
+void MainActions::slave_warningOn() {
+	eventManager->sendEvent(Event{EventType::LAMP_S_YELLOW, (int) LampState::FLASHING_SLOW});
+}
 
-	event.type = EventType::WARNING_S;
-	eventManager->sendEvent(event);
+void MainActions::slave_warningOff() {
+	eventManager->sendEvent(Event{EventType::LAMP_S_YELLOW, (int) LampState::OFF});
 }
 
 void MainActions::calibrateOffset() {
 	Logger::info("Calibrating HeightSensor offset...");
-	HeightSensor sensor;
-	sensor.start();
-	std::this_thread::sleep_for(std::chrono::milliseconds(500));
-	int sum = 0;
-	for(int i = 0; i < HM_CAL_MEASUREMENTS; i++) {
-		sum += sensor.getLastRawValue();
-		std::this_thread::sleep_for(std::chrono::milliseconds(10));
-	}
-	int offset = sum / HM_CAL_MEASUREMENTS;
-	Logger::info("Calibrating HeightSensor offset -> value = " + std::to_string(offset));
-	Configuration::getInstance().setOffsetCalibration(offset);
+	eventManager->sendEvent(Event{HM_M_CAL_OFFSET});
+	eventManager->sendEvent(Event{HM_S_CAL_OFFSET});
 }
 
 void MainActions::calibrateReference() {
 	Logger::info("Calibrating HeightSensor reference (high)...");
-	HeightSensor sensor;
-	sensor.start();
-	std::this_thread::sleep_for(std::chrono::milliseconds(500));
-	int sum = 0;
-	for(int i = 0; i < HM_CAL_MEASUREMENTS; i++) {
-		sum += sensor.getLastRawValue();
-		std::this_thread::sleep_for(std::chrono::milliseconds(10));
-	}
-	int ref = sum / HM_CAL_MEASUREMENTS;
-	Logger::info("Calibrating HeightSensor reference (high) -> value = " + std::to_string(ref));
-	Configuration::getInstance().setReferenceCalibration(ref);
+	eventManager->sendEvent(Event{HM_M_CAL_REF});
+	eventManager->sendEvent(Event{HM_S_CAL_REF});
 }
 
 void MainActions::saveCalibration() {
@@ -161,41 +180,26 @@ void MainActions::saveCalibration() {
 	ss << "HeightSensor calibration: CAL_OFFSET=" << cal.calOffset;
 	ss << "; CAL_REF=" << cal.calRef;
 	ss << " -> saved to file!" << std::endl;
+	Logger::debug(ss.str());
 }
 
 void MainActions::btnStartLedOn() {
-	Event ev;
-	ev.data = 1;
-	ev.type = EventType::LED_M_START;
-	eventManager->sendEvent(ev);
-	ev.type = EventType::LED_S_START;
-	eventManager->sendEvent(ev);
+	eventManager->sendEvent(Event{EventType::LED_M_START, (int) LampState::ON});
+	eventManager->sendEvent(Event{EventType::LED_S_START, (int) LampState::ON});
 }
 
 void MainActions::btnResetLedOn() {
-	Event ev;
-	ev.data = 1;
-	ev.type = EventType::LED_M_RESET;
-	eventManager->sendEvent(ev);
-	ev.type = EventType::LED_S_RESET;
-	eventManager->sendEvent(ev);
+	eventManager->sendEvent(Event{EventType::LED_M_RESET, (int) LampState::ON});
+	eventManager->sendEvent(Event{EventType::LED_S_RESET, (int) LampState::ON});
 }
 
 void MainActions::btnStartLedOff() {
-	Event ev;
-	ev.data = 0;
-	ev.type = EventType::LED_M_START;
-	eventManager->sendEvent(ev);
-	ev.type = EventType::LED_S_START;
-	eventManager->sendEvent(ev);
+	eventManager->sendEvent(Event{EventType::LED_M_START, (int) LampState::OFF});
+	eventManager->sendEvent(Event{EventType::LED_S_START, (int) LampState::OFF});
 }
 
 void MainActions::btnResetLedOff() {
-	Event ev;
-	ev.data = 0;
-	ev.type = EventType::LED_M_RESET;
-	eventManager->sendEvent(ev);
-	ev.type = EventType::LED_S_RESET;
-	eventManager->sendEvent(ev);
+	eventManager->sendEvent(Event{EventType::LED_M_RESET, (int) LampState::OFF});
+	eventManager->sendEvent(Event{EventType::LED_S_RESET, (int) LampState::OFF});
 }
 

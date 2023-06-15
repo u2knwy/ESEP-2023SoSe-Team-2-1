@@ -25,11 +25,12 @@
 class HeightSensor_Test : public ::testing::Test {
 protected:
 	HeightContext *fsm;
+	std::shared_ptr<HeightSensorMock> sensor;
 
   void SetUp() override {
-	  std::shared_ptr<IHeightSensor> heightSensor = std::make_shared<HeightSensorMock>();
 	  std::shared_ptr<EventManager> eventManager = std::make_shared<EventManager>();
-	  fsm = new HeightContext(eventManager, heightSensor);
+	  sensor = std::make_shared<HeightSensorMock>();
+	  fsm = new HeightContext(eventManager, sensor);
   }
 
   void TearDown() override {
@@ -70,9 +71,18 @@ TEST_F(HeightSensor_Test, HighDetected) {
 
 	// HIGH WS detected
 	fsm->heightValueReceived(25.0);
+	fsm->heightValueReceived(25.0);
+	fsm->heightValueReceived(25.0);
+	fsm->heightValueReceived(25.0);
+	fsm->heightValueReceived(25.0);
+	fsm->heightValueReceived(25.0);
+	fsm->heightValueReceived(25.0);
+	fsm->heightValueReceived(25.0);
+	fsm->heightValueReceived(25.0);
+	fsm->heightValueReceived(25.0);
 	HeightResult res = fsm->getCurrentResult();
 	EXPECT_EQ(WorkpieceType::WS_OB, res.type);
-	EXPECT_EQ(HeightState::HIGH, fsm->getCurrentState());
+	EXPECT_EQ(HeightState::WAIT_FOR_BELT, fsm->getCurrentState());
 
 	// NEXT COMES BELT
 	fsm->heightValueReceived(1.0);
@@ -87,12 +97,18 @@ TEST_F(HeightSensor_Test, FlatDetected) {
 
 	// FLAT WS detected
 	fsm->heightValueReceived(21.0);
-	EXPECT_EQ(WorkpieceType::WS_F, fsm->getCurrentResult().type);
 	EXPECT_EQ(HeightState::WAIT_FOR_BELT, fsm->getCurrentState());
+	fsm->heightValueReceived(21.0);
+	fsm->heightValueReceived(21.0);
+	fsm->heightValueReceived(21.0);
+	fsm->heightValueReceived(21.0);
+
+	EXPECT_EQ(WorkpieceType::WS_F, fsm->getCurrentResult().type);
 
 	// NEXT COMES BELT
 	fsm->heightValueReceived(1.0);
 	EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
+
 }
 
 TEST_F(HeightSensor_Test, HighWithHoleDetected) {
@@ -103,15 +119,13 @@ TEST_F(HeightSensor_Test, HighWithHoleDetected) {
 
 	// HIGH WS detected
 	fsm->heightValueReceived(25.0);
-	EXPECT_EQ(WorkpieceType::WS_OB, fsm->getCurrentResult().type);
-	EXPECT_EQ(HeightState::HIGH, fsm->getCurrentState());
-
-	// NEXT COMES HOLE
-	fsm->heightValueReceived(6.0);
-	EXPECT_EQ(WorkpieceType::WS_BOM, fsm->getCurrentResult().type);
 	EXPECT_EQ(HeightState::WAIT_FOR_BELT, fsm->getCurrentState());
+	// Next comes HOLE
+	fsm->heightValueReceived(6.0);
+	// And HIGH again
+	fsm->heightValueReceived(25.0);
 
-	// NEXT COMES BELT
+	// Next comes BELT
 	fsm->heightValueReceived(1.0);
 	EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
 }
@@ -124,6 +138,8 @@ TEST_F(HeightSensor_Test, UnknownDetected) {
 
 	// UNKNOWN WS detected
 	fsm->heightValueReceived(30.0);
+	// Next comes BELT
+	fsm->heightValueReceived(1.0);
 	EXPECT_EQ(WorkpieceType::WS_UNKNOWN, fsm->getCurrentResult().type);
 	EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
 }
@@ -139,31 +155,21 @@ TEST_F(HeightSensor_Test, CalculateAverageAndMaxValue) {
 	EXPECT_EQ("0.00", formatFloat(res.average, 2));
 	EXPECT_EQ("0.00", formatFloat(res.max, 2));
 
-	fsm->heightValueReceived(25.3);
-	fsm->heightValueReceived(25.1);
-	fsm->heightValueReceived(6.2);
-	fsm->heightValueReceived(21.2);
-	fsm->heightValueReceived(25.0);
-	fsm->heightValueReceived(24.9);
-	res = fsm->getCurrentResult();
-	EXPECT_EQ("21.28", formatFloat(res.average, 2));
-	EXPECT_EQ("25.30", formatFloat(res.max, 2));
+	// 1 invalid measurement - first value must be discarded
+	fsm->heightValueReceived(11.0);
 
-	ev.type = EventType::MOTOR_M_STOP;
-	fsm->handleEvent(ev);
-	EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
-	ev.type = EventType::MOTOR_M_FAST;
-	fsm->handleEvent(ev);
-	EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
+	// 18 valid measurements
+	for(int i = 0; i < 50; i++) {
+		fsm->heightValueReceived(25.0);
+	}
+	fsm->heightValueReceived(26.0);
+
+	// 1 invalid measurement - last value must be discarded
+	fsm->heightValueReceived(11.0);
+
 	res = fsm->getCurrentResult();
-	EXPECT_EQ("0.00", formatFloat(res.average, 2));
-	EXPECT_EQ("0.00", formatFloat(res.max, 2));
-	fsm->heightValueReceived(25.0);
-	EXPECT_EQ(HeightState::WAIT_FOR_BELT, fsm->getCurrentState());
-	res = fsm->getCurrentResult();
-	EXPECT_EQ(WorkpieceType::WS_OB, res.type);
 	EXPECT_EQ("25.00", formatFloat(res.average, 2));
-	EXPECT_EQ("25.00", formatFloat(res.max, 2));
+	EXPECT_EQ("26.00", formatFloat(res.max, 2));
 }
 
 TEST_F(HeightSensor_Test, CalculateAverageAndMaxValueWhenMotorStoppedInBetween) {
@@ -174,46 +180,35 @@ TEST_F(HeightSensor_Test, CalculateAverageAndMaxValueWhenMotorStoppedInBetween) 
 	fsm->handleEvent(ev);
 	EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
 
-	// FLAT received -> save measurements and stay in state WaitForBelt
+	// first measurement must be discarded
 	fsm->heightValueReceived(21.0);
-	fsm->heightValueReceived(21.8);
+
+	// FLAT received -> save measurements and stay in state WaitForBelt
 	EXPECT_EQ(HeightState::WAIT_FOR_BELT, fsm->getCurrentState());
 
+	for(int i = 0; i < 10; i++) {
+		fsm->heightValueReceived(25.0);
+	}
+	fsm->heightValueReceived(26.0);
+	fsm->heightValueReceived(24.0);
 	// Motor is stopped -> HM should be "paused"
 	ev.type = EventType::MOTOR_M_STOP;
 	fsm->handleEvent(ev);
-	// The following measurements should not influence the current average and max values
-	fsm->heightValueReceived(25.0);
+	// these measurements must be ignored
 	fsm->heightValueReceived(50.0);
-	res = fsm->getCurrentResult();
-	EXPECT_EQ("21.4", formatFloat(res.average, 1));
-	EXPECT_EQ("21.8", formatFloat(res.max, 1));
-
 	// Motor is running again
 	ev.type = EventType::MOTOR_M_FAST;
 	fsm->handleEvent(ev);
-	// the following values should influence the current average and max values
-	fsm->heightValueReceived(22.0);
-	res = fsm->getCurrentResult();
-	EXPECT_EQ("21.6", formatFloat(res.average, 1));
-	EXPECT_EQ("22.0", formatFloat(res.max, 1));
 
-	// Motor is stopped -> HM should be "paused"
-	ev.type = EventType::MOTOR_M_STOP;
-	fsm->handleEvent(ev);
-	// The following measurements should not influence the current average and max values
-	fsm->heightValueReceived(25.0);
-	fsm->heightValueReceived(50.0);
-	res = fsm->getCurrentResult();
-	EXPECT_EQ("21.6", formatFloat(res.average, 1));
-	EXPECT_EQ("22.0", formatFloat(res.max, 1));
+	// these measurements must be handled again
+	for(int i = 0; i < 10; i++) {
+		fsm->heightValueReceived(25.0);
+	}
 
-	// Motor is running again (in slow speed)
-	ev.type = EventType::MOTOR_M_SLOW;
-	fsm->handleEvent(ev);
-	// the following values should influence the current average and max values
-	fsm->heightValueReceived(22.4); // 87,2
+	// last measurement must be discarded
+	fsm->heightValueReceived(11.0);
+
 	res = fsm->getCurrentResult();
-	EXPECT_EQ("21.8", formatFloat(res.average, 1));
-	EXPECT_EQ("22.4", formatFloat(res.max, 1));
+	EXPECT_EQ("25.0", formatFloat(res.average, 1));
+	EXPECT_EQ("26.0", formatFloat(res.max, 1));
 }

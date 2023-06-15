@@ -1,0 +1,18 @@
+@startuml
+interface IEventHandler {
+  #handleEvent(Event event)
+}
+
+class MotorContext {
+  -MotorActions* actions
+	-MotorContextData* data
+	-MotorBasestate* state
+	-std::shared_ptr<EventManager> eventManager
+	-bool isMaster
+  +MotorContext(std::shared_ptr<EventManager> mngr, bool master)
+	-subscribeToEvents()
+}
+
+IEventHandler <|.. MotorContext
+
+@enduml

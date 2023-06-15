@@ -18,14 +18,14 @@ HeightActions::~HeightActions() {
 	// TODO Auto-generated destructor stub
 }
 
-void HeightActions::setMotorSlow(bool slow) {
+void HeightActions::sendMotorSlowRequest(bool slow) {
 	Event ev;
-	ev.type = isMaster ? EventType::MOTOR_M_SET_SLOW : EventType::MOTOR_S_SET_SLOW;
+	ev.type = isMaster ? EventType::MOTOR_M_SLOW_REQ : EventType::MOTOR_S_SLOW_REQ;
 	if(slow) {
-		Logger::debug("[HFSM] Start measurement - motor slow");
+		Logger::debug("[HFSM] Send motor slow request");
 		ev.data = 1;
 	} else {
-		Logger::debug("[HFSM] Stop measurement - motor fast");
+		Logger::debug("[HFSM] Reset motor slow request");
 		ev.data = 0;
 	}
 	eventManager->sendEvent(ev);

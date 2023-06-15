@@ -7,6 +7,7 @@
 #pragma once
 #include <functional>
 #include <vector>
+#include <memory>
 
 /*---------------------------------------------------------------------------
    HEIGHT SENSOR CONFIGURATION
@@ -16,8 +17,8 @@
 #define HEIGHT_HIGH 25
 #define HEIGHT_HOLE 6
 #define HEIGHT_TOL 2
-#define ADC_DEFAULT_OFFSET 3648
-#define ADC_DEFAULT_HIGH 2323
+#define ADC_DEFAULT_OFFSET 3333
+#define ADC_DEFAULT_HIGH 2222
 // use N samples for averaging / max. value (sliding window)
 #define ADC_SAMPLE_SIZE 100
 #define HM_SEND_INTERVAL 5
@@ -25,9 +26,8 @@
 class IHeightSensor {
 public:
 	using HeightCallback = std::function<void(float)>;
-	virtual ~IHeightSensor() {};
-	virtual void registerMeasurementCallback(HeightCallback callback) = 0;
-	virtual void unregisterNewMeasurementCallback() = 0;
+	virtual void registerOnNewValueCallback(HeightCallback callback) = 0;
+	virtual void unregisterOnNewValueCallback() = 0;
 	virtual void start() = 0;
 	virtual void stop() = 0;
 	virtual float getAverageHeight() = 0;
@@ -35,11 +35,12 @@ public:
 	virtual float getMedianHeight() = 0;
 	virtual int getLastRawValue() = 0;
 protected:
-    int adcOffset;
-    int adcIncPerMillimeter;
+	IHeightSensor() {}
+	virtual ~IHeightSensor() {}
+    int adcOffset{0};
+    int adcIncPerMillimeter{0};
 	HeightCallback heightValueCallback = nullptr;
     std::vector<int> window;
-    size_t windowCapacity;
     bool running{false};
 	void calibrateOffset(int offsetValue) {
 		adcOffset = offsetValue;

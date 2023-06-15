@@ -1,0 +1,86 @@
+\hypertarget{hal_8h_source}{}\doxysection{hal.\+h}
+\label{hal_8h_source}\index{main/src/hal/hal.h@{main/src/hal/hal.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ hal.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ *\ \ Created\ on:\ 26.05.2023}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *\ \ \ \ \ \ Author:\ Maik}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{comment}{//\ For\ QNX\ Neutrino}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <sys/mman.h>}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ <sys/neutrino.h>}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ <sys/procmgr.h>}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <hw/inout.h>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#ifdef\ SIMULATION}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ "{}simulation/simulationadapterqnx/simqnxgpioapi.h"{}}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \textcolor{comment}{/*-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00019\ \textcolor{comment}{\ \ \ GPIO\ CONFIGURATION}}
+\DoxyCodeLine{00020\ \textcolor{comment}{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ */}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#define\ SIZE\_4KB\ 0x1000}}
+\DoxyCodeLine{00022\ \textcolor{preprocessor}{\#define\ SIZE\_8KB\ 0x2000}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#define\ GPIO\_BANK\_0\ 0x44E07000}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#define\ GPIO\_BANK\_1\ 0x4804C000}}
+\DoxyCodeLine{00025\ \textcolor{preprocessor}{\#define\ GPIO\_BANK\_2\ 0x481AC000}}
+\DoxyCodeLine{00026\ \textcolor{preprocessor}{\#define\ GPIO\_BANK\_3\ 0x481AE000}}
+\DoxyCodeLine{00027\ \textcolor{preprocessor}{\#define\ GPIO\_CLEARDATAOUT(base)\ (uintptr\_t)\ base\ +\ 0x190}}
+\DoxyCodeLine{00028\ \textcolor{preprocessor}{\#define\ GPIO\_SETDATAOUT(base)\ (uintptr\_t)\ base\ +\ 0x194}}
+\DoxyCodeLine{00029\ \textcolor{preprocessor}{\#define\ GPIO\_DATAIN(base)\ (uintptr\_t)\ base\ +\ 0x138}}
+\DoxyCodeLine{00030\ \textcolor{preprocessor}{\#define\ GPIO\_DEBOUNCENABLE(base)\ (uintptr\_t)\ base\ +\ 0x150}}
+\DoxyCodeLine{00031\ \textcolor{preprocessor}{\#define\ GPIO\_DEBOUNCINGTIME(base)\ (uintptr\_t)\ base\ +\ 0x154}}
+\DoxyCodeLine{00032\ \textcolor{comment}{//\ Input\ Debouncing\ Value\ in\ 31\ microsecond\ steps.\ Debouncing\ Value\ =\ (DEBOUNCETIME\ +\ 1)\ *\ 31\ microseconds\ (see\ p.\ 4875)}}
+\DoxyCodeLine{00033\ \textcolor{preprocessor}{\#define\ GPIO\_DEBOUNCE\_VALUE\ 321\ }\textcolor{comment}{//\ ca.\ 10ms}}
+\DoxyCodeLine{00034\ }
+\DoxyCodeLine{00035\ \textcolor{comment}{/*\ GPIO0\ PINS\ -\/>\ INPUTS\ */}}
+\DoxyCodeLine{00036\ \textcolor{preprocessor}{\#define\ LB\_START\_PIN\ (1\ <<\ 2)\ \ \ \ \ }\textcolor{comment}{//\ Werkstück\ im\ Einlauf\ =\ low\ when\ true}}
+\DoxyCodeLine{00037\ \textcolor{preprocessor}{\#define\ LB\_HEIGHT\_PIN\ (1\ <<\ 3)\ \ \ \ }\textcolor{comment}{//\ Werkstück\ in\ Höhenmessung\ =\ low\ when\ true}}
+\DoxyCodeLine{00038\ \textcolor{preprocessor}{\#define\ LB\_HEIGHT\_OK\_PIN\ (1\ <<\ 4)\ }\textcolor{comment}{//\ Werkstück\ Höhe\ OK\ =\ high\ when\ true}}
+\DoxyCodeLine{00039\ \textcolor{preprocessor}{\#define\ LB\_SWITCH\_PIN\ (1\ <<\ 5)\ \ \ \ }\textcolor{comment}{//\ Werkstück\ in\ Weiche\ =\ low\ when\ true}}
+\DoxyCodeLine{00040\ \textcolor{preprocessor}{\#define\ SE\_METAL\_PIN\ (1\ <<\ 7)\ \ \ \ \ }\textcolor{comment}{//\ Werkstück\ Metall\ =\ high\ when\ true}}
+\DoxyCodeLine{00041\ \textcolor{preprocessor}{\#define\ SE\_SWITCH\_PIN\ (1\ <<\ 14)\ \ \ }\textcolor{comment}{//\ Weiche\ offen\ =\ high\ when\ true}}
+\DoxyCodeLine{00042\ \textcolor{preprocessor}{\#define\ LB\_RAMP\_PIN\ (1\ <<\ 15)\ \ \ \ \ }\textcolor{comment}{//\ Rutsche\ voll\ =\ low\ when\ true}}
+\DoxyCodeLine{00043\ \textcolor{preprocessor}{\#define\ LB\_END\_PIN\ (1\ <<\ 20)\ \ \ \ \ \ }\textcolor{comment}{//\ Werkstück\ im\ Auslauf\ =\ low\ when\ true}}
+\DoxyCodeLine{00044\ \textcolor{preprocessor}{\#define\ KEY\_START\_PIN\ (1\ <<\ 22)\ \ \ }\textcolor{comment}{//\ Taste\ Start\ =\ high,\ wenn\ betätigt}}
+\DoxyCodeLine{00045\ \textcolor{preprocessor}{\#define\ KEY\_STOP\_PIN\ (1\ <<\ 23)\ \ \ \ }\textcolor{comment}{//\ Taste\ Stop\ =\ low,\ wenn\ betätigt}}
+\DoxyCodeLine{00046\ \textcolor{preprocessor}{\#define\ KEY\_RESET\_PIN\ (1\ <<\ 26)\ \ \ }\textcolor{comment}{//\ Taste\ Reset\ =\ high,\ wenn\ betätigt}}
+\DoxyCodeLine{00047\ \textcolor{preprocessor}{\#define\ ESTOP\_PIN\ (1\ <<\ 27)\ \ \ \ \ \ \ }\textcolor{comment}{//\ E-\/Stop\ =\ low,\ wenn\ betätigt}}
+\DoxyCodeLine{00048\ }
+\DoxyCodeLine{00049\ \textcolor{comment}{/*\ GPIO1\ PINS\ -\/>\ OUTPUTS\ */}}
+\DoxyCodeLine{00050\ \textcolor{preprocessor}{\#define\ MOTOR\_RIGHT\_PIN\ (1\ <<\ 12)\ }\textcolor{comment}{//\ Motor\ Rechtslauf}}
+\DoxyCodeLine{00051\ \textcolor{preprocessor}{\#define\ MOTOR\_LEFT\_PIN\ (1\ <<\ 13)\ \ }\textcolor{comment}{//\ Motor\ Linkslauf}}
+\DoxyCodeLine{00052\ \textcolor{preprocessor}{\#define\ MOTOR\_SLOW\_PIN\ (1\ <<\ 14)\ \ }\textcolor{comment}{//\ Motor\ langsam}}
+\DoxyCodeLine{00053\ \textcolor{preprocessor}{\#define\ MOTOR\_STOP\_PIN\ (1\ <<\ 15)\ \ }\textcolor{comment}{//\ Motor\ Stop}}
+\DoxyCodeLine{00054\ \textcolor{preprocessor}{\#define\ LAMP\_RED\_PIN\ (1\ <<\ 16)\ \ \ \ }\textcolor{comment}{//\ Rote\ Lampe\ an}}
+\DoxyCodeLine{00055\ \textcolor{preprocessor}{\#define\ LAMP\_YELLOW\_PIN\ (1\ <<\ 17)\ }\textcolor{comment}{//\ Gelbe\ Lampe\ an}}
+\DoxyCodeLine{00056\ \textcolor{preprocessor}{\#define\ LAMP\_GREEN\_PIN\ (1\ <<\ 18)\ \ }\textcolor{comment}{//\ Grüne\ Lampe\ an}}
+\DoxyCodeLine{00057\ \textcolor{preprocessor}{\#define\ SWITCH\_PIN\ (1\ <<\ 19)\ \ \ \ \ \ }\textcolor{comment}{//\ Weiche\ öffnen}}
+\DoxyCodeLine{00058\ }
+\DoxyCodeLine{00059\ \textcolor{comment}{/*\ GPIO2\ PINS\ -\/>\ OUTPUTS\ */}}
+\DoxyCodeLine{00060\ \textcolor{preprocessor}{\#define\ LED\_START\_PIN\ (1\ <<\ 2)\ }\textcolor{comment}{//\ LED\ Taste\ Start}}
+\DoxyCodeLine{00061\ \textcolor{preprocessor}{\#define\ LED\_RESET\_PIN\ (1\ <<\ 3)\ }\textcolor{comment}{//\ LED\ Taste\ Reset}}
+\DoxyCodeLine{00062\ \textcolor{preprocessor}{\#define\ LED\_Q1\_PIN\ (1\ <<\ 4)\ \ \ \ }\textcolor{comment}{//\ Signalleuchte\ Q1}}
+\DoxyCodeLine{00063\ \textcolor{preprocessor}{\#define\ LED\_Q2\_PIN\ (1\ <<\ 5)\ \ \ \ }\textcolor{comment}{//\ Signalleuchte\ Q2}}
+\DoxyCodeLine{00064\ }
+\DoxyCodeLine{00065\ \textcolor{comment}{/*\ Interrupt\ numbers\ \ (spruh73l.pdf\ S.465\ ff.)\ */}}
+\DoxyCodeLine{00066\ \textcolor{preprocessor}{\#define\ INTR\_GPIO\_PORT0\ 97}}
+\DoxyCodeLine{00067\ \textcolor{preprocessor}{\#define\ INTR\_GPIO\_PORT1\ 99}}
+\DoxyCodeLine{00068\ \textcolor{preprocessor}{\#define\ INTR\_GPIO\_PORT2\ 33}}
+\DoxyCodeLine{00069\ }
+\DoxyCodeLine{00070\ \textcolor{comment}{/*\ GPIO\ register\ offsets\ (spruh73l.pdf\ S.4877)\ */}}
+\DoxyCodeLine{00071\ \textcolor{preprocessor}{\#define\ GPIO\_OE\_REGISTER(base)\ (uintptr\_t)\ base\ +\ 0x134}}
+\DoxyCodeLine{00072\ \textcolor{preprocessor}{\#define\ GPIO\_LEVELDETECT0(base)\ (uintptr\_t)\ base\ +\ 0x140}}
+\DoxyCodeLine{00073\ \textcolor{preprocessor}{\#define\ GPIO\_LEVELDETECT1(base)\ (uintptr\_t)\ base\ +\ 0x144}}
+\DoxyCodeLine{00074\ \textcolor{preprocessor}{\#define\ GPIO\_RISINGDETECT(base)\ (uintptr\_t)\ base\ +\ 0x148}}
+\DoxyCodeLine{00075\ \textcolor{preprocessor}{\#define\ GPIO\_FALLINGDETECT(base)\ (uintptr\_t)\ base\ +\ 0x14C}}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \textcolor{preprocessor}{\#define\ GPIO\_IRQSTATUS\_0(base)\ (uintptr\_t)\ base\ +\ 0x2C}}
+\DoxyCodeLine{00078\ \textcolor{preprocessor}{\#define\ GPIO\_IRQSTATUS\_1(base)\ (uintptr\_t)\ base\ +\ 0x30}}
+\DoxyCodeLine{00079\ \textcolor{preprocessor}{\#define\ GPIO\_IRQSTATUS\_SET\_0(base)\ (uintptr\_t)\ base\ +\ 0x34}}
+\DoxyCodeLine{00080\ \textcolor{preprocessor}{\#define\ GPIO\_IRQSTATUS\_SET\_1(base)\ (uintptr\_t)\ base\ +\ 0x38}}
+
+\end{DoxyCode}

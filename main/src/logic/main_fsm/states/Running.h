@@ -32,9 +32,18 @@ class Running: public MainBasestate {
 	bool slave_LBR_Blocked() override;
 	bool slave_LBR_Unblocked() override;
 
+	bool master_heightResultReceived(EventType event, float average) override;
+	bool slave_heightResultReceived(EventType event, float average) override;
+
+	bool master_metalDetected() override;
+	bool slave_metalDetected() override;
+
 	bool master_btnStop_Pressed() override;
 	bool slave_btnStop_Pressed() override;
 
 	bool master_EStop_Pressed() override;
 	bool slave_EStop_Pressed() override;
+
+	bool selfSolvableErrorOccurred() override;
+	bool nonSelfSolvableErrorOccurred() override;
 };

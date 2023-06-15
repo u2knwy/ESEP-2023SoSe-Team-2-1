@@ -7,12 +7,13 @@
 
 #include <logic/hm/HeightContext.h>
 #include "HeightActions.h"
-#include "hal/HeightSensor.h"
+#include "hal/IHeightSensor.h"
 #include "states/WaitForWorkpiece.h"
 
-HeightContext::HeightContext(std::shared_ptr<EventManager> mngr, std::shared_ptr<IHeightSensor> sensor)
+HeightContext::HeightContext(std::shared_ptr<EventManager> mngr, std::shared_ptr<IHeightSensor> heightSensor)
 {
 	this->eventManager = mngr;
+	this->sensor = heightSensor;
 	data = new HeightContextData();
 	actions = new HeightActions(data, mngr);
 	state = new WaitForWorkpiece();
@@ -21,8 +22,7 @@ HeightContext::HeightContext(std::shared_ptr<EventManager> mngr, std::shared_ptr
 	state->entry();
 	running = false;
 	subscribeToEvents();
-	this->sensor = sensor;
-	sensor->registerMeasurementCallback(std::bind(&HeightContext::heightValueReceived, this, std::placeholders::_1));
+	sensor->registerOnNewValueCallback(std::bind(&HeightContext::heightValueReceived, this, std::placeholders::_1));
 	sensor->start();
 }
 
@@ -45,7 +45,6 @@ void HeightContext::subscribeToEvents()
 	eventManager->subscribe(EventType::MOTOR_S_SLOW, std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
 	eventManager->subscribe(EventType::MOTOR_M_STOP, std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
 	eventManager->subscribe(EventType::MOTOR_S_STOP, std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
-
 }
 
 void HeightContext::handleEvent(Event event)
@@ -74,8 +73,7 @@ void HeightContext::heightValueReceived(float valueMM) {
 	if (running)
 	{
 		if(getCurrentState() != HeightState::WAIT_FOR_WS) {
-			//Logger::debug("[hm] Handle new value: " + std::to_string(valueMM));
-			data->updateAvgAndMaxValue(valueMM);
+			data->addValue(valueMM);
 		}
 
 		bool handled;

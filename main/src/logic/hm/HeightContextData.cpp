@@ -10,34 +10,22 @@
 #include "events/events.h"
 
 HeightContextData::HeightContextData() {
-	currentType = WorkpieceType::WS_UNKNOWN;
 	measurements = std::vector<float>(1000);
 	resetMeasurement();
 }
 
 HeightContextData::~HeightContextData() {
-	// TODO Auto-generated destructor stub
-}
-
-WorkpieceType HeightContextData::getCurrentType() {
-	return currentType;
-}
-
-void HeightContextData::setCurrentType(WorkpieceType type) {
-	Logger::debug("[HFSM] Current type changed: " + std::to_string(type));
-	this->currentType = type;
+	measurements.clear();
 }
 
 void HeightContextData::resetMeasurement() {
-	Logger::debug("Measurements were resetted.");
 	avgValue = 0.0;
 	maxValue = 0.0;
 	nMeasurements = 0;
 	measurements.clear();
-	//measurements.shrink_to_fit();
 }
 
-void HeightContextData::updateAvgAndMaxValue(float newValue) {
+void HeightContextData::addValue(float newValue) {
 	measurements.push_back(newValue);
 
 	if(nMeasurements == 0) {
@@ -48,9 +36,6 @@ void HeightContextData::updateAvgAndMaxValue(float newValue) {
 	nMeasurements++;
 	if(newValue > maxValue)
 		maxValue = newValue;
-//	std::stringstream ss;
-//	ss << "New value: " << std::setprecision(2) << newValue << " mm -> n=" << nMeasurements << "avg=" << avgValue << ", max=" << maxValue << " mm";
-//	Logger::debug(ss.str());
 }
 
 float HeightContextData::getAverageValue() {
@@ -62,15 +47,6 @@ float HeightContextData::getMaximumValue() {
 }
 
 HeightResult HeightContextData::getCurrentResult() {
-/*	HeightResult result;
-	result.type = currentType;
-	result.average = avgValue;
-	result.max = maxValue;
-	return result;*/
-	return getCurrentResultV2();
-}
-
-HeightResult HeightContextData::getCurrentResultV2() {
 	HeightResult result;
 
 	int totalValues = measurements.size();
@@ -85,9 +61,9 @@ HeightResult HeightContextData::getCurrentResultV2() {
 	// Throw out first and last 10 % of measurements
 	int startIndex = totalValues * 0.05;
 	int endIndex = totalValues * 0.95;
-	int nValues = endIndex - startIndex + 1;
+	int nValues = endIndex - startIndex;
 	double sum = 0;
-	for(auto it = measurements.begin() + startIndex; it != measurements.end(); ++it) {
+	for(auto it = measurements.begin() + startIndex; it != measurements.begin() + endIndex; ++it) {
 		float val = *it;
 		sum += val;
 		if(val > maxValue)

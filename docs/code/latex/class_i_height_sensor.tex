@@ -1,0 +1,73 @@
+\hypertarget{class_i_height_sensor}{}\doxysection{IHeight\+Sensor Class Reference}
+\label{class_i_height_sensor}\index{IHeightSensor@{IHeightSensor}}
+Inheritance diagram for IHeight\+Sensor\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_i_height_sensor}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_i_height_sensor_ac47d831da318c4aba4c3b00f2a5cb9d5}\label{class_i_height_sensor_ac47d831da318c4aba4c3b00f2a5cb9d5}} 
+using {\bfseries Height\+Callback} = std\+::function$<$ void(float)$>$
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_i_height_sensor_ac0fb38fdc4ebfb04f7aef7b2393f3438}\label{class_i_height_sensor_ac0fb38fdc4ebfb04f7aef7b2393f3438}} 
+virtual void {\bfseries register\+On\+New\+Value\+Callback} (Height\+Callback callback)=0
+\item 
+\mbox{\Hypertarget{class_i_height_sensor_aa4775c5b47db8d7b4a4af4702b7cb1d6}\label{class_i_height_sensor_aa4775c5b47db8d7b4a4af4702b7cb1d6}} 
+virtual void {\bfseries unregister\+On\+New\+Value\+Callback} ()=0
+\item 
+\mbox{\Hypertarget{class_i_height_sensor_a68f9cf26cb9f5fa17b64bbda82a45b84}\label{class_i_height_sensor_a68f9cf26cb9f5fa17b64bbda82a45b84}} 
+virtual void {\bfseries start} ()=0
+\item 
+\mbox{\Hypertarget{class_i_height_sensor_a070899e24e40a1f875db0208132c0643}\label{class_i_height_sensor_a070899e24e40a1f875db0208132c0643}} 
+virtual void {\bfseries stop} ()=0
+\item 
+\mbox{\Hypertarget{class_i_height_sensor_a1436193a627eea93b1d3f7e22be6030c}\label{class_i_height_sensor_a1436193a627eea93b1d3f7e22be6030c}} 
+virtual float {\bfseries get\+Average\+Height} ()=0
+\item 
+\mbox{\Hypertarget{class_i_height_sensor_a4d4ffb44b969ce296dd83bc28ccb7001}\label{class_i_height_sensor_a4d4ffb44b969ce296dd83bc28ccb7001}} 
+virtual float {\bfseries get\+Max\+Height} ()=0
+\item 
+\mbox{\Hypertarget{class_i_height_sensor_adc7c72b7dfdedc265ce5d2f975993916}\label{class_i_height_sensor_adc7c72b7dfdedc265ce5d2f975993916}} 
+virtual float {\bfseries get\+Median\+Height} ()=0
+\item 
+\mbox{\Hypertarget{class_i_height_sensor_a48dbbfe01e60d3218344b706ffdddd43}\label{class_i_height_sensor_a48dbbfe01e60d3218344b706ffdddd43}} 
+virtual int {\bfseries get\+Last\+Raw\+Value} ()=0
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_i_height_sensor_aa6c6daeb32c3cb54baca886fc292493c}\label{class_i_height_sensor_aa6c6daeb32c3cb54baca886fc292493c}} 
+void {\bfseries calibrate\+Offset} (int offset\+Value)
+\item 
+\mbox{\Hypertarget{class_i_height_sensor_a149e55e7bc73dcf2251785f1fd6d8ca9}\label{class_i_height_sensor_a149e55e7bc73dcf2251785f1fd6d8ca9}} 
+void {\bfseries calibrate\+Ref\+High} (int high\+Value)
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_i_height_sensor_a8eaf1ee7b4749fdb039ef4d0255ea29d}\label{class_i_height_sensor_a8eaf1ee7b4749fdb039ef4d0255ea29d}} 
+int {\bfseries adc\+Offset} \{0\}
+\item 
+\mbox{\Hypertarget{class_i_height_sensor_aa64c2b661845eba7434e1194500e0468}\label{class_i_height_sensor_aa64c2b661845eba7434e1194500e0468}} 
+int {\bfseries adc\+Inc\+Per\+Millimeter} \{0\}
+\item 
+\mbox{\Hypertarget{class_i_height_sensor_ad9e896ee817ff32e08fa1e477525fb79}\label{class_i_height_sensor_ad9e896ee817ff32e08fa1e477525fb79}} 
+Height\+Callback {\bfseries height\+Value\+Callback} = nullptr
+\item 
+\mbox{\Hypertarget{class_i_height_sensor_a5b652a5c0ae2b99240c4316bd395da53}\label{class_i_height_sensor_a5b652a5c0ae2b99240c4316bd395da53}} 
+std\+::vector$<$ int $>$ {\bfseries window}
+\item 
+\mbox{\Hypertarget{class_i_height_sensor_a43a7d2dbf24dcbb35db1aee57f0ac9e7}\label{class_i_height_sensor_a43a7d2dbf24dcbb35db1aee57f0ac9e7}} 
+bool {\bfseries running} \{false\}
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+main/src/hal/IHeight\+Sensor.\+h\end{DoxyCompactItemize}

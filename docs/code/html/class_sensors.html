@@ -90,8 +90,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5d0fdb486ac399f0ac956f9239bccc15"><td class="memItemLeft" align="right" valign="top"><a id="a5d0fdb486ac399f0ac956f9239bccc15" name="a5d0fdb486ac399f0ac956f9239bccc15"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Sensors</b> (std::shared_ptr&lt; <a class="el" href="class_event_manager.html">EventManager</a> &gt; mngr)</td></tr>
 <tr class="separator:a5d0fdb486ac399f0ac956f9239bccc15"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a48aa06635bc8fe32c8cb4f46a20abb3e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sensors.html#a48aa06635bc8fe32c8cb4f46a20abb3e">handleEvent</a> (EventType eventType) override</td></tr>
-<tr class="separator:a48aa06635bc8fe32c8cb4f46a20abb3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a338368a0017453c47760b5d149f3af04"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sensors.html#a338368a0017453c47760b5d149f3af04">handleEvent</a> (<a class="el" href="struct_event.html">Event</a> eventType) override</td></tr>
+<tr class="separator:a338368a0017453c47760b5d149f3af04"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1345f12ade8ebbe303bd8a2489492aea"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sensors.html#a1345f12ade8ebbe303bd8a2489492aea">startEventLoop</a> ()</td></tr>
 <tr class="separator:a1345f12ade8ebbe303bd8a2489492aea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e01bbe2d39789661a6478976858cda5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sensors.html#a7e01bbe2d39789661a6478976858cda5">stopEventLoop</a> ()</td></tr>
@@ -138,13 +138,13 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>eStopPressed</b> ()</
 <tr class="memitem:aa370ee913f0f391999ad6ee1abca1a52"><td class="memItemLeft" align="right" valign="top"><a id="aa370ee913f0f391999ad6ee1abca1a52" name="aa370ee913f0f391999ad6ee1abca1a52"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>eStopReleased</b> ()</td></tr>
 <tr class="separator:aa370ee913f0f391999ad6ee1abca1a52"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec8b6e6a322d10963ff085670fa4c146"><td class="memItemLeft" align="right" valign="top"><a id="aec8b6e6a322d10963ff085670fa4c146" name="aec8b6e6a322d10963ff085670fa4c146"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>handleEvent</b> (EventType eventType)=0</td></tr>
-<tr class="separator:aec8b6e6a322d10963ff085670fa4c146"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63c61e6208dacfac9efe636a60802267"><td class="memItemLeft" align="right" valign="top"><a id="a63c61e6208dacfac9efe636a60802267" name="a63c61e6208dacfac9efe636a60802267"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>handleEvent</b> (<a class="el" href="struct_event.html">Event</a> event)=0</td></tr>
+<tr class="separator:a63c61e6208dacfac9efe636a60802267"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a48aa06635bc8fe32c8cb4f46a20abb3e" name="a48aa06635bc8fe32c8cb4f46a20abb3e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a48aa06635bc8fe32c8cb4f46a20abb3e">&#9670;&#160;</a></span>handleEvent()</h2>
+<a id="a338368a0017453c47760b5d149f3af04" name="a338368a0017453c47760b5d149f3af04"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a338368a0017453c47760b5d149f3af04">&#9670;&#160;</a></span>handleEvent()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -155,7 +155,7 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>handleEvent</
         <tr>
           <td class="memname">void Sensors::handleEvent </td>
           <td>(</td>
-          <td class="paramtype">EventType&#160;</td>
+          <td class="paramtype"><a class="el" href="struct_event.html">Event</a>&#160;</td>
           <td class="paramname"><em>eventType</em></td><td>)</td>
           <td></td>
         </tr>

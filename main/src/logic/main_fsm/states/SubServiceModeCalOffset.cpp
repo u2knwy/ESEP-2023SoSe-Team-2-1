@@ -14,7 +14,7 @@
 
 void SubServiceModeCalOffset::entry() {
 	Logger::info("[ServiceMode] Calibrating HeightSensor offset (Belt)");
-	Logger::info("Make sure no workpiece is below the HeightSensor and press START to calibrate offset.");
+	Logger::info("Make sure no workpiece is below the HeightSensor at both Master and Slave and press START to calibrate offset.");
 	actions->btnStartLedOn();
 	actions->btnResetLedOff();
 	done = false;

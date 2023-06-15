@@ -17,6 +17,12 @@
 Configuration::Configuration() {
 	this->cal = Calibration{ .calOffset = ADC_DEFAULT_OFFSET, .calRef = ADC_DEFAULT_HIGH };
 	this->configFilePath = std::string(DEFAULT_CONFIG_FILE_PATH);
+	this->order = std::vector<WorkpieceType>(3);
+
+	// Set default order: FLAT -> HIGH -> HIGH WITH HOLE
+	this->order.push_back(WorkpieceType::WS_F);
+	this->order.push_back(WorkpieceType::WS_OB);
+	this->order.push_back(WorkpieceType::WS_BOM);
 }
 
 Configuration::~Configuration() {
@@ -87,7 +93,7 @@ bool Configuration::readConfigFromFile() {
 		fileStream << "CAL_OFFSET=" << ADC_DEFAULT_OFFSET << "\n";
 		fileStream << "CAL_REF=" << ADC_DEFAULT_HIGH << "\n";
 		fileStream.close();
-		return false;
+		return true;
 	}
 
 	if(!errors.empty()) {
@@ -157,9 +163,6 @@ void Configuration::saveCurrentConfigToFile() {
 	const std::string& order = "ORDER=" + ss.str();
 	const std::string& offset = "CAL_OFFSET=" + std::to_string(cal.calOffset);
 	const std::string& ref = "CAL_REF=" + std::to_string(cal.calRef);
-/*	writeLineToConfigFile(1, order);
-	writeLineToConfigFile(2, offset);
-	writeLineToConfigFile(3, ref);*/
 
 	std::ofstream outputFile(configFilePath);
 	if (!outputFile) {
@@ -211,7 +214,8 @@ void Configuration::writeLineToConfigFile(int lineNumber, const std::string& new
     }
 
     if (std::rename(tempFilePath.c_str(), configFilePath.c_str()) != 0) {
-    	Logger::error("Error renaming temporary file.");
+    	Logger::error("Error renaming temporary file: " + tempFilePath + " -> " + configFilePath);
+    	perror( "Error renaming file" );
         return;
     }
 

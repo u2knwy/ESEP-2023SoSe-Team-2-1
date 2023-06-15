@@ -1,0 +1,435 @@
+\hypertarget{class_i_actuators}{}\doxysection{IActuators Class Reference}
+\label{class_i_actuators}\index{IActuators@{IActuators}}
+Inheritance diagram for IActuators\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_i_actuators}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_af51238bc1df28e7da51c1e7941250d27}{standby\+Mode}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a84f9fbf9ce54a3a1a208810d825fe553}{running\+Mode}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a8ada57b70efce7f9144d9401fcf0bcd0}{service\+Mode}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_aff7fc5c82f5ea6b43771b23ec4a5d65a}{error\+Mode}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_aa2e83e6dfb7e625daefb1fe778db57e5}{estop\+Mode}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_aee54d8fcb0c1bf157db404ffca757116}{green\+Lamp\+On}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a7284026a272063e15b45aae12f46953d}{set\+Green\+Blinking}} (bool on)=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a17122e73f56d3575748bb04eaa9d3400}{green\+Lamp\+Off}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a73d557655264abe290d0fc9e9c7e5791}{yellow\+Lamp\+On}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a316e1dd2466a85a75990e0d9e92b5628}{set\+Yellow\+Blinking}} (bool on)=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a343eab508c560ea9066aa429bdded39a}{yellow\+Lamp\+Off}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a70505b6bbce7e944ad45fe09420a8ab3}{red\+Lamp\+On}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a4dda6ccb974394b3069816aa3eda51bc}{set\+Red\+Blinking}} (bool on, bool fast)=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a5a3391197d414a033bfd86838bd9e26f}{red\+Lamp\+Off}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a0df6dc71932cb7dc7ae1835b35cd6322}{start\+Led\+On}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a349a4b1d84fe7b20958a8135b4dcd1f8}{start\+Led\+Off}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a1d2ba78125df059f47a7ba83089adfa3}{reset\+Led\+On}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a83241316a1d4f79d84259d8669f04400}{reset\+Led\+Off}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a7cfcc4b7d54a8f79ab9f9eb8bde5db89}{q1\+Led\+On}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a96eaa9ec125ab749a3704f3f5c7e5a0f}{q1\+Led\+Off}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a3c1764cc05c9155ac1b6c603a6bc1eaa}{q2\+Led\+On}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a931c1b06d03ec415c9225542fc6acff6}{q2\+Led\+Off}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a0c113300056d325ba62c357bd8f46fc1}{motor\+Stop}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a52ac7a7aac279499298ee97ade3a16e5}{motor\+Slow}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a53c51253220adecc8ed49625b706b60d}{motor\+Fast}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a119a641b147abb43e0ed530f716849c8}{open\+Switch}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a5fd2cd4100dee70bc24900f07da8e41c}{close\+Switch}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_a4e6953017f6b66225a4a878991eeeb49}{sort\+Out}} ()=0
+\item 
+virtual void \mbox{\hyperlink{class_i_actuators_abefa0ecaeef1fe1425338f1017c4f4bb}{let\+Pass}} ()=0
+\item 
+void \mbox{\hyperlink{class_i_actuators_aabfbb10bcb1eb63a7960f9984da88e76}{handle\+Event}} (\mbox{\hyperlink{struct_event}{Event}} event) override
+\item 
+\mbox{\Hypertarget{class_i_actuators_a8fc4df1ace5168c962802a5e031ac64c}\label{class_i_actuators_a8fc4df1ace5168c962802a5e031ac64c}} 
+bool {\bfseries handle\+Lamp\+Event} (Event\+Type event, Lamp\+State state)
+\end{DoxyCompactItemize}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_i_event_handler_a63c61e6208dacfac9efe636a60802267}\label{class_i_event_handler_a63c61e6208dacfac9efe636a60802267}} 
+virtual void {\bfseries handle\+Event} (\mbox{\hyperlink{struct_event}{Event}} event)=0
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_i_actuators_a86de60b4e96c0fdff8ed90f818b0c897}\label{class_i_actuators_a86de60b4e96c0fdff8ed90f818b0c897}} 
+{\bfseries IActuators} (std\+::shared\+\_\+ptr$<$ \mbox{\hyperlink{class_event_manager}{Event\+Manager}} $>$ mngr)
+\item 
+\mbox{\Hypertarget{class_i_actuators_af9b8119a25fbebb184e89345fae85d33}\label{class_i_actuators_af9b8119a25fbebb184e89345fae85d33}} 
+void {\bfseries subscribe\+To\+Events} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_i_actuators_a5fd2cd4100dee70bc24900f07da8e41c}\label{class_i_actuators_a5fd2cd4100dee70bc24900f07da8e41c}} 
+\index{IActuators@{IActuators}!closeSwitch@{closeSwitch}}
+\index{closeSwitch@{closeSwitch}!IActuators@{IActuators}}
+\doxysubsubsection{\texorpdfstring{closeSwitch()}{closeSwitch()}}
+{\footnotesize\ttfamily virtual void IActuators\+::close\+Switch (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Closes the switch to let a workpiece fall into the slide. 
+
+Implemented in \mbox{\hyperlink{class_actuators_a4fb4eb29951800e73b2bf4b91fdb1f42}{Actuators}}, and \mbox{\hyperlink{class_actuator_mock_a181eec228a38fc59b6ac9a866e714ef9}{Actuator\+Mock}}.
+
+\mbox{\Hypertarget{class_i_actuators_aff7fc5c82f5ea6b43771b23ec4a5d65a}\label{class_i_actuators_aff7fc5c82f5ea6b43771b23ec4a5d65a}} 
+\index{IActuators@{IActuators}!errorMode@{errorMode}}
+\index{errorMode@{errorMode}!IActuators@{IActuators}}
+\doxysubsubsection{\texorpdfstring{errorMode()}{errorMode()}}
+{\footnotesize\ttfamily virtual void IActuators\+::error\+Mode (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Sets all actuators when Error mode is entered
+\begin{DoxyItemize}
+\item red lamp flashing fast
+\item motor stop 
+\end{DoxyItemize}
+
+Implemented in \mbox{\hyperlink{class_actuators_a676265e7f89e224245ce4f9dea379ebc}{Actuators}}, and \mbox{\hyperlink{class_actuator_mock_af230380ba75657ff5f7843f4ebeebe5d}{Actuator\+Mock}}.
+
+\mbox{\Hypertarget{class_i_actuators_aa2e83e6dfb7e625daefb1fe778db57e5}\label{class_i_actuators_aa2e83e6dfb7e625daefb1fe778db57e5}} 
+\index{IActuators@{IActuators}!estopMode@{estopMode}}
+\index{estopMode@{estopMode}!IActuators@{IActuators}}
+\doxysubsubsection{\texorpdfstring{estopMode()}{estopMode()}}
+{\footnotesize\ttfamily virtual void IActuators\+::estop\+Mode (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Sets all actuators when \mbox{\hyperlink{class_e_stop}{EStop}} mode is entered\+:
+\begin{DoxyItemize}
+\item all off 
+\end{DoxyItemize}
+
+Implemented in \mbox{\hyperlink{class_actuators_ad7b1c2fa821acefe5fce9a3842f3e545}{Actuators}}, and \mbox{\hyperlink{class_actuator_mock_a78ef1576f036ac445d904a7c8253e5a5}{Actuator\+Mock}}.
+
+\mbox{\Hypertarget{class_i_actuators_a17122e73f56d3575748bb04eaa9d3400}\label{class_i_actuators_a17122e73f56d3575748bb04eaa9d3400}} 
+\index{IActuators@{IActuators}!greenLampOff@{greenLampOff}}
+\index{greenLampOff@{greenLampOff}!IActuators@{IActuators}}
+\doxysubsubsection{\texorpdfstring{greenLampOff()}{greenLampOff()}}
+{\footnotesize\ttfamily virtual void IActuators\+::green\+Lamp\+Off (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Turns the green lamp off 
+
+Implemented in \mbox{\hyperlink{class_actuators_a8ce25b608de7ccbb4c9f7e4c5ed11781}{Actuators}}, and \mbox{\hyperlink{class_actuator_mock_a12bfbe386df6182bfde8baa8af685be7}{Actuator\+Mock}}.
+
+\mbox{\Hypertarget{class_i_actuators_aee54d8fcb0c1bf157db404ffca757116}\label{class_i_actuators_aee54d8fcb0c1bf157db404ffca757116}} 
+\index{IActuators@{IActuators}!greenLampOn@{greenLampOn}}
+\index{greenLampOn@{greenLampOn}!IActuators@{IActuators}}
+\doxysubsubsection{\texorpdfstring{greenLampOn()}{greenLampOn()}}
+{\footnotesize\ttfamily virtual void IActuators\+::green\+Lamp\+On (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Turns the green lamp on 
+
+Implemented in \mbox{\hyperlink{class_actuators_a29af838bac37a765c6052e73a08d31f8}{Actuators}}, and \mbox{\hyperlink{class_actuator_mock_a597ce419b16fc76ddf4d732c346f9343}{Actuator\+Mock}}.
+
+\mbox{\Hypertarget{class_i_actuators_aabfbb10bcb1eb63a7960f9984da88e76}\label{class_i_actuators_aabfbb10bcb1eb63a7960f9984da88e76}} 
+\index{IActuators@{IActuators}!handleEvent@{handleEvent}}
+\index{handleEvent@{handleEvent}!IActuators@{IActuators}}
+\doxysubsubsection{\texorpdfstring{handleEvent()}{handleEvent()}}
+{\footnotesize\ttfamily void IActuators\+::handle\+Event (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{struct_event}{Event}}}]{event }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_event_handler}{IEvent\+Handler}}.
+
+\mbox{\Hypertarget{class_i_actuators_abefa0ecaeef1fe1425338f1017c4f4bb}\label{class_i_actuators_abefa0ecaeef1fe1425338f1017c4f4bb}} 
+\index{IActuators@{IActuators}!letPass@{letPass}}
+\index{letPass@{letPass}!IActuators@{IActuators}}
+\doxysubsubsection{\texorpdfstring{letPass()}{letPass()}}
+{\footnotesize\ttfamily virtual void IActuators\+::let\+Pass (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Lets the switch or pusher pass a workpiece to the end of the belt. If switch is mounted\+: Open for \{ON\+\_\+\+TIME\+\_\+\+SWITCH\+\_\+\+MS\} ms, then close again If pusher is mounted\+: Do nothing, so workpiece will pass. 
+
+Implemented in \mbox{\hyperlink{class_actuators_a2e5c46885c18820d63a8cc6bffba9742}{Actuators}}, and \mbox{\hyperlink{class_actuator_mock_a74ba8b4bfaf274a50fe64a96bded39f8}{Actuator\+Mock}}.
+
+\mbox{\Hypertarget{class_i_actuators_a53c51253220adecc8ed49625b706b60d}\label{class_i_actuators_a53c51253220adecc8ed49625b706b60d}} 
+\index{IActuators@{IActuators}!motorFast@{motorFast}}
+\index{motorFast@{motorFast}!IActuators@{IActuators}}
+\doxysubsubsection{\texorpdfstring{motorFast()}{motorFast()}}
+{\footnotesize\ttfamily virtual void IActuators\+::motor\+Fast (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Lets the motor run in fast speed 
+
+Implemented in \mbox{\hyperlink{class_actuators_ad34e61be1f68f4532aee8738c6e60e89}{Actuators}}, and \mbox{\hyperlink{class_actuator_mock_a9d60103e5b1d5c3549152e8b29d0530d}{Actuator\+Mock}}.
+
+\mbox{\Hypertarget{class_i_actuators_a52ac7a7aac279499298ee97ade3a16e5}\label{class_i_actuators_a52ac7a7aac279499298ee97ade3a16e5}} 
+\index{IActuators@{IActuators}!motorSlow@{motorSlow}}
+\index{motorSlow@{motorSlow}!IActuators@{IActuators}}
+\doxysubsubsection{\texorpdfstring{motorSlow()}{motorSlow()}}
+{\footnotesize\ttfamily virtual void IActuators\+::motor\+Slow (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Lets the motor run in slow speed 
+
+Implemented in \mbox{\hyperlink{class_actuators_ad648b0cb800d9682137f94c01b80ef08}{Actuators}}, and \mbox{\hyperlink{class_actuator_mock_a706ccce3a7c4bc8e154584cc9155940a}{Actuator\+Mock}}.
+
+\mbox{\Hypertarget{class_i_actuators_a0c113300056d325ba62c357bd8f46fc1}\label{class_i_actuators_a0c113300056d325ba62c357bd8f46fc1}} 
+\index{IActuators@{IActuators}!motorStop@{motorStop}}
+\index{motorStop@{motorStop}!IActuators@{IActuators}}
+\doxysubsubsection{\texorpdfstring{motorStop()}{motorStop()}}
+{\footnotesize\ttfamily virtual void IActuators\+::motor\+Stop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Stops the motor 
+
+Implemented in \mbox{\hyperlink{class_actuators_a5ce35eeb306a8b4463307b9025f63000}{Actuators}}, and \mbox{\hyperlink{class_actuator_mock_abcac5a4528a57c6c07db30b478c82412}{Actuator\+Mock}}.
+
+\mbox{\Hypertarget{class_i_actuators_a119a641b147abb43e0ed530f716849c8}\label{class_i_actuators_a119a641b147abb43e0ed530f716849c8}} 
+\index{IActuators@{IActuators}!openSwitch@{openSwitch}}
+\index{openSwitch@{openSwitch}!IActuators@{IActuators}}
+\doxysubsubsection{\texorpdfstring{openSwitch()}{openSwitch()}}
+{\footnotesize\ttfamily virtual void IActuators\+::open\+Switch (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Opens the switch to let a workpiece pass. 
+
+Implemented in \mbox{\hyperlink{class_actuators_a609a36831ecefe695e5a16b8a1bc7cb9}{Actuators}}, and \mbox{\hyperlink{class_actuator_mock_a2356f3ad4ef3056b44577447f90f112a}{Actuator\+Mock}}.
+
+\mbox{\Hypertarget{class_i_actuators_a96eaa9ec125ab749a3704f3f5c7e5a0f}\label{class_i_actuators_a96eaa9ec125ab749a3704f3f5c7e5a0f}} 
+\index{IActuators@{IActuators}!q1LedOff@{q1LedOff}}
+\index{q1LedOff@{q1LedOff}!IActuators@{IActuators}}
+\doxysubsubsection{\texorpdfstring{q1LedOff()}{q1LedOff()}}
+{\footnotesize\ttfamily virtual void IActuators\+::q1\+Led\+Off (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Turns the \textquotesingle{}Q1\textquotesingle{} LED off 
+
+Implemented in \mbox{\hyperlink{class_actuators_a00e7e88bd5c8fb958df11472c55e2d4c}{Actuators}}, and \mbox{\hyperlink{class_actuator_mock_abd5dbc5e84a6cc6ad68f4becbd93d9f7}{Actuator\+Mock}}.
+
+\mbox{\Hypertarget{class_i_actuators_a7cfcc4b7d54a8f79ab9f9eb8bde5db89}\label{class_i_actuators_a7cfcc4b7d54a8f79ab9f9eb8bde5db89}} 
+\index{IActuators@{IActuators}!q1LedOn@{q1LedOn}}
+\index{q1LedOn@{q1LedOn}!IActuators@{IActuators}}
+\doxysubsubsection{\texorpdfstring{q1LedOn()}{q1LedOn()}}
+{\footnotesize\ttfamily virtual void IActuators\+::q1\+Led\+On (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Turns the \textquotesingle{}Q1\textquotesingle{} LED on 
+
+Implemented in \mbox{\hyperlink{class_actuators_a7eeb950c37ae9f2dad1a0b9877b6e657}{Actuators}}, and \mbox{\hyperlink{class_actuator_mock_ab36cc003173bdb14b3ab97fbefd2b0aa}{Actuator\+Mock}}.
+
+\mbox{\Hypertarget{class_i_actuators_a931c1b06d03ec415c9225542fc6acff6}\label{class_i_actuators_a931c1b06d03ec415c9225542fc6acff6}} 
+\index{IActuators@{IActuators}!q2LedOff@{q2LedOff}}
+\index{q2LedOff@{q2LedOff}!IActuators@{IActuators}}
+\doxysubsubsection{\texorpdfstring{q2LedOff()}{q2LedOff()}}
+{\footnotesize\ttfamily virtual void IActuators\+::q2\+Led\+Off (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Turns the \textquotesingle{}Q2\textquotesingle{} LED off 
+
+Implemented in \mbox{\hyperlink{class_actuators_aed525e60aa36a8fc14ee4f15b6b377cb}{Actuators}}, and \mbox{\hyperlink{class_actuator_mock_ae56547fa1c1e5ae31b165fa027db5f1b}{Actuator\+Mock}}.
+
+\mbox{\Hypertarget{class_i_actuators_a3c1764cc05c9155ac1b6c603a6bc1eaa}\label{class_i_actuators_a3c1764cc05c9155ac1b6c603a6bc1eaa}} 
+\index{IActuators@{IActuators}!q2LedOn@{q2LedOn}}
+\index{q2LedOn@{q2LedOn}!IActuators@{IActuators}}
+\doxysubsubsection{\texorpdfstring{q2LedOn()}{q2LedOn()}}
+{\footnotesize\ttfamily virtual void IActuators\+::q2\+Led\+On (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Turns the \textquotesingle{}Q2\textquotesingle{} LED on 
+
+Implemented in \mbox{\hyperlink{class_actuators_a9c8689b01d6732b3e5ced32f0046fe25}{Actuators}}, and \mbox{\hyperlink{class_actuator_mock_ab6580909284e95586557967ca9d12941}{Actuator\+Mock}}.
+
+\mbox{\Hypertarget{class_i_actuators_a5a3391197d414a033bfd86838bd9e26f}\label{class_i_actuators_a5a3391197d414a033bfd86838bd9e26f}} 
+\index{IActuators@{IActuators}!redLampOff@{redLampOff}}
+\index{redLampOff@{redLampOff}!IActuators@{IActuators}}
+\doxysubsubsection{\texorpdfstring{redLampOff()}{redLampOff()}}
+{\footnotesize\ttfamily virtual void IActuators\+::red\+Lamp\+Off (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Turns the red lamp off 
+
+Implemented in \mbox{\hyperlink{class_actuators_a6ea302e6946f25bbd20a4361d34aef00}{Actuators}}, and \mbox{\hyperlink{class_actuator_mock_a7d4baccd7e492a4a6c7414f054ec9316}{Actuator\+Mock}}.
+
+\mbox{\Hypertarget{class_i_actuators_a70505b6bbce7e944ad45fe09420a8ab3}\label{class_i_actuators_a70505b6bbce7e944ad45fe09420a8ab3}} 
+\index{IActuators@{IActuators}!redLampOn@{redLampOn}}
+\index{redLampOn@{redLampOn}!IActuators@{IActuators}}
+\doxysubsubsection{\texorpdfstring{redLampOn()}{redLampOn()}}
+{\footnotesize\ttfamily virtual void IActuators\+::red\+Lamp\+On (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Turns the red lamp on 
+
+Implemented in \mbox{\hyperlink{class_actuators_a57f3c9445fc3b52bea17499295e667c7}{Actuators}}, and \mbox{\hyperlink{class_actuator_mock_ac9c46925b0b663aa3ca400a8be7b788e}{Actuator\+Mock}}.
+
+\mbox{\Hypertarget{class_i_actuators_a83241316a1d4f79d84259d8669f04400}\label{class_i_actuators_a83241316a1d4f79d84259d8669f04400}} 
+\index{IActuators@{IActuators}!resetLedOff@{resetLedOff}}
+\index{resetLedOff@{resetLedOff}!IActuators@{IActuators}}
+\doxysubsubsection{\texorpdfstring{resetLedOff()}{resetLedOff()}}
+{\footnotesize\ttfamily virtual void IActuators\+::reset\+Led\+Off (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Turns the LED at the \textquotesingle{}Reset\textquotesingle{} button off 
+
+Implemented in \mbox{\hyperlink{class_actuators_ac9596220b535465e1dbe4e9a64b241e5}{Actuators}}, and \mbox{\hyperlink{class_actuator_mock_a6c8fb30ec10b5bff086d34acecd93c9b}{Actuator\+Mock}}.
+
+\mbox{\Hypertarget{class_i_actuators_a1d2ba78125df059f47a7ba83089adfa3}\label{class_i_actuators_a1d2ba78125df059f47a7ba83089adfa3}} 
+\index{IActuators@{IActuators}!resetLedOn@{resetLedOn}}
+\index{resetLedOn@{resetLedOn}!IActuators@{IActuators}}
+\doxysubsubsection{\texorpdfstring{resetLedOn()}{resetLedOn()}}
+{\footnotesize\ttfamily virtual void IActuators\+::reset\+Led\+On (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Turns the LED at the \textquotesingle{}Reset\textquotesingle{} button on 
+
+Implemented in \mbox{\hyperlink{class_actuators_a0e794f7be840beb26005ac047df85ab6}{Actuators}}, and \mbox{\hyperlink{class_actuator_mock_a903e048f7ec5b24b36ac19cbfd398aec}{Actuator\+Mock}}.
+
+\mbox{\Hypertarget{class_i_actuators_a84f9fbf9ce54a3a1a208810d825fe553}\label{class_i_actuators_a84f9fbf9ce54a3a1a208810d825fe553}} 
+\index{IActuators@{IActuators}!runningMode@{runningMode}}
+\index{runningMode@{runningMode}!IActuators@{IActuators}}
+\doxysubsubsection{\texorpdfstring{runningMode()}{runningMode()}}
+{\footnotesize\ttfamily virtual void IActuators\+::running\+Mode (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Sets all actuators when \mbox{\hyperlink{class_running}{Running}} mode is entered\+:
+\begin{DoxyItemize}
+\item green lamp on 
+\end{DoxyItemize}
+
+Implemented in \mbox{\hyperlink{class_actuators_aeeece7d6cff598696af0843ab19ce039}{Actuators}}, and \mbox{\hyperlink{class_actuator_mock_ae21c0fa1aae5e93966ab610ce812582e}{Actuator\+Mock}}.
+
+\mbox{\Hypertarget{class_i_actuators_a8ada57b70efce7f9144d9401fcf0bcd0}\label{class_i_actuators_a8ada57b70efce7f9144d9401fcf0bcd0}} 
+\index{IActuators@{IActuators}!serviceMode@{serviceMode}}
+\index{serviceMode@{serviceMode}!IActuators@{IActuators}}
+\doxysubsubsection{\texorpdfstring{serviceMode()}{serviceMode()}}
+{\footnotesize\ttfamily virtual void IActuators\+::service\+Mode (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Sets all actuators when Service mode is entered
+\begin{DoxyItemize}
+\item green lamp flashing 
+\end{DoxyItemize}
+
+Implemented in \mbox{\hyperlink{class_actuators_a66d741c179c7fe2641a2438d97fdfc99}{Actuators}}, and \mbox{\hyperlink{class_actuator_mock_a20e87cf0dfc9804fda39400e1b5e9a32}{Actuator\+Mock}}.
+
+\mbox{\Hypertarget{class_i_actuators_a7284026a272063e15b45aae12f46953d}\label{class_i_actuators_a7284026a272063e15b45aae12f46953d}} 
+\index{IActuators@{IActuators}!setGreenBlinking@{setGreenBlinking}}
+\index{setGreenBlinking@{setGreenBlinking}!IActuators@{IActuators}}
+\doxysubsubsection{\texorpdfstring{setGreenBlinking()}{setGreenBlinking()}}
+{\footnotesize\ttfamily virtual void IActuators\+::set\+Green\+Blinking (\begin{DoxyParamCaption}\item[{bool}]{on }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Lets the green lamp blink or turns it off
+
+
+\begin{DoxyParams}{Parameters}
+{\em on} & Blinking on or off \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{class_actuators_a35e89ee778898730ca7ec9fdb24579cc}{Actuators}}, and \mbox{\hyperlink{class_actuator_mock_ad0fd9955a526ef5d09c0f134150af642}{Actuator\+Mock}}.
+
+\mbox{\Hypertarget{class_i_actuators_a4dda6ccb974394b3069816aa3eda51bc}\label{class_i_actuators_a4dda6ccb974394b3069816aa3eda51bc}} 
+\index{IActuators@{IActuators}!setRedBlinking@{setRedBlinking}}
+\index{setRedBlinking@{setRedBlinking}!IActuators@{IActuators}}
+\doxysubsubsection{\texorpdfstring{setRedBlinking()}{setRedBlinking()}}
+{\footnotesize\ttfamily virtual void IActuators\+::set\+Red\+Blinking (\begin{DoxyParamCaption}\item[{bool}]{on,  }\item[{bool}]{fast }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Lets the red lamp blink or turns it off
+
+
+\begin{DoxyParams}{Parameters}
+{\em on} & Blinking on or off \\
+\hline
+{\em fast} & Blink fast(1\+Hz) or slow (0,5Hz) \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{class_actuators_aade746f1621299cf1324eedab50ddb90}{Actuators}}, and \mbox{\hyperlink{class_actuator_mock_a6d88a902aac33735813358563a0af9d5}{Actuator\+Mock}}.
+
+\mbox{\Hypertarget{class_i_actuators_a316e1dd2466a85a75990e0d9e92b5628}\label{class_i_actuators_a316e1dd2466a85a75990e0d9e92b5628}} 
+\index{IActuators@{IActuators}!setYellowBlinking@{setYellowBlinking}}
+\index{setYellowBlinking@{setYellowBlinking}!IActuators@{IActuators}}
+\doxysubsubsection{\texorpdfstring{setYellowBlinking()}{setYellowBlinking()}}
+{\footnotesize\ttfamily virtual void IActuators\+::set\+Yellow\+Blinking (\begin{DoxyParamCaption}\item[{bool}]{on }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Lets the yellow lamp blink or turns it off
+
+
+\begin{DoxyParams}{Parameters}
+{\em on} & Blinking on or off \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{class_actuators_a972da0a4a6bfa55a500fb4c7bdf82591}{Actuators}}, and \mbox{\hyperlink{class_actuator_mock_a15c888a200e659bc3775c1b333ea7aae}{Actuator\+Mock}}.
+
+\mbox{\Hypertarget{class_i_actuators_a4e6953017f6b66225a4a878991eeeb49}\label{class_i_actuators_a4e6953017f6b66225a4a878991eeeb49}} 
+\index{IActuators@{IActuators}!sortOut@{sortOut}}
+\index{sortOut@{sortOut}!IActuators@{IActuators}}
+\doxysubsubsection{\texorpdfstring{sortOut()}{sortOut()}}
+{\footnotesize\ttfamily virtual void IActuators\+::sort\+Out (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Lets the switch or pusher sort out workpiece to ramp. If switch is mounted\+: Do nothing, so workpiece will go to ramp If pusher is mounted\+: activate for \{ON\+\_\+\+TIME\+\_\+\+PUSHER\+\_\+\+MS\} ms, then deactivate again 
+
+Implemented in \mbox{\hyperlink{class_actuators_a978f3b33e3c4e2fcb9aaba68987fee6c}{Actuators}}, and \mbox{\hyperlink{class_actuator_mock_aea5045dc747e5537ce8f5711ff02246f}{Actuator\+Mock}}.
+
+\mbox{\Hypertarget{class_i_actuators_af51238bc1df28e7da51c1e7941250d27}\label{class_i_actuators_af51238bc1df28e7da51c1e7941250d27}} 
+\index{IActuators@{IActuators}!standbyMode@{standbyMode}}
+\index{standbyMode@{standbyMode}!IActuators@{IActuators}}
+\doxysubsubsection{\texorpdfstring{standbyMode()}{standbyMode()}}
+{\footnotesize\ttfamily virtual void IActuators\+::standby\+Mode (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Sets all actuators when \mbox{\hyperlink{class_standby}{Standby}} mode is entered\+:
+\begin{DoxyItemize}
+\item all off 
+\end{DoxyItemize}
+
+Implemented in \mbox{\hyperlink{class_actuators_ae459cd9517eef3731e13abe862ccad81}{Actuators}}, and \mbox{\hyperlink{class_actuator_mock_a375de17662f49528727cf1c56c5a306b}{Actuator\+Mock}}.
+
+\mbox{\Hypertarget{class_i_actuators_a349a4b1d84fe7b20958a8135b4dcd1f8}\label{class_i_actuators_a349a4b1d84fe7b20958a8135b4dcd1f8}} 
+\index{IActuators@{IActuators}!startLedOff@{startLedOff}}
+\index{startLedOff@{startLedOff}!IActuators@{IActuators}}
+\doxysubsubsection{\texorpdfstring{startLedOff()}{startLedOff()}}
+{\footnotesize\ttfamily virtual void IActuators\+::start\+Led\+Off (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Turns the LED at the \textquotesingle{}Start\textquotesingle{} button off 
+
+Implemented in \mbox{\hyperlink{class_actuators_a3346215c47e4b7631166da5f40f48994}{Actuators}}, and \mbox{\hyperlink{class_actuator_mock_a00e28ec5c3ddc83e9d9c25bd10bf3575}{Actuator\+Mock}}.
+
+\mbox{\Hypertarget{class_i_actuators_a0df6dc71932cb7dc7ae1835b35cd6322}\label{class_i_actuators_a0df6dc71932cb7dc7ae1835b35cd6322}} 
+\index{IActuators@{IActuators}!startLedOn@{startLedOn}}
+\index{startLedOn@{startLedOn}!IActuators@{IActuators}}
+\doxysubsubsection{\texorpdfstring{startLedOn()}{startLedOn()}}
+{\footnotesize\ttfamily virtual void IActuators\+::start\+Led\+On (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Turns the LED at the \textquotesingle{}Start\textquotesingle{} button on 
+
+Implemented in \mbox{\hyperlink{class_actuators_acb6db3efa1c8a0608e9988fa45a9c353}{Actuators}}, and \mbox{\hyperlink{class_actuator_mock_a8b014f80ab749875e57999e8aa39864a}{Actuator\+Mock}}.
+
+\mbox{\Hypertarget{class_i_actuators_a343eab508c560ea9066aa429bdded39a}\label{class_i_actuators_a343eab508c560ea9066aa429bdded39a}} 
+\index{IActuators@{IActuators}!yellowLampOff@{yellowLampOff}}
+\index{yellowLampOff@{yellowLampOff}!IActuators@{IActuators}}
+\doxysubsubsection{\texorpdfstring{yellowLampOff()}{yellowLampOff()}}
+{\footnotesize\ttfamily virtual void IActuators\+::yellow\+Lamp\+Off (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Turns the yellow lamp off 
+
+Implemented in \mbox{\hyperlink{class_actuators_ad74dc7dd43964a4de8d19bf9f85ca14f}{Actuators}}, and \mbox{\hyperlink{class_actuator_mock_ad0f76c58046e29e3e713f0d85dbb23dd}{Actuator\+Mock}}.
+
+\mbox{\Hypertarget{class_i_actuators_a73d557655264abe290d0fc9e9c7e5791}\label{class_i_actuators_a73d557655264abe290d0fc9e9c7e5791}} 
+\index{IActuators@{IActuators}!yellowLampOn@{yellowLampOn}}
+\index{yellowLampOn@{yellowLampOn}!IActuators@{IActuators}}
+\doxysubsubsection{\texorpdfstring{yellowLampOn()}{yellowLampOn()}}
+{\footnotesize\ttfamily virtual void IActuators\+::yellow\+Lamp\+On (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Turns the yellow lamp on 
+
+Implemented in \mbox{\hyperlink{class_actuators_a447d6ac05c103d618c527b80a7ad7aa7}{Actuators}}, and \mbox{\hyperlink{class_actuator_mock_a102a95565fafdeb9091387648760d0e3}{Actuator\+Mock}}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+main/src/hal/IActuators.\+h\end{DoxyCompactItemize}

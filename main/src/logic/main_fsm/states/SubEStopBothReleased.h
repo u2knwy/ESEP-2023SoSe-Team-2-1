@@ -1,5 +1,5 @@
 /*
- * SubEStopTwoPressed.h
+ * SubEStopBothReleased.h
  *
  *  Created on: 24.05.2023
  *      Author: Maik

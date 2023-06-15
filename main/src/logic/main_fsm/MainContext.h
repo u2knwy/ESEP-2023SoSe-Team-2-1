@@ -33,6 +33,8 @@ public:
 	void master_LBR_Blocked();
 	void master_LBR_Unblocked();
 
+	void master_MetalDetected();
+
 	void slave_LBA_Blocked();
 	void slave_LBA_Unblocked();
 	void slave_LBW_Blocked();
@@ -41,6 +43,8 @@ public:
 	void slave_LBE_Unblocked();
 	void slave_LBR_Blocked();
 	void slave_LBR_Unblocked();
+
+	void slave_MetalDetected();
 
 	// Buttons
 	void master_btnStart_PressedShort();
@@ -59,6 +63,10 @@ public:
 
 	void slave_EStop_Pressed();
 	void slave_EStop_Released();
+
+	void selfSolvableErrorOccurred();
+	void errorSelfSolved();
+	void nonSelfSolvableErrorOccurred();
 
 private:
 	MainActions* actions;

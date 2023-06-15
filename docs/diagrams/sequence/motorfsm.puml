@@ -1,0 +1,26 @@
+@startuml
+participant "MainFSM" as MainFSM
+participant "MotorFSM" as MotorFSM_M << Master >>
+participant "Actuators" as HAL_M << Master >>
+participant "HeightSensor" as HM_M << Master >>
+
+note left of MainFSM : Standby -> Running
+MainFSM ->> MotorFSM_M : MOTOR_X_STOP_REQ(false)
+MotorFSM_M -> MotorFSM_M : setStopFlag(false)
+note left of MainFSM : Neues WS eingelegt
+MainFSM ->> MotorFSM_M : MOTOR_X_RIGHT_REQ(true)
+MotorFSM_M -> MotorFSM_M : setRightFlag(true)
+MotorFSM_M -> HAL_M : motorRightFast()
+note left of MainFSM : WS an Höhenmessung angekommen
+MainFSM ->> MotorFSM_M : MOTOR_X_SLOW_REQ(true)
+MotorFSM_M -> MotorFSM_M : setSlowFlag(true)
+MotorFSM_M -> HAL_M : motorRightSlow()
+note left of MainFSM : Höhenmessung beendet
+MainFSM ->> MotorFSM_M : MOTOR_X_SLOW_REQ(false)
+MotorFSM_M -> MotorFSM_M : setSlowFlag(false)
+MotorFSM_M -> HAL_M : motorRightFast()
+note left of MainFSM : WS am Ende von FBM1 und FBM2 ist blockiert
+MainFSM ->> MotorFSM_M : MOTOR_X_RIGHT_REQ(false)
+MotorFSM_M -> MotorFSM_M : setRightFlag(false)
+MotorFSM_M -> HAL_M : motorStop()
+@enduml

@@ -1,0 +1,26 @@
+\hypertarget{_sub_e_stop_one_pressed_8h_source}{}\doxysection{Sub\+EStop\+One\+Pressed.\+h}
+\label{_sub_e_stop_one_pressed_8h_source}\index{main/src/logic/main\_fsm/states/SubEStopOnePressed.h@{main/src/logic/main\_fsm/states/SubEStopOnePressed.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ SubEStopOnePressed.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ *\ \ Created\ on:\ 24.05.2023}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *\ \ \ \ \ \ Author:\ Maik}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}../MainBasestate.h"{}}}
+\DoxyCodeLine{00010\ }
+\DoxyCodeLine{00011\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_sub_e_stop_one_pressed}{SubEStopOnePressed}}:\ \textcolor{keyword}{public}\ \mbox{\hyperlink{class_main_basestate}{MainBasestate}}\ \{}
+\DoxyCodeLine{00012\ \ \ \ \ \textcolor{keywordtype}{void}\ entry()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00013\ \ \ \ \ \textcolor{keywordtype}{void}\ exit()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \ \ \ \ \textcolor{keywordtype}{bool}\ master\_EStop\_Pressed()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00016\ \ \ \ \ \textcolor{keywordtype}{bool}\ master\_EStop\_Released()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00017\ }
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{bool}\ slave\_EStop\_Pressed()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{bool}\ slave\_EStop\_Released()\ \textcolor{keyword}{override};}
+\DoxyCodeLine{00020\ \};}
+
+\end{DoxyCode}

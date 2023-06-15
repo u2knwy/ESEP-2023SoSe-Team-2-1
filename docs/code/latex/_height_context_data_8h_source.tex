@@ -1,0 +1,49 @@
+\hypertarget{_height_context_data_8h_source}{}\doxysection{Height\+Context\+Data.\+h}
+\label{_height_context_data_8h_source}\index{main/src/logic/hm/HeightContextData.h@{main/src/logic/hm/HeightContextData.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ HeightContextData.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ *\ \ Created\ on:\ 11.05.2023}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *\ \ \ \ \ \ Author:\ Maik}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00009\ }
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}events/eventtypes\_enum.h"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}configuration/Configuration.h"{}}}
+\DoxyCodeLine{00012\ \textcolor{preprocessor}{\#include\ "{}hal/IHeightSensor.h"{}}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_height_result}{HeightResult}}\ \{}
+\DoxyCodeLine{00016\ \ \ \ \ WorkpieceType\ type\{WorkpieceType::WS\_UNKNOWN\};}
+\DoxyCodeLine{00017\ \ \ \ \ \textcolor{keywordtype}{float}\ average\{0.0\};}
+\DoxyCodeLine{00018\ \ \ \ \ \textcolor{keywordtype}{float}\ max\{0.0\};}
+\DoxyCodeLine{00019\ \};}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_height_context_data}{HeightContextData}}\ \{}
+\DoxyCodeLine{00022\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00023\ \ \ \ \ \mbox{\hyperlink{class_height_context_data}{HeightContextData}}();}
+\DoxyCodeLine{00024\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_height_context_data}{\string~HeightContextData}}();}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_height_context_data_aae17528da0b875c2635fbeed8e74be4b}{addValue}}(\textcolor{keywordtype}{float}\ value);}
+\DoxyCodeLine{00032\ }
+\DoxyCodeLine{00038\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_height_context_data_a01414656e57f44980ae713fe783bdf6b}{getAverageValue}}();}
+\DoxyCodeLine{00039\ }
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{float}\ \mbox{\hyperlink{class_height_context_data_ae6de081ca1e8282b0de354de74738c62}{getMaximumValue}}();}
+\DoxyCodeLine{00046\ }
+\DoxyCodeLine{00050\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_height_context_data_a24f55f0d87042525754a85b229cacc98}{resetMeasurement}}();}
+\DoxyCodeLine{00051\ \ \ \ \ \mbox{\hyperlink{struct_height_result}{HeightResult}}\ getCurrentResult();}
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ isFlat(\textcolor{keywordtype}{float}\ value);}
+\DoxyCodeLine{00053\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ isHigh(\textcolor{keywordtype}{float}\ value);}
+\DoxyCodeLine{00054\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ isHole(\textcolor{keywordtype}{float}\ value);}
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{bool}\ isUnknown(\textcolor{keywordtype}{float}\ value);}
+\DoxyCodeLine{00056\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00057\ \ \ \ \ \textcolor{keywordtype}{float}\ avgValue;}
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{float}\ maxValue;}
+\DoxyCodeLine{00059\ \ \ \ \ \textcolor{keywordtype}{int}\ nMeasurements;}
+\DoxyCodeLine{00060\ \ \ \ \ std::vector<float>\ measurements;}
+\DoxyCodeLine{00061\ \};}
+
+\end{DoxyCode}

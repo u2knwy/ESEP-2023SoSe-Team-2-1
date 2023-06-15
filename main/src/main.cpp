@@ -17,6 +17,7 @@
 #include <gtest/gtest.h>
 #include <hal/Sensors.h>
 #include <logic/hm/HeightContext.h>
+#include <atomic>
 
 #ifdef SIMULATION
 #include "simulation/simulationadapterqnx/simqnxgpioapi.h" // must be last include !!!
@@ -26,7 +27,7 @@ using namespace std;
 
 // Components which will be launched in main-function and cleaned up if program is terminated
 std::shared_ptr<HeightContext> heightFSM;
-//std::shared_ptr<HeightSensor> heightSensor;
+std::shared_ptr<IHeightSensor> heightSensor;
 std::shared_ptr<Sensors> sensors;
 std::shared_ptr<Actuators> actuators;
 std::shared_ptr<EventManager> eventManager;
@@ -35,7 +36,7 @@ std::shared_ptr<MotorContext> motorFSM_Master;
 std::shared_ptr<MotorContext> motorFSM_Slave;
 
 // Set this variable to false to stop main function from executing...
-bool running = true;
+std::atomic<bool> running(true);
 
 /**
  * Signal Handler which must be called if the program is terminated.
@@ -44,28 +45,33 @@ bool running = true;
 void cleanup(int exitCode)
 {
 	Logger::info("Exit code received: " + std::to_string(exitCode));
-//	heightSensor->stop();
+	//	heightSensor->stop();
 	running = false;
 }
 
-void startEvMgr(shared_ptr<EventManager> EventMgr){
+void startEvMgr(shared_ptr<EventManager> EventMgr)
+{
 	EventMgr->start();
 }
 
 int main(int argc, char **argv)
 {
 	// Initialize Logger
-	const char* debugValue = getenv("QNX_DEBUG");
+	const char *debugValue = getenv("QNX_DEBUG");
 	const std::string debug = debugValue ? debugValue : "";
-	if (debug == "TRUE") {
+	if (debug == "TRUE")
+	{
 		Logger::set_level(Logger::level::DEBUG);
 		Logger::debug("##### Started in DEBUG mode #####");
-	} else {
+	}
+	else
+	{
 		Logger::set_level(Logger::level::INFO);
 	}
 
 	Options options{argc, argv};
-	if (options.mode == Mode::TESTS) {
+	if (options.mode == Mode::TESTS)
+	{
 		// Run Unit Tests
 		Logger::info("Running tests...");
 		::testing::InitGoogleTest(&argc, argv);
@@ -73,73 +79,71 @@ int main(int argc, char **argv)
 		return result;
 	}
 
-	options.mode == Mode::MASTER ? Logger::info("Program started as MASTER") : Logger::info("Program started as SLAVE");
-	options.pusher ? Logger::info("Hardware uses Pusher for sorting out") : Logger::info("Hardware uses Switch for sorting out");
-
 	Configuration &conf = Configuration::getInstance();
 	conf.setConfigFilePath("/usr/tmp/conf.txt");
-	if(!conf.readConfigFromFile()) {
+	if (!conf.readConfigFromFile())
+	{
+		Logger::error("Error reading config file - terminating...");
 		return EXIT_FAILURE;
 	}
-	conf.setMaster(options.mode == Mode::MASTER);
-	conf.setPusherMounted(options.pusher);
 
+	if (options.pusher)
+	{
+		Logger::info("Hardware uses Pusher for sorting out");
+		conf.setPusherMounted(true);
+	}
+	else
+	{
+		Logger::info("Hardware uses Switch for sorting out");
+		conf.setPusherMounted(false);
+	}
+	if (options.mode == Mode::MASTER)
+	{
+		conf.setMaster(true);
+		// Run FSM's only at Master
+	}
+	else
+	{
+		conf.setMaster(false);
+	}
+	// Create components running on Master AND Slave
 	eventManager = std::make_shared<EventManager>();
 	thread thread_ev(startEvMgr, eventManager);
 	sensors = std::make_shared<Sensors>(eventManager);
 	actuators = std::make_shared<Actuators>(eventManager);
-	actuators->setMotorStop(true);
+	sensors = std::make_shared<Sensors>(eventManager);
+	heightSensor = std::make_shared<HeightSensor>(eventManager);
+	heightFSM = std::make_shared<HeightContext>(eventManager, heightSensor);
 
-	// Run FSM's
-	mainFSM = std::make_shared<MainContext>(eventManager);
-	motorFSM_Master = std::make_shared<MotorContext>(eventManager, true);
-	motorFSM_Slave = std::make_shared<MotorContext>(eventManager, false);
+	if (options.mode == Mode::MASTER)
+	{
+		Logger::info("Program started as MASTER");
+		conf.setMaster(true);
+		// Run FSM's only at Master
+		motorFSM_Master = std::make_shared<MotorContext>(eventManager, true);
+		motorFSM_Slave = std::make_shared<MotorContext>(eventManager, false);
+		mainFSM = std::make_shared<MainContext>(eventManager);
+	}
+	else
+	{
+		Logger::info("Program started as SLAVE");
+		conf.setMaster(false);
+	}
 
 	// Register handler function to be called if the program is not terminated properly
 	std::signal(SIGINT, cleanup);
 	std::signal(SIGABRT, cleanup);
 	std::signal(SIGTERM, cleanup);
+	std::signal(SIGKILL, cleanup);
 
-	std::shared_ptr<IHeightSensor> heightSensor = std::make_shared<HeightSensor>();
-
-	// ###########################################
-	// TEMPORARY: Calibrate HeightSensor
-/*	heightSensor->start();
-	std::string line;
-	Logger::info("Press ENTER to calibrate Conveyor");
-	bool ok = false;
-	int offset, refHigh;
-	while(!ok) {
-		std::getline(std::cin, line);
-		offset = heightSensor->getLastRawValue();
-		Logger::info("Value: " + std::to_string(offset) + " - OK? [y/N]");
-		ok = line == "y";
-	}
-	Logger::info("Press ENTER to calibrate HIGH");
-	ok = false;
-	while(!ok) {
-		std::getline(std::cin, line);
-		refHigh = heightSensor->getLastRawValue();
-		Logger::info("Value: " + std::to_string(refHigh) + " - OK? [y/N]");
-		ok = line == "y";
-	}
-	heightSensor->stop();
-	conf.setOffsetCalibration(offset);
-	conf.setReferenceCalibration(refHigh);*/
-	//conf.saveCurrentConfigToFile();
-	// Calibrate HeightSensor END
-	// ###########################################
-	conf.setOffsetCalibration(3644);
-	conf.setReferenceCalibration(2302);
-
+	// Start threads...
 	sensors->startEventLoop();
-	heightFSM = std::make_shared<HeightContext>(eventManager, heightSensor);
 
 	// Endless loop - wait until termination
-	while (running) {
+	while (running)
+	{
 		// Sleep to save CPU resources
-		std::this_thread::sleep_for(std::chrono::seconds(1));
-
+		std::this_thread::sleep_for(std::chrono::seconds(10));
 	}
 	thread_ev.join();
 	Logger::info("Sorting Machine was terminated.");

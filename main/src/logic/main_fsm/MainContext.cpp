@@ -45,42 +45,158 @@ void MainContext::subscribeToEvents() {
 	eventManager->subscribe(EventType::ESTOP_S_RELEASED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 
 	eventManager->subscribe(EventType::LBA_M_BLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::LBA_M_UNBLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::LBW_M_BLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::LBW_M_UNBLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 	eventManager->subscribe(EventType::LBE_M_BLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::LBE_M_UNBLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::LBR_M_BLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::LBR_M_UNBLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+
+	eventManager->subscribe(EventType::LBA_S_BLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::LBA_S_UNBLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::LBW_S_BLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::LBW_S_UNBLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::LBE_S_BLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::LBE_S_UNBLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::LBR_S_BLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::LBR_S_UNBLOCKED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+
+	// Height Sensor
+	eventManager->subscribe(EventType::HM_M_WS_UNKNOWN, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::HM_M_WS_F, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::HM_M_WS_OB, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::HM_M_WS_BOM, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::HM_S_WS_UNKNOWN, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::HM_S_WS_F, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::HM_S_WS_OB, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::HM_S_WS_BOM, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+
+	// Subscribe to errors and error-solved event
+	eventManager->subscribe(EventType::ERROR_SELF_SOLVABLE, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::ERROR_MAN_SOLVABLE, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::ERROR_SELF_SOLVED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 }
 
 void MainContext::handleEvent(Event event) {
 	Logger::debug("MainFSM handle Event: " + EVENT_TO_STRING(event.type));
 	switch(event.type) {
 	case EventType::START_M_SHORT:
-		state->master_btnStart_PressedShort(); break;
+		state->master_btnStart_PressedShort();
+		break;
 	case EventType::START_M_LONG:
-		state->master_btnStart_PressedLong(); break;
+		state->master_btnStart_PressedLong();
+		break;
 	case EventType::STOP_M_SHORT:
-		state->master_btnStop_Pressed(); break;
+		state->master_btnStop_Pressed();
+		break;
 	case EventType::RESET_M_SHORT:
-		state->master_btnReset_Pressed(); break;
+		state->master_btnReset_Pressed();
+		break;
 	case EventType::ESTOP_M_PRESSED:
-		state->master_EStop_Pressed(); break;
+		state->master_EStop_Pressed();
+		break;
 	case EventType::ESTOP_M_RELEASED:
-		state->master_EStop_Released(); break;
+		state->master_EStop_Released();
+		break;
 	case EventType::START_S_SHORT:
-		state->slave_btnStart_PressedShort(); break;
+		state->slave_btnStart_PressedShort();
+		break;
 	case EventType::START_S_LONG:
-		state->slave_btnStart_PressedLong(); break;
+		state->slave_btnStart_PressedLong();
+		break;
 	case EventType::STOP_S_SHORT:
-		state->slave_btnStop_Pressed(); break;
+		state->slave_btnStop_Pressed();
+		break;
 	case EventType::RESET_S_SHORT:
-		state->slave_btnReset_Pressed(); break;
+		state->slave_btnReset_Pressed();
+		break;
 	case EventType::ESTOP_S_PRESSED:
-		state->slave_EStop_Pressed(); break;
+		state->slave_EStop_Pressed();
+		break;
 	case EventType::ESTOP_S_RELEASED:
-		state->slave_EStop_Released(); break;
+		state->slave_EStop_Released();
+		break;
 	case EventType::LBA_M_BLOCKED:
-		state->master_LBA_Blocked(); break;
+		state->master_LBA_Blocked();
+		break;
+	case EventType::LBA_M_UNBLOCKED:
+		state->master_LBA_Unblocked();
+		break;
+	case EventType::LBW_M_BLOCKED:
+		state->master_LBW_Blocked();
+		break;
+	case EventType::LBW_M_UNBLOCKED:
+		state->master_LBW_Unblocked();
+		break;
 	case EventType::LBE_M_BLOCKED:
-		state->master_LBE_Blocked(); break;
+		state->master_LBE_Blocked();
+		break;
+	case EventType::LBE_M_UNBLOCKED:
+		state->master_LBE_Unblocked();
+		break;
+	case EventType::LBR_M_BLOCKED:
+		state->master_LBR_Blocked();
+		break;
+	case EventType::LBR_M_UNBLOCKED:
+		state->master_LBR_Unblocked();
+		break;
+	case EventType::LBA_S_BLOCKED:
+		state->slave_LBA_Blocked();
+		break;
+	case EventType::LBA_S_UNBLOCKED:
+		state->slave_LBA_Unblocked();
+		break;
+	case EventType::LBW_S_BLOCKED:
+		state->slave_LBW_Blocked();
+		break;
+	case EventType::LBW_S_UNBLOCKED:
+		state->slave_LBW_Unblocked();
+		break;
+	case EventType::LBE_S_BLOCKED:
+		state->slave_LBE_Blocked();
+		break;
+	case EventType::LBE_S_UNBLOCKED:
+		state->slave_LBE_Unblocked();
+		break;
+	case EventType::LBR_S_BLOCKED:
+		state->slave_LBR_Blocked();
+		break;
+	case EventType::LBR_S_UNBLOCKED:
+		state->slave_LBR_Unblocked();
+		break;
+	case EventType::HM_M_WS_F:
+	case EventType::HM_M_WS_OB:
+	case EventType::HM_M_WS_BOM:
+	case EventType::HM_M_WS_UNKNOWN: {
+		state->master_heightResultReceived(event.type, ((float) event.data) / 10);
+		break;
+	}
+	case EventType::HM_S_WS_F:
+	case EventType::HM_S_WS_OB:
+	case EventType::HM_S_WS_BOM:
+	case EventType::HM_S_WS_UNKNOWN: {
+		state->slave_heightResultReceived(event.type, ((float) event.data) / 10);
+		break;
+	}
+	case EventType::MD_M_PAYLOAD:
+		state->master_metalDetected();
+		break;
+	case EventType::MD_S_PAYLOAD:
+		state->slave_metalDetected();
+		break;
+	case EventType::ERROR_SELF_SOLVABLE:
+		selfSolvableErrorOccurred();
+		break;
+	case EventType::ERROR_MAN_SOLVABLE:
+		nonSelfSolvableErrorOccurred();
+		break;
+	case EventType::ERROR_SELF_SOLVED:
+		errorSelfSolved();
+		break;
 	default:
 		Logger::warn(EVENT_TO_STRING(event.type) + " was not handled by MainFSM");
+		break;
 	}
 }
 
@@ -198,4 +314,16 @@ void MainContext::slave_EStop_Pressed() {
 
 void MainContext::slave_EStop_Released() {
 	state->slave_EStop_Released();
+}
+
+void MainContext::selfSolvableErrorOccurred() {
+	state->selfSolvableErrorOccurred();
+}
+
+void MainContext::errorSelfSolved() {
+	state->errorSelfSolved();
+}
+
+void MainContext::nonSelfSolvableErrorOccurred() {
+	state->nonSelfSolvableErrorOccurred();
 }

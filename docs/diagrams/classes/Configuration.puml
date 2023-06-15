@@ -1,0 +1,27 @@
+@startuml
+
+struct Calibration {
+  +int calOffset
+  +int calRef
+}
+
+class Configuration {
+  -{static} Configuration instance
+  -std::string configFilePath
+  -bool isMaster
+  -bool pusher
+  -Calibration cal
+  -std::vector<WorkpieceType> desiredOrder
+  +Configuration* getInstance()
+  +setConfigFilePath(std::string fp)
+  +readConfigFromFile()
+  +bool systemIsMaster()
+  +bool pusherMounted()
+  +WorkpieceType[] getDesiredOrder()
+  +saveCalibration(int offset, int flatHeight)
+  +float convertAdcToMillimeter(int adcValue)
+}
+
+Configuration o- Calibration
+
+@enduml

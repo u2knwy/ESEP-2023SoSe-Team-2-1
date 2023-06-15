@@ -1,13 +1,30 @@
 @startuml
 
+struct Event {
+  EventType type
+  int data
+}
+
+enum EventType {
+  START_X_SHORT
+  START_X_LONG
+  STOP_X_SHORT
+  ...
+  LBA_X_BLOCKED
+  MD_X_PAYLOAD
+  ...
+}
+
+Event *- EventType
+
 class EventManager {
   -int channelID
-  -std::map<int, std::vector<IEventHandler&>> handlers
+  -std::map<EventType, std::vector<IEventHandler&>> subscribers
   -ILogger logger
-  +register(Event event, IEventHandler& handler)
+  +subscribe(Event event, IEventHandler& handler)
   +unregister(Event event, IEventHandler& handler)
-  -receiveLoop()
   +sendEvent(Event event)
+  -receiveLoop()
 }
 
 EventManager o- Logger
@@ -51,16 +68,6 @@ class Logger {
   +error(std::string msg)
 }
 ILogger <|.. Logger
-
-enum Event {
-  START_X_SHORT
-  START_X_LONG
-  STOP_X_SHORT
-  ...
-  LB1_X_BLOCKED
-  MD_X_PAYLOAD
-  ...
-}
 
 IEventHandler . Event
 

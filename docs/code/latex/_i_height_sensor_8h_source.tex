@@ -1,0 +1,57 @@
+\hypertarget{_i_height_sensor_8h_source}{}\doxysection{IHeight\+Sensor.\+h}
+\label{_i_height_sensor_8h_source}\index{main/src/hal/IHeightSensor.h@{main/src/hal/IHeightSensor.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ IHeightSensor.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ *\ \ Created\ on:\ 05.06.2023}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *\ \ \ \ \ \ Author:\ Maik}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <functional>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{comment}{/*-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{00013\ \textcolor{comment}{\ \ \ HEIGHT\ SENSOR\ CONFIGURATION}}
+\DoxyCodeLine{00014\ \textcolor{comment}{-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ */}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#define\ HEIGHT\_CONV\_MAX\ 2}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#define\ HEIGHT\_FLAT\ 21}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#define\ HEIGHT\_HIGH\ 25}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#define\ HEIGHT\_HOLE\ 6}}
+\DoxyCodeLine{00019\ \textcolor{preprocessor}{\#define\ HEIGHT\_TOL\ 2}}
+\DoxyCodeLine{00020\ \textcolor{preprocessor}{\#define\ ADC\_DEFAULT\_OFFSET\ 3333}}
+\DoxyCodeLine{00021\ \textcolor{preprocessor}{\#define\ ADC\_DEFAULT\_HIGH\ 2222}}
+\DoxyCodeLine{00022\ \textcolor{comment}{//\ use\ N\ samples\ for\ averaging\ /\ max.\ value\ (sliding\ window)}}
+\DoxyCodeLine{00023\ \textcolor{preprocessor}{\#define\ ADC\_SAMPLE\_SIZE\ 100}}
+\DoxyCodeLine{00024\ \textcolor{preprocessor}{\#define\ HM\_SEND\_INTERVAL\ 5}}
+\DoxyCodeLine{00025\ }
+\DoxyCodeLine{00026\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_i_height_sensor}{IHeightSensor}}\ \{}
+\DoxyCodeLine{00027\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{using\ }HeightCallback\ =\ std::function<void(\textcolor{keywordtype}{float})>;}
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ registerOnNewValueCallback(HeightCallback\ callback)\ =\ 0;}
+\DoxyCodeLine{00030\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ unregisterOnNewValueCallback()\ =\ 0;}
+\DoxyCodeLine{00031\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ start()\ =\ 0;}
+\DoxyCodeLine{00032\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{void}\ stop()\ =\ 0;}
+\DoxyCodeLine{00033\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{float}\ getAverageHeight()\ =\ 0;}
+\DoxyCodeLine{00034\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{float}\ getMaxHeight()\ =\ 0;}
+\DoxyCodeLine{00035\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{float}\ getMedianHeight()\ =\ 0;}
+\DoxyCodeLine{00036\ \ \ \ \ \textcolor{keyword}{virtual}\ \textcolor{keywordtype}{int}\ getLastRawValue()\ =\ 0;}
+\DoxyCodeLine{00037\ \textcolor{keyword}{protected}:}
+\DoxyCodeLine{00038\ \ \ \ \ \mbox{\hyperlink{class_i_height_sensor}{IHeightSensor}}()\ \{\}}
+\DoxyCodeLine{00039\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{class_i_height_sensor}{\string~IHeightSensor}}()\ \{\}}
+\DoxyCodeLine{00040\ \ \ \ \ \textcolor{keywordtype}{int}\ adcOffset\{0\};}
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{int}\ adcIncPerMillimeter\{0\};}
+\DoxyCodeLine{00042\ \ \ \ \ HeightCallback\ heightValueCallback\ =\ \textcolor{keyword}{nullptr};}
+\DoxyCodeLine{00043\ \ \ \ \ std::vector<int>\ window;}
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{bool}\ running\{\textcolor{keyword}{false}\};}
+\DoxyCodeLine{00045\ \ \ \ \ \textcolor{keywordtype}{void}\ calibrateOffset(\textcolor{keywordtype}{int}\ offsetValue)\ \{}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ adcOffset\ =\ offsetValue;}
+\DoxyCodeLine{00047\ \ \ \ \ \}}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{keywordtype}{void}\ calibrateRefHigh(\textcolor{keywordtype}{int}\ highValue)\ \{}
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ adcIncPerMillimeter\ =\ (adcOffset\ -\/\ highValue)\ /\ HEIGHT\_HIGH;}
+\DoxyCodeLine{00050\ \ \ \ \ \}}
+\DoxyCodeLine{00051\ \};}
+
+\end{DoxyCode}

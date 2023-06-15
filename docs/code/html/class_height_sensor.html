@@ -75,31 +75,344 @@ $(function() {
   <div class="headertitle"><div class="title">HeightSensor Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+<div class="dynheader">
+Inheritance diagram for HeightSensor:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="class_height_sensor.png" usemap="#HeightSensor_map" alt=""/>
+  <map id="HeightSensor_map" name="HeightSensor_map">
+<area href="class_i_height_sensor.html" alt="IHeightSensor" shape="rect" coords="0,0,92,24"/>
+<area href="class_i_event_handler.html" alt="IEventHandler" shape="rect" coords="102,0,194,24"/>
+  </map>
+</div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa770099fcf52be736a2b333c9a220f6d"><td class="memItemLeft" align="right" valign="top"><a id="aa770099fcf52be736a2b333c9a220f6d" name="aa770099fcf52be736a2b333c9a220f6d"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>HeightSensor</b> (std::shared_ptr&lt; <a class="el" href="class_height_sensor_f_s_m.html">HeightSensorFSM</a> &gt; fsm)</td></tr>
-<tr class="separator:aa770099fcf52be736a2b333c9a220f6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3532a48c0602c3f709c267d3c9dd846c"><td class="memItemLeft" align="right" valign="top"><a id="a3532a48c0602c3f709c267d3c9dd846c" name="a3532a48c0602c3f709c267d3c9dd846c"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>start</b> ()</td></tr>
-<tr class="separator:a3532a48c0602c3f709c267d3c9dd846c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a07de4e3e82f603869191d2318cfb6388"><td class="memItemLeft" align="right" valign="top"><a id="a07de4e3e82f603869191d2318cfb6388" name="a07de4e3e82f603869191d2318cfb6388"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>stop</b> ()</td></tr>
-<tr class="separator:a07de4e3e82f603869191d2318cfb6388"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac0abf721debef8ac8699bc45d6d7c87e"><td class="memItemLeft" align="right" valign="top"><a id="ac0abf721debef8ac8699bc45d6d7c87e" name="ac0abf721debef8ac8699bc45d6d7c87e"></a>
+<tr class="memitem:ace7aa7faaa96463a34f56f8092ff315a"><td class="memItemLeft" align="right" valign="top"><a id="ace7aa7faaa96463a34f56f8092ff315a" name="ace7aa7faaa96463a34f56f8092ff315a"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>HeightSensor</b> (std::shared_ptr&lt; <a class="el" href="class_event_manager.html">EventManager</a> &gt; mngr)</td></tr>
+<tr class="separator:ace7aa7faaa96463a34f56f8092ff315a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7095e4f0604def3012617c41fe48142f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_height_sensor.html#a7095e4f0604def3012617c41fe48142f">handleEvent</a> (<a class="el" href="struct_event.html">Event</a> event) override</td></tr>
+<tr class="separator:a7095e4f0604def3012617c41fe48142f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abdc364f21d62181a37d8ec17964208f5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_height_sensor.html#abdc364f21d62181a37d8ec17964208f5">registerOnNewValueCallback</a> (HeightCallback callback) override</td></tr>
+<tr class="separator:abdc364f21d62181a37d8ec17964208f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab16ed393ba3e1adee63c6a339b0cb2cb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_height_sensor.html#ab16ed393ba3e1adee63c6a339b0cb2cb">unregisterOnNewValueCallback</a> () override</td></tr>
+<tr class="separator:ab16ed393ba3e1adee63c6a339b0cb2cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4be584e1c1346475bead8d3ec9b5ab8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_height_sensor.html#af4be584e1c1346475bead8d3ec9b5ab8">start</a> () override</td></tr>
+<tr class="separator:af4be584e1c1346475bead8d3ec9b5ab8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb700428e2b1b003b36faf11b6f35032"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_height_sensor.html#aeb700428e2b1b003b36faf11b6f35032">stop</a> () override</td></tr>
+<tr class="separator:aeb700428e2b1b003b36faf11b6f35032"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adfd85510b959c7c040ad0a1fc4f5f79a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_height_sensor.html#adfd85510b959c7c040ad0a1fc4f5f79a">getAverageHeight</a> () override</td></tr>
+<tr class="separator:adfd85510b959c7c040ad0a1fc4f5f79a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e492d24b757480b465153ea8b2186bc"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_height_sensor.html#a6e492d24b757480b465153ea8b2186bc">getMaxHeight</a> () override</td></tr>
+<tr class="separator:a6e492d24b757480b465153ea8b2186bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac27698f90b7ef5347c3493dc5973ef2"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_height_sensor.html#aac27698f90b7ef5347c3493dc5973ef2">getMedianHeight</a> () override</td></tr>
+<tr class="separator:aac27698f90b7ef5347c3493dc5973ef2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc3bcf3f27461b390b84137b5173cc56"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_height_sensor.html#acc3bcf3f27461b390b84137b5173cc56">getLastRawValue</a> () override</td></tr>
+<tr class="separator:acc3bcf3f27461b390b84137b5173cc56"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0fb38fdc4ebfb04f7aef7b2393f3438"><td class="memItemLeft" align="right" valign="top"><a id="ac0fb38fdc4ebfb04f7aef7b2393f3438" name="ac0fb38fdc4ebfb04f7aef7b2393f3438"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>registerOnNewValueCallback</b> (HeightCallback callback)=0</td></tr>
+<tr class="separator:ac0fb38fdc4ebfb04f7aef7b2393f3438"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4775c5b47db8d7b4a4af4702b7cb1d6"><td class="memItemLeft" align="right" valign="top"><a id="aa4775c5b47db8d7b4a4af4702b7cb1d6" name="aa4775c5b47db8d7b4a4af4702b7cb1d6"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>unregisterOnNewValueCallback</b> ()=0</td></tr>
+<tr class="separator:aa4775c5b47db8d7b4a4af4702b7cb1d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68f9cf26cb9f5fa17b64bbda82a45b84"><td class="memItemLeft" align="right" valign="top"><a id="a68f9cf26cb9f5fa17b64bbda82a45b84" name="a68f9cf26cb9f5fa17b64bbda82a45b84"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>start</b> ()=0</td></tr>
+<tr class="separator:a68f9cf26cb9f5fa17b64bbda82a45b84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a070899e24e40a1f875db0208132c0643"><td class="memItemLeft" align="right" valign="top"><a id="a070899e24e40a1f875db0208132c0643" name="a070899e24e40a1f875db0208132c0643"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>stop</b> ()=0</td></tr>
+<tr class="separator:a070899e24e40a1f875db0208132c0643"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1436193a627eea93b1d3f7e22be6030c"><td class="memItemLeft" align="right" valign="top"><a id="a1436193a627eea93b1d3f7e22be6030c" name="a1436193a627eea93b1d3f7e22be6030c"></a>
+virtual float&#160;</td><td class="memItemRight" valign="bottom"><b>getAverageHeight</b> ()=0</td></tr>
+<tr class="separator:a1436193a627eea93b1d3f7e22be6030c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d4ffb44b969ce296dd83bc28ccb7001"><td class="memItemLeft" align="right" valign="top"><a id="a4d4ffb44b969ce296dd83bc28ccb7001" name="a4d4ffb44b969ce296dd83bc28ccb7001"></a>
+virtual float&#160;</td><td class="memItemRight" valign="bottom"><b>getMaxHeight</b> ()=0</td></tr>
+<tr class="separator:a4d4ffb44b969ce296dd83bc28ccb7001"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc7c72b7dfdedc265ce5d2f975993916"><td class="memItemLeft" align="right" valign="top"><a id="adc7c72b7dfdedc265ce5d2f975993916" name="adc7c72b7dfdedc265ce5d2f975993916"></a>
+virtual float&#160;</td><td class="memItemRight" valign="bottom"><b>getMedianHeight</b> ()=0</td></tr>
+<tr class="separator:adc7c72b7dfdedc265ce5d2f975993916"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48dbbfe01e60d3218344b706ffdddd43"><td class="memItemLeft" align="right" valign="top"><a id="a48dbbfe01e60d3218344b706ffdddd43" name="a48dbbfe01e60d3218344b706ffdddd43"></a>
+virtual int&#160;</td><td class="memItemRight" valign="bottom"><b>getLastRawValue</b> ()=0</td></tr>
+<tr class="separator:a48dbbfe01e60d3218344b706ffdddd43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63c61e6208dacfac9efe636a60802267"><td class="memItemLeft" align="right" valign="top"><a id="a63c61e6208dacfac9efe636a60802267" name="a63c61e6208dacfac9efe636a60802267"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>handleEvent</b> (<a class="el" href="struct_event.html">Event</a> event)=0</td></tr>
+<tr class="separator:a63c61e6208dacfac9efe636a60802267"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pub_types_class_i_height_sensor"><td colspan="2" onclick="javascript:toggleInherit('pub_types_class_i_height_sensor')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="class_i_height_sensor.html">IHeightSensor</a></td></tr>
+<tr class="memitem:ac47d831da318c4aba4c3b00f2a5cb9d5 inherit pub_types_class_i_height_sensor"><td class="memItemLeft" align="right" valign="top"><a id="ac47d831da318c4aba4c3b00f2a5cb9d5" name="ac47d831da318c4aba4c3b00f2a5cb9d5"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>HeightCallback</b> = std::function&lt; void(float)&gt;</td></tr>
+<tr class="separator:ac47d831da318c4aba4c3b00f2a5cb9d5 inherit pub_types_class_i_height_sensor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_class_i_height_sensor"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_class_i_height_sensor')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="class_i_height_sensor.html">IHeightSensor</a></td></tr>
+<tr class="memitem:aa6c6daeb32c3cb54baca886fc292493c inherit pro_methods_class_i_height_sensor"><td class="memItemLeft" align="right" valign="top"><a id="aa6c6daeb32c3cb54baca886fc292493c" name="aa6c6daeb32c3cb54baca886fc292493c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>calibrateOffset</b> (int offsetValue)</td></tr>
-<tr class="separator:ac0abf721debef8ac8699bc45d6d7c87e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abef44355259fe2cc6399530cfe100a2c"><td class="memItemLeft" align="right" valign="top"><a id="abef44355259fe2cc6399530cfe100a2c" name="abef44355259fe2cc6399530cfe100a2c"></a>
+<tr class="separator:aa6c6daeb32c3cb54baca886fc292493c inherit pro_methods_class_i_height_sensor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a149e55e7bc73dcf2251785f1fd6d8ca9 inherit pro_methods_class_i_height_sensor"><td class="memItemLeft" align="right" valign="top"><a id="a149e55e7bc73dcf2251785f1fd6d8ca9" name="a149e55e7bc73dcf2251785f1fd6d8ca9"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>calibrateRefHigh</b> (int highValue)</td></tr>
-<tr class="separator:abef44355259fe2cc6399530cfe100a2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af0ba39af54c5e4b019655969bad6a6a0"><td class="memItemLeft" align="right" valign="top"><a id="af0ba39af54c5e4b019655969bad6a6a0" name="af0ba39af54c5e4b019655969bad6a6a0"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>getAverageHeight</b> ()</td></tr>
-<tr class="separator:af0ba39af54c5e4b019655969bad6a6a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a10951cf421dcaef845975ff3aa84b2cd"><td class="memItemLeft" align="right" valign="top"><a id="a10951cf421dcaef845975ff3aa84b2cd" name="a10951cf421dcaef845975ff3aa84b2cd"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>getMaxHeight</b> ()</td></tr>
-<tr class="separator:a10951cf421dcaef845975ff3aa84b2cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a149e55e7bc73dcf2251785f1fd6d8ca9 inherit pro_methods_class_i_height_sensor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_class_i_height_sensor"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_class_i_height_sensor')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="class_i_height_sensor.html">IHeightSensor</a></td></tr>
+<tr class="memitem:a8eaf1ee7b4749fdb039ef4d0255ea29d inherit pro_attribs_class_i_height_sensor"><td class="memItemLeft" align="right" valign="top"><a id="a8eaf1ee7b4749fdb039ef4d0255ea29d" name="a8eaf1ee7b4749fdb039ef4d0255ea29d"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>adcOffset</b> {0}</td></tr>
+<tr class="separator:a8eaf1ee7b4749fdb039ef4d0255ea29d inherit pro_attribs_class_i_height_sensor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa64c2b661845eba7434e1194500e0468 inherit pro_attribs_class_i_height_sensor"><td class="memItemLeft" align="right" valign="top"><a id="aa64c2b661845eba7434e1194500e0468" name="aa64c2b661845eba7434e1194500e0468"></a>
+int&#160;</td><td class="memItemRight" valign="bottom"><b>adcIncPerMillimeter</b> {0}</td></tr>
+<tr class="separator:aa64c2b661845eba7434e1194500e0468 inherit pro_attribs_class_i_height_sensor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad9e896ee817ff32e08fa1e477525fb79 inherit pro_attribs_class_i_height_sensor"><td class="memItemLeft" align="right" valign="top"><a id="ad9e896ee817ff32e08fa1e477525fb79" name="ad9e896ee817ff32e08fa1e477525fb79"></a>
+HeightCallback&#160;</td><td class="memItemRight" valign="bottom"><b>heightValueCallback</b> = nullptr</td></tr>
+<tr class="separator:ad9e896ee817ff32e08fa1e477525fb79 inherit pro_attribs_class_i_height_sensor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b652a5c0ae2b99240c4316bd395da53 inherit pro_attribs_class_i_height_sensor"><td class="memItemLeft" align="right" valign="top"><a id="a5b652a5c0ae2b99240c4316bd395da53" name="a5b652a5c0ae2b99240c4316bd395da53"></a>
+std::vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>window</b></td></tr>
+<tr class="separator:a5b652a5c0ae2b99240c4316bd395da53 inherit pro_attribs_class_i_height_sensor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43a7d2dbf24dcbb35db1aee57f0ac9e7 inherit pro_attribs_class_i_height_sensor"><td class="memItemLeft" align="right" valign="top"><a id="a43a7d2dbf24dcbb35db1aee57f0ac9e7" name="a43a7d2dbf24dcbb35db1aee57f0ac9e7"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>running</b> {false}</td></tr>
+<tr class="separator:a43a7d2dbf24dcbb35db1aee57f0ac9e7 inherit pro_attribs_class_i_height_sensor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="adfd85510b959c7c040ad0a1fc4f5f79a" name="adfd85510b959c7c040ad0a1fc4f5f79a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adfd85510b959c7c040ad0a1fc4f5f79a">&#9670;&#160;</a></span>getAverageHeight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float HeightSensor::getAverageHeight </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="class_i_height_sensor.html">IHeightSensor</a>.</p>
+
+</div>
+</div>
+<a id="acc3bcf3f27461b390b84137b5173cc56" name="acc3bcf3f27461b390b84137b5173cc56"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc3bcf3f27461b390b84137b5173cc56">&#9670;&#160;</a></span>getLastRawValue()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int HeightSensor::getLastRawValue </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="class_i_height_sensor.html">IHeightSensor</a>.</p>
+
+</div>
+</div>
+<a id="a6e492d24b757480b465153ea8b2186bc" name="a6e492d24b757480b465153ea8b2186bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e492d24b757480b465153ea8b2186bc">&#9670;&#160;</a></span>getMaxHeight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float HeightSensor::getMaxHeight </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="class_i_height_sensor.html">IHeightSensor</a>.</p>
+
+</div>
+</div>
+<a id="aac27698f90b7ef5347c3493dc5973ef2" name="aac27698f90b7ef5347c3493dc5973ef2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac27698f90b7ef5347c3493dc5973ef2">&#9670;&#160;</a></span>getMedianHeight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float HeightSensor::getMedianHeight </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="class_i_height_sensor.html">IHeightSensor</a>.</p>
+
+</div>
+</div>
+<a id="a7095e4f0604def3012617c41fe48142f" name="a7095e4f0604def3012617c41fe48142f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7095e4f0604def3012617c41fe48142f">&#9670;&#160;</a></span>handleEvent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void HeightSensor::handleEvent </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_event.html">Event</a>&#160;</td>
+          <td class="paramname"><em>event</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="class_i_event_handler.html">IEventHandler</a>.</p>
+
+</div>
+</div>
+<a id="abdc364f21d62181a37d8ec17964208f5" name="abdc364f21d62181a37d8ec17964208f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abdc364f21d62181a37d8ec17964208f5">&#9670;&#160;</a></span>registerOnNewValueCallback()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void HeightSensor::registerOnNewValueCallback </td>
+          <td>(</td>
+          <td class="paramtype">HeightCallback&#160;</td>
+          <td class="paramname"><em>callback</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="class_i_height_sensor.html">IHeightSensor</a>.</p>
+
+</div>
+</div>
+<a id="af4be584e1c1346475bead8d3ec9b5ab8" name="af4be584e1c1346475bead8d3ec9b5ab8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af4be584e1c1346475bead8d3ec9b5ab8">&#9670;&#160;</a></span>start()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void HeightSensor::start </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="class_i_height_sensor.html">IHeightSensor</a>.</p>
+
+</div>
+</div>
+<a id="aeb700428e2b1b003b36faf11b6f35032" name="aeb700428e2b1b003b36faf11b6f35032"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb700428e2b1b003b36faf11b6f35032">&#9670;&#160;</a></span>stop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void HeightSensor::stop </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="class_i_height_sensor.html">IHeightSensor</a>.</p>
+
+</div>
+</div>
+<a id="ab16ed393ba3e1adee63c6a339b0cb2cb" name="ab16ed393ba3e1adee63c6a339b0cb2cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab16ed393ba3e1adee63c6a339b0cb2cb">&#9670;&#160;</a></span>unregisterOnNewValueCallback()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void HeightSensor::unregisterOnNewValueCallback </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="class_i_height_sensor.html">IHeightSensor</a>.</p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>main/src/hal/<a class="el" href="_height_sensor_8h_source.html">HeightSensor.h</a></li>
 <li>main/src/hal/HeightSensor.cpp</li>

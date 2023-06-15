@@ -35,32 +35,32 @@ MotorState MotorContext::getCurrentState() {
 
 void MotorContext::subscribeToEvents() {
 	if(isMaster) {
-		eventManager->subscribe(EventType::MOTOR_M_SET_STOP, std::bind(&MotorContext::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::MOTOR_M_SET_SLOW, std::bind(&MotorContext::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::MOTOR_M_SET_FAST, std::bind(&MotorContext::handleEvent, this, std::placeholders::_1));
+		eventManager->subscribe(EventType::MOTOR_M_STOP_REQ, std::bind(&MotorContext::handleEvent, this, std::placeholders::_1));
+		eventManager->subscribe(EventType::MOTOR_M_SLOW_REQ, std::bind(&MotorContext::handleEvent, this, std::placeholders::_1));
+		eventManager->subscribe(EventType::MOTOR_M_RIGHT_REQ, std::bind(&MotorContext::handleEvent, this, std::placeholders::_1));
 	} else {
-		eventManager->subscribe(EventType::MOTOR_S_SET_STOP, std::bind(&MotorContext::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::MOTOR_S_SET_SLOW, std::bind(&MotorContext::handleEvent, this, std::placeholders::_1));
-		eventManager->subscribe(EventType::MOTOR_S_SET_FAST, std::bind(&MotorContext::handleEvent, this, std::placeholders::_1));
+		eventManager->subscribe(EventType::MOTOR_S_STOP_REQ, std::bind(&MotorContext::handleEvent, this, std::placeholders::_1));
+		eventManager->subscribe(EventType::MOTOR_S_SLOW_REQ, std::bind(&MotorContext::handleEvent, this, std::placeholders::_1));
+		eventManager->subscribe(EventType::MOTOR_S_RIGHT_REQ, std::bind(&MotorContext::handleEvent, this, std::placeholders::_1));
 	}
 }
 
 void MotorContext::handleEvent(Event event) {
 	Logger::debug("[MotorFSM] Event received: " + EVENT_TO_STRING(event.type));
 	switch(event.type) {
-	case EventType::MOTOR_M_SET_STOP:
-	case EventType::MOTOR_S_SET_STOP:
+	case EventType::MOTOR_M_STOP_REQ:
+	case EventType::MOTOR_S_STOP_REQ:
 		data->setStopFlag(event.data == 1);
 		state->handleFlagsUpdated();
 		break;
-	case EventType::MOTOR_M_SET_SLOW:
-	case EventType::MOTOR_S_SET_SLOW:
+	case EventType::MOTOR_M_SLOW_REQ:
+	case EventType::MOTOR_S_SLOW_REQ:
 		data->setSlowFlag(event.data == 1);
 		state->handleFlagsUpdated();
 		break;
-	case EventType::MOTOR_M_SET_FAST:
-	case EventType::MOTOR_S_SET_FAST:
-		data->setFastFlag(event.data == 1);
+	case EventType::MOTOR_M_RIGHT_REQ:
+	case EventType::MOTOR_S_RIGHT_REQ:
+		data->setRightFlag(event.data == 1);
 		state->handleFlagsUpdated();
 		break;
 	default:

@@ -1,0 +1,176 @@
+\hypertarget{class_height_sensor_mock}{}\doxysection{Height\+Sensor\+Mock Class Reference}
+\label{class_height_sensor_mock}\index{HeightSensorMock@{HeightSensorMock}}
+Inheritance diagram for Height\+Sensor\+Mock\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_height_sensor_mock}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_height_sensor_mock_a49fc89787d5ea4f1f8aaf078f93d1df6}{register\+On\+New\+Value\+Callback}} (Height\+Callback callback) override
+\item 
+void \mbox{\hyperlink{class_height_sensor_mock_ae9db22cc28be7cbff6439bfad4f512a8}{unregister\+On\+New\+Value\+Callback}} () override
+\item 
+void \mbox{\hyperlink{class_height_sensor_mock_adc1e897d166c1fedc4cc73476870a3ef}{start}} () override
+\item 
+void \mbox{\hyperlink{class_height_sensor_mock_acc8288c6124a2b2245c201e100396fdb}{stop}} () override
+\item 
+float \mbox{\hyperlink{class_height_sensor_mock_a66a7ccef1e3420cf9c850bcb5b2da957}{get\+Average\+Height}} () override
+\item 
+float \mbox{\hyperlink{class_height_sensor_mock_a5e92e942ab37aeeb8dc3b81fa089b6fc}{get\+Max\+Height}} () override
+\item 
+float \mbox{\hyperlink{class_height_sensor_mock_aaaaa41f34efa4bda79a2434d635d6fc6}{get\+Median\+Height}} () override
+\item 
+int \mbox{\hyperlink{class_height_sensor_mock_a31c7b434c1c792418f8009ccddf193c0}{get\+Last\+Raw\+Value}} () override
+\end{DoxyCompactItemize}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_i_height_sensor_ac0fb38fdc4ebfb04f7aef7b2393f3438}\label{class_i_height_sensor_ac0fb38fdc4ebfb04f7aef7b2393f3438}} 
+virtual void {\bfseries register\+On\+New\+Value\+Callback} (Height\+Callback callback)=0
+\item 
+\mbox{\Hypertarget{class_i_height_sensor_aa4775c5b47db8d7b4a4af4702b7cb1d6}\label{class_i_height_sensor_aa4775c5b47db8d7b4a4af4702b7cb1d6}} 
+virtual void {\bfseries unregister\+On\+New\+Value\+Callback} ()=0
+\item 
+\mbox{\Hypertarget{class_i_height_sensor_a68f9cf26cb9f5fa17b64bbda82a45b84}\label{class_i_height_sensor_a68f9cf26cb9f5fa17b64bbda82a45b84}} 
+virtual void {\bfseries start} ()=0
+\item 
+\mbox{\Hypertarget{class_i_height_sensor_a070899e24e40a1f875db0208132c0643}\label{class_i_height_sensor_a070899e24e40a1f875db0208132c0643}} 
+virtual void {\bfseries stop} ()=0
+\item 
+\mbox{\Hypertarget{class_i_height_sensor_a1436193a627eea93b1d3f7e22be6030c}\label{class_i_height_sensor_a1436193a627eea93b1d3f7e22be6030c}} 
+virtual float {\bfseries get\+Average\+Height} ()=0
+\item 
+\mbox{\Hypertarget{class_i_height_sensor_a4d4ffb44b969ce296dd83bc28ccb7001}\label{class_i_height_sensor_a4d4ffb44b969ce296dd83bc28ccb7001}} 
+virtual float {\bfseries get\+Max\+Height} ()=0
+\item 
+\mbox{\Hypertarget{class_i_height_sensor_adc7c72b7dfdedc265ce5d2f975993916}\label{class_i_height_sensor_adc7c72b7dfdedc265ce5d2f975993916}} 
+virtual float {\bfseries get\+Median\+Height} ()=0
+\item 
+\mbox{\Hypertarget{class_i_height_sensor_a48dbbfe01e60d3218344b706ffdddd43}\label{class_i_height_sensor_a48dbbfe01e60d3218344b706ffdddd43}} 
+virtual int {\bfseries get\+Last\+Raw\+Value} ()=0
+\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+\doxysubsubsection*{Public Types inherited from \mbox{\hyperlink{class_i_height_sensor}{IHeight\+Sensor}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_i_height_sensor_ac47d831da318c4aba4c3b00f2a5cb9d5}\label{class_i_height_sensor_ac47d831da318c4aba4c3b00f2a5cb9d5}} 
+using {\bfseries Height\+Callback} = std\+::function$<$ void(float)$>$
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Member Functions inherited from \mbox{\hyperlink{class_i_height_sensor}{IHeight\+Sensor}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_i_height_sensor_aa6c6daeb32c3cb54baca886fc292493c}\label{class_i_height_sensor_aa6c6daeb32c3cb54baca886fc292493c}} 
+void {\bfseries calibrate\+Offset} (int offset\+Value)
+\item 
+\mbox{\Hypertarget{class_i_height_sensor_a149e55e7bc73dcf2251785f1fd6d8ca9}\label{class_i_height_sensor_a149e55e7bc73dcf2251785f1fd6d8ca9}} 
+void {\bfseries calibrate\+Ref\+High} (int high\+Value)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes inherited from \mbox{\hyperlink{class_i_height_sensor}{IHeight\+Sensor}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_i_height_sensor_a8eaf1ee7b4749fdb039ef4d0255ea29d}\label{class_i_height_sensor_a8eaf1ee7b4749fdb039ef4d0255ea29d}} 
+int {\bfseries adc\+Offset} \{0\}
+\item 
+\mbox{\Hypertarget{class_i_height_sensor_aa64c2b661845eba7434e1194500e0468}\label{class_i_height_sensor_aa64c2b661845eba7434e1194500e0468}} 
+int {\bfseries adc\+Inc\+Per\+Millimeter} \{0\}
+\item 
+\mbox{\Hypertarget{class_i_height_sensor_ad9e896ee817ff32e08fa1e477525fb79}\label{class_i_height_sensor_ad9e896ee817ff32e08fa1e477525fb79}} 
+Height\+Callback {\bfseries height\+Value\+Callback} = nullptr
+\item 
+\mbox{\Hypertarget{class_i_height_sensor_a5b652a5c0ae2b99240c4316bd395da53}\label{class_i_height_sensor_a5b652a5c0ae2b99240c4316bd395da53}} 
+std\+::vector$<$ int $>$ {\bfseries window}
+\item 
+\mbox{\Hypertarget{class_i_height_sensor_a43a7d2dbf24dcbb35db1aee57f0ac9e7}\label{class_i_height_sensor_a43a7d2dbf24dcbb35db1aee57f0ac9e7}} 
+bool {\bfseries running} \{false\}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_height_sensor_mock_a66a7ccef1e3420cf9c850bcb5b2da957}\label{class_height_sensor_mock_a66a7ccef1e3420cf9c850bcb5b2da957}} 
+\index{HeightSensorMock@{HeightSensorMock}!getAverageHeight@{getAverageHeight}}
+\index{getAverageHeight@{getAverageHeight}!HeightSensorMock@{HeightSensorMock}}
+\doxysubsubsection{\texorpdfstring{getAverageHeight()}{getAverageHeight()}}
+{\footnotesize\ttfamily float Height\+Sensor\+Mock\+::get\+Average\+Height (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_height_sensor}{IHeight\+Sensor}}.
+
+\mbox{\Hypertarget{class_height_sensor_mock_a31c7b434c1c792418f8009ccddf193c0}\label{class_height_sensor_mock_a31c7b434c1c792418f8009ccddf193c0}} 
+\index{HeightSensorMock@{HeightSensorMock}!getLastRawValue@{getLastRawValue}}
+\index{getLastRawValue@{getLastRawValue}!HeightSensorMock@{HeightSensorMock}}
+\doxysubsubsection{\texorpdfstring{getLastRawValue()}{getLastRawValue()}}
+{\footnotesize\ttfamily int Height\+Sensor\+Mock\+::get\+Last\+Raw\+Value (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_height_sensor}{IHeight\+Sensor}}.
+
+\mbox{\Hypertarget{class_height_sensor_mock_a5e92e942ab37aeeb8dc3b81fa089b6fc}\label{class_height_sensor_mock_a5e92e942ab37aeeb8dc3b81fa089b6fc}} 
+\index{HeightSensorMock@{HeightSensorMock}!getMaxHeight@{getMaxHeight}}
+\index{getMaxHeight@{getMaxHeight}!HeightSensorMock@{HeightSensorMock}}
+\doxysubsubsection{\texorpdfstring{getMaxHeight()}{getMaxHeight()}}
+{\footnotesize\ttfamily float Height\+Sensor\+Mock\+::get\+Max\+Height (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_height_sensor}{IHeight\+Sensor}}.
+
+\mbox{\Hypertarget{class_height_sensor_mock_aaaaa41f34efa4bda79a2434d635d6fc6}\label{class_height_sensor_mock_aaaaa41f34efa4bda79a2434d635d6fc6}} 
+\index{HeightSensorMock@{HeightSensorMock}!getMedianHeight@{getMedianHeight}}
+\index{getMedianHeight@{getMedianHeight}!HeightSensorMock@{HeightSensorMock}}
+\doxysubsubsection{\texorpdfstring{getMedianHeight()}{getMedianHeight()}}
+{\footnotesize\ttfamily float Height\+Sensor\+Mock\+::get\+Median\+Height (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_height_sensor}{IHeight\+Sensor}}.
+
+\mbox{\Hypertarget{class_height_sensor_mock_a49fc89787d5ea4f1f8aaf078f93d1df6}\label{class_height_sensor_mock_a49fc89787d5ea4f1f8aaf078f93d1df6}} 
+\index{HeightSensorMock@{HeightSensorMock}!registerOnNewValueCallback@{registerOnNewValueCallback}}
+\index{registerOnNewValueCallback@{registerOnNewValueCallback}!HeightSensorMock@{HeightSensorMock}}
+\doxysubsubsection{\texorpdfstring{registerOnNewValueCallback()}{registerOnNewValueCallback()}}
+{\footnotesize\ttfamily void Height\+Sensor\+Mock\+::register\+On\+New\+Value\+Callback (\begin{DoxyParamCaption}\item[{Height\+Callback}]{callback }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_height_sensor}{IHeight\+Sensor}}.
+
+\mbox{\Hypertarget{class_height_sensor_mock_adc1e897d166c1fedc4cc73476870a3ef}\label{class_height_sensor_mock_adc1e897d166c1fedc4cc73476870a3ef}} 
+\index{HeightSensorMock@{HeightSensorMock}!start@{start}}
+\index{start@{start}!HeightSensorMock@{HeightSensorMock}}
+\doxysubsubsection{\texorpdfstring{start()}{start()}}
+{\footnotesize\ttfamily void Height\+Sensor\+Mock\+::start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_height_sensor}{IHeight\+Sensor}}.
+
+\mbox{\Hypertarget{class_height_sensor_mock_acc8288c6124a2b2245c201e100396fdb}\label{class_height_sensor_mock_acc8288c6124a2b2245c201e100396fdb}} 
+\index{HeightSensorMock@{HeightSensorMock}!stop@{stop}}
+\index{stop@{stop}!HeightSensorMock@{HeightSensorMock}}
+\doxysubsubsection{\texorpdfstring{stop()}{stop()}}
+{\footnotesize\ttfamily void Height\+Sensor\+Mock\+::stop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_height_sensor}{IHeight\+Sensor}}.
+
+\mbox{\Hypertarget{class_height_sensor_mock_ae9db22cc28be7cbff6439bfad4f512a8}\label{class_height_sensor_mock_ae9db22cc28be7cbff6439bfad4f512a8}} 
+\index{HeightSensorMock@{HeightSensorMock}!unregisterOnNewValueCallback@{unregisterOnNewValueCallback}}
+\index{unregisterOnNewValueCallback@{unregisterOnNewValueCallback}!HeightSensorMock@{HeightSensorMock}}
+\doxysubsubsection{\texorpdfstring{unregisterOnNewValueCallback()}{unregisterOnNewValueCallback()}}
+{\footnotesize\ttfamily void Height\+Sensor\+Mock\+::unregister\+On\+New\+Value\+Callback (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_height_sensor}{IHeight\+Sensor}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+main/src/tests/hm/Height\+Sensor\+Mock.\+h\item 
+main/src/tests/hm/Height\+Sensor\+Mock.\+cpp\end{DoxyCompactItemize}

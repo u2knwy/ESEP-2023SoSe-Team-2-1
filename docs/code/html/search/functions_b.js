@@ -1,8 +1,4 @@
 var searchData=
 [
-  ['press_5fcode_0',['press_code',['../classsimulationcommandinterface_1_1_simulation_command_interface.html#a8f0fb6b5197a746ff37a070b74593cff',1,'simulationcommandinterface::SimulationCommandInterface']]],
-  ['press_5femergency_5fstop_5fonly_1',['press_emergency_stop_only',['../classsimulationcommandinterface_1_1_simulation_command_interface.html#a8d80b8fb6e46c3ff2d202336213fcaf8',1,'simulationcommandinterface::SimulationCommandInterface']]],
-  ['press_5freset_5fonly_2',['press_reset_only',['../classsimulationcommandinterface_1_1_simulation_command_interface.html#a4cf3b2ef41ce7ec50efe21f5ea153a41',1,'simulationcommandinterface::SimulationCommandInterface']]],
-  ['press_5fstart_5fonly_3',['press_start_only',['../classsimulationcommandinterface_1_1_simulation_command_interface.html#af2a2ee8a15383dd485bade885bf3345e',1,'simulationcommandinterface::SimulationCommandInterface']]],
-  ['press_5fstop_5fonly_4',['press_stop_only',['../classsimulationcommandinterface_1_1_simulation_command_interface.html#a8fa6e4a08389ffe66c076aca259a227f',1,'simulationcommandinterface::SimulationCommandInterface']]]
+  ['openswitch_0',['openSwitch',['../class_actuators.html#a609a36831ecefe695e5a16b8a1bc7cb9',1,'Actuators::openSwitch()'],['../class_i_actuators.html#a119a641b147abb43e0ed530f716849c8',1,'IActuators::openSwitch()'],['../class_actuator_mock.html#a2356f3ad4ef3056b44577447f90f112a',1,'ActuatorMock::openSwitch()']]]
 ];

@@ -1,0 +1,24 @@
+\hypertarget{macros_8h_source}{}\doxysection{macros.\+h}
+\label{macros_8h_source}\index{main/src/common/macros.h@{main/src/common/macros.h}}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{comment}{/*}}
+\DoxyCodeLine{00002\ \textcolor{comment}{\ *\ macros.h}}
+\DoxyCodeLine{00003\ \textcolor{comment}{\ *}}
+\DoxyCodeLine{00004\ \textcolor{comment}{\ *\ \ Created\ on:\ 15.05.2023}}
+\DoxyCodeLine{00005\ \textcolor{comment}{\ *\ \ \ \ \ \ Author:\ Maik}}
+\DoxyCodeLine{00006\ \textcolor{comment}{\ */}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00008\ }
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <thread>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <chrono>}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{comment}{/*\ Helper\ macros\ */}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#define\ DELAY\_S(x)\ std::this\_thread::sleep\_for(std::chrono::seconds(x))}}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#define\ BIT\_MASK(x)\ (1\ <<\ (x))}}
+\DoxyCodeLine{00016\ \textcolor{comment}{//\ Check\ if\ bit(s)\ of\ a\ register\ are\ set}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#define\ BIT\_SET(mask,\ reg)\ ((mask\ \&\ reg)\ ==\ mask)}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#define\ BIT\_NOTSET(mask,\ reg)\ ((mask\ \&\ reg)\ !=\ mask)}}
+
+\end{DoxyCode}
