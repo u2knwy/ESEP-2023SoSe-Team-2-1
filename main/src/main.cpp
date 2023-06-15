@@ -111,7 +111,6 @@ int main(int argc, char **argv)
 	thread thread_ev(startEvMgr, eventManager);
 	sensors = std::make_shared<Sensors>(eventManager);
 	actuators = std::make_shared<Actuators>(eventManager);
-	sensors = std::make_shared<Sensors>(eventManager);
 	heightSensor = std::make_shared<HeightSensor>(eventManager);
 	heightFSM = std::make_shared<HeightContext>(eventManager, heightSensor);
 
@@ -143,7 +142,7 @@ int main(int argc, char **argv)
 	while (running)
 	{
 		// Sleep to save CPU resources
-		std::this_thread::sleep_for(std::chrono::seconds(10));
+		std::this_thread::sleep_for(std::chrono::seconds(1));
 	}
 	thread_ev.join();
 	Logger::info("Sorting Machine was terminated.");
