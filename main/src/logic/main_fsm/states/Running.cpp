@@ -74,7 +74,9 @@ bool Running::master_metalDetected() {
 	Workpiece* wp= data->wpManager->getter_head_Area_B();
 	wp->metal=true;
 
-	//if(wp->metal)wp->metal
+	if(wp->WP_M_type == WorkpieceType::WS_BOM){
+		wp->WP_M_type=WorkpieceType::WS_BUM;
+	}
 	return true;
 }
 
@@ -82,18 +84,16 @@ bool Running::master_LBW_Blocked() {
 
 	Workpiece* wp = data->wpManager->getter_head_Area_B();
 
+	wp->sortOut= wp->WP_M_type==WorkpieceType::WS_F && wp->WP_M_type!=data->wpManager->getNextWorkpieceType();
 
-	//Logger::info("Workpiece with id: " + std::to_string(wp->id) +" master Type set to: ");
-	//data->wpManager->setSortOut_M()
 	if(data->wpManager->getSortOut_M()){
-		//closegate()
+		actions->master_openGate(false);
 		Logger::info("Workpiece with id: " + std::to_string(wp->id) +" you shall not Pass throungh Master switch");
 	}
 	else
-		//opengate();
-		Logger::info("Workpiece with id: " + std::to_string(wp->id)+"Passed through Master switch");
+		actions->master_openGate(false);
 		data->wpManager->moveFromArea_BtoArea_C();
-		Logger::info("Workpiece with id: " + std::to_string(wp->id) +" transfered to Area_C");
+		Logger::info("Workpiece with id: " + std::to_string(wp->id) +" Passed through Master switch and transfered to Area_C");
 	return true;
 }
 
@@ -103,27 +103,35 @@ bool Running::master_LBW_Unblocked() {
 
 bool Running::master_LBE_Blocked() {
 	Workpiece* wp = data->wpManager->getter_head_Area_C();
-		if(data->wpManager->fbm_S_Occupied()){
-			actions->master_sendMotorStopRequest(false);
-			Logger::info("Workpiece with id: " + std::to_string(wp->id) +" setMotorFastMaster(false)");
-		}
-		while(data->wpManager->fbm_S_Occupied()){
-			//wait
-			std::this_thread::sleep_for(std::chrono::seconds(2));
-			Logger::info("Workpiece with id: " + std::to_string(wp->id) +" waiting for fbm_S to get free");
-		}
-		actions->master_sendMotorStopRequest(true);
-		Logger::info("Workpiece with id: " + std::to_string(wp->id) +" actions->master_sendMotorStopRequest(true)");
+	if(data->wpManager->fbm_S_Occupied()){
+		actions->master_sendMotorRightRequest(false);
+		Logger::info("Workpiece with id: " + std::to_string(wp->id) +" setMotorFastMaster(false)");
+	}
+	while(data->wpManager->fbm_S_Occupied()){
+		//wait
+		std::this_thread::sleep_for(std::chrono::seconds(2));
+		Logger::info("Workpiece with id: " + std::to_string(wp->id) +" waiting for fbm_S to get free");
+	}
+	actions->master_sendMotorRightRequest(true);
+	Logger::info("Workpiece with id: " + std::to_string(wp->id) +" actions->master_sendMotorStopRequest(true)");
 
 	return true;
 }
 
 bool Running::master_LBE_Unblocked() {
-	actions->master_sendMotorStopRequest(false);
+	data->wpManager->moveFromArea_CtoArea_D();
+	actions->slave_sendMotorRightRequest(true);
+
 	return true;
 }
 
 bool Running::master_LBR_Blocked() {
+	data->wpManager->removeFromArea_A();
+	if(!data->wpManager->WP_ON_FBM_M()){
+		actions->master_sendMotorRightRequest(false);
+	}
+
+	// code was allready there
 	data->setRampFBM1Blocked(true);
 	actions->master_sendMotorRightRequest(false);
 	return true;
