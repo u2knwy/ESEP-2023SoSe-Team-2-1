@@ -18,10 +18,14 @@ private:
 	std::queue<Workpiece*> Area_B;
 	std::queue<Workpiece*> Area_C;
 	std::queue<Workpiece*> Area_D;
+	WorkpieceType desiredOrder[3];
 	int nextId;
 public:
 	WorkpieceManager();
 	virtual ~WorkpieceManager();
+
+	void rotateNextWorkpieces();
+	WorkpieceType getNextWorkpieceType();
 
 	/**
 	 * creats a new Workpiece with default values.
@@ -122,6 +126,7 @@ public:
 	 * shows the ammount of elements in each list;
 	 */
 
+//<<<<<<< HEAD
 	 void showAllLists(){
         std::cout << "Area_A= ";
         while (!Area_A.empty()) {
@@ -152,6 +157,5 @@ public:
      * tmp method for test purposes
      */
     void testWorkpieceManager();
-
 
 };

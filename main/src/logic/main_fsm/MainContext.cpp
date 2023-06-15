@@ -62,33 +62,47 @@ void MainContext::handleEvent(Event event) {
 	Logger::debug("MainFSM handle Event: " + EVENT_TO_STRING(event.type));
 	switch(event.type) {
 	case EventType::START_M_SHORT:
-		state->master_btnStart_PressedShort(); break;
+		state->master_btnStart_PressedShort();
+		break;
 	case EventType::START_M_LONG:
-		state->master_btnStart_PressedLong(); break;
+		state->master_btnStart_PressedLong();
+		break;
 	case EventType::STOP_M_SHORT:
-		state->master_btnStop_Pressed(); break;
+		state->master_btnStop_Pressed();
+		break;
 	case EventType::RESET_M_SHORT:
-		state->master_btnReset_Pressed(); break;
+		state->master_btnReset_Pressed();
+		break;
 	case EventType::ESTOP_M_PRESSED:
-		state->master_EStop_Pressed(); break;
+		state->master_EStop_Pressed();
+		break;
 	case EventType::ESTOP_M_RELEASED:
-		state->master_EStop_Released(); break;
+		state->master_EStop_Released();
+		break;
 	case EventType::START_S_SHORT:
-		state->slave_btnStart_PressedShort(); break;
+		state->slave_btnStart_PressedShort();
+		break;
 	case EventType::START_S_LONG:
-		state->slave_btnStart_PressedLong(); break;
+		state->slave_btnStart_PressedLong();
+		break;
 	case EventType::STOP_S_SHORT:
-		state->slave_btnStop_Pressed(); break;
+		state->slave_btnStop_Pressed();
+		break;
 	case EventType::RESET_S_SHORT:
-		state->slave_btnReset_Pressed(); break;
+		state->slave_btnReset_Pressed();
+		break;
 	case EventType::ESTOP_S_PRESSED:
-		state->slave_EStop_Pressed(); break;
+		state->slave_EStop_Pressed();
+		break;
 	case EventType::ESTOP_S_RELEASED:
-		state->slave_EStop_Released(); break;
+		state->slave_EStop_Released();
+		break;
 	case EventType::LBA_M_BLOCKED:
-		state->master_LBA_Blocked(); break;
+		state->master_LBA_Blocked();
+		break;
 	case EventType::LBE_M_BLOCKED:
-		state->master_LBE_Blocked(); break;
+		state->master_LBE_Blocked();
+		break;
 	case EventType::HM_M_WS_F:
 	case EventType::HM_M_WS_OB:
 	case EventType::HM_M_WS_BOM:
@@ -103,6 +117,12 @@ void MainContext::handleEvent(Event event) {
 		state->slave_heightResultReceived(event.type, ((float) event.data) / 10);
 		break;
 	}
+	case EventType::MD_M_PAYLOAD:
+		state->master_metalDetected();
+		break;
+	case EventType::MD_S_PAYLOAD:
+		state->slave_metalDetected();
+		break;
 	default:
 		Logger::warn(EVENT_TO_STRING(event.type) + " was not handled by MainFSM");
 		break;

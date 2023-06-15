@@ -6,6 +6,7 @@
  */
 #pragma once
 #include "data/WorkpieceManager.h"
+#include "data/Workpiece.h"
 
 class MainContextData {
 public:

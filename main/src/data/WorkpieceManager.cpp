@@ -5,14 +5,39 @@
  *      Author: Sulaiman
  */
 
+
 #include "WorkpieceManager.h"
+#include "configuration/Configuration.h"
+
+
+
+
 
 WorkpieceManager::WorkpieceManager() {
 	nextId = 1;
+	auto confOrder = Configuration::getInstance().getDesiredOrder();
+	for(int i = 0; i < 3; i++) {
+		desiredOrder[i] = confOrder.at(i);
+	}
+
 }
 
 WorkpieceManager::~WorkpieceManager() {
 
+}
+
+void WorkpieceManager::rotateNextWorkpieces() {
+	WorkpieceType front = desiredOrder[0];
+	// 2nd -> 1st
+	desiredOrder[0] = desiredOrder[1];
+	// 3rd -> 2nd
+	desiredOrder[1] = desiredOrder[2];
+	// 1st -> 3rd
+	desiredOrder[2] = front;
+}
+
+WorkpieceType WorkpieceManager::getNextWorkpieceType() {
+	return desiredOrder[0];
 }
 
 Workpiece* WorkpieceManager::addWorkpiece() {

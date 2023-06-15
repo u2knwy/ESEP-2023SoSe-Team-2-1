@@ -37,13 +37,6 @@ void MainActions::master_sendMotorRightRequest(bool right) {
 	eventManager->sendEvent(event);
 }
 
-void MainActions::master_sendMotorSlowRequest(bool slow) {
-	Event event;
-	event.type = EventType::MOTOR_M_SLOW_REQ;
-	event.data = (int) slow;
-	eventManager->sendEvent(event);
-}
-
 void MainActions::slave_sendMotorStopRequest(bool stop) {
 	Event event;
 	event.type = EventType::MOTOR_S_STOP_REQ;
@@ -58,11 +51,16 @@ void MainActions::slave_sendMotorRightRequest(bool right) {
 	eventManager->sendEvent(event);
 }
 
-void MainActions::slave_sendMotorSlowRequest(bool slow) {
-	Event event;
-	event.type = EventType::MOTOR_S_SLOW_REQ;
-	event.data = (int) slow;
-	eventManager->sendEvent(event);
+void MainActions::master_openGate(bool open) {
+	// (EventData) 0: sort out, 1: open gate
+	int eventData = open ? 0 : 1;
+	eventManager->sendEvent(Event{SORT_M_OUT, eventData});
+}
+
+void MainActions::slave_openGate(bool open) {
+	// (EventData) 0: sort out, 1: open gate
+	int eventData = open ? 0 : 1;
+	eventManager->sendEvent(Event{SORT_S_OUT, eventData});
 }
 
 void MainActions::setStandbyMode() {
