@@ -20,7 +20,7 @@ typedef struct _pulse header_t;
 typedef struct
 {
 	int size;  // size of data block
-	int count;
+	int data;
 	int eventnr;// some counter used by the application
 			   // further data fields required by our application
 } app_header_t;

@@ -12,6 +12,8 @@
 
 #include <string>
 #include <iostream>
+#include <thread>
+#include <chrono>
 #include <sstream>
 #include <errno.h>
 #include <sys/neutrino.h>
@@ -82,7 +84,7 @@ int EventManager::sendtoMaster(const Event &ev)
 	header.subtype = 0x00;
 
 	app_header.size = payload_size; // fill application header
-	app_header.count = 777;
+	app_header.data = ev.data;
 	app_header.eventnr = ev.type;
 
 	SETIOV(iov + 0, &header, sizeof(header));
@@ -162,10 +164,16 @@ void EventManager::handle_app_msg(header_t hdr, int rcvid)
 		default:
 			printf("Received EventType %d\n", app_header.eventnr);
 		}
+		Event incoming;
+		incoming.data = app_header.data;
+		incoming.type = (EventType)app_header.eventnr;
+
+		sendEvent(incoming);
 
 		// send reply
 		MsgReply(rcvid, EOK, ret_msg, strlen(ret_msg) + 1);
 		free(buf);
+
 		return;
 	}
 	// Wrong msg type
