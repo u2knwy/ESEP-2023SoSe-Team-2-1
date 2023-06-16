@@ -27,6 +27,7 @@ public:
 private:
 	std::shared_ptr<EventManager> eventManager;
 	bool isMaster;
+	bool connectionActive;
 	std::thread th_receive;
 	std::thread th_send;
 	std::atomic<bool> sendingRunning;

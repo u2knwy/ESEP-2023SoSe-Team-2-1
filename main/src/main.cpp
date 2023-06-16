@@ -32,6 +32,7 @@ std::shared_ptr<IHeightSensor> heightSensor;
 std::shared_ptr<Sensors> sensors;
 std::shared_ptr<Actuators> actuators;
 std::shared_ptr<EventManager> eventManager;
+std::shared_ptr<Watchdog> watchdog;
 std::shared_ptr<MainContext> mainFSM;
 std::shared_ptr<MotorContext> motorFSM_Master;
 std::shared_ptr<MotorContext> motorFSM_Slave;
@@ -106,6 +107,10 @@ int main(int argc, char **argv)
 
 	// Create components running on Master AND Slave
 	eventManager = std::make_shared<EventManager>();
+	eventManager->connectGNS();
+
+	watchdog = std::make_shared<Watchdog>(eventManager);
+
 	actuators = std::make_shared<Actuators>(eventManager);
 	sensors = std::make_shared<Sensors>(eventManager);
 	heightSensor = std::make_shared<HeightSensor>(eventManager);

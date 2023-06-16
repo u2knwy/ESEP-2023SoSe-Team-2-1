@@ -6,22 +6,28 @@
  */
 
 #include "Watchdog.h"
+#include <sys/neutrino.h>
 #include "logger/logger.hpp"
 #include "configuration/Configuration.h"
 
+#include <iostream>
 #include <thread>
 #include <chrono>
-#include <sys/neutrino.h>
 
 Watchdog::Watchdog(std::shared_ptr<EventManager> eventManager) {
 	this->eventManager = eventManager;
 	this->isMaster = Configuration::getInstance().systemIsMaster();
+	this->connectionActive = true;
 
+	// Master: Receive heartbeats from slave
+	// Slave: Receive heartbeats from master
 	if(isMaster) {
 		eventManager->subscribe(EventType::WD_S_HEARTBEAT, std::bind(&Watchdog::handleEvent, this, std::placeholders::_1));
 	} else {
 		eventManager->subscribe(EventType::WD_M_HEARTBEAT, std::bind(&Watchdog::handleEvent, this, std::placeholders::_1));
 	}
+
+	start();
 }
 
 Watchdog::~Watchdog() {
@@ -41,8 +47,8 @@ void Watchdog::handleEvent(Event event) {
 
 void Watchdog::start() {
 	stop();
-	th_send = std::thread(&Watchdog::sendingThread, this);
 	th_receive = std::thread(&Watchdog::receivingThread, this);
+	th_send = std::thread(&Watchdog::sendingThread, this);
 }
 
 void Watchdog::stop() {
@@ -77,19 +83,31 @@ void Watchdog::sendHeartbeat() {
 }
 
 void Watchdog::receivingThread() {
-	using namespace std::chrono;
+	using namespace std;
 	Logger::debug("[WD] Started receiving heartbeats...");
+	lastReceiveTime = chrono::steady_clock::now();
 	receivingRunning = true;
-	lastReceiveTime = steady_clock::now();
 	while(receivingRunning) {
 		// every second: check if timeout has occurred
-		std::this_thread::sleep_for(seconds(1));
-		const auto now = steady_clock::now();
-		int elapsed_sec = duration_cast<seconds>(now - lastReceiveTime).count();
+		this_thread::sleep_for(chrono::seconds(1));
+		Logger::debug("[WD] Check if heartbeat received within timeout");
+		const auto now = chrono::steady_clock::now();
+		int elapsed_sec = chrono::duration_cast<chrono::seconds>(now - lastReceiveTime).count();
 		if(elapsed_sec > WD_TIMEOUT_SEC) {
-			Logger::error("[WD] Heartbeat received " + std::to_string(elapsed_sec) + " seconds ago -> ERROR!!!");
+			Logger::debug("[WD] Heartbeat received " + std::to_string(elapsed_sec) + " seconds ago -> ERROR!!!");
+			// If error pending first time -> send ERROR
+			if(connectionActive) {
+				Logger::error("[WD] Partner system connection lost");
+				eventManager->sendEvent(Event{EventType::ERROR_SELF_SOLVABLE});
+			}
+			connectionActive = false;
 		} else {
-			Logger::info("[WD] Heartbeat received " + std::to_string(elapsed_sec) + " seconds ago -> OK!");
+			Logger::debug("[WD] Heartbeat received " + std::to_string(elapsed_sec) + " seconds ago -> OK!");
+			if(!connectionActive) {
+				Logger::info("[WD] Partner system reconnected");
+				eventManager->sendEvent(Event{EventType::ERROR_SELF_SOLVED});
+			}
+			connectionActive = true;
 		}
 	}
 	Logger::debug("[WD] Stopped receiving heartbeats");

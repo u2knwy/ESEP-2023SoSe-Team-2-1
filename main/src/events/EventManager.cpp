@@ -27,14 +27,19 @@
 
 EventManager::EventManager() : server_coid(-1) {
 	isMaster = Configuration::getInstance().systemIsMaster();
-	connectGNS();
+//	connectGNS();
 }
 
 EventManager::~EventManager() {
-	disconnectGNS();
+//	disconnectGNS();
 }
 
 void EventManager::connectGNS() {
+	Logger::debug("[EventManager] Demo: connect to GNS service of partner system");
+	std::this_thread::sleep_for(std::chrono::seconds(1));
+	Logger::info("GNS connected!");
+	return;
+
 	if(isMaster) {
 		// create service
 		if( (attachedServer = name_attach(NULL, "SERVICE", NAME_FLAG_ATTACH_GLOBAL)) == NULL) {

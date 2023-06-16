@@ -23,6 +23,8 @@ public:
 	void subscribe(EventType type, EventCallback callback);
 	void unsubscribe(EventType type, EventCallback callback);
 	void sendEvent(const Event &event);
+	void connectGNS();
+	void disconnectGNS();
 	int start();
 private:
 	bool isMaster;
@@ -30,6 +32,4 @@ private:
 	std::map<EventType, std::vector<EventCallback>> subscribers;
 	std::mutex mtx;
 	name_attach_t *attachedServer;
-	void connectGNS();
-	void disconnectGNS();
 };
