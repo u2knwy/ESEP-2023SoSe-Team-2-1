@@ -11,9 +11,9 @@ OUTPUT_DIR = build/$(CONFIG_NAME)
 TARGET = $(OUTPUT_DIR)/$(ARTIFACT)
 
 #Compiler definitions
-CC = qcc -Vgcc_nto$(PLATFORM)
-CXX = qcc -lang-c++ -Vgcc_nto$(PLATFORM)
-#CXX += -DSIM_ACTIVE
+CC = qcc -Vgcc_nto$(PLATFORM) -Wno-unused-variable
+CXX = qcc -lang-c++ -Vgcc_nto$(PLATFORM) -Wno-unused-variable
+CXX += -DSIM_ACTIVE
 LD = $(CXX)
 
 #User defined include/preprocessor flags and libraries

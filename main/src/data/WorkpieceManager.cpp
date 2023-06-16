@@ -5,13 +5,8 @@
  *      Author: Sulaiman
  */
 
-
 #include "WorkpieceManager.h"
 #include "configuration/Configuration.h"
-
-
-
-
 
 WorkpieceManager::WorkpieceManager() {
 	nextId = 1;
@@ -67,33 +62,33 @@ void WorkpieceManager::addToArea_D(Workpiece* wp) {
 
 
 void WorkpieceManager::moveFromArea_AtoArea_B(){
-    addToArea_B(removeFromArea_A());
+	addToArea_B(removeFromArea_A());
 };
 
 void WorkpieceManager::moveFromArea_BtoArea_C(){
-    addToArea_C(removeFromArea_B());
+	addToArea_C(removeFromArea_B());
 };
 
 void WorkpieceManager::moveFromArea_CtoArea_D(){
-    addToArea_D(removeFromArea_C());
+	addToArea_D(removeFromArea_C());
 };
 
 Workpiece* WorkpieceManager::removeFromArea_A() {
-    Workpiece* wp = Area_A.front();
-    Area_A.pop();
-    return wp;
+	Workpiece* wp = Area_A.front();
+	Area_A.pop();
+	return wp;
 }
 
 Workpiece*  WorkpieceManager::removeFromArea_B() {
-    Workpiece* wp = Area_B.front();
-    Area_B.pop();
-    return wp;
+	Workpiece* wp = Area_B.front();
+	Area_B.pop();
+	return wp;
 }
 
 Workpiece*  WorkpieceManager::removeFromArea_C() {
-    Workpiece* wp = Area_C.front();
-    Area_C.pop();
-    return wp;
+	Workpiece* wp = Area_C.front();
+	Area_C.pop();
+	return wp;
 }
 
 Workpiece* WorkpieceManager::getter_head_Area_A(){
@@ -117,9 +112,9 @@ Workpiece* WorkpieceManager::getter_head_Area_D(){
 }
 
 Workpiece*  WorkpieceManager::removeFromArea_D() {
-    Workpiece* wp = Area_D.front();
-    Area_D.pop();
-    return wp;
+	Workpiece* wp = Area_D.front();
+	Area_D.pop();
+	return wp;
 }
 
 
@@ -224,35 +219,35 @@ bool WorkpieceManager::fbm_S_Occupied() {
  * test code
  */
 void  WorkpieceManager::testWorkpieceManager(){
-    Workpiece* wp1;
-    Workpiece* wp2;
-    Workpiece* wp3;
-    Workpiece* wp4;
-    Workpiece* wp5;
-    Workpiece* wp6;
-    Workpiece* wp7;
-    Workpiece* wp8;
+	Workpiece* wp1;
+	Workpiece* wp2;
+	Workpiece* wp3;
+	Workpiece* wp4;
+	Workpiece* wp5;
+	Workpiece* wp6;
+	Workpiece* wp7;
+	Workpiece* wp8;
 
-    wp1->id =1;
-    wp2->id =2;
-    wp3->id =3;
-    wp4->id =4;
-    wp5->id =5;
-    wp6->id =6;
-    wp7->id =7;
-    wp8->id =8;
+	wp1->id = 1;
+	wp2->id = 2;
+	wp3->id = 3;
+	wp4->id = 4;
+	wp5->id = 5;
+	wp6->id = 6;
+	wp7->id = 7;
+	wp8->id = 8;
 
-    addToArea_A(wp1);
-    addToArea_A(wp2);
-    addToArea_A(wp3);
-    addToArea_A(wp4);
-    addToArea_A(wp5);
-    addToArea_A(wp6);
-    addToArea_A(wp7);
+	addToArea_A(wp1);
+	addToArea_A(wp2);
+	addToArea_A(wp3);
+	addToArea_A(wp4);
+	addToArea_A(wp5);
+	addToArea_A(wp6);
+	addToArea_A(wp7);
 
-    moveFromArea_AtoArea_B();
-    moveFromArea_BtoArea_C();
-    //removeFromArea_D();
+	moveFromArea_AtoArea_B();
+	moveFromArea_BtoArea_C();
+	//removeFromArea_D();
 }
 
 

@@ -30,10 +30,13 @@
 
 using namespace std;
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Woverflow"
 TSCADC::TSCADC()
 	: 	baseAdd(MAP_DEVICE_FAILED){
 	gainAccess();
 }
+#pragma GCC diagnostic pop
 
 TSCADC::~TSCADC() {
 	munmap_device_io(baseAdd, SIZE);

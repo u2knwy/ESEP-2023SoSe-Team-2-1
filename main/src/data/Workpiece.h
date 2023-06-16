@@ -6,8 +6,10 @@
  */
 
 #pragma once
+
 #include "workpiecetype_enum.h"
 #include "workpiecetype_stringlist.h"
+
 #define WP_TYPE_TO_STRING(wp) std::string(WorkpieceTypeString[wp])
 
 struct Workpiece{
