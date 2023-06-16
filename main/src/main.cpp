@@ -71,6 +71,13 @@ int main(int argc, char **argv)
 	}
 
 	Configuration &conf = Configuration::getInstance();
+	conf.setMaster(options.mode == MASTER);
+	if(conf.systemIsMaster()) {
+		Logger::info("Program started as MASTER");
+	} else {
+		Logger::info("Program started as SLAVE");
+	}
+
 	conf.setConfigFilePath("/tmp/esep_conf.txt");
 	if(!conf.readConfigFromFile()) {
 		Logger::error("Error reading config file - terminating...");
@@ -92,16 +99,11 @@ int main(int argc, char **argv)
 	heightSensor = std::make_shared<HeightSensor>(eventManager);
 	heightFSM = std::make_shared<HeightContext>(eventManager, heightSensor);
 
+	// Run FSM's only at Master
 	if(options.mode == Mode::MASTER) {
-		Logger::info("Program started as MASTER");
-		conf.setMaster(true);
-		// Run FSM's only at Master
 		motorFSM_Master = std::make_shared<MotorContext>(eventManager, true);
 		motorFSM_Slave = std::make_shared<MotorContext>(eventManager, false);
 		mainFSM = std::make_shared<MainContext>(eventManager);
-	} else {
-		Logger::info("Program started as SLAVE");
-		conf.setMaster(false);
 	}
 
 	// Register handler function to be called if the program is not terminated properly
