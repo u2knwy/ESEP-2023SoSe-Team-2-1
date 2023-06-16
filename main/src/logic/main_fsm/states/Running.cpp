@@ -29,7 +29,6 @@ void Running::entry() {
 }
 
 void Running::exit() {
-	Logger::debug("Running::exit");
 }
 
 bool Running::master_LBA_Blocked() {
@@ -66,8 +65,7 @@ bool Running::master_heightResultReceived(EventType event, float average) {
 	//moveFromArea_AtoArea_B()
 	data->wpManager->moveFromArea_AtoArea_B();
 	wp = data->wpManager->getter_head_Area_B();
-	Logger::info("Workpiece with id: " + std::to_string(wp->id) + "type= "+ std::to_string(wp->WP_M_type) +
-			" height= " + std::to_string(wp->avgHeight));
+	Logger::info("Workpiece with id: " + std::to_string(wp->id) + " -> type= "+ std::to_string(wp->WP_M_type) + ", height= " + std::to_string(wp->avgHeight));
 	return true;
 }
 

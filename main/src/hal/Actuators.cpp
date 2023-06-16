@@ -377,6 +377,7 @@ void Actuators::letPass() {
 
 void Actuators::motorStop()
 {
+	Logger::debug("[Actuators] Motor stop");
 	setMotorStop(true);
 	setMotorSlow(false);
 	setMotorRight(false);
@@ -385,6 +386,7 @@ void Actuators::motorStop()
 
 void Actuators::motorSlow()
 {
+	Logger::debug("[Actuators] Motor slow");
 	setMotorStop(false);
 	setMotorSlow(true);
 	setMotorRight(true);
@@ -393,6 +395,7 @@ void Actuators::motorSlow()
 
 void Actuators::motorFast()
 {
+	Logger::debug("[Actuators] Motor fast");
 	setMotorStop(false);
 	setMotorSlow(false);
 	setMotorRight(true);

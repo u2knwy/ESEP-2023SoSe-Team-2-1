@@ -15,7 +15,6 @@ MotorActions::MotorActions(std::shared_ptr<EventManager> mngr, bool master) {
 }
 
 MotorActions::~MotorActions() {
-	// TODO Auto-generated destructor stub
 }
 
 void MotorActions::motorStop() {

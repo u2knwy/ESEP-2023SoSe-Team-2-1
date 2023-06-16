@@ -195,7 +195,7 @@ void MainContext::handleEvent(Event event) {
 		errorSelfSolved();
 		break;
 	default:
-		Logger::warn(EVENT_TO_STRING(event.type) + " was not handled by MainFSM");
+		Logger::warn("[MainFSM] Event was not handled: " + EVENT_TO_STRING(event.type));
 		break;
 	}
 }
@@ -317,13 +317,16 @@ void MainContext::slave_EStop_Released() {
 }
 
 void MainContext::selfSolvableErrorOccurred() {
+	Logger::error("Error occurred (self-solvable)");
 	state->selfSolvableErrorOccurred();
 }
 
 void MainContext::errorSelfSolved() {
+	Logger::info("Error was solved");
 	state->errorSelfSolved();
 }
 
 void MainContext::nonSelfSolvableErrorOccurred() {
+	Logger::error("Error occurred (not self-solvable)");
 	state->nonSelfSolvableErrorOccurred();
 }

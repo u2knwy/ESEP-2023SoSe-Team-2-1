@@ -50,7 +50,7 @@ HeightResult HeightContextData::getCurrentResult() {
 	HeightResult result;
 
 	int totalValues = measurements.size();
-	Logger::debug("HeightContextData::getCurrentResultV2 -> n=" + std::to_string(totalValues));
+	Logger::debug("[HFSM] Get Result -> # of measurements: " + std::to_string(totalValues));
 	if(totalValues == 0) {
 		result.type = WorkpieceType::WS_UNKNOWN;
 		result.average = 0.0;
@@ -73,7 +73,8 @@ HeightResult HeightContextData::getCurrentResult() {
 	float middle = measurements.at(totalValues/2);
 	float end = measurements.at(endIndex);
 	std::stringstream ss;
-	ss << "[HFSM] GET RESULT -> begin=" << begin << ", middle=" << middle << ", end=" << end;
+	ss.precision(1);
+	ss << "[HFSM] Get Result -> begin=" << std::to_string(begin) << ", middle=" << std::to_string(middle) << ", end=" << std::to_string(end);
 	Logger::debug(ss.str());
 
 	if(isFlat(begin) && isFlat(middle) && isFlat(end)) {

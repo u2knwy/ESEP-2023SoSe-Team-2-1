@@ -10,22 +10,22 @@
 #include "logger/logger.hpp"
 
 void SubErrorPendingResigned::entry(){
+	Logger::user_info("Pending error was resigned - Press Start button to leave Error mode");
 	actions->redLampFlashingSlow();
-	Logger::info("Pending resigned - Press the Start button");
 }
 
 void SubErrorPendingResigned::exit(){
 
 }
 
-bool SubErrorPendingResigned::master_btnStart_PressedShort(){
+bool SubErrorPendingResigned::master_btnStart_PressedShort() {
 	exit();
 	new(this) SubErrorEndState;
 	entry();
 	return true;
 }
 
-bool SubErrorPendingResigned::slave_btnStart_PressedShort(){
+bool SubErrorPendingResigned::slave_btnStart_PressedShort() {
 	exit();
 	new(this) SubErrorEndState;
 	entry();

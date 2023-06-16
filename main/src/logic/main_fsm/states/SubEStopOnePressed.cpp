@@ -13,7 +13,7 @@
 #include <iostream>
 
 void SubEStopOnePressed::entry() {
-	Logger::debug("[EStop] One pressed");
+	Logger::info("One E-Stop is pressed");
 }
 
 void SubEStopOnePressed::exit() {

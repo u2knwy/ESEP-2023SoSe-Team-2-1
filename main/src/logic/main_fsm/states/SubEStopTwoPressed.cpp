@@ -12,7 +12,7 @@
 #include <iostream>
 
 void SubEStopTwoPressed::entry() {
-	Logger::debug("[EStop] Two pressed");
+	Logger::info("Both E-Stop's are pressed");
 }
 
 bool SubEStopTwoPressed::master_EStop_Released() {

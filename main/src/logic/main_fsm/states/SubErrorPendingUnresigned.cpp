@@ -8,6 +8,7 @@
 #include "SubErrorPendingUnresigned.h"
 #include "SubErrorSolvedUnresigned.h"
 #include "SubErrorPendingResigned.h"
+#include "logger/logger.hpp"
 
 void SubErrorPendingUnresigned::entry(){
 	actions->redLampFlashingFast();
@@ -18,11 +19,13 @@ void SubErrorPendingUnresigned::exit(){
 }
 
 bool SubErrorPendingUnresigned::selfSolvableErrorOccurred(){
+	Logger::info("Self-solving error pending - Wait until it solves itself");
 	selfSolving = true;
 	return true;
 }
 
 bool SubErrorPendingUnresigned::nonSelfSolvableErrorOccurred(){
+	Logger::user_info("Error pending - Press Reset button to resign it");
 	manualSolving = true;
 	return true;
 }

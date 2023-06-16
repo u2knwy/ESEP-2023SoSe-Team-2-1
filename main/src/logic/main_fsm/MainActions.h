@@ -43,6 +43,14 @@ public:
 	void btnStartLedOff();
 	void btnResetLedOn();
 	void btnResetLedOff();
+	void master_q1LedOn();
+	void master_q1LedOff();
+	void master_q2LedOn();
+	void master_q2LedOff();
+	void slave_q1LedOn();
+	void slave_q1LedOff();
+	void slave_q2LedOn();
+	void slave_q2LedOff();
 private:
 	std::shared_ptr<EventManager> eventManager;
 };

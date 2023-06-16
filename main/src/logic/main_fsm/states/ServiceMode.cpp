@@ -59,7 +59,6 @@ bool ServiceMode::master_LBE_Unblocked() {
 }
 
 bool ServiceMode::master_LBR_Blocked() {
-	Logger::debug("ServiceMode::master_LBR_Blocked");
 	return substateServiceMode->master_LBR_Blocked();
 }
 

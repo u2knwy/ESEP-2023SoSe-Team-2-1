@@ -14,7 +14,6 @@ MotorContextData::MotorContextData() {
 }
 
 MotorContextData::~MotorContextData() {
-	// TODO Auto-generated destructor stub
 }
 
 void MotorContextData::setStopFlag(bool stop) {

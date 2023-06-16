@@ -52,16 +52,16 @@ void EventManager::sendEvent(const Event &event) {
 		ss << ", data: " << std::to_string(event.data);
 
 	if (subscribers.find(event.type) != subscribers.end()) {
-		Logger::debug("Notifiying subscribers...");
+		Logger::debug("[EventManager] Notifiying " + std::to_string(subscribers[event.type].size()) + " subscribers about Event " + EVENT_TO_STRING(event.type));
 		int i = 1;
 		for(const auto& callback : subscribers[event.type]) {
-			Logger::debug("Notifiying subscriber #" + std::to_string(i++));
+			Logger::debug("[EventManager] Notifiying subscriber #" + std::to_string(i++));
 			callback(event);
 		}
 	} else{
 		ss << " -> No subscribers for Event!";
 	}
-	Logger::info(ss.str());
+	Logger::debug(ss.str());
 }
 
 int EventManager::start() {

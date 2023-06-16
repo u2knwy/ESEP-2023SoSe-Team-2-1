@@ -71,19 +71,17 @@ int main(int argc, char **argv)
 	}
 
 	Configuration &conf = Configuration::getInstance();
-	conf.setConfigFilePath("/usr/tmp/conf.txt");
+	conf.setConfigFilePath("/tmp/esep_conf.txt");
 	if(!conf.readConfigFromFile()) {
 		Logger::error("Error reading config file - terminating...");
 		return EXIT_FAILURE;
 	}
 
-	Logger::user_info("Calibrate sensor");
-
 	if(options.pusher) {
-		Logger::info("Hardware uses Pusher for sorting out");
+		Logger::info("Configured hardware: Use 'Pusher' for sorting out");
 		conf.setPusherMounted(true);
 	} else {
-		Logger::info("Hardware uses Switch for sorting out");
+		Logger::info("Configured hardware: Use 'Switch' for sorting out");
 		conf.setPusherMounted(false);
 	}
 

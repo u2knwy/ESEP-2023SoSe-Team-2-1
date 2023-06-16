@@ -17,12 +17,7 @@
 Configuration::Configuration() {
 	this->cal = Calibration{ .calOffset = ADC_DEFAULT_OFFSET, .calRef = ADC_DEFAULT_HIGH };
 	this->configFilePath = std::string(DEFAULT_CONFIG_FILE_PATH);
-	this->order = std::vector<WorkpieceType>(3);
-
-	// Set default order: FLAT -> HIGH -> HIGH WITH HOLE
-	this->order.push_back(WorkpieceType::WS_F);
-	this->order.push_back(WorkpieceType::WS_OB);
-	this->order.push_back(WorkpieceType::WS_BOM);
+	this->order = { WS_F, WS_OB, WS_BOM };
 }
 
 Configuration::~Configuration() {
@@ -33,10 +28,12 @@ void Configuration::setConfigFilePath(std::string filePath) {
 }
 
 bool Configuration::readConfigFromFile() {
+	bool readResult = false;
+
 	std::vector<std::string> errors;
 	std::ifstream fileStream(configFilePath);
 	if(fileStream.is_open()) {
-		Logger::info("Read config file: " + configFilePath);
+		Logger::info("Read config from file: " + configFilePath);
 		std::vector<WorkpieceType> workpieceOrder;
 		std::string line;
 		while (std::getline(fileStream, line)) {
@@ -70,21 +67,14 @@ bool Configuration::readConfigFromFile() {
 			}
 		}
 
-		std::stringstream ss;
-		for (size_t i = 0; i < workpieceOrder.size(); ++i) {
-			ss << WP_TYPE_TO_STRING(workpieceOrder[i]);
-			if (i < workpieceOrder.size()-1) {
-				ss << " -> ";
-			}
-		}
-		Logger::info("Configured workpiece order: " + ss.str());
 		if(workpieceOrder.size() != 3) {
 			errors.push_back("Configured workpiece order must contain exactly 3 types (e.g.: F,BOM,OB)");
 		} else {
 			order = std::move(workpieceOrder);
 		}
-		Logger::info("Cal. Offset: " + std::to_string(cal.calOffset));
-		Logger::info("Cal. Ref: " + std::to_string(cal.calRef));
+		Logger::debug("Cal. Offset: " + std::to_string(cal.calOffset));
+		Logger::debug("Cal. Ref: " + std::to_string(cal.calRef));
+		readResult = true;
 	} else {
 		Logger::warn("Config file " + configFilePath + " does not exist -> create new and write default values");
 		std::ofstream fileStream;
@@ -93,7 +83,7 @@ bool Configuration::readConfigFromFile() {
 		fileStream << "CAL_OFFSET=" << ADC_DEFAULT_OFFSET << "\n";
 		fileStream << "CAL_REF=" << ADC_DEFAULT_HIGH << "\n";
 		fileStream.close();
-		return true;
+		readResult = true;
 	}
 
 	if(!errors.empty()) {
@@ -104,7 +94,16 @@ bool Configuration::readConfigFromFile() {
 		return false;
 	}
 
-	return true;
+	std::stringstream ss;
+	for (size_t i = 0; i < order.size(); ++i) {
+		ss << WP_TYPE_TO_STRING(order[i]);
+		if (i < order.size()-1) {
+			ss << " -> ";
+		}
+	}
+	Logger::info("Configured workpiece order: " + ss.str());
+
+	return readResult;
 }
 
 void Configuration::setMaster(bool isMaster) {

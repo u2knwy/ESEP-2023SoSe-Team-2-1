@@ -13,7 +13,6 @@
 #endif
 
 HeightSensor::HeightSensor(std::shared_ptr<EventManager> mngr) : chanID(-1), conID(-1) {
-	Logger::debug("HeightSensor created");
 	adc = new ADC(tsc);
 	window.reserve(ADC_SAMPLE_SIZE);
 	Configuration &conf = Configuration::getInstance();
@@ -155,7 +154,7 @@ void HeightSensor::addValue(int value) {
 void HeightSensor::threadFunction() {
 	ThreadCtl(_NTO_TCTL_IO, 0); // Request IO privileges for this thread.
 
-	Logger::info("[HM] Height sensor started!");
+	Logger::debug("[HM] Height sensor started!");
 	Calibration adcCal = Configuration::getInstance().getCalibration();
 	calibrateOffset(adcCal.calOffset);
 	calibrateRefHigh(adcCal.calRef);

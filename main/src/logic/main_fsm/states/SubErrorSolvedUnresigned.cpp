@@ -11,7 +11,7 @@
 
 void SubErrorSolvedUnresigned::entry(){
 	actions->redLampFlashingSlow();
-	Logger::info("Solved unresigned - Push the Reset button");
+	Logger::user_info("Error has solved itself - Push the Reset button to resign it and leave Error mode");
 }
 
 void SubErrorSolvedUnresigned::exit(){

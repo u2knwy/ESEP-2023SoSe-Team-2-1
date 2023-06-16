@@ -124,6 +124,9 @@ void MainActions::allActuatorsOn() {
 	eventManager->sendEvent(Event{EventType::LED_S_RESET, (int) LampState::ON});
 	eventManager->sendEvent(Event{EventType::LED_S_Q1, (int) LampState::ON});
 	eventManager->sendEvent(Event{EventType::LED_S_Q2, (int) LampState::ON});
+
+	eventManager->sendEvent(Event{EventType::SORT_M_OUT, 0});
+	eventManager->sendEvent(Event{EventType::SORT_S_OUT, 0});
 }
 
 void MainActions::allActuatorsOff() {
@@ -142,6 +145,9 @@ void MainActions::allActuatorsOff() {
 	eventManager->sendEvent(Event{EventType::LED_S_RESET, (int) LampState::OFF});
 	eventManager->sendEvent(Event{EventType::LED_S_Q1, (int) LampState::OFF});
 	eventManager->sendEvent(Event{EventType::LED_S_Q2, (int) LampState::OFF});
+
+	eventManager->sendEvent(Event{EventType::SORT_M_OUT, 1});
+	eventManager->sendEvent(Event{EventType::SORT_S_OUT, 1});
 }
 
 void MainActions::master_warningOn() {
@@ -203,3 +209,34 @@ void MainActions::btnResetLedOff() {
 	eventManager->sendEvent(Event{EventType::LED_S_RESET, (int) LampState::OFF});
 }
 
+void MainActions::master_q1LedOn() {
+	eventManager->sendEvent(Event{EventType::LED_M_Q1, (int) LampState::ON});
+}
+
+void MainActions::master_q1LedOff() {
+	eventManager->sendEvent(Event{EventType::LED_M_Q1, (int) LampState::OFF});
+}
+
+void MainActions::master_q2LedOn() {
+	eventManager->sendEvent(Event{EventType::LED_M_Q2, (int) LampState::ON});
+}
+
+void MainActions::master_q2LedOff() {
+	eventManager->sendEvent(Event{EventType::LED_M_Q2, (int) LampState::OFF});
+}
+
+void MainActions::slave_q1LedOn() {
+	eventManager->sendEvent(Event{EventType::LED_S_Q1, (int) LampState::ON});
+}
+
+void MainActions::slave_q1LedOff() {
+	eventManager->sendEvent(Event{EventType::LED_S_Q1, (int) LampState::OFF});
+}
+
+void MainActions::slave_q2LedOn() {
+	eventManager->sendEvent(Event{EventType::LED_S_Q2, (int) LampState::ON});
+}
+
+void MainActions::slave_q2LedOff() {
+	eventManager->sendEvent(Event{EventType::LED_S_Q2, (int) LampState::OFF});
+}
