@@ -98,13 +98,13 @@ class Logger : public IEventHandler {
 	            case level::ERR:
 	                return "[ERROR] ";
 	            case level::WARN:
-	                return "[WARN] ";
+	                return "[WARN]  ";
 	            case level::INFO:
-	                return "[INFO] ";
+	                return "[INFO]  ";
 	            case level::DATA:
-	                return "[DATA] ";
+	                return "[DATA]  ";
 	            case level::USER:
-	            	return "[USER] ";
+	            	return "[USER]  ";
 	            default:
 	                return "[UNKNOWN] ";
 	        }
@@ -115,30 +115,31 @@ class Logger : public IEventHandler {
 			if (log_level < this->minimal_log_level)
 				return;
 
-			std::stringstream stringstream;
+			std::stringstream ss;
 
-			std::string level_date = level_str(log_level);
+			if(log_level == level::ERR) {
+				ss << ANSI_FOREGROUND_RED;
+			} else if(log_level == level::WARN) {
+				ss << ANSI_FOREGROUND_YELLOW;
+			} else if(log_level == level::USER) {
+				ss << ANSI_FOREGROUND_GREEN;
+			} else if(log_level == level::DEBUG) {
+				ss << ANSI_BACKGROUND_BLACK << ANSI_FOREGROUND_WHITE;
+			} else if(log_level == level::INFO) {
+				ss << ANSI_FOREGROUND_BLUE;
+			}
+
 			{
 				auto now = std::time(nullptr);
 				//localtime is not thread safe
 				auto local_time = std::localtime(&now);
-	            stringstream << '[' << std::put_time(local_time, "%Y-%m-%d %H:%M:%S") << "] ";
+	            ss << '[' << std::put_time(local_time, "%Y-%m-%d %H:%M:%S") << "] ";
 			}
 
-			if(log_level == level::ERR) {
-				stringstream << ANSI_FOREGROUND_RED << level_date << log << ANSI_RESET;
-			} else if(log_level == level::WARN) {
-				stringstream << ANSI_FOREGROUND_YELLOW << level_date << log << ANSI_RESET;
-			} else if(log_level == level::USER) {
-				stringstream << ANSI_FOREGROUND_GREEN << level_date << log << ANSI_RESET;
-			} else if(log_level == level::DEBUG) {
-				stringstream << ANSI_BACKGROUND_BLACK << ANSI_FOREGROUND_WHITE << level_date << log << ANSI_RESET;
-			} else if(log_level == level::INFO) {
-				stringstream << ANSI_FOREGROUND_BLUE << level_date << log << ANSI_RESET;
-			} else {
-				stringstream << level_date << log;
-			}
+			ss << level_str(log_level);
 
-			std::cout << stringstream.str() << std::endl;
+			ss << log << ANSI_RESET;
+
+			std::cout << ss.str() << std::endl;
 		}
 };

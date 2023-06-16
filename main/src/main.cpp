@@ -77,6 +77,8 @@ int main(int argc, char **argv)
 		return EXIT_FAILURE;
 	}
 
+	Logger::user_info("Calibrate sensor");
+
 	if(options.pusher) {
 		Logger::info("Hardware uses Pusher for sorting out");
 		conf.setPusherMounted(true);
