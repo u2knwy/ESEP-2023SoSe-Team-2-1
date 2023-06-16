@@ -29,6 +29,8 @@ void ServiceMode::exit() {
 
 void ServiceMode::initSubStateServiceMode() {
 	substateServiceMode = new SubServiceModeCalOffset;
+	substateServiceMode->setAction(actions);
+	substateServiceMode->setData(data);
 	substateServiceMode->entry();
 }
 
@@ -57,7 +59,6 @@ bool ServiceMode::master_LBE_Unblocked() {
 }
 
 bool ServiceMode::master_LBR_Blocked() {
-	Logger::debug("ServiceMode::master_LBR_Blocked");
 	return substateServiceMode->master_LBR_Blocked();
 }
 

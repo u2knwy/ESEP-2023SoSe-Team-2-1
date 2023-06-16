@@ -26,7 +26,9 @@ MotorContext::MotorContext(std::shared_ptr<EventManager> mngr, bool master) {
 }
 
 MotorContext::~MotorContext() {
-	// TODO Auto-generated destructor stub
+	delete actions;
+	delete data;
+	delete state;
 }
 
 MotorState MotorContext::getCurrentState() {

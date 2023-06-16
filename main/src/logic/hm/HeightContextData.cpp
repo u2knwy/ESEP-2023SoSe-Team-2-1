@@ -10,22 +10,12 @@
 #include "events/events.h"
 
 HeightContextData::HeightContextData() {
-	currentType = WorkpieceType::WS_UNKNOWN;
 	measurements = std::vector<float>(1000);
 	resetMeasurement();
 }
 
 HeightContextData::~HeightContextData() {
 	measurements.clear();
-}
-
-WorkpieceType HeightContextData::getCurrentType() {
-	return currentType;
-}
-
-void HeightContextData::setCurrentType(WorkpieceType type) {
-	Logger::debug("[HFSM] Current type changed: " + std::to_string(type));
-	this->currentType = type;
 }
 
 void HeightContextData::resetMeasurement() {
@@ -60,7 +50,7 @@ HeightResult HeightContextData::getCurrentResult() {
 	HeightResult result;
 
 	int totalValues = measurements.size();
-	Logger::debug("HeightContextData::getCurrentResultV2 -> n=" + std::to_string(totalValues));
+	Logger::debug("[HFSM] Get Result -> # of measurements: " + std::to_string(totalValues));
 	if(totalValues == 0) {
 		result.type = WorkpieceType::WS_UNKNOWN;
 		result.average = 0.0;
@@ -71,9 +61,9 @@ HeightResult HeightContextData::getCurrentResult() {
 	// Throw out first and last 10 % of measurements
 	int startIndex = totalValues * 0.05;
 	int endIndex = totalValues * 0.95;
-	int nValues = endIndex - startIndex + 1;
+	int nValues = endIndex - startIndex;
 	double sum = 0;
-	for(auto it = measurements.begin() + startIndex; it != measurements.end(); ++it) {
+	for(auto it = measurements.begin() + startIndex; it != measurements.begin() + endIndex; ++it) {
 		float val = *it;
 		sum += val;
 		if(val > maxValue)
@@ -83,7 +73,8 @@ HeightResult HeightContextData::getCurrentResult() {
 	float middle = measurements.at(totalValues/2);
 	float end = measurements.at(endIndex);
 	std::stringstream ss;
-	ss << "[HFSM] GET RESULT -> begin=" << begin << ", middle=" << middle << ", end=" << end;
+	ss.precision(1);
+	ss << "[HFSM] Get Result -> begin=" << std::to_string(begin) << ", middle=" << std::to_string(middle) << ", end=" << std::to_string(end);
 	Logger::debug(ss.str());
 
 	if(isFlat(begin) && isFlat(middle) && isFlat(end)) {

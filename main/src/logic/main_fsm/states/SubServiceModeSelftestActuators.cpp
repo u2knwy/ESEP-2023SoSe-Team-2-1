@@ -13,9 +13,9 @@
 #include <iostream>
 
 void SubServiceModeSelftestActuators::entry() {
-	Logger::info("[ServiceMode] Selftest Actuators");
+	Logger::info("[ServiceMode] +++ SELFTEST ACTUATORS +++");
 	actions->allActuatorsOn();
-	Logger::info("Are all actuators on? Press START button if ok.");
+	Logger::user_info("Are all actuators on? Press START button if ok.");
 	actions->btnStartLedOn();
 	actions->btnResetLedOff();
 }

@@ -27,6 +27,5 @@ bool WaitForBelt::beltDetected() {
 }
 
 bool WaitForBelt::unknownDetected() {
-	data->setCurrentType(WorkpieceType::WS_UNKNOWN);
 	return false;
 }

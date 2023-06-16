@@ -14,7 +14,8 @@
 #include <iostream>
 
 void SubEStopBothReleased::entry() {
-	Logger::info("[EStop] Both released");
+	Logger::debug("[EStop] Both released");
+	Logger::user_info("Both E-Stop release - Press Reset button at Master and Slave to leave EStop mode");
 	masterReset = false;
 	slaveReset = false;
 }
@@ -23,7 +24,7 @@ void SubEStopBothReleased::exit() {
 }
 
 bool SubEStopBothReleased::master_btnReset_Pressed() {
-	Logger::info("[EStop] Master confirmed reset");
+	Logger::debug("[EStop] Master confirmed reset");
 	this->masterReset = true;
 	if(masterReset && slaveReset) {
 		Logger::debug("EStop was resetted -> leave EStop mode");
@@ -36,7 +37,7 @@ bool SubEStopBothReleased::master_btnReset_Pressed() {
 }
 
 bool SubEStopBothReleased::slave_btnReset_Pressed() {
-	Logger::info("[EStop] Slave confirmed reset");
+	Logger::debug("[EStop] Slave confirmed reset");
 	this->slaveReset = true;
 	if(masterReset && slaveReset) {
 		Logger::debug("EStop was resetted -> leave EStop mode");

@@ -139,7 +139,7 @@ void Sensors::initInterrupts()
 
 void Sensors::handleEvent(Event event)
 {
-	Logger::debug("HAL handle Event: " + EVENT_TO_STRING(event.type));
+	Logger::debug("[Sensors] HAL handle Event: " + EVENT_TO_STRING(event.type));
 }
 
 void Sensors::startEventLoop()
@@ -250,7 +250,7 @@ void Sensors::eventLoop()
 			// Stop thread while it blocks.
 			if (msg.code == PULSE_STOP_THREAD)
 			{
-				Logger::debug("Thread kill code received!");
+				Logger::debug("[Sensors] Thread kill code received!");
 				receivingRunning = false;
 				continue;
 			}
@@ -283,12 +283,12 @@ void Sensors::handleGpioInterrupt()
 	{
 		if (eStopPressed())
 		{
-			Logger::info("ESTOP pressed");
+			Logger::debug("[Sensors] ESTOP pressed");
 			event.type = master ? EventType::ESTOP_M_PRESSED : EventType::ESTOP_S_PRESSED;
 		}
 		else
 		{
-			Logger::info("ESTOP released");
+			Logger::debug("[Sensors] ESTOP released");
 			event.type = master ? EventType::ESTOP_M_RELEASED : EventType::ESTOP_S_RELEASED;
 		}
 	}
@@ -297,22 +297,22 @@ void Sensors::handleGpioInterrupt()
 		using namespace std::chrono;
 		if (startPressed())
 		{
-			Logger::debug("START pressed");
+			Logger::debug("[Sensors] START pressed");
 			lastStartBtnPressTime = steady_clock::now();
 		}
 		else
 		{
-			Logger::debug("START released");
+			Logger::debug("[Sensors] START released");
 			const auto now = steady_clock::now();
 			int elapsed_ms = duration_cast<milliseconds>(now - lastStartBtnPressTime).count();
 			if (elapsed_ms >= BTN_LONG_PRESSED_TIME_MS)
 			{
-				Logger::info("START button pressed long");
+				Logger::debug("[Sensors] START button pressed long");
 				event.type = master ? EventType::START_M_LONG : EventType::START_S_LONG;
 			}
 			else
 			{
-				Logger::info("START button pressed short");
+				Logger::debug("[Sensors] START button pressed short");
 				event.type = master ? EventType::START_M_SHORT : EventType::START_S_SHORT;
 			}
 		}
@@ -321,7 +321,7 @@ void Sensors::handleGpioInterrupt()
 	{
 		if (!stopPressed())
 		{
-			Logger::info("STOP button pressed");
+			Logger::debug("[Sensors] STOP button pressed");
 			event.type = master ? EventType::STOP_M_SHORT : EventType::STOP_S_SHORT;
 		}
 	}
@@ -329,7 +329,7 @@ void Sensors::handleGpioInterrupt()
 	{
 		if (!resetPressed())
 		{
-			Logger::info("RESET button pressed");
+			Logger::debug("[Sensors] RESET button pressed");
 			event.type = master ? EventType::RESET_M_SHORT : EventType::RESET_S_SHORT;
 		}
 	}
@@ -337,12 +337,12 @@ void Sensors::handleGpioInterrupt()
 	{
 		if (lbStartBlocked())
 		{
-			Logger::debug("LBA blocked");
+			Logger::debug("[Sensors] LBA blocked");
 			event.type = master ? EventType::LBA_M_BLOCKED : EventType::LBA_S_BLOCKED;
 		}
 		else
 		{
-			Logger::debug("LBA unblocked");
+			Logger::debug("[Sensors] LBA unblocked");
 			event.type = master ? EventType::LBA_M_UNBLOCKED : EventType::LBA_S_UNBLOCKED;
 		}
 	}
@@ -350,12 +350,12 @@ void Sensors::handleGpioInterrupt()
 	{
 		if (lbSwitchBlocked())
 		{
-			Logger::debug("LBW blocked");
+			Logger::debug("[Sensors] LBW blocked");
 			event.type = master ? EventType::LBW_M_BLOCKED : EventType::LBW_S_BLOCKED;
 		}
 		else
 		{
-			Logger::debug("LBW unblocked");
+			Logger::debug("[Sensors] LBW unblocked");
 			event.type = master ? EventType::LBW_M_UNBLOCKED : EventType::LBW_S_UNBLOCKED;
 		}
 	}
@@ -363,12 +363,12 @@ void Sensors::handleGpioInterrupt()
 	{
 		if (lbEndBlocked())
 		{
-			Logger::debug("LBE blocked");
+			Logger::debug("[Sensors] LBE blocked");
 			event.type = master ? EventType::LBE_M_BLOCKED : EventType::LBE_S_BLOCKED;
 		}
 		else
 		{
-			Logger::debug("LBE unblocked");
+			Logger::debug("[Sensors] LBE unblocked");
 			event.type = master ? EventType::LBE_M_UNBLOCKED : EventType::LBE_S_UNBLOCKED;
 		}
 	}
@@ -376,12 +376,12 @@ void Sensors::handleGpioInterrupt()
 	{
 		if (lbRampBlocked())
 		{
-			Logger::debug("LBR blocked");
+			Logger::debug("[Sensors] LBR blocked");
 			event.type = master ? EventType::LBR_M_BLOCKED : EventType::LBR_S_BLOCKED;
 		}
 		else
 		{
-			Logger::debug("LBR unblocked");
+			Logger::debug("[Sensors] LBR unblocked");
 			event.type = master ? EventType::LBR_M_UNBLOCKED : EventType::LBR_S_UNBLOCKED;
 		}
 	}
@@ -389,13 +389,13 @@ void Sensors::handleGpioInterrupt()
 	{
 		if (metalDetected())
 		{
-			Logger::debug("Metal detected");
+			Logger::debug("[Sensors] Metal detected");
 			event.type = master ? EventType::MD_M_PAYLOAD : EventType::MD_S_PAYLOAD;
 			event.data = 1;
 		}
 		else
 		{
-			Logger::debug("Metal not detected");
+			Logger::debug("[Sensors] Metal not detected");
 			event.type = master ? EventType::MD_M_PAYLOAD : EventType::MD_S_PAYLOAD;
 			event.data = 0;
 		}

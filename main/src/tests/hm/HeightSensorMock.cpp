@@ -6,6 +6,7 @@
  */
 
 #include "HeightSensorMock.h"
+#include "logger/logger.hpp"
 
 HeightSensorMock::HeightSensorMock() {
 }
@@ -15,7 +16,7 @@ void HeightSensorMock::registerOnNewValueCallback(HeightCallback callback) {
 }
 
 void HeightSensorMock::unregisterOnNewValueCallback() {
-
+	this->heightValueCallback = nullptr;
 }
 
 void HeightSensorMock::start() {

@@ -1,24 +1,11 @@
 var searchData=
 [
-  ['sample_0',['sample',['../class_a_d_c.html#ad6159c6bd20d435322fb825f7efbb6cf',1,'ADC']]],
-  ['servicemode_1',['serviceMode',['../class_actuators.html#a9e5a5a242687a8669c230d6c6b7731a5',1,'Actuators']]],
-  ['setavgheightfbm1_2',['setAvgHeightFBM1',['../class_workpiece.html#a119b23da7f5807d911942edf7ae508ba',1,'Workpiece']]],
-  ['setcurrenttype_3',['setCurrentType',['../class_height_context_data.html#a18c8795c12d2bd43b3e7a04ccda5479c',1,'HeightContextData']]],
-  ['setflipped_4',['setFlipped',['../class_workpiece.html#a44ee73dcb087aeb279595de49bbd0fcb',1,'Workpiece']]],
-  ['setgreenblinking_5',['setGreenBlinking',['../class_actuators.html#acddcaeff350772137e44f4cff0d3c2e6',1,'Actuators']]],
-  ['setmaxheightfbm2_6',['setMaxHeightFBM2',['../class_workpiece.html#a7ac1fa8ade3ef4bf2af424e72942d169',1,'Workpiece']]],
-  ['setmetalfbm1_7',['setMetalFBM1',['../class_workpiece.html#ac2ed2f657598a59233ab8ecc77e7eb65',1,'Workpiece']]],
-  ['setmetalfbm2_8',['setMetalFBM2',['../class_workpiece.html#a313d03e9378810274d3024eb60e9f48d',1,'Workpiece']]],
-  ['setredblinking_9',['setRedBlinking',['../class_actuators.html#a22c84fc59cad111733cffa94be51a188',1,'Actuators']]],
-  ['setup_10',['SetUp',['../class_workpieces___test.html#a502681732f37cb3b665bd5752f1796a1',1,'Workpieces_Test']]],
-  ['setyellowblinking_11',['setYellowBlinking',['../class_actuators.html#a7ef36b8221bc1803b259e2993b48bf2b',1,'Actuators']]],
-  ['sortout_12',['sortOut',['../class_actuators.html#aed712758b11125b69c2d9447898753a4',1,'Actuators']]],
-  ['standbymode_13',['standbyMode',['../class_actuators.html#ac9df438b3266dd959a1cadd960127b5f',1,'Actuators']]],
-  ['starteventloop_14',['startEventLoop',['../class_sensors.html#a1345f12ade8ebbe303bd8a2489492aea',1,'Sensors']]],
-  ['startledoff_15',['startLedOff',['../class_actuators.html#af52819aca72d8e45bda618dd23a7acd1',1,'Actuators']]],
-  ['startledon_16',['startLedOn',['../class_actuators.html#a9b68264254fd3810300df0f475707efb',1,'Actuators']]],
-  ['stepconfigprotectiondisable_17',['stepConfigProtectionDisable',['../class_t_s_c_a_d_c.html#ae937f40b80634d9bc131df5bb348cf2d',1,'TSCADC']]],
-  ['stepconfigprotectionenable_18',['stepConfigProtectionEnable',['../class_t_s_c_a_d_c.html#a0e7d6cf9f1384a6e35249ac0190c4bab',1,'TSCADC']]],
-  ['stepidtagconfig_19',['stepIDTagConfig',['../class_t_s_c_a_d_c.html#a1ace97c7b68bf237bc8f7e9e033592cc',1,'TSCADC']]],
-  ['stopeventloop_20',['stopEventLoop',['../class_sensors.html#a7e01bbe2d39789661a6478976858cda5',1,'Sensors']]]
+  ['readconfigfromfile_0',['readConfigFromFile',['../class_configuration.html#ae7338459d3ae2cac99311fd479968186',1,'Configuration']]],
+  ['redlampoff_1',['redLampOff',['../class_actuators.html#a6ea302e6946f25bbd20a4361d34aef00',1,'Actuators::redLampOff()'],['../class_i_actuators.html#a5a3391197d414a033bfd86838bd9e26f',1,'IActuators::redLampOff()'],['../class_actuator_mock.html#a7d4baccd7e492a4a6c7414f054ec9316',1,'ActuatorMock::redLampOff()']]],
+  ['redlampon_2',['redLampOn',['../class_actuators.html#a57f3c9445fc3b52bea17499295e667c7',1,'Actuators::redLampOn()'],['../class_i_actuators.html#a70505b6bbce7e944ad45fe09420a8ab3',1,'IActuators::redLampOn()'],['../class_actuator_mock.html#ac9c46925b0b663aa3ca400a8be7b788e',1,'ActuatorMock::redLampOn()']]],
+  ['removewponfbm2_3',['removeWpOnFBM2',['../class_workpiece_manager.html#a193c6df2f20ef94110876719f1c61741',1,'WorkpieceManager']]],
+  ['resetledoff_4',['resetLedOff',['../class_actuators.html#ac9596220b535465e1dbe4e9a64b241e5',1,'Actuators::resetLedOff()'],['../class_i_actuators.html#a83241316a1d4f79d84259d8669f04400',1,'IActuators::resetLedOff()'],['../class_actuator_mock.html#a6c8fb30ec10b5bff086d34acecd93c9b',1,'ActuatorMock::resetLedOff()']]],
+  ['resetledon_5',['resetLedOn',['../class_actuators.html#a0e794f7be840beb26005ac047df85ab6',1,'Actuators::resetLedOn()'],['../class_i_actuators.html#a1d2ba78125df059f47a7ba83089adfa3',1,'IActuators::resetLedOn()'],['../class_actuator_mock.html#a903e048f7ec5b24b36ac19cbfd398aec',1,'ActuatorMock::resetLedOn()']]],
+  ['resetmeasurement_6',['resetMeasurement',['../class_height_context_data.html#a24f55f0d87042525754a85b229cacc98',1,'HeightContextData']]],
+  ['runningmode_7',['runningMode',['../class_actuators.html#aeeece7d6cff598696af0843ab19ce039',1,'Actuators::runningMode()'],['../class_i_actuators.html#a84f9fbf9ce54a3a1a208810d825fe553',1,'IActuators::runningMode()'],['../class_actuator_mock.html#ae21c0fa1aae5e93966ab610ce812582e',1,'ActuatorMock::runningMode()']]]
 ];

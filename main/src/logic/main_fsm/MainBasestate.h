@@ -24,6 +24,7 @@ class MainBasestate {
 protected:
 	MainBasestate* substateEStop = nullptr;
 	MainBasestate* substateServiceMode = nullptr;
+	MainBasestate* substateError = nullptr;
 	MainActions* actions;
 	MainContextData* data;
 
@@ -46,8 +47,9 @@ public:
 
 	virtual void initSubStateEStop() {}
 	virtual void initSubStateServiceMode() {}
+	virtual void initSubStateError() {}
 
-	virtual bool isSubEndState() { return false; };
+	virtual bool isSubEndState() { return false; }
 
 	// Light Barriers
 	virtual bool master_LBA_Blocked() 	{ return false; }	// Anfang blockiert
@@ -58,6 +60,14 @@ public:
 	virtual bool master_LBE_Unblocked() { return false; }	// Ende wieder frei
 	virtual bool master_LBR_Blocked() 	{ return false; }	// Rampe blockiert
 	virtual bool master_LBR_Unblocked() { return false; }	// Rampe wieder frei
+
+	// Höhenmessung Events
+	virtual bool master_heightResultReceived(EventType event, float average) { return false; }
+	virtual bool slave_heightResultReceived(EventType event, float average) { return false; }
+
+	// Metall erkannt
+	virtual bool master_metalDetected() { return false; }
+	virtual bool slave_metalDetected() { return false; }
 
 	virtual bool slave_LBA_Blocked() 	{ return false; }	// Anfang blockiert
 	virtual bool slave_LBA_Unblocked() 	{ return false; }	// Anfang wieder frei
@@ -85,4 +95,8 @@ public:
 
 	virtual bool slave_EStop_Pressed() 		{ return false; }
 	virtual bool slave_EStop_Released() 	{ return false; }
+
+	virtual bool selfSolvableErrorOccurred() { return false; }
+	virtual bool errorSelfSolved() { return false; }
+	virtual bool nonSelfSolvableErrorOccurred() { return false; }
 };

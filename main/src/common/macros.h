@@ -8,6 +8,10 @@
 
 #include <thread>
 #include <chrono>
+#include "data/workpiecetype_stringlist.h"
+
+#define EVENT_TO_STRING(ev) std::string(EventString[ev])
+#define WP_TYPE_TO_STRING(wp) std::string(WorkpieceTypeString[wp])
 
 /* Helper macros */
 #define DELAY_S(x) std::this_thread::sleep_for(std::chrono::seconds(x))

@@ -11,7 +11,7 @@
 #include <iostream>
 
 void SubServiceModeTestsFailed::entry() {
-	Logger::info("[ServiceMode] Tests have failed. Press RESET to return to Standby mode.");
+	Logger::error("[ServiceMode] Tests have failed. Press RESET to return to Standby mode.");
 	actions->master_warningOn();
 	actions->btnStartLedOff();
 	actions->btnResetLedOff();

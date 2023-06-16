@@ -12,20 +12,24 @@
 
 #include <memory>
 
-class MainActions {
+class MainActions
+{
 public:
 	MainActions(std::shared_ptr<EventManager> mngr);
 	virtual ~MainActions();
 	void master_sendMotorStopRequest(bool stop);
-	void master_sendMotorRightRequest(bool right);
-	void master_sendMotorSlowRequest(bool slow);
 	void slave_sendMotorStopRequest(bool stop);
+	void master_sendMotorRightRequest(bool right);
 	void slave_sendMotorRightRequest(bool right);
-	void slave_sendMotorSlowRequest(bool slow);
+	void master_openGate(bool open);
+	void slave_openGate(bool open);
 	void setStandbyMode();
 	void setRunningMode();
 	void setServiceMode();
 	void setErrorMode();
+	void redLampOn();
+	void redLampFlashingFast();
+	void redLampFlashingSlow();
 	void setEStopMode();
 	void allActuatorsOn();
 	void allActuatorsOff();
@@ -40,8 +44,15 @@ public:
 	void btnStartLedOff();
 	void btnResetLedOn();
 	void btnResetLedOff();
-	void redLampFlashingFast();
-	void redLampFlashingSlow();
+	void master_q1LedOn();
+	void master_q1LedOff();
+	void master_q2LedOn();
+	void master_q2LedOff();
+	void slave_q1LedOn();
+	void slave_q1LedOff();
+	void slave_q2LedOn();
+	void slave_q2LedOff();
+
 private:
 	std::shared_ptr<EventManager> eventManager;
 };

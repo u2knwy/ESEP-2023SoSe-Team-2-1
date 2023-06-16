@@ -6,38 +6,27 @@
 \mbox{\Hypertarget{class_configuration_ace92a3abe5d54b31dfe942a297f606a7}\label{class_configuration_ace92a3abe5d54b31dfe942a297f606a7}} 
 void {\bfseries set\+Config\+File\+Path} (std\+::string file\+Path)
 \item 
-\mbox{\Hypertarget{class_configuration_ae7338459d3ae2cac99311fd479968186}\label{class_configuration_ae7338459d3ae2cac99311fd479968186}} 
-bool {\bfseries read\+Config\+From\+File} ()
+bool \mbox{\hyperlink{class_configuration_ae7338459d3ae2cac99311fd479968186}{read\+Config\+From\+File}} ()
 \item 
-\mbox{\Hypertarget{class_configuration_aeef3dc6764deb9f059b2c31426291fa0}\label{class_configuration_aeef3dc6764deb9f059b2c31426291fa0}} 
-void {\bfseries set\+Master} (bool is\+Master)
+void \mbox{\hyperlink{class_configuration_aeef3dc6764deb9f059b2c31426291fa0}{set\+Master}} (bool is\+Master)
 \item 
-\mbox{\Hypertarget{class_configuration_a94e282442978cb8efdf186068e919ea4}\label{class_configuration_a94e282442978cb8efdf186068e919ea4}} 
-bool {\bfseries system\+Is\+Master} ()
+bool \mbox{\hyperlink{class_configuration_a94e282442978cb8efdf186068e919ea4}{system\+Is\+Master}} ()
 \item 
-\mbox{\Hypertarget{class_configuration_a3a1f0ab826d1b1135c7722beba1d196c}\label{class_configuration_a3a1f0ab826d1b1135c7722beba1d196c}} 
-void {\bfseries set\+Pusher\+Mounted} (bool pusher\+Is\+Mounted)
+void \mbox{\hyperlink{class_configuration_a3a1f0ab826d1b1135c7722beba1d196c}{set\+Pusher\+Mounted}} (bool pusher\+Is\+Mounted)
 \item 
-\mbox{\Hypertarget{class_configuration_a60c305cbbd6da8aebb156805c4f43729}\label{class_configuration_a60c305cbbd6da8aebb156805c4f43729}} 
-bool {\bfseries pusher\+Mounted} ()
+bool \mbox{\hyperlink{class_configuration_a60c305cbbd6da8aebb156805c4f43729}{pusher\+Mounted}} ()
 \item 
-\mbox{\Hypertarget{class_configuration_ab16244b119ed2b4072f509eca33c5fa7}\label{class_configuration_ab16244b119ed2b4072f509eca33c5fa7}} 
-void {\bfseries set\+Desired\+Workpiece\+Order} (std\+::vector$<$ Workpiece\+Type $>$ order)
+void \mbox{\hyperlink{class_configuration_ab16244b119ed2b4072f509eca33c5fa7}{set\+Desired\+Workpiece\+Order}} (std\+::vector$<$ Workpiece\+Type $>$ order)
 \item 
-\mbox{\Hypertarget{class_configuration_a3e79d55674629405b7c15429f5343f66}\label{class_configuration_a3e79d55674629405b7c15429f5343f66}} 
-std\+::vector$<$ Workpiece\+Type $>$ {\bfseries get\+Desired\+Order} ()
+std\+::vector$<$ Workpiece\+Type $>$ \mbox{\hyperlink{class_configuration_a3e79d55674629405b7c15429f5343f66}{get\+Desired\+Order}} ()
 \item 
-\mbox{\Hypertarget{class_configuration_acd677a1a1b7ff0e04c92c181b2653cef}\label{class_configuration_acd677a1a1b7ff0e04c92c181b2653cef}} 
-\mbox{\hyperlink{struct_calibration}{Calibration}} {\bfseries get\+Calibration} ()
+\mbox{\hyperlink{struct_calibration}{Calibration}} \mbox{\hyperlink{class_configuration_acd677a1a1b7ff0e04c92c181b2653cef}{get\+Calibration}} ()
 \item 
-\mbox{\Hypertarget{class_configuration_a83eb23e21c8016b63201302890fa6af7}\label{class_configuration_a83eb23e21c8016b63201302890fa6af7}} 
-void {\bfseries set\+Offset\+Calibration} (int offset)
+void \mbox{\hyperlink{class_configuration_a0cb24316186c0cd42c825df6bd5ca677}{set\+Offset\+Calibration}} (int offset, bool save\+Permanent)
 \item 
-\mbox{\Hypertarget{class_configuration_a991d830cdde0799dc97d7930cff3050e}\label{class_configuration_a991d830cdde0799dc97d7930cff3050e}} 
-void {\bfseries set\+Reference\+Calibration} (int ref\+High)
+void \mbox{\hyperlink{class_configuration_a4955e0b75c901ea664b5aaf103868efb}{set\+Reference\+Calibration}} (int ref\+High, bool save\+Permanent)
 \item 
-\mbox{\Hypertarget{class_configuration_a30a465df61312c587857b642d362b4bc}\label{class_configuration_a30a465df61312c587857b642d362b4bc}} 
-void {\bfseries save\+Current\+Config\+To\+File} ()
+void \mbox{\hyperlink{class_configuration_a30a465df61312c587857b642d362b4bc}{save\+Current\+Config\+To\+File}} ()
 \end{DoxyCompactItemize}
 \doxysubsection*{Static Public Member Functions}
 \begin{DoxyCompactItemize}
@@ -45,6 +34,141 @@ void {\bfseries save\+Current\+Config\+To\+File} ()
 \mbox{\Hypertarget{class_configuration_a4d77775969da7f63e3dbc83d31d451e6}\label{class_configuration_a4d77775969da7f63e3dbc83d31d451e6}} 
 static \mbox{\hyperlink{class_configuration}{Configuration}} \& {\bfseries get\+Instance} ()
 \end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_configuration_acd677a1a1b7ff0e04c92c181b2653cef}\label{class_configuration_acd677a1a1b7ff0e04c92c181b2653cef}} 
+\index{Configuration@{Configuration}!getCalibration@{getCalibration}}
+\index{getCalibration@{getCalibration}!Configuration@{Configuration}}
+\doxysubsubsection{\texorpdfstring{getCalibration()}{getCalibration()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{struct_calibration}{Calibration}} Configuration\+::get\+Calibration (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Gets the currently calibrated values.
+
+\begin{DoxyReturn}{Returns}
+current calibration 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_configuration_a3e79d55674629405b7c15429f5343f66}\label{class_configuration_a3e79d55674629405b7c15429f5343f66}} 
+\index{Configuration@{Configuration}!getDesiredOrder@{getDesiredOrder}}
+\index{getDesiredOrder@{getDesiredOrder}!Configuration@{Configuration}}
+\doxysubsubsection{\texorpdfstring{getDesiredOrder()}{getDesiredOrder()}}
+{\footnotesize\ttfamily std\+::vector$<$ Workpiece\+Type $>$ Configuration\+::get\+Desired\+Order (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Gets the desired order in which workpieces should arrive at the end of FBM2
+
+\begin{DoxyReturn}{Returns}
+the desired workpiece order 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_configuration_a60c305cbbd6da8aebb156805c4f43729}\label{class_configuration_a60c305cbbd6da8aebb156805c4f43729}} 
+\index{Configuration@{Configuration}!pusherMounted@{pusherMounted}}
+\index{pusherMounted@{pusherMounted}!Configuration@{Configuration}}
+\doxysubsubsection{\texorpdfstring{pusherMounted()}{pusherMounted()}}
+{\footnotesize\ttfamily bool Configuration\+::pusher\+Mounted (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Checks if a pusher is mounted for sorting out.
+
+\begin{DoxyReturn}{Returns}
+true if pusher is mounted, false\+: switch is mounted 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_configuration_ae7338459d3ae2cac99311fd479968186}\label{class_configuration_ae7338459d3ae2cac99311fd479968186}} 
+\index{Configuration@{Configuration}!readConfigFromFile@{readConfigFromFile}}
+\index{readConfigFromFile@{readConfigFromFile}!Configuration@{Configuration}}
+\doxysubsubsection{\texorpdfstring{readConfigFromFile()}{readConfigFromFile()}}
+{\footnotesize\ttfamily bool Configuration\+::read\+Config\+From\+File (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Reads the configuration from the set config file path (or default path). If the file does not exist, a new one will be created with default values.
+
+Structure of the file\+: 1 $\vert$ ORDER=\mbox{[}Desired \mbox{\hyperlink{class_workpiece}{Workpiece}} Order\mbox{]} 2 $\vert$ CAL\+\_\+\+OFFSET=\mbox{[}Calibrated \mbox{\hyperlink{class_a_d_c}{ADC}} offset value for \mbox{\hyperlink{class_height_sensor}{Height\+Sensor}}\mbox{]} 3 $\vert$ CAL\+\_\+\+REF=\mbox{[}Calibrated \mbox{\hyperlink{class_a_d_c}{ADC}} reference value (@ 25.\+0 mm) for \mbox{\hyperlink{class_height_sensor}{Height\+Sensor}}\mbox{]}
+
+\begin{DoxyReturn}{Returns}
+true if reading the file was successful. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_configuration_a30a465df61312c587857b642d362b4bc}\label{class_configuration_a30a465df61312c587857b642d362b4bc}} 
+\index{Configuration@{Configuration}!saveCurrentConfigToFile@{saveCurrentConfigToFile}}
+\index{saveCurrentConfigToFile@{saveCurrentConfigToFile}!Configuration@{Configuration}}
+\doxysubsubsection{\texorpdfstring{saveCurrentConfigToFile()}{saveCurrentConfigToFile()}}
+{\footnotesize\ttfamily void Configuration\+::save\+Current\+Config\+To\+File (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Saves all currently stored configuration values to config file. \mbox{\Hypertarget{class_configuration_ab16244b119ed2b4072f509eca33c5fa7}\label{class_configuration_ab16244b119ed2b4072f509eca33c5fa7}} 
+\index{Configuration@{Configuration}!setDesiredWorkpieceOrder@{setDesiredWorkpieceOrder}}
+\index{setDesiredWorkpieceOrder@{setDesiredWorkpieceOrder}!Configuration@{Configuration}}
+\doxysubsubsection{\texorpdfstring{setDesiredWorkpieceOrder()}{setDesiredWorkpieceOrder()}}
+{\footnotesize\ttfamily void Configuration\+::set\+Desired\+Workpiece\+Order (\begin{DoxyParamCaption}\item[{std\+::vector$<$ Workpiece\+Type $>$}]{order }\end{DoxyParamCaption})}
+
+Sets the desired workpiece order. Will usually be read out of the config file
+
+
+\begin{DoxyParams}{Parameters}
+{\em order} & Desired workpiece order as list of 3 workpieces \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_configuration_aeef3dc6764deb9f059b2c31426291fa0}\label{class_configuration_aeef3dc6764deb9f059b2c31426291fa0}} 
+\index{Configuration@{Configuration}!setMaster@{setMaster}}
+\index{setMaster@{setMaster}!Configuration@{Configuration}}
+\doxysubsubsection{\texorpdfstring{setMaster()}{setMaster()}}
+{\footnotesize\ttfamily void Configuration\+::set\+Master (\begin{DoxyParamCaption}\item[{bool}]{is\+Master }\end{DoxyParamCaption})}
+
+Sets the type of the system the \mbox{\hyperlink{class_configuration}{Configuration}} is running on.
+
+
+\begin{DoxyParams}{Parameters}
+{\em is\+Master} & true=Master, false=Slave \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_configuration_a0cb24316186c0cd42c825df6bd5ca677}\label{class_configuration_a0cb24316186c0cd42c825df6bd5ca677}} 
+\index{Configuration@{Configuration}!setOffsetCalibration@{setOffsetCalibration}}
+\index{setOffsetCalibration@{setOffsetCalibration}!Configuration@{Configuration}}
+\doxysubsubsection{\texorpdfstring{setOffsetCalibration()}{setOffsetCalibration()}}
+{\footnotesize\ttfamily void Configuration\+::set\+Offset\+Calibration (\begin{DoxyParamCaption}\item[{int}]{offset,  }\item[{bool}]{save\+Permanent }\end{DoxyParamCaption})}
+
+Sets the calibrated value for \mbox{\hyperlink{class_a_d_c}{ADC}} offset (belt height)
+
+
+\begin{DoxyParams}{Parameters}
+{\em offset} & Value to save for calibration \\
+\hline
+{\em save\+Permanent} & set to true, if the value should also be saved to config file \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_configuration_a3a1f0ab826d1b1135c7722beba1d196c}\label{class_configuration_a3a1f0ab826d1b1135c7722beba1d196c}} 
+\index{Configuration@{Configuration}!setPusherMounted@{setPusherMounted}}
+\index{setPusherMounted@{setPusherMounted}!Configuration@{Configuration}}
+\doxysubsubsection{\texorpdfstring{setPusherMounted()}{setPusherMounted()}}
+{\footnotesize\ttfamily void Configuration\+::set\+Pusher\+Mounted (\begin{DoxyParamCaption}\item[{bool}]{pusher\+Is\+Mounted }\end{DoxyParamCaption})}
+
+Sets if a pusher is mounted for sorting out.
+
+
+\begin{DoxyParams}{Parameters}
+{\em pusher\+Is\+Mounted} & true\+: Pusher is mounted, false\+: Switch is mounted \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_configuration_a4955e0b75c901ea664b5aaf103868efb}\label{class_configuration_a4955e0b75c901ea664b5aaf103868efb}} 
+\index{Configuration@{Configuration}!setReferenceCalibration@{setReferenceCalibration}}
+\index{setReferenceCalibration@{setReferenceCalibration}!Configuration@{Configuration}}
+\doxysubsubsection{\texorpdfstring{setReferenceCalibration()}{setReferenceCalibration()}}
+{\footnotesize\ttfamily void Configuration\+::set\+Reference\+Calibration (\begin{DoxyParamCaption}\item[{int}]{ref\+High,  }\item[{bool}]{save\+Permanent }\end{DoxyParamCaption})}
+
+Sets the calibrated value for \mbox{\hyperlink{class_a_d_c}{ADC}} reference (@ 25.\+0 mm)
+
+
+\begin{DoxyParams}{Parameters}
+{\em ref\+High} & Value to save for calibration \\
+\hline
+{\em save\+Permanent} & set to true, if the value should also be saved to config file \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_configuration_a94e282442978cb8efdf186068e919ea4}\label{class_configuration_a94e282442978cb8efdf186068e919ea4}} 
+\index{Configuration@{Configuration}!systemIsMaster@{systemIsMaster}}
+\index{systemIsMaster@{systemIsMaster}!Configuration@{Configuration}}
+\doxysubsubsection{\texorpdfstring{systemIsMaster()}{systemIsMaster()}}
+{\footnotesize\ttfamily bool Configuration\+::system\+Is\+Master (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Gets the type of the system
+
+\begin{DoxyReturn}{Returns}
+true if Master, false if Slave 
+\end{DoxyReturn}
 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}

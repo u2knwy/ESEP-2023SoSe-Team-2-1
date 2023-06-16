@@ -11,7 +11,6 @@
 #include "logger/logger.hpp"
 
 void RightSlow::entry() {
-	Logger::debug("[MotorFSM] Stopped entry");
 	actions->motorRightSlow();
 }
 

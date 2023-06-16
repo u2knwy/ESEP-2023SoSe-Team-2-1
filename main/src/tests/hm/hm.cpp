@@ -25,11 +25,12 @@
 class HeightSensor_Test : public ::testing::Test {
 protected:
 	HeightContext *fsm;
+	std::shared_ptr<HeightSensorMock> sensor;
 
   void SetUp() override {
-	  std::shared_ptr<IHeightSensor> heightSensor = std::make_shared<HeightSensorMock>();
 	  std::shared_ptr<EventManager> eventManager = std::make_shared<EventManager>();
-	  fsm = new HeightContext(eventManager, heightSensor);
+	  sensor = std::make_shared<HeightSensorMock>();
+	  fsm = new HeightContext(eventManager, sensor);
   }
 
   void TearDown() override {
@@ -158,16 +159,12 @@ TEST_F(HeightSensor_Test, CalculateAverageAndMaxValue) {
 	fsm->heightValueReceived(11.0);
 
 	// 18 valid measurements
-	for(int i = 0; i < 8; i++) {
+	for(int i = 0; i < 50; i++) {
 		fsm->heightValueReceived(25.0);
 	}
 	fsm->heightValueReceived(26.0);
-	fsm->heightValueReceived(24.0);
-	for(int i = 0; i < 8; i++) {
-		fsm->heightValueReceived(25.0);
-	}
 
-	// 1 invalud measurement - last value must be discarded
+	// 1 invalid measurement - last value must be discarded
 	fsm->heightValueReceived(11.0);
 
 	res = fsm->getCurrentResult();
@@ -204,7 +201,7 @@ TEST_F(HeightSensor_Test, CalculateAverageAndMaxValueWhenMotorStoppedInBetween) 
 	fsm->handleEvent(ev);
 
 	// these measurements must be handled again
-	for(int i = 0; i < 6; i++) {
+	for(int i = 0; i < 10; i++) {
 		fsm->heightValueReceived(25.0);
 	}
 

@@ -11,7 +11,6 @@
 #include "logger/logger.hpp"
 
 void RightFast::entry() {
-	Logger::debug("[MotorFSM] RightFast entry");
 	actions->motorRightFast();
 }
 
