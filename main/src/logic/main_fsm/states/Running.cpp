@@ -269,13 +269,6 @@ bool Running::slave_LBR_Unblocked()
 	return false;
 }
 
-bool Running::slave_heightResultReceived(EventType event, float average)
-{
-	Logger::debug("[MainFSM] Received FBM1 height result: " + EVENT_TO_STRING(event) + " - avg: " + std::to_string(average) + " mm");
-	// TODO: Handle height result -> convert EventType to WorkpieceType and update workpiece data
-	return true;
-}
-
 bool Running::master_btnStop_Pressed()
 {
 	exit();

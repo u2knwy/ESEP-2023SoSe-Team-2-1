@@ -77,6 +77,7 @@ bool Configuration::readConfigFromFile() {
 		readResult = true;
 	} else {
 		Logger::warn("Config file " + configFilePath + " does not exist -> create new and write default values");
+		Logger::warn("Please perform a calibration of the HeightSensor!");
 		std::ofstream fileStream;
 		fileStream.open(configFilePath);
 		fileStream << "ORDER=F,OB,BOM\n";
