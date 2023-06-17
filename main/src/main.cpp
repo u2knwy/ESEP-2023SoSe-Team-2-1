@@ -118,6 +118,15 @@ int main(int argc, char **argv)
 		motorFSM_Master = std::make_shared<MotorContext>(eventManager, true);
 		motorFSM_Slave = std::make_shared<MotorContext>(eventManager, false);
 		mainFSM = std::make_shared<MainContext>(eventManager);
+
+		// mainFSM->master_btnStart_PressedShort();
+		// mainFSM->master_LBA_Blocked();
+		// mainFSM->master_LBA_Unblocked();
+	}
+	else
+	{
+		Logger::info("Program started as SLAVE");
+		conf.setMaster(false);
 	}
 
 	// Register handler function to be called if the program is not terminated properly
