@@ -49,7 +49,8 @@ public:
     bool isFBM_SOccupied();
     bool isQueueempty(AreaType area);
 
-    void printWorkpiece(Workpiece* wp);
+    std::string to_string_Workpiece(Workpiece* wp);
+
 
     void testWorkpieceManager();
 

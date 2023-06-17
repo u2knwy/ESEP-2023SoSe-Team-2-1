@@ -164,12 +164,14 @@ bool WorkpieceManager::isQueueempty(AreaType area){
 	return false;
 }
 
-void WorkpieceManager::printWorkpiece(Workpiece* wp){
-	std::cout<<"wp [id= " << std::to_string(wp->id)<<", ";
-	std::cout<<" master_type= " << std::to_string(wp->WP_M_type)<<", ";
-	std::cout<<" slave_type= " << std::to_string(wp->WP_S_type)<<", ";
-	std::cout<<" height= " << std::to_string(wp->avgHeight)<<", ";
-	std::cout<<" flipped= " << std::to_string(wp->flipped)<<"] "<<std::endl;
+std::string WorkpieceManager::to_string_Workpiece(Workpiece* wp){
+	std::string str= "wp [id= "+ std::to_string(wp->id)+", "+
+			" master_type= " +std::to_string(wp->WP_M_type)+", "+
+			" slave_type= "+std::to_string(wp->WP_S_type)+", "+
+			" height= "+std::to_string(wp->avgHeight)+
+			" flipped= "+std::to_string(wp->flipped)+"] ";
+
+	return str;
 
 }
 

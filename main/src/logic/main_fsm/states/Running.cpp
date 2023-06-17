@@ -15,6 +15,7 @@
 #include <iostream>
 
 
+
 MainState Running::getCurrentState() {
 	return MainState::RUNNING;
 };
@@ -38,7 +39,7 @@ bool Running::master_LBA_Blocked() {
 }
 
 bool Running::master_LBA_Unblocked() {
-	Workpiece* wp = data->wpManager->addWorkpiece();                          	//addWorkpiece
+	Workpiece* wp = data->wpManager->addWorkpiece();                          				//addWorkpiece
 	Logger::info("Workpiece with id: " + std::to_string(wp->id) + " created and added to Area_A");
 	return true;
 }
@@ -46,12 +47,12 @@ bool Running::master_LBA_Unblocked() {
 bool Running::master_heightResultReceived(EventType event, float average) {
 	Logger::debug("[MainFSM] Received FBM1 height result: " + EVENT_TO_STRING(event) + " - avg: " + std::to_string(average) + " mm");
 
-	data->wpManager->setHeight(AreaType::AREA_A, average);   					// setheight()
-	data->wpManager->setTypeEvent(event, AreaType::AREA_A);   					// setType()
-	data->wpManager->moveFromAreaToArea(AreaType::AREA_A, AreaType::AREA_B); 	//moveFromArea_AtoArea_B()
+	Workpiece* wp = data->wpManager->getHeadOfArea(AreaType::AREA_A);
+	data->wpManager->setHeight(AreaType::AREA_A, average);   								// setheight()
+	data->wpManager->setTypeEvent(event, AreaType::AREA_A);   								// setType()
+	data->wpManager->moveFromAreaToArea(AreaType::AREA_A, AreaType::AREA_B); 				//moveFromArea_AtoArea_B()
 
-	//Logger::info("Workpiece with id: " + std::to_string(wp->id) + "type= "+ std::to_string(wp->WP_M_type) +
-		//" height= " + std::to_string(wp->avgHeight));
+	Logger::info(data->wpManager->to_string_Workpiece(wp));
 	return true;
 }
 
@@ -142,17 +143,17 @@ bool Running::slave_LBA_Unblocked() {
 bool Running::slave_heightResultReceived(EventType event, float average) {
 	Logger::debug("[MainFSM] Received FBM1 height result: " + EVENT_TO_STRING(event) + " - avg: " + std::to_string(average) + " mm");
 
-	data->wpManager->setHeight(AreaType::AREA_D, average);   					// setheight()
-	data->wpManager->setTypeEvent(event, AreaType::AREA_D);   					// setType()
+	data->wpManager->setHeight(AreaType::AREA_D, average);   								// setheight()
+	data->wpManager->setTypeEvent(event, AreaType::AREA_D);   								// setType()
 
 	return true;
 }
 
 bool Running::slave_metalDetected() {
 	Workpiece* wp = data->wpManager->getHeadOfArea(AreaType::AREA_D);
-	data->wpManager->setMetal(AreaType::AREA_D);                            	//setMetal()
+	data->wpManager->setMetal(AreaType::AREA_D);                            				//setMetal()
 
-	if(wp->WP_S_type == WorkpieceType::WS_BOM){									//setType()
+	if(wp->WP_S_type == WorkpieceType::WS_BOM){												//setType()
 		wp->WP_S_type = WorkpieceType::WS_BUM;
 	}
 	return true;
@@ -163,14 +164,14 @@ bool Running::slave_LBW_Blocked() {
 	WorkpieceType slave_type= data->wpManager->getNextWorkpieceType();
 	WorkpieceType detected_type= wp->WP_S_type;
 
-	wp->sortOut= detected_type != slave_type;
+	wp->sortOut= detected_type != slave_type;												// sortOut()
 
 	if(wp->sortOut){
-		actions->slave_openGate(false);
+		actions->slave_openGate(false);														// opengate()
 		Logger::info("WP id: " + std::to_string(wp->id) +" kicked out");
 	}
 	else
-		actions->slave_openGate(true);
+		actions->slave_openGate(true);														// closegate()
 		Logger::info("WP id: " + std::to_string(wp->id) +" Passed to Area_C");
 	return true;
 }
@@ -182,7 +183,7 @@ bool Running::slave_LBW_Unblocked() {
 bool Running::slave_LBE_Blocked() {
 	Workpiece* wp = data->wpManager->getHeadOfArea(AreaType::AREA_D);
 	if(!data->wpManager->isQueueempty(AreaType::AREA_D)){
-		data->wpManager->printWorkpiece(wp);
+		std::cout<<data->wpManager->to_string_Workpiece(wp)<<std::endl;						//print()
 		actions->slave_sendMotorRightRequest(false);
 	}
 
