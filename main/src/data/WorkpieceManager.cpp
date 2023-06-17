@@ -5,34 +5,22 @@
  *      Author: Sulaiman
  */
 
-
 #include "WorkpieceManager.h"
 #include "configuration/Configuration.h"
 
-
-
-
-
-WorkpieceManager::WorkpieceManager() {
-	nextId = 1;
+WorkpieceManager::WorkpieceManager() : nextId(1) {
 	auto confOrder = Configuration::getInstance().getDesiredOrder();
-	for(int i = 0; i < 3; i++) {
+	for (int i = 0; i < 3; i++) {
 		desiredOrder[i] = confOrder.at(i);
 	}
-
 }
 
-WorkpieceManager::~WorkpieceManager() {
-
-}
+WorkpieceManager::~WorkpieceManager() {}
 
 void WorkpieceManager::rotateNextWorkpieces() {
 	WorkpieceType front = desiredOrder[0];
-	// 2nd -> 1st
 	desiredOrder[0] = desiredOrder[1];
-	// 3rd -> 2nd
 	desiredOrder[1] = desiredOrder[2];
-	// 1st -> 3rd
 	desiredOrder[2] = front;
 }
 
@@ -41,220 +29,161 @@ WorkpieceType WorkpieceManager::getNextWorkpieceType() {
 }
 
 Workpiece* WorkpieceManager::addWorkpiece() {
-	Workpiece* wp;
-	wp->id=nextId;
-	nextId++;
+	Workpiece* wp = new Workpiece();
+	wp->id = nextId++;
+	addToArea(AreaType::AREA_A, wp);
 	return wp;
 }
 
-
-
-void WorkpieceManager::addToArea_A(Workpiece* wp) {
-	Area_A.push(wp);
-}
-
-void WorkpieceManager::addToArea_B(Workpiece* wp) {
-	Area_B.push(wp);
-}
-
-void WorkpieceManager::addToArea_C(Workpiece* wp) {
-	Area_C.push(wp);
-}
-
-void WorkpieceManager::addToArea_D(Workpiece* wp) {
-	Area_D.push(wp);
-}
-
-
-void WorkpieceManager::moveFromArea_AtoArea_B(){
-    addToArea_B(removeFromArea_A());
-};
-
-void WorkpieceManager::moveFromArea_BtoArea_C(){
-    addToArea_C(removeFromArea_B());
-};
-
-void WorkpieceManager::moveFromArea_CtoArea_D(){
-    addToArea_D(removeFromArea_C());
-};
-
-Workpiece* WorkpieceManager::removeFromArea_A() {
-    Workpiece* wp = Area_A.front();
-    Area_A.pop();
-    return wp;
-}
-
-Workpiece*  WorkpieceManager::removeFromArea_B() {
-    Workpiece* wp = Area_B.front();
-    Area_B.pop();
-    return wp;
-}
-
-Workpiece*  WorkpieceManager::removeFromArea_C() {
-    Workpiece* wp = Area_C.front();
-    Area_C.pop();
-    return wp;
-}
-
-Workpiece* WorkpieceManager::getter_head_Area_A(){
-	Workpiece* wp = Area_A.front();
-	return wp;
-}
-
-Workpiece* WorkpieceManager::getter_head_Area_B(){
-	Workpiece* wp = Area_B.front();
-	return wp;
-}
-
-Workpiece* WorkpieceManager::getter_head_Area_C(){
-	Workpiece* wp = Area_C.front();
-	return wp;
-}
-
-Workpiece* WorkpieceManager::getter_head_Area_D(){
-	Workpiece* wp = Area_D.front();
-	return wp;
-}
-
-Workpiece*  WorkpieceManager::removeFromArea_D() {
-    Workpiece* wp = Area_D.front();
-    Area_D.pop();
-    return wp;
-}
-
-
-void WorkpieceManager::setHeight_M(int height){
-	if (!Area_A.empty()) {
-		Workpiece* currentWorkpiece = Area_A.front();
-		currentWorkpiece->avgHeight = height;
-	}
-}
-void WorkpieceManager::setHeight_S(int height){
-	if (!Area_D.empty()) {
-		float tmp= height/10;
-		Workpiece* currentWorkpiece = Area_D.front();
-		currentWorkpiece->avgHeight = tmp;
+void WorkpieceManager::addToArea(AreaType area, Workpiece* wp) {
+	switch (area) {
+		case AreaType::AREA_A:
+			Area_A.push(wp);
+			break;
+		case AreaType::AREA_B:
+			Area_B.push(wp);
+			break;
+		case AreaType::AREA_C:
+			Area_C.push(wp);
+			break;
+		case AreaType::AREA_D:
+			Area_D.push(wp);
+			break;
 	}
 }
 
-void WorkpieceManager::setMetal_M(){
-	if (!Area_B.empty()) {
-		Workpiece* currentWorkpiece = Area_B.front();
-		currentWorkpiece->metal = true;
+void WorkpieceManager::moveFromAreaToArea(AreaType source, AreaType destination) {
+	Workpiece* wp = removeFromArea(source);
+	if (wp != nullptr) {
+		addToArea(destination, wp);
 	}
 }
 
-void WorkpieceManager::setMetal_S(){
-	if (!Area_D.empty()) {
-		Workpiece* currentWorkpiece = Area_D.front();
-		currentWorkpiece->metal = true;
+Workpiece* WorkpieceManager::removeFromArea(AreaType area) {
+	std::queue<Workpiece*>& targetArea = getArea(area);
+	if (!targetArea.empty()) {
+		Workpiece* wp = targetArea.front();
+		targetArea.pop();
+		return wp;
+	}
+	return nullptr;
+}
+
+Workpiece* WorkpieceManager::getHeadOfArea(AreaType area) {
+	std::queue<Workpiece*>& targetArea = getArea(area);
+	if (!targetArea.empty()) {
+		return targetArea.front();
+	}
+	return nullptr;
+}
+
+void WorkpieceManager::setHeight(AreaType area, double height) {
+	Workpiece* wp = getHeadOfArea(area);
+	if (wp != nullptr) {
+		wp->avgHeight = height;
 	}
 }
 
-void WorkpieceManager::setType_M(WorkpieceType type){
-	if (!Area_B.empty()) {
-		Workpiece* currentWorkpiece = Area_B.front();
-		currentWorkpiece->WP_M_type = type;
+void WorkpieceManager::setTypeEvent(EventType event,AreaType area) {
+	WorkpieceType tmp;
+	if(event == EventType::HM_M_WS_F) {
+		tmp=WorkpieceType::WS_F;
+	} else if(event == EventType::HM_M_WS_OB) {
+		tmp=WorkpieceType::WS_OB;
+	} else if(event == EventType::HM_M_WS_BOM) {
+		tmp=WorkpieceType::WS_BOM;
+	} else if (event == EventType::HM_M_WS_UNKNOWN) {
+		tmp=WS_UNKNOWN;
+	}
+
+	Workpiece* wp = getHeadOfArea(area);
+	if (wp != nullptr) {
+		if (area==AreaType::AREA_D){
+			wp->WP_S_type = tmp;
+		}
+		else
+			wp->WP_M_type = tmp;
+	}
+
+}
+
+
+void WorkpieceManager::setMetal(AreaType area) {
+	Workpiece* wp = getHeadOfArea(area);
+	if (wp != nullptr) {
+		wp->metal = true;
 	}
 }
 
-void WorkpieceManager::setType_S(WorkpieceType type){
-	if (!Area_D.empty()) {
-		Workpiece* currentWorkpiece = Area_D.front();
-		currentWorkpiece->WP_S_type = type;
+void WorkpieceManager::setType(AreaType area, WorkpieceType type) {
+	Workpiece* wp = getHeadOfArea(area);
+	if (wp != nullptr) {
+		if (area == AreaType::AREA_A || area == AreaType::AREA_B) {
+			wp->WP_M_type = type;
+		} else if (area == AreaType::AREA_C || area == AreaType::AREA_D) {
+			wp->WP_S_type = type;
+		}
 	}
 }
 
-void WorkpieceManager::setSortOut_M(bool input){
-	if (!Area_B.empty()) {
-		Workpiece* currentWorkpiece = Area_B.front();
-		currentWorkpiece->sortOut = input;
+void WorkpieceManager::setSortOut(AreaType area, bool sortOut) {
+	Workpiece* wp = getHeadOfArea(area);
+	if (wp != nullptr) {
+		wp->sortOut = sortOut;
 	}
 }
 
-void WorkpieceManager::setSortOut_S(bool input){
-	if (!Area_D.empty()) {
-		Workpiece* currentWorkpiece = Area_D.front();
-		currentWorkpiece->sortOut = input;
+void WorkpieceManager::setFlipped(AreaType area) {
+	Workpiece* wp = getHeadOfArea(area);
+	if (wp != nullptr) {
+		wp->flipped = true;
 	}
 }
 
-bool WorkpieceManager::getSortOut_M(){
-	if (!Area_B.empty()) {
-		Workpiece* currentWorkpiece = Area_B.front();
-		return currentWorkpiece->sortOut;
+bool WorkpieceManager::isFBM_MEmpty(){
+	return  Area_A.empty() && Area_B.empty() && Area_C.empty();
+}
+
+bool WorkpieceManager::isFBM_SOccupied(){
+	return  Area_D.empty();
+}
+
+bool WorkpieceManager::isQueueempty(AreaType area){
+	if(area==AreaType::AREA_A){
+		return Area_A.empty();
+	}
+	else if (area==AreaType::AREA_B){
+		return Area_B.empty();
+	}
+	else if(area==AreaType::AREA_C){
+		return Area_C.empty();
+	}
+	else if (area==AreaType::AREA_D){
+		return Area_D.empty();
+	}
+	return false;
+}
+
+void WorkpieceManager::printWorkpiece(Workpiece* wp){
+	std::cout<<"wp [id= " << std::to_string(wp->id)<<", ";
+	std::cout<<" master_type= " << std::to_string(wp->WP_M_type)<<", ";
+	std::cout<<" slave_type= " << std::to_string(wp->WP_S_type)<<", ";
+	std::cout<<" height= " << std::to_string(wp->avgHeight)<<", ";
+	std::cout<<" flipped= " << std::to_string(wp->flipped)<<"] "<<std::endl;
+
+}
+
+std::queue<Workpiece*>& WorkpieceManager::getArea(AreaType area) {
+	switch (area) {
+		case AreaType::AREA_A:
+			return Area_A;
+		case AreaType::AREA_B:
+			return Area_B;
+		case AreaType::AREA_C:
+			return Area_C;
+		case AreaType::AREA_D:
+			return Area_D;
+		default:
+			throw std::invalid_argument("Invalid area type");
 	}
 }
-
-bool WorkpieceManager::getSortOut_S(){
-	if (!Area_D.empty()) {
-		Workpiece* currentWorkpiece = Area_D.front();
-		return currentWorkpiece->sortOut;
-	}
-}
-
-void WorkpieceManager::setflipped(){
-	if (!Area_D.empty()) {
-		Workpiece* currentWorkpiece = Area_D.front();
-		currentWorkpiece->flipped=true;
-	}
-}
-
-void WorkpieceManager::print_WP(){
-	if (!Area_D.empty()) {
-		Workpiece* currentWorkpiece = Area_D.front();
-		std::cout << "WP: id = "<< currentWorkpiece->id <<std::endl;
-		std::cout << "    metal = "<< currentWorkpiece->metal <<std::endl;
-		std::cout << "    Height = "<< currentWorkpiece->avgHeight <<std::endl;
-		std::cout << "    flipped = "<< currentWorkpiece->flipped <<std::endl;
-		std::cout << "    Type = "<< currentWorkpiece->WP_S_type <<std::endl;
-	}
-}
-
-bool WorkpieceManager::WP_ON_FBM_M() {
-	return Area_A.empty() && Area_B.empty() &&Area_C.empty();
-}
-
-bool WorkpieceManager::fbm_S_Occupied() {
-	return Area_D.empty();
-}
-
-
-/*
- * test code
- */
-void  WorkpieceManager::testWorkpieceManager(){
-    Workpiece* wp1;
-    Workpiece* wp2;
-    Workpiece* wp3;
-    Workpiece* wp4;
-    Workpiece* wp5;
-    Workpiece* wp6;
-    Workpiece* wp7;
-    Workpiece* wp8;
-
-    wp1->id =1;
-    wp2->id =2;
-    wp3->id =3;
-    wp4->id =4;
-    wp5->id =5;
-    wp6->id =6;
-    wp7->id =7;
-    wp8->id =8;
-
-    addToArea_A(wp1);
-    addToArea_A(wp2);
-    addToArea_A(wp3);
-    addToArea_A(wp4);
-    addToArea_A(wp5);
-    addToArea_A(wp6);
-    addToArea_A(wp7);
-
-    moveFromArea_AtoArea_B();
-    moveFromArea_BtoArea_C();
-    //removeFromArea_D();
-}
-
-
-
-
