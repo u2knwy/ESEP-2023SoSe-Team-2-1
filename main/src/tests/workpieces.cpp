@@ -28,17 +28,12 @@ protected:
 };
 
 TEST_F(Workpieces_Test, InitiallyNoWorkpiecesAddNewAndIncrementId) {
-	/*EXPECT_FALSE(mngr->FBM2Occupied());
-	//EXPECT_FALSE(mngr->removeWpOnFBM2());
-	//EXPECT_FALSE(mngr->wpTransferredToFBM2());
-
-	EXPECT_EQ(0, mngr->nWorkpiecesOnFBM1());
+	EXPECT_TRUE(mngr->isFBM_MEmpty());
+	EXPECT_TRUE(mngr->isFBM_SOccupied());
 	Workpiece* wp1 = mngr->addWorkpiece();
-	EXPECT_EQ(1, wp1->getId());
-	EXPECT_EQ(1, mngr->nWorkpiecesOnFBM1());
-
+	EXPECT_EQ(1, wp1->id);
 	Workpiece* wp2 = mngr->addWorkpiece();
-	EXPECT_EQ(2, wp2->getId());
-	EXPECT_EQ(2, mngr->nWorkpiecesOnFBM1());
-	*/
+	EXPECT_EQ(2, wp2->id);
+	Workpiece* wp1a = mngr->getHeadOfArea(AreaType::AREA_A);
+	EXPECT_EQ(wp1->id, wp1a->id);
 }
