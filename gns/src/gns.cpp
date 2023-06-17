@@ -185,6 +185,7 @@ int send_msg(const std::string& msg) {
 }
 
 int main(int argc, char **argv) {
+	std::string msg;
 	int ret;
 	if (argc < 2) {
 		printf("Usage %s -s | -c \n", argv[0]);
@@ -192,12 +193,14 @@ int main(int argc, char **argv) {
 	}
 	else if (strcmp(argv[1], "-c") == 0) {
 		printf("Running Slave ... \n");
+		msg = "hi from slave";
 		create_service(ATTACH_POINT_SLAVE);
 		std::thread(receive_msg).detach();
 		connect_to_service(ATTACH_POINT_MASTER);
 	}
 	else if (strcmp(argv[1], "-s") == 0) {
 		printf("Running Master ... \n");
+		msg = "hi from master";
 		create_service(ATTACH_POINT_MASTER);
 		std::thread(receive_msg).detach();
 		connect_to_service(ATTACH_POINT_SLAVE);
@@ -208,7 +211,7 @@ int main(int argc, char **argv) {
 	}
 
 	while(true) {
-		ret = send_msg("hi");
+		ret = send_msg(msg);
 		std::this_thread::sleep_for(std::chrono::seconds(10));
 	}
 }
