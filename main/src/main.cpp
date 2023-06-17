@@ -20,8 +20,9 @@
 #include <logic/hm/HeightContext.h>
 #include <atomic>
 
-#ifdef SIMULATION
-#include "simulation/simulationadapterqnx/simqnxgpioapi.h" // must be last include !!!
+#ifdef SIM_ACTIVE
+#include "simqnxgpioapi.h" // must be last include !!!
+#include "simqnxirqapi.h"
 #endif
 
 using namespace std;

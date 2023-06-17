@@ -137,6 +137,7 @@ bool Running::master_LBR_Blocked() {
     	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     	if(data->isRampFBM1Blocked()) {
     		actions->master_warningOn();
+    		actions->master_q2LedOn();
     	}
     });
     t.detach();
@@ -148,6 +149,7 @@ bool Running::master_LBR_Unblocked() {
 	if(data->isRampFBM1Blocked()) {
 		data->setRampFBM1Blocked(false);
 		actions->master_warningOff();
+		actions->master_q2LedOff();
 		return true;
 	}
 	return false;
@@ -185,6 +187,7 @@ bool Running::slave_LBR_Blocked() {
     	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     	if(data->isRampFBM2Blocked()) {
     		actions->slave_warningOn();
+    		actions->slave_q1LedOn();
     	}
     });
     t.detach();
@@ -196,12 +199,11 @@ bool Running::slave_LBR_Unblocked() {
 	if(data->isRampFBM2Blocked()) {
 		data->setRampFBM2Blocked(false);
 		actions->slave_warningOff();
+		actions->slave_q1LedOff();
 		return true;
 	}
 	return false;
 }
-
-
 
 bool Running::slave_heightResultReceived(EventType event, float average) {
 	Logger::debug("[MainFSM] Received FBM1 height result: " + EVENT_TO_STRING(event) + " - avg: " + std::to_string(average) + " mm");
