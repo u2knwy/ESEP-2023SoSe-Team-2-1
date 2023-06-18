@@ -101,11 +101,11 @@ bool Running::master_LBW_Unblocked()
 bool Running::master_LBE_Blocked()
 {
 	Workpiece *wp = data->wpManager->getHeadOfArea(AreaType::AREA_C);
-	if (data->wpManager->isFBM_SOccupied())
+	if (data->wpManager->isFBM_SEmpty())
 	{
 		actions->master_sendMotorRightRequest(false);
 	}
-	while (data->wpManager->isFBM_SOccupied())
+	while (data->wpManager->isFBM_SEmpty())
 	{
 		// wait
 		std::this_thread::sleep_for(std::chrono::seconds(3));

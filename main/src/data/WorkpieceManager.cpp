@@ -179,7 +179,7 @@ bool WorkpieceManager::isFBM_MEmpty()
 	return Area_A.empty() && Area_B.empty() && Area_C.empty();
 }
 
-bool WorkpieceManager::isFBM_SOccupied()
+bool WorkpieceManager::isFBM_SEmpty()
 {
 	return Area_D.empty();
 }
@@ -208,10 +208,10 @@ bool WorkpieceManager::isQueueempty(AreaType area)
 std::string WorkpieceManager::to_string_Workpiece(Workpiece *wp)
 {
 	std::string str = "wp [id= " + std::to_string(wp->id) + ", " +
-										" master_type= " + std::to_string(wp->WP_M_type) + ", " +
-										" slave_type= " + std::to_string(wp->WP_S_type) + ", " +
-										" height= " + std::to_string(wp->avgHeight) +
-										" flipped= " + std::to_string(wp->flipped) + "] ";
+		" master_type= " + std::to_string(wp->WP_M_type) + ", " +
+		" slave_type= " + std::to_string(wp->WP_S_type) + ", " +
+		" height= " + std::to_string(wp->avgHeight) +
+		" flipped= " + std::to_string(wp->flipped) + "] ";
 
 	return str;
 }
