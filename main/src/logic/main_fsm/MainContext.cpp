@@ -73,9 +73,17 @@ void MainContext::subscribeToEvents() {
 	eventManager->subscribe(EventType::HM_S_WS_BOM, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 
 	// Subscribe to errors and error-solved event
-	eventManager->subscribe(EventType::ERROR_SELF_SOLVABLE, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::ERROR_MAN_SOLVABLE, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::ERROR_SELF_SOLVED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::ERROR_M_SELF_SOLVABLE, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::ERROR_M_MAN_SOLVABLE, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::ERROR_M_SELF_SOLVED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::ERROR_S_SELF_SOLVABLE, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::ERROR_S_MAN_SOLVABLE, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::ERROR_S_SELF_SOLVED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+
+	eventManager->subscribe(EventType::WD_M_CONN_LOST, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::WD_M_CONN_REESTABLISHED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::WD_S_CONN_LOST, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	eventManager->subscribe(EventType::WD_S_CONN_REESTABLISHED, std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 }
 
 void MainContext::handleEvent(Event event) {
@@ -185,13 +193,20 @@ void MainContext::handleEvent(Event event) {
 	case EventType::MD_S_PAYLOAD:
 		state->slave_metalDetected();
 		break;
-	case EventType::ERROR_SELF_SOLVABLE:
+	case EventType::ERROR_M_SELF_SOLVABLE:
+	case EventType::ERROR_S_SELF_SOLVABLE:
+	case EventType::WD_M_CONN_LOST:
+	case EventType::WD_S_CONN_LOST:
 		selfSolvableErrorOccurred();
 		break;
-	case EventType::ERROR_MAN_SOLVABLE:
+	case EventType::ERROR_M_MAN_SOLVABLE:
+	case EventType::ERROR_S_MAN_SOLVABLE:
 		nonSelfSolvableErrorOccurred();
 		break;
-	case EventType::ERROR_SELF_SOLVED:
+	case EventType::ERROR_M_SELF_SOLVED:
+	case EventType::ERROR_S_SELF_SOLVED:
+	case EventType::WD_M_CONN_REESTABLISHED:
+	case EventType::WD_S_CONN_REESTABLISHED:
 		errorSelfSolved();
 		break;
 	default:

@@ -94,9 +94,19 @@ void Watchdog::receivingThread() {
 		const auto now = steady_clock::now();
 		int elapsed_sec = duration_cast<seconds>(now - lastReceiveTime).count();
 		if(elapsed_sec > WD_TIMEOUT_SEC) {
-			Logger::error("[WD] Heartbeat received " + std::to_string(elapsed_sec) + " seconds ago -> ERROR!!!");
+			Logger::debug("[WD] Heartbeat received " + std::to_string(elapsed_sec) + " seconds ago -> ERROR!");
+			if(!connectionLost) {
+				Logger::error("[WD] Connection lost! (Timeout)");
+				connectionLost = true;
+				isMaster ? sendEvent(WD_M_CONN_LOST) : sendEvent(WD_S_CONN_LOST);
+			}
 		} else {
-			Logger::info("[WD] Heartbeat received " + std::to_string(elapsed_sec) + " seconds ago -> OK!");
+			Logger::debug("[WD] Heartbeat received " + std::to_string(elapsed_sec) + " seconds ago -> OK!");
+			if(connectionLost) {
+				Logger::info("[WD] Connection reestablished");
+				connectionLost = false;
+				isMaster ? sendEvent(WD_M_CONN_REESTABLISHED) : sendEvent(WD_S_CONN_REESTABLISHED);
+			}
 		}
 	}
 	Logger::debug("[WD] Stopped receiving heartbeats");

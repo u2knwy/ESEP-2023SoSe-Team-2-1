@@ -13,8 +13,8 @@
 #include <atomic>
 #include <thread>
 
-#define WD_SEND_INTERVAL_SEC 1
-#define WD_TIMEOUT_SEC 3
+#define WD_SEND_INTERVAL_SEC 3
+#define WD_TIMEOUT_SEC 5
 
 class Watchdog : public IEventHandler, public EventSender {
 public:
@@ -28,6 +28,7 @@ public:
 private:
 	std::shared_ptr<EventManager> eventManager;
 	bool isMaster;
+	bool connectionLost{false};
 	std::thread th_receive;
 	std::thread th_send;
 	std::atomic<bool> sendingRunning;

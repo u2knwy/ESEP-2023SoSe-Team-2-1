@@ -22,6 +22,7 @@ static std::chrono::steady_clock::time_point lastStartBtnPressTime;
 
 Sensors::Sensors(std::shared_ptr<EventManager> mngr) : eventManager(mngr) {
   gpio_bank_0 = mmap_device_io(SIZE_4KB, (uint64_t)GPIO_BANK_0);
+  isMaster = Configuration::getInstance().systemIsMaster();
 
   /* ### Create channel to receive interrupt pulse messages ### */
   chanID = ChannelCreate(0);
@@ -44,6 +45,10 @@ Sensors::Sensors(std::shared_ptr<EventManager> mngr) : eventManager(mngr) {
     Logger::debug("[Sensors] Connected to EventManager");
   } else {
     Logger::error("[Sensors] Error while connecting to EventManager");
+  }
+
+  if(eStopPressed()) {
+	  isMaster ? sendEvent(EventType::ESTOP_M_PRESSED) : sendEvent(EventType::ESTOP_S_PRESSED);
   }
 }
 
@@ -258,7 +263,6 @@ void Sensors::handleGpioInterrupt() {
   out32(GPIO_IRQSTATUS_1(gpio_bank_0), intrStatusReg);
   InterruptUnmask(INTR_GPIO_PORT0, interruptID);
 
-  bool master = Configuration::getInstance().systemIsMaster();
   Event event;
   event.type = (EventType)-1;
 
@@ -266,11 +270,11 @@ void Sensors::handleGpioInterrupt() {
     if (eStopPressed()) {
       Logger::debug("[Sensors] ESTOP pressed");
       event.type =
-          master ? EventType::ESTOP_M_PRESSED : EventType::ESTOP_S_PRESSED;
+          isMaster ? EventType::ESTOP_M_PRESSED : EventType::ESTOP_S_PRESSED;
     } else {
       Logger::debug("[Sensors] ESTOP released");
       event.type =
-          master ? EventType::ESTOP_M_RELEASED : EventType::ESTOP_S_RELEASED;
+          isMaster ? EventType::ESTOP_M_RELEASED : EventType::ESTOP_S_RELEASED;
     }
   } else if (BIT_SET(KEY_START_PIN, intrStatusReg)) {
     using namespace std::chrono;
@@ -284,67 +288,67 @@ void Sensors::handleGpioInterrupt() {
           duration_cast<milliseconds>(now - lastStartBtnPressTime).count();
       if (elapsed_ms >= BTN_LONG_PRESSED_TIME_MS) {
         Logger::debug("[Sensors] START button pressed long");
-        event.type = master ? EventType::START_M_LONG : EventType::START_S_LONG;
+        event.type = isMaster ? EventType::START_M_LONG : EventType::START_S_LONG;
       } else {
         Logger::debug("[Sensors] START button pressed short");
         event.type =
-            master ? EventType::START_M_SHORT : EventType::START_S_SHORT;
+            isMaster ? EventType::START_M_SHORT : EventType::START_S_SHORT;
       }
     }
   } else if (BIT_SET(KEY_STOP_PIN, intrStatusReg)) {
     if (!stopPressed()) {
       Logger::debug("[Sensors] STOP button pressed");
-      event.type = master ? EventType::STOP_M_SHORT : EventType::STOP_S_SHORT;
+      event.type = isMaster ? EventType::STOP_M_SHORT : EventType::STOP_S_SHORT;
     }
   } else if (BIT_SET(KEY_RESET_PIN, intrStatusReg)) {
     if (!resetPressed()) {
       Logger::debug("[Sensors] RESET button pressed");
-      event.type = master ? EventType::RESET_M_SHORT : EventType::RESET_S_SHORT;
+      event.type = isMaster ? EventType::RESET_M_SHORT : EventType::RESET_S_SHORT;
     }
   } else if (BIT_SET(LB_START_PIN, intrStatusReg)) {
     if (lbStartBlocked()) {
       Logger::debug("[Sensors] LBA blocked");
-      event.type = master ? EventType::LBA_M_BLOCKED : EventType::LBA_S_BLOCKED;
+      event.type = isMaster ? EventType::LBA_M_BLOCKED : EventType::LBA_S_BLOCKED;
     } else {
       Logger::debug("[Sensors] LBA unblocked");
       event.type =
-          master ? EventType::LBA_M_UNBLOCKED : EventType::LBA_S_UNBLOCKED;
+          isMaster ? EventType::LBA_M_UNBLOCKED : EventType::LBA_S_UNBLOCKED;
     }
   } else if (BIT_SET(LB_SWITCH_PIN, intrStatusReg)) {
     if (lbSwitchBlocked()) {
       Logger::debug("[Sensors] LBW blocked");
-      event.type = master ? EventType::LBW_M_BLOCKED : EventType::LBW_S_BLOCKED;
+      event.type = isMaster ? EventType::LBW_M_BLOCKED : EventType::LBW_S_BLOCKED;
     } else {
       Logger::debug("[Sensors] LBW unblocked");
       event.type =
-          master ? EventType::LBW_M_UNBLOCKED : EventType::LBW_S_UNBLOCKED;
+          isMaster ? EventType::LBW_M_UNBLOCKED : EventType::LBW_S_UNBLOCKED;
     }
   } else if (BIT_SET(LB_END_PIN, intrStatusReg)) {
     if (lbEndBlocked()) {
       Logger::debug("[Sensors] LBE blocked");
-      event.type = master ? EventType::LBE_M_BLOCKED : EventType::LBE_S_BLOCKED;
+      event.type = isMaster ? EventType::LBE_M_BLOCKED : EventType::LBE_S_BLOCKED;
     } else {
       Logger::debug("[Sensors] LBE unblocked");
       event.type =
-          master ? EventType::LBE_M_UNBLOCKED : EventType::LBE_S_UNBLOCKED;
+          isMaster ? EventType::LBE_M_UNBLOCKED : EventType::LBE_S_UNBLOCKED;
     }
   } else if (BIT_SET(LB_RAMP_PIN, intrStatusReg)) {
     if (lbRampBlocked()) {
       Logger::debug("[Sensors] LBR blocked");
-      event.type = master ? EventType::LBR_M_BLOCKED : EventType::LBR_S_BLOCKED;
+      event.type = isMaster ? EventType::LBR_M_BLOCKED : EventType::LBR_S_BLOCKED;
     } else {
       Logger::debug("[Sensors] LBR unblocked");
       event.type =
-          master ? EventType::LBR_M_UNBLOCKED : EventType::LBR_S_UNBLOCKED;
+          isMaster ? EventType::LBR_M_UNBLOCKED : EventType::LBR_S_UNBLOCKED;
     }
   } else if (BIT_SET(SE_METAL_PIN, intrStatusReg)) {
     if (metalDetected()) {
       Logger::debug("[Sensors] Metal detected");
-      event.type = master ? EventType::MD_M_PAYLOAD : EventType::MD_S_PAYLOAD;
+      event.type = isMaster ? EventType::MD_M_PAYLOAD : EventType::MD_S_PAYLOAD;
       event.data = 1;
     } else {
       Logger::debug("[Sensors] Metal not detected");
-      event.type = master ? EventType::MD_M_PAYLOAD : EventType::MD_S_PAYLOAD;
+      event.type = isMaster ? EventType::MD_M_PAYLOAD : EventType::MD_S_PAYLOAD;
       event.data = 0;
     }
   }

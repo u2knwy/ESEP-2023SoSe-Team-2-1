@@ -18,6 +18,7 @@ MainState Standby::getCurrentState() { return MainState::STANDBY; };
 
 void Standby::entry() {
   Logger::info("Entered Standby mode");
+  Logger::user_info("Press Start button shortly (< 2 seconds) to go to Running mode or long to start ServiceMode");
   actions->master_sendMotorStopRequest(true);
   actions->slave_sendMotorStopRequest(true);
   actions->setStandbyMode();

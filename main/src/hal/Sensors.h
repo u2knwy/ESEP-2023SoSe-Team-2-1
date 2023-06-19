@@ -63,6 +63,7 @@ class Sensors : public IEventHandler, public EventSender {
   int conID;
   std::thread eventLoopThread;
   std::shared_ptr<EventManager> eventManager;
+  bool isMaster;
 
   /**
    * Configure all Pins as input / outputs
