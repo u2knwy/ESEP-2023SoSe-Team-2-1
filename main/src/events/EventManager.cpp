@@ -25,13 +25,60 @@
 #define ATTACH_POINT_GNS_S "/dev/name/global/EventMgrSlave"
 
 
-EventManager::EventManager() : server_coid(-1) {
+EventManager::EventManager() : internal_chid(-1), internal_coid(-1), server_coid(-1) {
 	isMaster = Configuration::getInstance().systemIsMaster();
-	connectGNS();
+	//connectGNS();
+	rcvInternalRunning = false;
+	openInternalChannel();
 }
 
 EventManager::~EventManager() {
-	disconnectGNS();
+	//disconnectGNS();
+	ConnectDetach(internal_coid);
+	ChannelDestroy(internal_chid);
+}
+
+void EventManager::openInternalChannel() {
+	internal_chid = ChannelCreate(0);
+	if(internal_chid == -1) {
+		Logger::error("[EventManager] Creating internal channel failed");
+		throw std::runtime_error("ChannelCreate failed");
+	}
+	internal_coid = ConnectAttach(0, 0, internal_chid, _NTO_SIDE_CHANNEL, 0);
+	if(internal_coid == -1) {
+		Logger::error("[EventManager] Attaching to internal channel failed");
+		throw std::runtime_error("ConnectAttach failed");
+	}
+}
+
+int EventManager::connectInternalClient() {
+	if(internal_chid == -1) {
+		openInternalChannel();
+	}
+	int coid = ConnectAttach(0, 0, internal_chid, _NTO_SIDE_CHANNEL, 0);
+	if(coid == -1) {
+		Logger::error("ConnectAttach failed");
+	}
+	return coid;
+}
+
+void EventManager::rcvInternalEventsThread() {
+	rcvInternalRunning = true;
+	Logger::debug("[EventManager] Ready to receive internal events");
+	while(rcvInternalRunning) {
+	    _pulse pulse;
+		int rtrn = MsgReceivePulse(internal_chid, &pulse, sizeof(pulse), NULL);
+		if(rtrn < 0) {
+			Logger::error("Error during MsgReceivePulse: " + std::to_string(errno));
+		}
+		if(pulse.code == PULSE_STOP_THREAD) {
+			rcvInternalRunning = false;
+			continue;
+		}
+		Event ev{(EventType) pulse.code, pulse.value.sival_int};
+		handleEvent(ev);
+	}
+	Logger::debug("[EventManager] Stopped receiving internal events");
 }
 
 void EventManager::connectGNS() {
@@ -72,16 +119,26 @@ void EventManager::subscribe(EventType type, EventCallback callback) {
 	subscribers[type].push_back(callback);
 }
 
+int EventManager::subscribeToAllEvents(EventCallback callback) {
+	int nEvents = 0;
+	for (int i = static_cast<int>(EventType::PULSE_STOP_THREAD); i <= static_cast<int>(EventType::ERROR_SELF_SOLVED); i++) {
+		EventType eventType = static_cast<EventType>(i);
+		subscribe(eventType, callback);
+		nEvents++;
+	}
+	return nEvents;
+}
+
 void EventManager::unsubscribe(EventType type, EventCallback callback) {
 
 }
 
-void EventManager::sendEvent(const Event &event) {
+void EventManager::handleEvent(const Event &event) {
 	std::stringstream ss;
-	ss << "[EventManager] sendEvent: " << EVENT_TO_STRING(event.type); // << " = " << (int) event.type;
+	ss << "[EventManager] handleEvent: " << EVENT_TO_STRING(event.type);
 
 	if(event.data != -1)
-		ss << ", data: " << std::to_string(event.data);
+		ss << ", data: " << event.data;
 
 	if (subscribers.find(event.type) != subscribers.end()) {
 		Logger::debug("[EventManager] Notifiying " + std::to_string(subscribers[event.type].size()) + " subscribers about Event " + EVENT_TO_STRING(event.type));
@@ -96,6 +153,20 @@ void EventManager::sendEvent(const Event &event) {
 	Logger::debug(ss.str());
 }
 
+void EventManager::sendEvent(const Event &event) {
+	// TODO: Send event to other system
+}
+
 int EventManager::start() {
+	thRcvInternal = std::thread(&EventManager::rcvInternalEventsThread, this);
+	return 0;
+}
+
+int EventManager::stop() {
+	int res = MsgSendPulse(internal_coid, -1, PULSE_STOP_THREAD, 0);
+	if(res < 0) {
+		Logger::error("[EventManager] Error during MsgSendPulse: " + std::to_string(errno));
+	}
+	thRcvInternal.join();
 	return 0;
 }

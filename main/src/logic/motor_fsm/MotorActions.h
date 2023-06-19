@@ -7,9 +7,10 @@
 #pragma once
 
 #include "events/EventManager.h"
+#include "events/EventSender.h"
 #include <memory>
 
-class MotorActions {
+class MotorActions : public EventSender {
 public:
 	MotorActions(std::shared_ptr<EventManager> mngr, bool master);
 	virtual ~MotorActions();

@@ -71,42 +71,25 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
-<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="class_logger-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">Logger Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="dynheader">
-Inheritance diagram for Logger:</div>
-<div class="dyncontent">
- <div class="center">
-  <img src="class_logger.png" usemap="#Logger_map" alt=""/>
-  <map id="Logger_map" name="Logger_map">
-<area href="class_i_event_handler.html" alt="IEventHandler" shape="rect" coords="0,0,92,24"/>
-  </map>
-</div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:aed6cff4305f6b79f0620111fd4c26121"><td class="memItemLeft" align="right" valign="top"><a id="aed6cff4305f6b79f0620111fd4c26121" name="aed6cff4305f6b79f0620111fd4c26121"></a>enum class &#160;</td><td class="memItemRight" valign="bottom"><b>level</b> { <br />
-&#160;&#160;<b>ERR</b> = 4
-, <b>WARN</b> = 3
+&#160;&#160;<b>ERR</b> = 5
+, <b>WARN</b> = 4
+, <b>USER</b> = 3
 , <b>INFO</b> = 2
-, <b>DEBUG</b> = 1
 , <br />
-&#160;&#160;<b>DATA</b> = 0
+&#160;&#160;<b>DEBUG</b> = 1
+, <b>DATA</b> = 0
 <br />
  }</td></tr>
 <tr class="separator:aed6cff4305f6b79f0620111fd4c26121"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
-Public Member Functions</h2></td></tr>
-<tr class="memitem:a1d40757f308f44c40a74bf00636db184"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_logger.html#a1d40757f308f44c40a74bf00636db184">handleEvent</a> (<a class="el" href="struct_event.html">Event</a> event) override</td></tr>
-<tr class="separator:a1d40757f308f44c40a74bf00636db184"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63c61e6208dacfac9efe636a60802267"><td class="memItemLeft" align="right" valign="top"><a id="a63c61e6208dacfac9efe636a60802267" name="a63c61e6208dacfac9efe636a60802267"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>handleEvent</b> (<a class="el" href="struct_event.html">Event</a> event)=0</td></tr>
-<tr class="separator:a63c61e6208dacfac9efe636a60802267"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -125,13 +108,21 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>data</b> (cons
 <tr class="memitem:a114e7654f74a152ba23831ebc078f420"><td class="memItemLeft" align="right" valign="top"><a id="a114e7654f74a152ba23831ebc078f420" name="a114e7654f74a152ba23831ebc078f420"></a>
 static void&#160;</td><td class="memItemRight" valign="bottom"><b>debug</b> (const std::string &amp;log)</td></tr>
 <tr class="separator:a114e7654f74a152ba23831ebc078f420"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb944ee24f3eff63c9cc44f4ff57c592"><td class="memItemLeft" align="right" valign="top"><a id="adb944ee24f3eff63c9cc44f4ff57c592" name="adb944ee24f3eff63c9cc44f4ff57c592"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>user_info</b> (const std::string &amp;msg)</td></tr>
+<tr class="separator:adb944ee24f3eff63c9cc44f4ff57c592"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace2483d6231c4476a9fc68c4a6b7f2b9"><td class="memItemLeft" align="right" valign="top"><a id="ace2483d6231c4476a9fc68c4a6b7f2b9" name="ace2483d6231c4476a9fc68c4a6b7f2b9"></a>
 static void&#160;</td><td class="memItemRight" valign="bottom"><b>set_level</b> (level log_level)</td></tr>
 <tr class="separator:ace2483d6231c4476a9fc68c4a6b7f2b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4d6792bd0bd68eed961a276205d4ab6"><td class="memItemLeft" align="right" valign="top"><a id="ac4d6792bd0bd68eed961a276205d4ab6" name="ac4d6792bd0bd68eed961a276205d4ab6"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>logEvent</b> (<a class="el" href="struct_event.html">Event</a> event)</td></tr>
+<tr class="separator:ac4d6792bd0bd68eed961a276205d4ab6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0dc017e33bb412d5774ed9728a9ce55d"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_logger.html#a0dc017e33bb412d5774ed9728a9ce55d">registerEvents</a> (std::shared_ptr&lt; <a class="el" href="class_event_manager.html">EventManager</a> &gt; eventManager)</td></tr>
+<tr class="separator:a0dc017e33bb412d5774ed9728a9ce55d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a1d40757f308f44c40a74bf00636db184" name="a1d40757f308f44c40a74bf00636db184"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1d40757f308f44c40a74bf00636db184">&#9670;&#160;</a></span>handleEvent()</h2>
+<a id="a0dc017e33bb412d5774ed9728a9ce55d" name="a0dc017e33bb412d5774ed9728a9ce55d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0dc017e33bb412d5774ed9728a9ce55d">&#9670;&#160;</a></span>registerEvents()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -140,21 +131,26 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>set_level</b> 
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Logger::handleEvent </td>
+          <td class="memname">static void Logger::registerEvents </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_event.html">Event</a>&#160;</td>
-          <td class="paramname"><em>event</em></td><td>)</td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="class_event_manager.html">EventManager</a> &gt;&#160;</td>
+          <td class="paramname"><em>eventManager</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>Implements <a class="el" href="class_i_event_handler.html">IEventHandler</a>.</p>
+<p>Register to all events, which will then be logged by this <a class="el" href="class_logger.html">Logger</a></p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">eventManager</td><td>reference to the <a class="el" href="class_event_manager.html">EventManager</a> where the <a class="el" href="class_logger.html">Logger</a> should subscribe to all events </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

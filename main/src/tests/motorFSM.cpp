@@ -12,12 +12,11 @@
 
 class MotorFSM_Test : public ::testing::Test {
 protected:
+	std::shared_ptr<EventManager> eventManager = std::make_shared<EventManager>();
 	std::shared_ptr<MotorContext> motorfsm_master;
 	std::shared_ptr<MotorContext> motorfsm_slave;
-	std::shared_ptr<EventManager> eventManager;
 
   void SetUp() override {
-	  eventManager = std::make_shared<EventManager>();
 	  motorfsm_master = std::make_shared<MotorContext>(eventManager, true);
 	  motorfsm_slave = std::make_shared<MotorContext>(eventManager, false);
 	  Configuration::getInstance().setMaster(true);

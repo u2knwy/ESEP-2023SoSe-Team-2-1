@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['configfilename_0',['configfilename',['../namespaceautofeeder.html#a57b879d7d5cdf4fe6c2e4121c6a5a59d',1,'autofeeder']]]
+  ['avgheight_0',['avgHeight',['../struct_workpiece.html#a99588139f13149ae583d24919b4d2d73',1,'Workpiece']]]
 ];

@@ -9,11 +9,11 @@
 #define SRC_LOGIC_MAIN_FSM_MAINACTIONS_H_
 
 #include "events/EventManager.h"
+#include "events/EventSender.h"
 
 #include <memory>
 
-class MainActions
-{
+class MainActions : public EventSender {
 public:
 	MainActions(std::shared_ptr<EventManager> mngr);
 	virtual ~MainActions();

@@ -11,11 +11,16 @@
 HeightActions::HeightActions(HeightContextData* data, std::shared_ptr<EventManager> mngr) {
 	this->data = data;
 	this->eventManager = mngr;
-	this->isMaster = Configuration::getInstance().systemIsMaster();;
+	this->isMaster = Configuration::getInstance().systemIsMaster();
+	if(connect(mngr)) {
+		Logger::debug("[HeightActions] Connected to EventManager");
+	} else {
+		Logger::error("[HeightActions] Error while connecting to EventManager");
+	}
 }
 
 HeightActions::~HeightActions() {
-	// TODO Auto-generated destructor stub
+	disconnect();
 }
 
 void HeightActions::sendMotorSlowRequest(bool slow) {
@@ -28,7 +33,7 @@ void HeightActions::sendMotorSlowRequest(bool slow) {
 		Logger::debug("[HFSM] Reset motor slow request");
 		ev.data = 0;
 	}
-	eventManager->sendEvent(ev);
+	sendEvent(ev);
 }
 
 void HeightActions::sendHeightResult() {
@@ -56,6 +61,6 @@ void HeightActions::sendHeightResult() {
 		Logger::debug("[HM] Height Result at FBM2: " + EVENT_TO_STRING(event.type) + ", max (mm): " + std::to_string(result.max));
 	}
 
-	eventManager->sendEvent(event);
+	sendEvent(event);
 
 }

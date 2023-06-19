@@ -33,11 +33,12 @@
 #include <mutex>
 
 #include "events/events.h"
+#include "events/EventManager.h"
 #include "common/macros.h"
 
 using namespace std;
 
-class Logger : public IEventHandler {
+class Logger {
 public:
 	enum class level {
 		ERR = 5,
@@ -76,8 +77,25 @@ public:
 		getInstance().minimal_log_level = log_level;
 	}
 
-	void handleEvent(Event event) override {
-		info("Event occurred: " + EVENT_TO_STRING(event.type));
+	static void logEvent(Event event) {
+		std::stringstream ss;
+		ss << "Event occurred: " << EVENT_TO_STRING(event.type);
+		if(event.data != -1) {
+			ss << " - data=" << event.data;
+		}
+		info(ss.str());
+	}
+
+	/**
+	 * Register to all events, which will then be logged by this Logger
+	 *
+	 * @param eventManager reference to the EventManager where the Logger should subscribe to all events
+	 */
+	static void registerEvents(std::shared_ptr<EventManager> eventManager) {
+		int nEvents = eventManager->subscribeToAllEvents(std::bind(&Logger::logEvent, std::placeholders::_1));
+		std::stringstream ss;
+		ss << "[Logger] Registered to all events (" << nEvents << ") from EventManager";
+		Logger::debug(ss.str());
 	}
 
 private:

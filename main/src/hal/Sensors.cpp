@@ -40,6 +40,12 @@ Sensors::Sensors(std::shared_ptr<EventManager> mngr) : eventManager(mngr)
 
 	configurePins();
 	initInterrupts();
+
+	if(connect(mngr)) {
+		Logger::debug("[Sensors] Connected to EventManager");
+	} else {
+		Logger::error("[Sensors] Error while connecting to EventManager");
+	}
 }
 
 Sensors::~Sensors()
@@ -61,6 +67,8 @@ Sensors::~Sensors()
 	}
 
 	munmap_device_io(gpio_bank_0, SIZE_4KB);
+
+	disconnect();
 }
 
 void Sensors::configurePins()
@@ -90,11 +98,11 @@ void Sensors::initInterrupts()
 
 	// Request interrupt and IO abilities.
 	int procmgr_status = procmgr_ability(0,
-																			 PROCMGR_ADN_ROOT | PROCMGR_AOP_ALLOW | PROCMGR_AID_INTERRUPT,
-																			 PROCMGR_ADN_NONROOT | PROCMGR_AOP_ALLOW | PROCMGR_AID_INTERRUPT,
-																			 PROCMGR_ADN_ROOT | PROCMGR_AOP_ALLOW | PROCMGR_AID_IO,
-																			 PROCMGR_ADN_NONROOT | PROCMGR_AOP_ALLOW | PROCMGR_AID_IO,
-																			 PROCMGR_AID_EOL);
+			PROCMGR_ADN_ROOT | PROCMGR_AOP_ALLOW | PROCMGR_AID_INTERRUPT,
+			PROCMGR_ADN_NONROOT | PROCMGR_AOP_ALLOW | PROCMGR_AID_INTERRUPT,
+			PROCMGR_ADN_ROOT | PROCMGR_AOP_ALLOW | PROCMGR_AID_IO,
+			PROCMGR_ADN_NONROOT | PROCMGR_AOP_ALLOW | PROCMGR_AID_IO,
+			PROCMGR_AID_EOL);
 	if (procmgr_status != EOK)
 	{
 		perror("Requested abilities failed or denied!");
@@ -106,7 +114,7 @@ void Sensors::initInterrupts()
 	/* ### Register interrupts by OS. ### */
 	struct sigevent intr_event;
 	SIGEV_PULSE_INIT(&intr_event, conID, SIGEV_PULSE_PRIO_INHERIT,
-									 PULSE_INTR_ON_PORT0, 0);
+			PULSE_INTR_ON_PORT0, 0);
 	interruptID = InterruptAttachEvent(INTR_GPIO_PORT0, &intr_event, 0);
 	if (interruptID < 0)
 	{
@@ -232,7 +240,7 @@ void Sensors::eventLoop()
 	using namespace std;
 	ThreadCtl(_NTO_TCTL_IO, 0); // Request IO privileges for this thread.
 
-	Logger::debug("[Sensors] EventLoop has started");
+	Logger::debug("[Sensors] Ready to receive Sensor events...");
 
 	_pulse msg;
 	receivingRunning = true;
@@ -245,8 +253,7 @@ void Sensors::eventLoop()
 			exit(EXIT_FAILURE);
 		}
 
-		if (recvid == 0)
-		{ // pulse received.
+		if (recvid == 0) { // pulse received.
 			// Stop thread while it blocks.
 			if (msg.code == PULSE_STOP_THREAD)
 			{
@@ -404,6 +411,6 @@ void Sensors::handleGpioInterrupt()
 	// If IRQ is associated to an event, we send it!
 	if ((int)event.type != -1)
 	{
-		eventManager->sendEvent(event);
+		sendEvent(event);
 	}
 }

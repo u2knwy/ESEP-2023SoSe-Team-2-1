@@ -12,10 +12,11 @@
 #include "configuration/Configuration.h"
 #include "HeightContextData.h"
 #include "events/EventManager.h"
+#include "events/EventSender.h"
 
 #include <memory>
 
-class HeightActions {
+class HeightActions : public EventSender {
 public:
 	HeightActions(HeightContextData* data, std::shared_ptr<EventManager> mngr);
 	virtual ~HeightActions();

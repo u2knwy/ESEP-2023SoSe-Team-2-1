@@ -1,17 +1,11 @@
 var searchData=
 [
-  ['hal_5ftest_0',['HAL_Test',['../class_h_a_l___test.html',1,'']]],
-  ['heightactions_1',['HeightActions',['../class_height_actions.html',1,'']]],
-  ['heightbasestate_2',['HeightBasestate',['../class_height_basestate.html',1,'']]],
-  ['heightcontext_3',['HeightContext',['../class_height_context.html',1,'']]],
-  ['heightcontextdata_4',['HeightContextData',['../class_height_context_data.html',1,'']]],
-  ['heightresult_5',['HeightResult',['../struct_height_result.html',1,'']]],
-  ['heightsensor_6',['HeightSensor',['../class_height_sensor.html',1,'']]],
-  ['heightsensor_5ftest_7',['HeightSensor_Test',['../class_height_sensor___test.html',1,'']]],
-  ['heightsensormock_8',['HeightSensorMock',['../class_height_sensor_mock.html',1,'']]],
-  ['heightvaluereceived_9',['heightValueReceived',['../class_height_context.html#a37d6274af893013346f1ce47952a8c33',1,'HeightContext']]],
-  ['helpgroupdetails_10',['HelpGroupDetails',['../structcxxopts_1_1_help_group_details.html',1,'cxxopts']]],
-  ['helpoptiondetails_11',['HelpOptionDetails',['../structcxxopts_1_1_help_option_details.html',1,'cxxopts']]],
-  ['highdetected_12',['highDetected',['../class_height_basestate.html#a3405f37765ea8634f07104afafb155ff',1,'HeightBasestate']]],
-  ['holedetected_13',['holeDetected',['../class_height_basestate.html#aad61f9a01341a2a9fe83dc8f3a8d8cdc',1,'HeightBasestate']]]
+  ['getaveragevalue_0',['getAverageValue',['../class_height_context_data.html#a01414656e57f44980ae713fe783bdf6b',1,'HeightContextData']]],
+  ['getcalibration_1',['getCalibration',['../class_configuration.html#acd677a1a1b7ff0e04c92c181b2653cef',1,'Configuration']]],
+  ['getdesiredorder_2',['getDesiredOrder',['../class_configuration.html#a3e79d55674629405b7c15429f5343f66',1,'Configuration']]],
+  ['getmaximumvalue_3',['getMaximumValue',['../class_height_context_data.html#ae6de081ca1e8282b0de354de74738c62',1,'HeightContextData']]],
+  ['getrevision_4',['getRevision',['../class_t_s_c_a_d_c.html#aba48d5e2bf84838b8614d1a5a9f76ff7',1,'TSCADC']]],
+  ['gratuitous_5fargument_5ffor_5foption_5',['gratuitous_argument_for_option',['../classcxxopts_1_1exceptions_1_1gratuitous__argument__for__option.html',1,'cxxopts::exceptions']]],
+  ['greenlampoff_6',['greenLampOff',['../class_actuators.html#a8ce25b608de7ccbb4c9f7e4c5ed11781',1,'Actuators::greenLampOff()'],['../class_i_actuators.html#a17122e73f56d3575748bb04eaa9d3400',1,'IActuators::greenLampOff()'],['../class_actuator_mock.html#a12bfbe386df6182bfde8baa8af685be7',1,'ActuatorMock::greenLampOff()']]],
+  ['greenlampon_7',['greenLampOn',['../class_actuators.html#a29af838bac37a765c6052e73a08d31f8',1,'Actuators::greenLampOn()'],['../class_i_actuators.html#aee54d8fcb0c1bf157db404ffca757116',1,'IActuators::greenLampOn()'],['../class_actuator_mock.html#a597ce419b16fc76ddf4d732c346f9343',1,'ActuatorMock::greenLampOn()']]]
 ];

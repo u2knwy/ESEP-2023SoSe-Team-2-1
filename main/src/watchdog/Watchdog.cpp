@@ -17,6 +17,12 @@ Watchdog::Watchdog(std::shared_ptr<EventManager> eventManager) {
 	this->eventManager = eventManager;
 	this->isMaster = Configuration::getInstance().systemIsMaster();
 
+	if(connect(eventManager)) {
+		Logger::debug("[Watchdog] Connected to EventManager");
+	} else {
+		Logger::error("[Watchdog] Error while connecting to EventManager");
+	}
+
 	if(isMaster) {
 		eventManager->subscribe(EventType::WD_S_HEARTBEAT, std::bind(&Watchdog::handleEvent, this, std::placeholders::_1));
 	} else {
@@ -26,6 +32,7 @@ Watchdog::Watchdog(std::shared_ptr<EventManager> eventManager) {
 
 Watchdog::~Watchdog() {
 	stop();
+	disconnect();
 }
 
 void Watchdog::handleEvent(Event event) {
@@ -70,9 +77,9 @@ void Watchdog::sendingThread() {
 
 void Watchdog::sendHeartbeat() {
 	if(isMaster) {
-		eventManager->sendEvent(Event{WD_M_HEARTBEAT});
+		sendEvent(Event{WD_M_HEARTBEAT});
 	} else {
-		eventManager->sendEvent(Event{WD_S_HEARTBEAT});
+		sendEvent(Event{WD_S_HEARTBEAT});
 	}
 }
 

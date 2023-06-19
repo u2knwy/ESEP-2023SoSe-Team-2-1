@@ -7,6 +7,7 @@
 #pragma once
 
 #include "events/EventManager.h"
+#include "events/EventSender.h"
 #include "events/IEventHandler.h"
 #include <memory>
 #include <atomic>
@@ -15,7 +16,7 @@
 #define WD_SEND_INTERVAL_SEC 1
 #define WD_TIMEOUT_SEC 3
 
-class Watchdog : public IEventHandler {
+class Watchdog : public IEventHandler, public EventSender {
 public:
 	Watchdog(std::shared_ptr<EventManager> eventManager);
 	virtual ~Watchdog();
