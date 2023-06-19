@@ -100,6 +100,10 @@ int main(int argc, char **argv) {
   Logger::registerEvents(eventManager);
   eventManager->start();
 
+  // Start Watchdog -> send and receive heartbeats via EventManager
+//  Watchdog wd(eventManager);
+//  wd.start();
+
   actuators = std::make_shared<Actuators>(eventManager);
   sensors = std::make_shared<Sensors>(eventManager);
   heightSensor = std::make_shared<HeightSensor>(eventManager);

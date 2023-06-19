@@ -7,24 +7,24 @@
 
 #pragma once
 
-#include "IHeightSensor.h"
-#include "adc/ADC.h"
-#include "events/events.h"
-#include "events/EventManager.h"
-#include "configuration/Configuration.h"
-
-#include <sys/mman.h>
-#include <hw/inout.h>
-
-#include <iostream>
-#include <stdio.h>
 #include <errno.h>
+#include <hw/inout.h>
+#include <stdio.h>
+#include <sys/mman.h>
 #include <sys/neutrino.h>
 #include <sys/procmgr.h>
-#include <thread>
+
 #include <chrono>
-#include <vector>
+#include <iostream>
 #include <mutex>
+#include <thread>
+#include <vector>
+
+#include "IHeightSensor.h"
+#include "adc/ADC.h"
+#include "configuration/Configuration.h"
+#include "events/EventManager.h"
+#include "events/events.h"
 
 /*---------------------------------------------------------------------------
    ADC CONFIGURATION
@@ -43,30 +43,31 @@
 #define ADC_IRQ_PIN_MASK 0x2
 
 class HeightSensor : public IHeightSensor, public IEventHandler {
-public:
-	HeightSensor(std::shared_ptr<EventManager> mngr);
-	virtual ~HeightSensor();
-	void handleEvent(Event event) override;
-	void registerOnNewValueCallback(HeightCallback callback) override;
-	void unregisterOnNewValueCallback() override;
-	void start() override;
-	void stop() override;
-	float getAverageHeight() override;
-	float getMaxHeight() override;
-	float getMedianHeight() override;
-	int getLastRawValue() override;
-private:
-	TSCADC tsc;
-	ADC* adc;
-	HeightCallback heightValueCallback = nullptr;
-	int chanID;
-	int conID;
-    std::thread measureThread;
-    std::vector<int> window;
-    int nMeasurements;
-    std::mutex mtx;
-    void addValue(int value);
-    bool running{false};
-    void threadFunction();
-    float adcValueToMillimeter(int adcValue);
+ public:
+  HeightSensor(std::shared_ptr<EventManager> mngr);
+  virtual ~HeightSensor();
+  void handleEvent(Event event) override;
+  void registerOnNewValueCallback(HeightCallback callback) override;
+  void unregisterOnNewValueCallback() override;
+  void start() override;
+  void stop() override;
+  float getAverageHeight() override;
+  float getMaxHeight() override;
+  float getMedianHeight() override;
+  int getLastRawValue() override;
+
+ private:
+  TSCADC tsc;
+  ADC* adc;
+  HeightCallback heightValueCallback = nullptr;
+  int chanID;
+  int conID;
+  std::thread measureThread;
+  std::vector<int> window;
+  int nMeasurements;
+  std::mutex mtx;
+  void addValue(int value);
+  bool running{false};
+  void threadFunction();
+  float adcValueToMillimeter(int adcValue);
 };
