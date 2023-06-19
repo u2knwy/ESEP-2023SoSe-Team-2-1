@@ -46,4 +46,6 @@ class Running : public MainBasestate {
 
   bool selfSolvableErrorOccurred() override;
   bool nonSelfSolvableErrorOccurred() override;
+private:
+  bool transferPending{false};
 };
