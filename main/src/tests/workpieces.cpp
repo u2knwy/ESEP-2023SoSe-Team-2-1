@@ -56,7 +56,7 @@ TEST_F(Workpieces_Test, InitiallyNoWorkpiecesAddNewAndIncrementId) {
 
 	EXPECT_EQ(wp1b->metal, true);
 	EXPECT_EQ(wp1b->avgHeight, 23);
-	EXPECT_EQ(wp1b->WP_M_type,  WorkpieceType::WS_F);
+	EXPECT_EQ(wp1b->M_type,  WorkpieceType::WS_F);
 	EXPECT_EQ(wp1b->sortOut, true);
 
 	mngr->moveFromAreaToArea(AreaType::AREA_B, AreaType::AREA_C);
@@ -67,7 +67,7 @@ TEST_F(Workpieces_Test, InitiallyNoWorkpiecesAddNewAndIncrementId) {
 	Workpiece* wp1c = mngr->getHeadOfArea(AreaType::AREA_C);
 	EXPECT_EQ(wp1c->metal, true);
 	EXPECT_EQ(wp1c->avgHeight, 23);
-	EXPECT_EQ(wp1c->WP_M_type,  WorkpieceType::WS_F);
+	EXPECT_EQ(wp1c->M_type,  WorkpieceType::WS_F);
 	EXPECT_EQ(wp1c->sortOut, true);
 	EXPECT_EQ(wp1c->flipped, false);
 
@@ -75,7 +75,7 @@ TEST_F(Workpieces_Test, InitiallyNoWorkpiecesAddNewAndIncrementId) {
 	Workpiece* wp2b = mngr->getHeadOfArea(AreaType::AREA_B);
 	EXPECT_EQ(wp2b->metal, false);
 	EXPECT_EQ(wp2b->avgHeight, 0);
-	EXPECT_EQ(wp2b->WP_M_type,  WorkpieceType::WS_UNKNOWN);
+	EXPECT_EQ(wp2b->M_type,  WorkpieceType::WS_UNKNOWN);
 	EXPECT_EQ(wp2b->sortOut, false);
 	EXPECT_EQ(wp2b->flipped, false);
 
@@ -88,8 +88,8 @@ TEST_F(Workpieces_Test, InitiallyNoWorkpiecesAddNewAndIncrementId) {
 	Workpiece* wp1d = mngr->getHeadOfArea(AreaType::AREA_D);
 	EXPECT_EQ(wp1d->metal, true);
 	EXPECT_EQ(wp1d->avgHeight, 23);
-	EXPECT_EQ(wp1d->WP_M_type,  WorkpieceType::WS_F);
-	EXPECT_EQ(wp1d->WP_S_type,  WorkpieceType::WS_UNKNOWN);
+	EXPECT_EQ(wp1d->M_type,  WorkpieceType::WS_F);
+	EXPECT_EQ(wp1d->S_type,  WorkpieceType::WS_UNKNOWN);
 	EXPECT_EQ(wp1d->sortOut, true);
 	EXPECT_EQ(wp1d->flipped, false);
 
@@ -99,7 +99,7 @@ TEST_F(Workpieces_Test, InitiallyNoWorkpiecesAddNewAndIncrementId) {
 	EXPECT_EQ(mngr->isQueueempty(AreaType::AREA_D), false);
 
 	mngr->setType(AreaType::AREA_D, WorkpieceType::WS_F);
-	EXPECT_EQ(wp1d->WP_S_type,  WorkpieceType::WS_F);
+	EXPECT_EQ(wp1d->S_type,  WorkpieceType::WS_F);
 
 	EXPECT_EQ(mngr->isFBM_MEmpty(),  false);
 	EXPECT_EQ(mngr->isFBM_SEmpty(),  false);

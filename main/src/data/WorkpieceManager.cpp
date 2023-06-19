@@ -124,10 +124,10 @@ void WorkpieceManager::setTypeEvent(EventType event, AreaType area)
 	{
 		if (area == AreaType::AREA_D)
 		{
-			wp->WP_S_type = tmp;
+			wp->S_type = tmp;
 		}
 		else
-			wp->WP_M_type = tmp;
+			wp->M_type = tmp;
 	}
 }
 
@@ -147,11 +147,11 @@ void WorkpieceManager::setType(AreaType area, WorkpieceType type)
 	{
 		if (area == AreaType::AREA_A || area == AreaType::AREA_B)
 		{
-			wp->WP_M_type = type;
+			wp->M_type = type;
 		}
 		else if (area == AreaType::AREA_C || area == AreaType::AREA_D)
 		{
-			wp->WP_S_type = type;
+			wp->S_type = type;
 		}
 	}
 }
@@ -208,8 +208,8 @@ bool WorkpieceManager::isQueueempty(AreaType area)
 std::string WorkpieceManager::to_string_Workpiece(Workpiece *wp)
 {
 	std::string str = "wp [id= " + std::to_string(wp->id) + ", " +
-		" master_type= " + std::to_string(wp->WP_M_type) + ", " +
-		" slave_type= " + std::to_string(wp->WP_S_type) + ", " +
+		" master_type= " + std::to_string(wp->M_type) + ", " +
+		" slave_type= " + std::to_string(wp->S_type) + ", " +
 		" height= " + std::to_string(wp->avgHeight) +
 		" flipped= " + std::to_string(wp->flipped) + "] ";
 

@@ -51,45 +51,50 @@ bool Running::master_heightResultReceived(EventType event, float average)
 {
 	Logger::debug("[MainFSM] Received FBM1 height result: " + EVENT_TO_STRING(event) + " - avg: " + std::to_string(average) + " mm");
 
-	Workpiece *wp = data->wpManager->getHeadOfArea(AreaType::AREA_A);
-	data->wpManager->setHeight(AreaType::AREA_A, average);									 // setheight()
-	data->wpManager->setTypeEvent(event, AreaType::AREA_A);									 // setType()
-	data->wpManager->moveFromAreaToArea(AreaType::AREA_A, AreaType::AREA_B); // moveFromArea_AtoArea_B()
+	if(!data->wpManager->isQueueempty(AreaType::AREA_A)){
+		Workpiece *wp = data->wpManager->getHeadOfArea(AreaType::AREA_A);
+		data->wpManager->setHeight(AreaType::AREA_A, average);									 // setheight()
+		data->wpManager->setTypeEvent(event, AreaType::AREA_A);									 // setType()
+		data->wpManager->moveFromAreaToArea(AreaType::AREA_A, AreaType::AREA_B); // moveFromArea_AtoArea_B()
 
-	Logger::info(data->wpManager->to_string_Workpiece(wp));
+		Logger::info(data->wpManager->to_string_Workpiece(wp));
+		}
 	return true;
 }
 
 bool Running::master_metalDetected()
 {
-	data->wpManager->setMetal(AreaType::AREA_B);
-	Workpiece *wp = data->wpManager->getHeadOfArea(AreaType::AREA_B);
+	if(!data->wpManager->isQueueempty(AreaType::AREA_B)){
+		data->wpManager->setMetal(AreaType::AREA_B);											//setmetal()
+		Workpiece *wp = data->wpManager->getHeadOfArea(AreaType::AREA_B);						
 
-	if (wp->WP_M_type == WorkpieceType::WS_BOM)
-	{
-		wp->WP_M_type = WorkpieceType::WS_BUM;
+		if (wp->M_type == WorkpieceType::WS_BOM)												//setType()
+		{
+			wp->M_type = WorkpieceType::WS_BUM;
+		}
 	}
 	return true;
 }
 
 bool Running::master_LBW_Blocked()
 {
+	if(!data->wpManager->isQueueempty(AreaType::AREA_B)){
+		Workpiece *wp = data->wpManager->getHeadOfArea(AreaType::AREA_B);
+		WorkpieceType detected_type = wp->M_type;
+		WorkpieceType config_type = data->wpManager->getNextWorkpieceType();
 
-	Workpiece *wp = data->wpManager->getHeadOfArea(AreaType::AREA_B);
-	WorkpieceType detected_type = wp->WP_M_type;
-	WorkpieceType config_type = data->wpManager->getNextWorkpieceType();
+		wp->sortOut = detected_type == WorkpieceType::WS_F && detected_type != config_type;		//compare()
 
-	wp->sortOut = detected_type == WorkpieceType::WS_F && detected_type != config_type;
-
-	if (wp->sortOut)
-	{
-		actions->master_openGate(false);
-		Logger::info("WP id: " + std::to_string(wp->id) + " kicked out");
+		if (wp->sortOut)
+		{
+			actions->master_openGate(false);													//closegate()
+			Logger::info("WP id: " + std::to_string(wp->id) + " kicked out");
+		}
+		else
+			actions->master_openGate(true);														//opengate()
+		data->wpManager->moveFromAreaToArea(AreaType::AREA_B, AreaType::AREA_C);
+		Logger::info("WP id: " + std::to_string(wp->id) + " Passed to Area_C");
 	}
-	else
-		actions->master_openGate(true);
-	data->wpManager->moveFromAreaToArea(AreaType::AREA_B, AreaType::AREA_C);
-	Logger::info("WP id: " + std::to_string(wp->id) + " Passed to Area_C");
 	return true;
 }
 
@@ -100,25 +105,29 @@ bool Running::master_LBW_Unblocked()
 
 bool Running::master_LBE_Blocked()
 {
-	Workpiece *wp = data->wpManager->getHeadOfArea(AreaType::AREA_C);
-	if (data->wpManager->isFBM_SEmpty())
-	{
-		actions->master_sendMotorRightRequest(false);
+	if(!data->wpManager->isQueueempty(AreaType::AREA_C)){
+		Workpiece *wp = data->wpManager->getHeadOfArea(AreaType::AREA_C);
+		if (data->wpManager->isFBM_SEmpty())
+		{
+			actions->master_sendMotorRightRequest(false);
+		}
+		while (data->wpManager->isFBM_SEmpty())
+		{
+			// wait
+			std::this_thread::sleep_for(std::chrono::seconds(3));
+			Logger::info("Workpiece with id: " + std::to_string(wp->id) + " waiting for fbm_S to get free");
+		}
+		actions->master_sendMotorRightRequest(true);
 	}
-	while (data->wpManager->isFBM_SEmpty())
-	{
-		// wait
-		std::this_thread::sleep_for(std::chrono::seconds(3));
-		Logger::info("Workpiece with id: " + std::to_string(wp->id) + " waiting for fbm_S to get free");
-	}
-	actions->master_sendMotorRightRequest(true);
 	return true;
 }
 
 bool Running::master_LBE_Unblocked()
 {
-	data->wpManager->moveFromAreaToArea(AreaType::AREA_C, AreaType::AREA_D);
-	actions->slave_sendMotorRightRequest(true);
+	if(!data->wpManager->isQueueempty(AreaType::AREA_C)){
+		data->wpManager->moveFromAreaToArea(AreaType::AREA_C, AreaType::AREA_D);
+		actions->slave_sendMotorRightRequest(true);
+	}
 
 	return true;
 }
@@ -126,11 +135,12 @@ bool Running::master_LBE_Unblocked()
 bool Running::master_LBR_Blocked()
 {
 	data->setRampFBM1Blocked(true);
-
-	data->wpManager->removeFromArea(AreaType::AREA_B);
-	if (data->wpManager->isFBM_MEmpty())
-	{
-		actions->master_sendMotorRightRequest(false);
+		if(!data->wpManager->isQueueempty(AreaType::AREA_B)){
+		data->wpManager->removeFromArea(AreaType::AREA_B);
+		if (data->wpManager->isFBM_MEmpty())
+		{
+			actions->master_sendMotorRightRequest(false);
+		}
 	}
 
 	// If still blocked after 1s -> display warning
@@ -161,9 +171,11 @@ bool Running::master_LBR_Unblocked()
 //---------------------------------------------------------------------------------
 bool Running::slave_LBA_Blocked()
 {
-	if (data->wpManager->isFBM_MEmpty())
-	{
-		actions->master_sendMotorRightRequest(false);
+	if(!data->wpManager->isQueueempty(AreaType::AREA_D)){
+		if (data->wpManager->isFBM_MEmpty())
+		{
+			actions->master_sendMotorRightRequest(false);
+		}
 	}
 	return true;
 }
@@ -177,40 +189,47 @@ bool Running::slave_heightResultReceived(EventType event, float average)
 {
 	Logger::debug("[MainFSM] Received FBM1 height result: " + EVENT_TO_STRING(event) + " - avg: " + std::to_string(average) + " mm");
 
-	data->wpManager->setHeight(AreaType::AREA_D, average);	// setheight()
-	data->wpManager->setTypeEvent(event, AreaType::AREA_D); // setType()
+	if(!data->wpManager->isQueueempty(AreaType::AREA_D)){
+		data->wpManager->setHeight(AreaType::AREA_D, average);	// setheight()
+		data->wpManager->setTypeEvent(event, AreaType::AREA_D); // setType()
+	}
 
 	return true;
 }
 
 bool Running::slave_metalDetected()
 {
-	Workpiece *wp = data->wpManager->getHeadOfArea(AreaType::AREA_D);
-	data->wpManager->setMetal(AreaType::AREA_D); // setMetal()
+	if(!data->wpManager->isQueueempty(AreaType::AREA_D)){
+		Workpiece *wp = data->wpManager->getHeadOfArea(AreaType::AREA_D);
+		data->wpManager->setMetal(AreaType::AREA_D); // setMetal()
 
-	if (wp->WP_S_type == WorkpieceType::WS_BOM)
-	{ // setType()
-		wp->WP_S_type = WorkpieceType::WS_BUM;
+		if (wp-> S_type == WorkpieceType::WS_BOM)
+		{ // setType()
+			wp-> S_type = WorkpieceType::WS_BUM;
+		}
 	}
 	return true;
 }
 
 bool Running::slave_LBW_Blocked()
 {
-	Workpiece *wp = data->wpManager->getHeadOfArea(AreaType::AREA_D);
-	WorkpieceType slave_type = data->wpManager->getNextWorkpieceType();
-	WorkpieceType detected_type = wp->WP_S_type;
+	if(!data->wpManager->isQueueempty(AreaType::AREA_D)){
+		Workpiece *wp = data->wpManager->getHeadOfArea(AreaType::AREA_D);
+		WorkpieceType slave_type = data->wpManager->getNextWorkpieceType();
+		WorkpieceType detected_type = wp->S_type;
 
-	wp->sortOut = detected_type != slave_type; // sortOut()
+		wp->sortOut = detected_type != slave_type; // sortOut()
 
-	if (wp->sortOut)
-	{
-		actions->slave_openGate(false); // opengate()
-		Logger::info("WP id: " + std::to_string(wp->id) + " kicked out");
+		if (wp->sortOut)
+		{
+			actions->slave_openGate(false); // opengate()
+			Logger::info("WP id: " + std::to_string(wp->id) + " kicked out");
+		}
+		else
+			actions->slave_openGate(true); // closegate()
+			data->wpManager->rotateNextWorkpieces();
+		Logger::info("WP id: " + std::to_string(wp->id) + " Passed to Area_C");
 	}
-	else
-		actions->slave_openGate(true); // closegate()
-	Logger::info("WP id: " + std::to_string(wp->id) + " Passed to Area_C");
 	return true;
 }
 
@@ -221,11 +240,13 @@ bool Running::slave_LBW_Unblocked()
 
 bool Running::slave_LBE_Blocked()
 {
-	Workpiece *wp = data->wpManager->getHeadOfArea(AreaType::AREA_D);
-	if (!data->wpManager->isQueueempty(AreaType::AREA_D))
-	{
-		std::cout << data->wpManager->to_string_Workpiece(wp) << std::endl; // print()
-		actions->slave_sendMotorRightRequest(false);
+	if(!data->wpManager->isQueueempty(AreaType::AREA_D)){
+		Workpiece *wp = data->wpManager->getHeadOfArea(AreaType::AREA_D);
+		if (!data->wpManager->isQueueempty(AreaType::AREA_D))
+		{
+			std::cout << data->wpManager->to_string_Workpiece(wp) << std::endl; // print()
+			actions->slave_sendMotorRightRequest(false);
+		}
 	}
 
 	return true;

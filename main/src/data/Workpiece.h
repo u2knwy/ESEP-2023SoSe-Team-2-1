@@ -48,13 +48,13 @@ struct Workpiece{
 	 *
 	 * @return Workpiece Type (TYPE_A, TYPE_B, TYPE_C or UNKNOWN (default))
 	 */
-	WorkpieceType WP_M_type=WorkpieceType::WS_UNKNOWN;
+	WorkpieceType M_type=WorkpieceType::WS_UNKNOWN;
 
 	/**
 	 * Type of the workpiece in FBM-Slave
 	 *
 	 * @return Workpiece Type (TYPE_A, TYPE_B, TYPE_C or UNKNOWN (default))
 	 */
-	WorkpieceType WP_S_type{WorkpieceType::WS_UNKNOWN};
+	WorkpieceType S_type{WorkpieceType::WS_UNKNOWN};
 
 };
