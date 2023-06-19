@@ -83,11 +83,25 @@ bool Running::master_LBW_Blocked()
 		WorkpieceType detected_type = wp->M_type;
 		WorkpieceType config_type = data->wpManager->getNextWorkpieceType();
 
-		wp->sortOut = detected_type == WorkpieceType::WS_F && detected_type != config_type;		//compare()
+																									//compare()
+
+		if(!data->wpManager->getRamp_one() && data->wpManager->getRamp_two())
+		{
+			wp->sortOut = detected_type != config_type;
+		}
+		else if (data->wpManager->getRamp_one() && !data->wpManager->getRamp_two())
+		{
+			wp->sortOut = false;
+		}
+		else
+		{
+			wp->sortOut = detected_type == WorkpieceType::WS_F && detected_type != config_type;
+		}
 
 		if (wp->sortOut)
 		{
 			actions->master_openGate(false);													//closegate()
+			data->wpManager->rotateNextWorkpieces();
 			Logger::info("WP id: " + std::to_string(wp->id) + " kicked out");
 		}
 		else

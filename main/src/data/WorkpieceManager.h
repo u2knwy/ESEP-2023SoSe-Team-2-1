@@ -41,8 +41,12 @@ public:
     void setTypeEvent(EventType event,AreaType area);
     void setSortOut(AreaType area, bool sortOut);
     void setFlipped(AreaType area);
+    void setRamp_one(bool input);
+    void setRamp_two(bool input);
     bool getSortOut(AreaType area);
     bool getFlipped(AreaType area);
+    bool getRamp_one();
+    bool getRamp_two();
 
 
     bool isFBM_MEmpty();
@@ -63,6 +67,8 @@ private:
     std::queue<Workpiece*> Area_B;
     std::queue<Workpiece*> Area_C;
     std::queue<Workpiece*> Area_D;
+    bool ramp_one_B;
+    bool ramp_two_B;
 
     Workpiece* getQueue(AreaType area);
     std::queue<Workpiece*>& getArea(AreaType area);
