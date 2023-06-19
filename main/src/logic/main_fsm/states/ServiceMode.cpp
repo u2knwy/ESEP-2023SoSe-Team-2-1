@@ -21,6 +21,8 @@ void ServiceMode::entry() {
 	Logger::info("Entered Service mode");
 	actions->setServiceMode();
 	initSubStateServiceMode();
+	actions->master_sendMotorStopRequest(false);
+	actions->slave_sendMotorStopRequest(false);
 }
 
 void ServiceMode::exit() {
