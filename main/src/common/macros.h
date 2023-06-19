@@ -6,11 +6,12 @@
  */
 #pragma once
 
-#include <thread>
-#include <chrono>
 #include "data/workpiecetype_stringlist.h"
+#include <chrono>
+#include <thread>
 
-#define EVENT_TO_STRING(ev) std::string(EventString[ev])
+
+#define EVENT_TO_STRING(ev)   std::string(EventString[ev])
 #define WP_TYPE_TO_STRING(wp) std::string(WorkpieceTypeString[wp])
 
 /* Helper macros */
@@ -18,5 +19,5 @@
 
 #define BIT_MASK(x) (1 << (x))
 // Check if bit(s) of a register are set
-#define BIT_SET(mask, reg) ((mask & reg) == mask)
+#define BIT_SET(mask, reg)    ((mask & reg) == mask)
 #define BIT_NOTSET(mask, reg) ((mask & reg) != mask)

@@ -9,5 +9,5 @@
 #include "../MainBasestate.h"
 
 class SubErrorEndState : public MainBasestate {
-  bool isSubEndState() override { return true; }
+    bool isSubEndState() override { return true; }
 };

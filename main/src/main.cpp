@@ -20,7 +20,7 @@
 #include "logic/motor_fsm/MotorContext.h"
 #include "watchdog/Watchdog.h"
 #ifdef SIM_ACTIVE
-#include "simqnxgpioapi.h"  // must be last include !!!
+#include "simqnxgpioapi.h"   // must be last include !!!
 #include "simqnxirqapi.h"
 #endif
 
@@ -45,96 +45,96 @@ std::atomic<bool> running(true);
  * Does all necessary stuff for cleanup to avoid memory leaks.
  */
 void cleanup(int exitCode) {
-  Logger::info("Exit code received: " + std::to_string(exitCode));
-  //	heightSensor->stop();
-  eventManager->stop();
-  running = false;
+    Logger::info("Exit code received: " + std::to_string(exitCode));
+    //	heightSensor->stop();
+    eventManager->stop();
+    running = false;
 }
 
 int main(int argc, char **argv) {
-  // Initialize Logger
-  const char *debugValue = getenv("QNX_DEBUG");
-  const std::string debug = debugValue ? debugValue : "";
-  if (debug == "TRUE") {
-    Logger::set_level(Logger::level::DEBUG);
-    Logger::debug("##### Started in DEBUG mode #####");
-  } else {
-    Logger::set_level(Logger::level::INFO);
-  }
+    // Initialize Logger
+    const char *debugValue = getenv("QNX_DEBUG");
+    const std::string debug = debugValue ? debugValue : "";
+    if (debug == "TRUE") {
+        Logger::set_level(Logger::level::DEBUG);
+        Logger::debug("##### Started in DEBUG mode #####");
+    } else {
+        Logger::set_level(Logger::level::INFO);
+    }
 
-  Options options{argc, argv};
-  if (options.mode == Mode::TESTS) {
-    // Run Unit Tests
-    Logger::info("Running tests...");
-    ::testing::InitGoogleTest(&argc, argv);
-    auto result = RUN_ALL_TESTS();
-    return result;
-  }
+    Options options{argc, argv};
+    if (options.mode == Mode::TESTS) {
+        // Run Unit Tests
+        Logger::info("Running tests...");
+        ::testing::InitGoogleTest(&argc, argv);
+        auto result = RUN_ALL_TESTS();
+        return result;
+    }
 
-  Configuration &conf = Configuration::getInstance();
-  conf.setMaster(options.mode == MASTER);
-  if (conf.systemIsMaster()) {
-    Logger::info("Program started as MASTER");
-  } else {
-    Logger::info("Program started as SLAVE");
-  }
+    Configuration &conf = Configuration::getInstance();
+    conf.setMaster(options.mode == MASTER);
+    if (conf.systemIsMaster()) {
+        Logger::info("Program started as MASTER");
+    } else {
+        Logger::info("Program started as SLAVE");
+    }
 
-  conf.setConfigFilePath("/tmp/esep_conf.txt");
-  if (!conf.readConfigFromFile()) {
-    Logger::error("Error reading config file - terminating...");
-    return EXIT_FAILURE;
-  }
+    conf.setConfigFilePath("/tmp/esep_conf.txt");
+    if (!conf.readConfigFromFile()) {
+        Logger::error("Error reading config file - terminating...");
+        return EXIT_FAILURE;
+    }
 
-  if (options.pusher) {
-    Logger::info("Configured hardware: Use 'Pusher' for sorting out");
-    conf.setPusherMounted(true);
-  } else {
-    Logger::info("Configured hardware: Use 'Switch' for sorting out");
-    conf.setPusherMounted(false);
-  }
+    if (options.pusher) {
+        Logger::info("Configured hardware: Use 'Pusher' for sorting out");
+        conf.setPusherMounted(true);
+    } else {
+        Logger::info("Configured hardware: Use 'Switch' for sorting out");
+        conf.setPusherMounted(false);
+    }
 
-  // Create components running on Master AND Slave
+    // Create components running on Master AND Slave
 
-  // Create and start EventManager to receive internal Events
-  eventManager = std::make_shared<EventManager>();
-  Logger::registerEvents(eventManager);
-  eventManager->start();
+    // Create and start EventManager to receive internal Events
+    eventManager = std::make_shared<EventManager>();
+    Logger::registerEvents(eventManager);
+    eventManager->start();
 
-  // Start Watchdog -> send and receive heartbeats via EventManager
-//  Watchdog wd(eventManager);
-//  wd.start();
+    // Start Watchdog -> send and receive heartbeats via EventManager
+    //  Watchdog wd(eventManager);
+    //  wd.start();
 
-  actuators = std::make_shared<Actuators>(eventManager);
-  sensors = std::make_shared<Sensors>(eventManager);
-  heightSensor = std::make_shared<HeightSensor>(eventManager);
-  heightFSM = std::make_shared<HeightContext>(eventManager, heightSensor);
+    actuators = std::make_shared<Actuators>(eventManager);
+    sensors = std::make_shared<Sensors>(eventManager);
+    heightSensor = std::make_shared<HeightSensor>(eventManager);
+    heightFSM = std::make_shared<HeightContext>(eventManager, heightSensor);
 
-  // Run FSM's only at Master
-  if (options.mode == Mode::MASTER) {
-    motorFSM_Master = std::make_shared<MotorContext>(eventManager, true);
-    motorFSM_Slave = std::make_shared<MotorContext>(eventManager, false);
-    mainFSM = std::make_shared<MainContext>(eventManager);
-  } else {
-    Logger::info("Program started as SLAVE");
-    conf.setMaster(false);
-  }
+    // Run FSM's only at Master
+    if (options.mode == Mode::MASTER) {
+        motorFSM_Master = std::make_shared<MotorContext>(eventManager, true);
+        motorFSM_Slave = std::make_shared<MotorContext>(eventManager, false);
+        mainFSM = std::make_shared<MainContext>(eventManager);
+    } else {
+        Logger::info("Program started as SLAVE");
+        conf.setMaster(false);
+    }
 
-  // Register handler function to be called if the program is not terminated
-  // properly
-  std::signal(SIGINT, cleanup);
-  std::signal(SIGABRT, cleanup);
-  std::signal(SIGTERM, cleanup);
-  std::signal(SIGKILL, cleanup);
+    // Register handler function to be called if the program is not
+    // terminated properly
+    std::signal(SIGINT, cleanup);
+    std::signal(SIGABRT, cleanup);
+    std::signal(SIGTERM, cleanup);
+    std::signal(SIGKILL, cleanup);
 
-  // Start threads...
-  sensors->startEventLoop();
+    // Start threads...
+    sensors->startEventLoop();
 
-  // Endless loop - wait until termination
-  while (running) {
-    // Sleep to save CPU resources
-    std::this_thread::sleep_for(std::chrono::seconds(10));
-  }
+    // Endless loop - wait until termination
+    while (running) {
+        // Sleep to save CPU resources
+        std::this_thread::sleep_for(std::chrono::seconds(10));
+    }
 
-  Logger::info("Sorting Machine was terminated.");
-  return EXIT_SUCCESS;
+    Logger::info("Sorting Machine was terminated.");
+    return EXIT_SUCCESS;
 }

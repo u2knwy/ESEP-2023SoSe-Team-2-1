@@ -8,9 +8,9 @@
 
 #include "../MotorBasestate.h"
 
-class RightSlow: public MotorBasestate {
-	void entry() override;
-	void exit() override;
-	MotorState getCurrentState() override;
-	bool handleFlagsUpdated() override;
+class RightSlow : public MotorBasestate {
+    void entry() override;
+    void exit() override;
+    MotorState getCurrentState() override;
+    bool handleFlagsUpdated() override;
 };

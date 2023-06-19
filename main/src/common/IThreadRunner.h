@@ -12,12 +12,12 @@
 using namespace std;
 
 class IThreadRunner {
-public:
-	virtual ~IThreadRunner() {}
-	virtual void start() = 0;
-	virtual void stop() = 0;
+  public:
+    virtual ~IThreadRunner() {}
+    virtual void start() = 0;
+    virtual void stop() = 0;
 
-protected:
+  protected:
     bool running{false};
     std::thread runningThread;
 

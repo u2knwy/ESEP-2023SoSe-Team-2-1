@@ -11,16 +11,13 @@
 #include <iostream>
 
 void SubServiceModeTestsFailed::entry() {
-	Logger::error("[ServiceMode] Tests have failed. Press RESET to return to Standby mode.");
-	actions->master_warningOn();
-	actions->btnStartLedOff();
-	actions->btnResetLedOff();
+    Logger::error("[ServiceMode] Tests have failed. Press RESET to return to "
+                  "Standby mode.");
+    actions->master_warningOn();
+    actions->btnStartLedOff();
+    actions->btnResetLedOff();
 }
 
-void SubServiceModeTestsFailed::exit() {
-	actions->master_warningOff();
-}
+void SubServiceModeTestsFailed::exit() { actions->master_warningOff(); }
 
-bool SubServiceModeTestsFailed::isSubEndState() {
-	return true;
-}
+bool SubServiceModeTestsFailed::isSubEndState() { return true; }

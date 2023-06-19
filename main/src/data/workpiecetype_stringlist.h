@@ -12,4 +12,4 @@ static const char *WorkpieceTypeString[] = {
 };
 
 #undef ESTRING
-#endif //CONSTRUCT_WORKPIECETYPES_STRINGLIST_H
+#endif   // CONSTRUCT_WORKPIECETYPES_STRINGLIST_H

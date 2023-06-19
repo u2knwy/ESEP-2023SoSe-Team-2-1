@@ -8,9 +8,6 @@
 
 #include "../MainBasestate.h"
 
-class SubEStopEndState: public MainBasestate {
-	bool isSubEndState() override {
-		return true;
-	}
-
+class SubEStopEndState : public MainBasestate {
+    bool isSubEndState() override { return true; }
 };

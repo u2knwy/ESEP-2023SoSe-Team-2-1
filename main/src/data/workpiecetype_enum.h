@@ -15,5 +15,4 @@ enum WorkpieceType {
 
 #undef ESTRING
 
-
-#endif //CONSTRUCT_WORKPIECETYPES_ENUM_H
+#endif   // CONSTRUCT_WORKPIECETYPES_ENUM_H

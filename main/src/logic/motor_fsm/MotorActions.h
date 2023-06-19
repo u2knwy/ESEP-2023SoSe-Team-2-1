@@ -11,14 +11,14 @@
 #include <memory>
 
 class MotorActions : public EventSender {
-public:
-	MotorActions(std::shared_ptr<EventManager> mngr, bool master);
-	virtual ~MotorActions();
-	void motorStop();
-	void motorRightFast();
-	void motorRightSlow();
-private:
-	std::shared_ptr<EventManager> eventManager;
-	bool isMaster;
-};
+  public:
+    MotorActions(std::shared_ptr<EventManager> mngr, bool master);
+    virtual ~MotorActions();
+    void motorStop();
+    void motorRightFast();
+    void motorRightSlow();
 
+  private:
+    std::shared_ptr<EventManager> eventManager;
+    bool isMaster;
+};

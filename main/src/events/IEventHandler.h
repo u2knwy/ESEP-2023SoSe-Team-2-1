@@ -7,19 +7,20 @@
 
 #pragma once
 
-#include "eventtypes_enum.h"
 #include "events.h"
+#include "eventtypes_enum.h"
+
 
 struct Event {
-	Event() {}
-	Event(EventType evType) : type(evType), data(-1) {}
-	Event(EventType evType, int evData) : type(evType), data(evData) {}
+    Event() {}
+    Event(EventType evType) : type(evType), data(-1) {}
+    Event(EventType evType, int evData) : type(evType), data(evData) {}
     EventType type;
     int data{-1};
 };
 
 class IEventHandler {
-public:
-	virtual ~IEventHandler() {};
-	virtual void handleEvent(Event event) = 0;
+  public:
+    virtual ~IEventHandler(){};
+    virtual void handleEvent(Event event) = 0;
 };

@@ -8,8 +8,8 @@
 #define ESTRING(x) #x,
 
 static const char *EventString[] = {
-#include"eventtypes_estrings.h"
+#include "eventtypes_estrings.h"
 };
 
 #undef ESTRING
-#endif //CONSTRUCT_EVENTTYPES_STRINGLIST_H
+#endif   // CONSTRUCT_EVENTTYPES_STRINGLIST_H

@@ -10,29 +10,23 @@
 #include "RightSlow.h"
 #include "logger/logger.hpp"
 
-void Stopped::entry() {
-	actions->motorStop();
-}
+void Stopped::entry() { actions->motorStop(); }
 
-void Stopped::exit() {
+void Stopped::exit() {}
 
-}
-
-MotorState Stopped::getCurrentState() {
-	return MotorState::STOPPED;
-};
+MotorState Stopped::getCurrentState() { return MotorState::STOPPED; };
 
 bool Stopped::handleFlagsUpdated() {
-	if(!data->getStop() && data->getRight() && !data->getSlow()) {
-		exit();
-		new(this) RightFast;
-		entry();
-		return true;
-	} else if(!data->getStop() && data->getRight() && data->getSlow()) {
-		exit();
-		new(this) RightSlow;
-		entry();
-		return true;
-	}
-	return false;
+    if (!data->getStop() && data->getRight() && !data->getSlow()) {
+        exit();
+        new (this) RightFast;
+        entry();
+        return true;
+    } else if (!data->getStop() && data->getRight() && data->getSlow()) {
+        exit();
+        new (this) RightSlow;
+        entry();
+        return true;
+    }
+    return false;
 }

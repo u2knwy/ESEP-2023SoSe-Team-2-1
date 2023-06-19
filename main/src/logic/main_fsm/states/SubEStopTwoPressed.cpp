@@ -11,20 +11,18 @@
 
 #include <iostream>
 
-void SubEStopTwoPressed::entry() {
-	Logger::info("Both E-Stop's are pressed");
-}
+void SubEStopTwoPressed::entry() { Logger::info("Both E-Stop's are pressed"); }
 
 bool SubEStopTwoPressed::master_EStop_Released() {
-	exit();
-	new(this) SubEStopOnePressed;
-	entry();
-	return true;
+    exit();
+    new (this) SubEStopOnePressed;
+    entry();
+    return true;
 }
 
 bool SubEStopTwoPressed::slave_EStop_Released() {
-	exit();
-	new(this) SubEStopOnePressed;
-	entry();
-	return true;
+    exit();
+    new (this) SubEStopOnePressed;
+    entry();
+    return true;
 }

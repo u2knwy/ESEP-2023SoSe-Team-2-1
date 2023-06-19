@@ -8,9 +8,9 @@
 
 #include "../MotorBasestate.h"
 
-class Stopped: public MotorBasestate {
-	void entry() override;
-	void exit() override;
-	MotorState getCurrentState() override;
-	bool handleFlagsUpdated() override;
+class Stopped : public MotorBasestate {
+    void entry() override;
+    void exit() override;
+    MotorState getCurrentState() override;
+    bool handleFlagsUpdated() override;
 };
