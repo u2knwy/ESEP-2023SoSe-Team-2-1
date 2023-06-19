@@ -30,25 +30,25 @@ class HAL_Test : public ::testing::Test {
 TEST_F(HAL_Test, GreenLampOnOffFlashing) {
     EXPECT_EQ(LampState::OFF, actuators->greenLamp);
 
-    mngr->sendEvent(Event{EventType::LAMP_M_GREEN, LampState::ON});
+    mngr->sendExternalEvent(Event{EventType::LAMP_M_GREEN, LampState::ON});
     EXPECT_EQ(LampState::ON, actuators->greenLamp);
 
-    mngr->sendEvent(Event{EventType::LAMP_M_GREEN, LampState::FLASHING_SLOW});
+    mngr->sendExternalEvent(Event{EventType::LAMP_M_GREEN, LampState::FLASHING_SLOW});
     EXPECT_EQ(LampState::FLASHING_SLOW, actuators->greenLamp);
 
-    mngr->sendEvent(Event{EventType::LAMP_M_GREEN, LampState::OFF});
+    mngr->sendExternalEvent(Event{EventType::LAMP_M_GREEN, LampState::OFF});
     EXPECT_EQ(LampState::OFF, actuators->greenLamp);
 }
 
 TEST_F(HAL_Test, MotorFastSlowStopped) {
     EXPECT_EQ(STOPPED, actuators->motor);
 
-    mngr->sendEvent(Event{MOTOR_M_FAST});
+    mngr->sendExternalEvent(Event{MOTOR_M_FAST});
     EXPECT_EQ(RIGHT_FAST, actuators->motor);
 
-    mngr->sendEvent(Event{MOTOR_M_SLOW});
+    mngr->sendExternalEvent(Event{MOTOR_M_SLOW});
     EXPECT_EQ(RIGHT_SLOW, actuators->motor);
 
-    mngr->sendEvent(Event{MOTOR_M_STOP});
+    mngr->sendExternalEvent(Event{MOTOR_M_STOP});
     EXPECT_EQ(STOPPED, actuators->motor);
 }

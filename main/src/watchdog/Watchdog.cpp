@@ -98,20 +98,19 @@ void Watchdog::receivingThread() {
         // every second: check if timeout has occurred
         std::this_thread::sleep_for(seconds(1));
         const auto now = steady_clock::now();
-        int elapsed_sec = duration_cast<seconds>(now - lastReceiveTime).count();
-        if (elapsed_sec > WD_TIMEOUT_SEC) {
+        int elapsed_msec = duration_cast<milliseconds>(now - lastReceiveTime).count();
+        if (elapsed_msec > WD_TIMEOUT_SEC*1000) {
             Logger::debug("[WD] Heartbeat received " +
-                          std::to_string(elapsed_sec) +
+                          std::to_string(elapsed_msec/1000) +
                           " seconds ago -> ERROR!");
             if (!connectionLost) {
                 Logger::error("[WD] Connection lost! (Timeout)");
                 connectionLost = true;
-                isMaster ? sendEvent(WD_M_CONN_LOST)
-                         : sendEvent(WD_S_CONN_LOST);
+                isMaster ? sendEvent(WD_M_CONN_LOST) : sendEvent(WD_S_CONN_LOST);
             }
         } else {
             Logger::debug("[WD] Heartbeat received " +
-                          std::to_string(elapsed_sec) + " seconds ago -> OK!");
+                          std::to_string(elapsed_msec/1000) + " seconds ago -> OK!");
             if (connectionLost) {
                 Logger::info("[WD] Connection reestablished");
                 connectionLost = false;

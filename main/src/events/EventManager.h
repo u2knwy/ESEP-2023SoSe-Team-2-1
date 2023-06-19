@@ -15,6 +15,26 @@
 #include <thread>
 
 #include <sys/dispatch.h>
+#include <sys/neutrino.h>
+#include <sys/iofunc.h>
+
+#define ATTACH_POINT_LOCAL_M "EventMgrMaster"
+#define ATTACH_POINT_LOCAL_S "EventMgrSlave"
+
+#define ATTACH_POINT_GNS_M "/dev/name/global/EventMgrMaster"
+#define ATTACH_POINT_GNS_S "/dev/name/global/EventMgrSlave"
+
+// qnx message declarations
+typedef struct _pulse header_t;
+/* Second header: used by application - if required */
+typedef struct
+{
+    int size;  // size of data block
+    int data;
+    int eventnr;// some counter used by the application
+               // further data fields required by our application
+} app_header_t;
+
 
 class EventManager {
 public:
@@ -65,7 +85,7 @@ public:
 	 *
 	 * @param event Event to send externally
 	 */
-	void sendEvent(const Event &event);
+	void sendExternalEvent(const Event &event);
 
 	/**
 	 * Starts the "Receive internal Events" thread
@@ -81,18 +101,28 @@ public:
 	 * @return 0 if stop was successful
 	 */
 	int stop();
+
+	void connectToService(const std::string& name);
 private:
 	bool isMaster;
 	int internal_chid;
 	int internal_coid;
 	int server_coid; // for GNS connection?
+	bool externConnected;
 	std::atomic<bool> rcvInternalRunning;
 	std::thread thRcvInternal;
+    std::atomic<bool> rcvExternalRunning;
+    std::thread thRcvExternal;
 	std::map<EventType, std::vector<EventCallback>> subscribers;
 	std::mutex mtx;
-	name_attach_t *attachedServer;
+	name_attach_t *attachedService;
 	void openInternalChannel();
-	void connectGNS();
-	void disconnectGNS();
+	void createService(const std::string& name);
+	void stopService();
+	void disconnectFromService();
 	void rcvInternalEventsThread();
+    void rcvExternalEventsThread();
+    void handle_pulse(header_t hdr, int rcvid);
+    void handle_ONX_IO_msg(header_t hdr, int rcvid);
+    void handle_app_msg(header_t hdr, int rcvid);
 };

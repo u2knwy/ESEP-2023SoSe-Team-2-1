@@ -13,6 +13,7 @@
 #include "configuration/options.hpp"
 #include "events/EventManager.h"
 #include "events/events.h"
+#include "events/EventSender.h"
 #include "hal/Actuators.h"
 #include "hal/HeightSensor.h"
 #include "logger/logger.hpp"
@@ -93,6 +94,16 @@ int main(int argc, char **argv) {
         conf.setPusherMounted(false);
     }
 
+    //starting GNS
+    int gnsExitCode;
+    system("slay gns");
+    if(options.mode == MASTER) {
+        gnsExitCode = system("gns -c");
+    } else {
+        gnsExitCode = system("gns -s");
+    }
+    Logger::info("Started GNS -> exited with " + to_string(gnsExitCode));
+
     // Create components running on Master AND Slave
 
     // Create and start EventManager to receive internal Events
@@ -101,8 +112,8 @@ int main(int argc, char **argv) {
     eventManager->start();
 
     // Start Watchdog -> send and receive heartbeats via EventManager
-    //  Watchdog wd(eventManager);
-    //  wd.start();
+    Watchdog wd(eventManager);
+    wd.start();
 
     actuators = std::make_shared<Actuators>(eventManager);
     sensors = std::make_shared<Sensors>(eventManager);
@@ -121,10 +132,10 @@ int main(int argc, char **argv) {
 
     // Register handler function to be called if the program is not
     // terminated properly
-    std::signal(SIGINT, cleanup);
+/*    std::signal(SIGINT, cleanup);
     std::signal(SIGABRT, cleanup);
     std::signal(SIGTERM, cleanup);
-    std::signal(SIGKILL, cleanup);
+    std::signal(SIGKILL, cleanup);*/
 
     // Start threads...
     sensors->startEventLoop();
