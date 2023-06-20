@@ -72,27 +72,12 @@ bool Running::master_metalDetected() {
     return true;
 }
 
-bool Running::master_LBW_Blocked() {
-    if (!data->wpManager->isQueueempty(AreaType::AREA_B)) {
-        Workpiece *wp = data->wpManager->getHeadOfArea(AreaType::AREA_B);
-        WorkpieceType detected_type = wp->M_type;
-        WorkpieceType config_type = data->wpManager->getNextWorkpieceType();
-
-        wp->sortOut = detected_type == WorkpieceType::WS_F &&
-                      detected_type != config_type;   // compare()
-
-        if (wp->sortOut) {
-            actions->master_openGate(false);   // closegate()
-            Logger::info("WP id: " + std::to_string(wp->id) + " kicked out");
-        } else
-            actions->master_openGate(true);   // opengate()
-        data->wpManager->moveFromAreaToArea(AreaType::AREA_B, AreaType::AREA_C);
-        Logger::info("WP id: " + std::to_string(wp->id) + " Passed to Area_C");
-    }
-    return true;
-}
-
-bool Running::master_LBW_Unblocked() { return true; }
+bool Running::master_LBW_Blocked()
+{
+	if(!data->wpManager->isQueueempty(AreaType::AREA_B)){
+		Workpiece *wp = data->wpManager->getHeadOfArea(AreaType::AREA_B);
+		WorkpieceType detected_type = wp->M_type;
+		WorkpieceType config_type = data->wpManager->getNextWorkpieceType();
 
 																									//compare()
 
@@ -122,6 +107,28 @@ bool Running::master_LBW_Unblocked() { return true; }
 	}
 	return true;
 }
+
+bool Running::master_LBW_Unblocked() { return true; }
+
+bool Running::master_LBE_Blocked()
+{
+	if(!data->wpManager->isQueueempty(AreaType::AREA_C)){
+		Workpiece *wp = data->wpManager->getHeadOfArea(AreaType::AREA_C);
+		if (data->wpManager->isFBM_SEmpty())
+		{
+			actions->master_sendMotorRightRequest(false);
+		}
+		while (data->wpManager->isFBM_SEmpty())
+		{
+			// wait
+			std::this_thread::sleep_for(std::chrono::seconds(3));
+			Logger::info("Workpiece with id: " + std::to_string(wp->id) + " waiting for fbm_S to get free");
+		}
+		actions->master_sendMotorRightRequest(true);
+	}
+	return true;
+}
+
 
 bool Running::master_LBE_Unblocked() {
     if (!data->wpManager->isQueueempty(AreaType::AREA_C)) {
