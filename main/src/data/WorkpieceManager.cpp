@@ -8,11 +8,15 @@
 #include "WorkpieceManager.h"
 #include "configuration/Configuration.h"
 
-WorkpieceManager::WorkpieceManager() : nextId(1) {
-    auto confOrder = Configuration::getInstance().getDesiredOrder();
-    for (int i = 0; i < 3; i++) {
-        desiredOrder[i] = confOrder.at(i);
-    }
+WorkpieceManager::WorkpieceManager() : nextId(1)
+{
+	bool ramp_one=false;
+    bool ramp_two=false;
+	auto confOrder = Configuration::getInstance().getDesiredOrder();
+	for (int i = 0; i < 3; i++)
+	{
+		desiredOrder[i] = confOrder.at(i);
+	}
 }
 
 WorkpieceManager::~WorkpieceManager() {}
@@ -138,8 +142,24 @@ void WorkpieceManager::setFlipped(AreaType area) {
     }
 }
 
-bool WorkpieceManager::isFBM_MEmpty() {
-    return Area_A.empty() && Area_B.empty() && Area_C.empty();
+void WorkpieceManager::setRamp_one(bool input){
+	ramp_one_B= input;
+}
+void WorkpieceManager::setRamp_two(bool input){
+	ramp_two_B = input;
+}
+
+bool WorkpieceManager::getRamp_one(){
+	return ramp_one_B;
+}
+
+bool WorkpieceManager::getRamp_two(){
+	return ramp_two_B;
+}
+
+bool WorkpieceManager::isFBM_MEmpty()
+{
+	return Area_A.empty() && Area_B.empty() && Area_C.empty();
 }
 
 bool WorkpieceManager::isFBM_SEmpty() { return Area_D.empty(); }

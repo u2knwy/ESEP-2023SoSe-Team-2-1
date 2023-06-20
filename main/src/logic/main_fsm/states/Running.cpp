@@ -94,15 +94,33 @@ bool Running::master_LBW_Blocked() {
 
 bool Running::master_LBW_Unblocked() { return true; }
 
-bool Running::master_LBE_Blocked() {
-    if (!data->wpManager->isQueueempty(AreaType::AREA_C)) {
-        Workpiece *wp = data->wpManager->getHeadOfArea(AreaType::AREA_C);
-        if (!data->wpManager->isFBM_SEmpty()) {
-            actions->master_sendMotorRightRequest(false);
-        }
-        return true;
-    }
-    return false;
+																									//compare()
+
+		if(!data->wpManager->getRamp_one() && data->wpManager->getRamp_two())
+		{
+			wp->sortOut = detected_type != config_type;
+		}
+		else if (data->wpManager->getRamp_one() && !data->wpManager->getRamp_two())
+		{
+			wp->sortOut = false;
+		}
+		else
+		{
+			wp->sortOut = detected_type == WorkpieceType::WS_F && detected_type != config_type;
+		}
+
+		if (wp->sortOut)
+		{
+			actions->master_openGate(false);													//closegate()
+			data->wpManager->rotateNextWorkpieces();
+			Logger::info("WP id: " + std::to_string(wp->id) + " kicked out");
+		}
+		else
+			actions->master_openGate(true);														//opengate()
+		data->wpManager->moveFromAreaToArea(AreaType::AREA_B, AreaType::AREA_C);
+		Logger::info("WP id: " + std::to_string(wp->id) + " Passed to Area_C");
+	}
+	return true;
 }
 
 bool Running::master_LBE_Unblocked() {
