@@ -14,7 +14,7 @@
 #include "logger/logger.hpp"
 
 MotorContext::MotorContext(std::shared_ptr<EventManager> mngr, bool master) {
-    isMaster = Configuration::getInstance().systemIsMaster();
+    isMaster = master;
     this->eventManager = mngr;
     this->actions = new MotorActions(mngr, master);
     this->data = new MotorContextData();
@@ -58,7 +58,11 @@ void MotorContext::subscribeToEvents() {
 }
 
 void MotorContext::handleEvent(Event event) {
-    Logger::debug("[MotorFSM] Event received: " + EVENT_TO_STRING(event.type));
+	if(isMaster) {
+		Logger::debug("[MotorFSM_M] Event received: " + EVENT_TO_STRING(event.type));
+	} else {
+		Logger::debug("[MotorFSM_S] Event received: " + EVENT_TO_STRING(event.type));
+	}
     switch (event.type) {
     case EventType::MOTOR_M_STOP_REQ:
     case EventType::MOTOR_S_STOP_REQ:

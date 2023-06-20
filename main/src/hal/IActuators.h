@@ -184,6 +184,7 @@ class IActuators : public IEventHandler {
 
     void handleEvent(Event event) override {
         std::lock_guard<std::mutex> lock(mutex);
+        Logger::debug("[Actuators] handleEvent: " + EVENT_TO_STRING(event.type));
 
         bool handled = true;
 

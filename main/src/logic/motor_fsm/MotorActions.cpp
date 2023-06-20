@@ -23,22 +23,37 @@ MotorActions::MotorActions(std::shared_ptr<EventManager> mngr, bool master) {
 MotorActions::~MotorActions() { disconnect(); }
 
 void MotorActions::motorStop() {
-    Logger::debug("[MotorFSM] Motor stop");
     Event ev;
-    ev.type = isMaster ? EventType::MOTOR_M_STOP : EventType::MOTOR_S_STOP;
+	if(isMaster) {
+		Logger::debug("[MotorFSM_M] Motor stop");
+		ev.type = EventType::MOTOR_M_STOP;
+	} else {
+		Logger::debug("[MotorFSM_S] Motor stop");
+		ev.type = EventType::MOTOR_S_STOP;
+	}
     sendEvent(ev);
 }
 
 void MotorActions::motorRightFast() {
-    Logger::debug("[MotorFSM] Motor right fast");
     Event ev;
-    ev.type = isMaster ? EventType::MOTOR_M_FAST : EventType::MOTOR_S_FAST;
+	if(isMaster) {
+		Logger::debug("[MotorFSM_M] Motor right fast");
+		ev.type = EventType::MOTOR_M_FAST;
+	} else {
+		Logger::debug("[MotorFSM_S] Motor right fast");
+		ev.type = EventType::MOTOR_S_FAST;
+	}
     sendEvent(ev);
 }
 
 void MotorActions::motorRightSlow() {
-    Logger::debug("[MotorFSM] Motor right slow");
     Event ev;
-    ev.type = isMaster ? EventType::MOTOR_M_SLOW : EventType::MOTOR_S_SLOW;
+	if(isMaster) {
+		Logger::debug("[MotorFSM_M] Motor right slow");
+		ev.type = EventType::MOTOR_M_SLOW;
+	} else {
+		Logger::debug("[MotorFSM_S] Motor right slow");
+		ev.type = EventType::MOTOR_S_SLOW;
+	}
     sendEvent(ev);
 }

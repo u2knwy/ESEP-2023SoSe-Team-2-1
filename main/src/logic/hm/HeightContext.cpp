@@ -13,6 +13,7 @@
 
 HeightContext::HeightContext(std::shared_ptr<EventManager> mngr,
                              std::shared_ptr<IHeightSensor> heightSensor) {
+	this->isMaster = Configuration::getInstance().systemIsMaster();
     this->eventManager = mngr;
     this->sensor = heightSensor;
     data = new HeightContextData();
@@ -38,24 +39,27 @@ HeightContext::~HeightContext() {
 }
 
 void HeightContext::subscribeToEvents() {
-    eventManager->subscribe(
-        EventType::MOTOR_M_FAST,
-        std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
-    eventManager->subscribe(
-        EventType::MOTOR_S_FAST,
-        std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
-    eventManager->subscribe(
-        EventType::MOTOR_M_SLOW,
-        std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
-    eventManager->subscribe(
-        EventType::MOTOR_S_SLOW,
-        std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
-    eventManager->subscribe(
-        EventType::MOTOR_M_STOP,
-        std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
-    eventManager->subscribe(
-        EventType::MOTOR_S_STOP,
-        std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
+	if(isMaster) {
+	    eventManager->subscribe(
+	        EventType::MOTOR_M_FAST,
+	        std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
+	    eventManager->subscribe(
+	        EventType::MOTOR_M_SLOW,
+	        std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
+	    eventManager->subscribe(
+	        EventType::MOTOR_M_STOP,
+	        std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
+	} else {
+	    eventManager->subscribe(
+	        EventType::MOTOR_S_FAST,
+	        std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
+	    eventManager->subscribe(
+	        EventType::MOTOR_S_SLOW,
+	        std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
+	    eventManager->subscribe(
+	        EventType::MOTOR_S_STOP,
+	        std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
+	}
 }
 
 void HeightContext::handleEvent(Event event) {
@@ -64,15 +68,19 @@ void HeightContext::handleEvent(Event event) {
     case EventType::MOTOR_M_FAST:
     case EventType::MOTOR_S_FAST:
     case EventType::MOTOR_M_SLOW:
-    case EventType::MOTOR_S_SLOW:
+    case EventType::MOTOR_S_SLOW: {
+    	Logger::debug("[HM] Motor running -> start measurement");
         this->running = true;
         // sensor->start();
         break;
+    }
     case EventType::MOTOR_M_STOP:
-    case EventType::MOTOR_S_STOP:
+    case EventType::MOTOR_S_STOP: {
+    	Logger::debug("[HM] Motor stopped -> stop measurement");
         this->running = false;
         // sensor->stop();
         break;
+    }
     default:
         Logger::warn("[HFSM] Event was not handled: " +
                      EVENT_TO_STRING(event.type));

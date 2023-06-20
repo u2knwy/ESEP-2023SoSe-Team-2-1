@@ -47,6 +47,7 @@ HeightSensor::~HeightSensor() {
 }
 
 void HeightSensor::handleEvent(Event event) {
+    Logger::debug("[HS] handleEvent: " + EVENT_TO_STRING(event.type));
     Configuration &conf = Configuration::getInstance();
     switch (event.type) {
     case EventType::HM_M_CAL_OFFSET:

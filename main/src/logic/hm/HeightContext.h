@@ -43,6 +43,7 @@ class HeightContext : public IEventHandler {
     HeightBasestate *state;
     HeightContextData *data;
     std::shared_ptr<IHeightSensor> sensor;
+    bool isMaster;
     bool running;
     void subscribeToEvents();
 };

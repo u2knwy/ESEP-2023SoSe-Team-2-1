@@ -118,13 +118,6 @@ bool Running::master_LBE_Blocked()
 		{
 			actions->master_sendMotorRightRequest(false);
 		}
-		while (data->wpManager->isFBM_SEmpty())
-		{
-			// wait
-			std::this_thread::sleep_for(std::chrono::seconds(3));
-			Logger::info("Workpiece with id: " + std::to_string(wp->id) + " waiting for fbm_S to get free");
-		}
-		actions->master_sendMotorRightRequest(true);
 	}
 	return true;
 }
