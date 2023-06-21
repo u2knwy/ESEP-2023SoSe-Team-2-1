@@ -17,10 +17,12 @@ MainContextData::~MainContextData() { delete wpManager; }
 
 void MainContextData::setRampFBM1Blocked(bool blocked) {
     this->rampFBM1Blocked = blocked;
+    wpManager->setRamp_one(blocked);
 }
 
 void MainContextData::setRampFBM2Blocked(bool blocked) {
     this->rampFBM2Blocked = blocked;
+    wpManager->setRamp_two(blocked);
 }
 
 bool MainContextData::isRampFBM1Blocked() { return this->rampFBM1Blocked; }
