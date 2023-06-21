@@ -14,8 +14,7 @@
 
 void SubServiceModeSelftestSensors::entry() {
     Logger::info("[ServiceMode] +++ SELFTEST SENSORS +++");
-    Logger::user_info("Interrupt all sensors and watch console outputs. Press "
-                      "START button if ok.");
+    Logger::user_info("Place any workpiece at Start of FBM1 and wait until it arrives at the end of FBM2.");
     actions->btnStartLedOn();
     actions->btnResetLedOff();
 }
@@ -121,7 +120,7 @@ bool SubServiceModeSelftestSensors::slave_LBW_Blocked() {
 bool SubServiceModeSelftestSensors::slave_LBE_Blocked() {
     slave_lbEndOk = true;
     actions->slave_sendMotorRightRequest(false);
-    Logger::user_info("[ServiceMode] Block ramp at FBM1 and FBM2");
+    Logger::user_info("[ServiceMode] Block ramp at FBM1 and FBM2 and then press START to continue");
     return true;
 }
 

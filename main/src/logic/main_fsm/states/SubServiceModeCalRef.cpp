@@ -16,7 +16,7 @@
 void SubServiceModeCalRef::entry() {
     Logger::info("[ServiceMode] Calibrating HeightSensor reference (High)");
     Logger::user_info(
-        "Place a high workpiece below the HeightSensor at both Master and "
+        "Place a high workpiece (25 mm) below the HeightSensor at both Master and "
         "Slave and press START to calibrate reference.");
     actions->btnStartLedOn();
     actions->btnResetLedOff();

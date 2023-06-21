@@ -112,8 +112,8 @@ int main(int argc, char **argv) {
     eventManager->start();
 
     // Start Watchdog -> send and receive heartbeats via EventManager
-    Watchdog wd(eventManager);
-    wd.start();
+//    Watchdog wd(eventManager);
+//    wd.start();
 
     actuators = std::make_shared<Actuators>(eventManager);
     sensors = std::make_shared<Sensors>(eventManager);
@@ -129,6 +129,43 @@ int main(int argc, char **argv) {
         Logger::info("Program started as SLAVE");
         conf.setMaster(false);
     }
+
+/*    EventSender s;
+    s.connect(eventManager);
+	std::this_thread::sleep_for(std::chrono::seconds(3));
+    if(conf.systemIsMaster()) {
+        s.sendEvent(Event{START_M_SHORT});
+        std::this_thread::sleep_for(std::chrono::seconds(3));
+        s.sendEvent(Event{LBA_M_BLOCKED});
+        std::this_thread::sleep_for(std::chrono::seconds(3));
+        s.sendEvent(Event{LBA_M_UNBLOCKED});
+        std::this_thread::sleep_for(std::chrono::seconds(3));
+        s.sendEvent(Event{HM_M_WS_F, 244});
+        std::this_thread::sleep_for(std::chrono::seconds(3));
+        s.sendEvent(Event{LBW_M_BLOCKED});
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        s.sendEvent(Event{LBW_M_UNBLOCKED});
+        std::this_thread::sleep_for(std::chrono::seconds(3));
+        s.sendEvent(Event{LBE_M_BLOCKED});
+        std::this_thread::sleep_for(std::chrono::seconds(3));
+        s.sendEvent(Event{LBE_M_UNBLOCKED});
+        std::this_thread::sleep_for(std::chrono::seconds(60));
+    } else {
+        std::this_thread::sleep_for(std::chrono::seconds(30));
+        s.sendEvent(Event{LBA_S_BLOCKED});
+        std::this_thread::sleep_for(std::chrono::seconds(3));
+        s.sendEvent(Event{LBA_S_UNBLOCKED});
+        std::this_thread::sleep_for(std::chrono::seconds(3));
+        s.sendEvent(Event{HM_S_WS_F, 231});
+        std::this_thread::sleep_for(std::chrono::seconds(3));
+        s.sendEvent(Event{LBW_S_BLOCKED});
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        s.sendEvent(Event{LBW_S_UNBLOCKED});
+        std::this_thread::sleep_for(std::chrono::seconds(3));
+        s.sendEvent(Event{LBE_S_BLOCKED});
+        std::this_thread::sleep_for(std::chrono::seconds(3));
+        s.sendEvent(Event{LBE_S_UNBLOCKED});
+    }*/
 
     // Register handler function to be called if the program is not
     // terminated properly
