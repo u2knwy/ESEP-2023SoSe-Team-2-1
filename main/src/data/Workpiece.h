@@ -27,7 +27,7 @@ struct Workpiece {
      * Whether the Workpiece contains a metal.
      */
     bool metal{false};
-#
+
     /**
      * Maximum measured height at FBM2
      */

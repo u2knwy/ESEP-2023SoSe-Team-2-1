@@ -7,6 +7,7 @@
 
 #include "WorkpieceManager.h"
 #include "configuration/Configuration.h"
+#include "logger/logger.hpp"
 
 WorkpieceManager::WorkpieceManager() : nextId(1)
 {
@@ -26,6 +27,8 @@ void WorkpieceManager::rotateNextWorkpieces() {
     desiredOrder[0] = desiredOrder[1];
     desiredOrder[1] = desiredOrder[2];
     desiredOrder[2] = front;
+
+    Logger::info("Next expected workpiece: " + WP_TYPE_TO_STRING(getNextWorkpieceType()));
 }
 
 WorkpieceType WorkpieceManager::getNextWorkpieceType() {
@@ -90,23 +93,24 @@ void WorkpieceManager::setHeight(AreaType area, double height) {
 }
 
 void WorkpieceManager::setTypeEvent(EventType event, AreaType area) {
-    WorkpieceType tmp;
-    if (event == EventType::HM_M_WS_F) {
+    WorkpieceType tmp = WorkpieceType::WS_UNKNOWN;
+    if (event == EventType::HM_M_WS_F || event == EventType::HM_S_WS_F) {
         tmp = WorkpieceType::WS_F;
-    } else if (event == EventType::HM_M_WS_OB) {
+    } else if (event == EventType::HM_M_WS_OB || event == EventType::HM_S_WS_OB) {
         tmp = WorkpieceType::WS_OB;
-    } else if (event == EventType::HM_M_WS_BOM) {
+    } else if (event == EventType::HM_M_WS_BOM || event == EventType::HM_S_WS_BOM) {
         tmp = WorkpieceType::WS_BOM;
-    } else if (event == EventType::HM_M_WS_UNKNOWN) {
-        tmp = WS_UNKNOWN;
+    } else if (event == EventType::HM_M_WS_UNKNOWN || event == EventType::HM_S_WS_UNKNOWN) {
+        tmp = WorkpieceType::WS_UNKNOWN;
     }
 
     Workpiece *wp = getHeadOfArea(area);
     if (wp != nullptr) {
         if (area == AreaType::AREA_D) {
             wp->S_type = tmp;
-        } else
+        } else {
             wp->M_type = tmp;
+        }
     }
 }
 
