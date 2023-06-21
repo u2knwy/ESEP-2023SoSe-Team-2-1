@@ -44,6 +44,7 @@ class ActuatorMock : public IActuators {
     void closeSwitch() override;
     void sortOut() override;
     void letPass() override;
+    void allOff() override;
 
     // To test function calls:
     LampState greenLamp{OFF};

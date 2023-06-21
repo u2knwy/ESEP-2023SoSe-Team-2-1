@@ -76,3 +76,5 @@ void ActuatorMock::closeSwitch() { switchOpen = false; }
 void ActuatorMock::sortOut() { switchOpen = false; }
 
 void ActuatorMock::letPass() { switchOpen = true; }
+
+void ActuatorMock::allOff() { }

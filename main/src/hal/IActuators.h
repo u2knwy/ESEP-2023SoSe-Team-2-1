@@ -182,6 +182,8 @@ class IActuators : public IEventHandler {
      */
     virtual void letPass() = 0;
 
+    virtual void allOff() = 0;
+
     void handleEvent(Event event) override {
         std::lock_guard<std::mutex> lock(mutex);
         Logger::debug("[Actuators] handleEvent: " + EVENT_TO_STRING(event.type));

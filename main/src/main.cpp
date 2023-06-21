@@ -48,11 +48,14 @@ std::atomic<bool> running(true);
 void cleanup(int exitCode) {
     Logger::info("Exit code received: " + std::to_string(exitCode));
     //	heightSensor->stop();
-    eventManager->stop();
+    //eventManager->stop();
+    actuators->allOff();
     running = false;
+    exit(EXIT_FAILURE);
 }
 
 int main(int argc, char **argv) {
+
     // Initialize Logger
     const char *debugValue = getenv("QNX_DEBUG");
     const std::string debug = debugValue ? debugValue : "";
@@ -104,19 +107,21 @@ int main(int argc, char **argv) {
     }
     Logger::info("Started GNS -> exited with " + to_string(gnsExitCode));
 
-    // Create components running on Master AND Slave
-
-    // Create and start EventManager to receive internal Events
     eventManager = std::make_shared<EventManager>();
     Logger::registerEvents(eventManager);
+
+    // Create components running on Master AND Slave
+    actuators = std::make_shared<Actuators>(eventManager);
+    actuators->standbyMode();
+
     eventManager->start();
 
     // Start Watchdog -> send and receive heartbeats via EventManager
-//    Watchdog wd(eventManager);
-//    wd.start();
+    Watchdog wd(eventManager);
+    wd.start();
 
-    actuators = std::make_shared<Actuators>(eventManager);
     sensors = std::make_shared<Sensors>(eventManager);
+    sensors->startEventLoop();
     heightSensor = std::make_shared<HeightSensor>(eventManager);
     heightFSM = std::make_shared<HeightContext>(eventManager, heightSensor);
 
@@ -130,52 +135,13 @@ int main(int argc, char **argv) {
         conf.setMaster(false);
     }
 
-/*    EventSender s;
-    s.connect(eventManager);
-	std::this_thread::sleep_for(std::chrono::seconds(3));
-    if(conf.systemIsMaster()) {
-        s.sendEvent(Event{START_M_SHORT});
-        std::this_thread::sleep_for(std::chrono::seconds(3));
-        s.sendEvent(Event{LBA_M_BLOCKED});
-        std::this_thread::sleep_for(std::chrono::seconds(3));
-        s.sendEvent(Event{LBA_M_UNBLOCKED});
-        std::this_thread::sleep_for(std::chrono::seconds(3));
-        s.sendEvent(Event{HM_M_WS_F, 244});
-        std::this_thread::sleep_for(std::chrono::seconds(3));
-        s.sendEvent(Event{LBW_M_BLOCKED});
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-        s.sendEvent(Event{LBW_M_UNBLOCKED});
-        std::this_thread::sleep_for(std::chrono::seconds(3));
-        s.sendEvent(Event{LBE_M_BLOCKED});
-        std::this_thread::sleep_for(std::chrono::seconds(3));
-        s.sendEvent(Event{LBE_M_UNBLOCKED});
-        std::this_thread::sleep_for(std::chrono::seconds(60));
-    } else {
-        std::this_thread::sleep_for(std::chrono::seconds(30));
-        s.sendEvent(Event{LBA_S_BLOCKED});
-        std::this_thread::sleep_for(std::chrono::seconds(3));
-        s.sendEvent(Event{LBA_S_UNBLOCKED});
-        std::this_thread::sleep_for(std::chrono::seconds(3));
-        s.sendEvent(Event{HM_S_WS_F, 231});
-        std::this_thread::sleep_for(std::chrono::seconds(3));
-        s.sendEvent(Event{LBW_S_BLOCKED});
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-        s.sendEvent(Event{LBW_S_UNBLOCKED});
-        std::this_thread::sleep_for(std::chrono::seconds(3));
-        s.sendEvent(Event{LBE_S_BLOCKED});
-        std::this_thread::sleep_for(std::chrono::seconds(3));
-        s.sendEvent(Event{LBE_S_UNBLOCKED});
-    }*/
-
     // Register handler function to be called if the program is not
     // terminated properly
-/*    std::signal(SIGINT, cleanup);
+    std::signal(SIGINT, cleanup);
     std::signal(SIGABRT, cleanup);
     std::signal(SIGTERM, cleanup);
-    std::signal(SIGKILL, cleanup);*/
-
-    // Start threads...
-    sensors->startEventLoop();
+    std::signal(SIGKILL, cleanup);
+    std::signal(SIGSEGV, cleanup);
 
     // Endless loop - wait until termination
     while (running) {

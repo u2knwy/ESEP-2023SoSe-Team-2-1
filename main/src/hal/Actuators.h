@@ -60,6 +60,7 @@ class Actuators : public IActuators {
     void closeSwitch() override;
     void sortOut() override;
     void letPass() override;
+    void allOff() override;
 
   private:
     uintptr_t gpio_bank_1;

@@ -331,6 +331,17 @@ void Actuators::letPass() {
     }
 }
 
+void Actuators::allOff() {
+	motorStop();
+	greenLampOff();
+	yellowLampOff();
+	redLampOff();
+	q1LedOff();
+	q2LedOff();
+	startLedOff();
+	resetLedOff();
+}
+
 void Actuators::motorStop() {
     Logger::debug("[Actuators] Motor stop");
     setMotorStop(true);
