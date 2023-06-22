@@ -9,6 +9,7 @@
 #include <memory>
 #include <mutex>
 #include <vector>
+#include "logger/logger.hpp"
 
 /*---------------------------------------------------------------------------
          HEIGHT SENSOR CONFIGURATION
@@ -16,7 +17,8 @@
 #define HEIGHT_CONV_MAX    2
 #define HEIGHT_FLAT        21
 #define HEIGHT_HIGH        25
-#define HEIGHT_HOLE        6
+#define HEIGHT_HOLE_MIN    4
+#define HEIGHT_HOLE_MAX    9
 #define HEIGHT_TOL         2
 #define ADC_DEFAULT_OFFSET 3333
 #define ADC_DEFAULT_HIGH   2222
@@ -48,9 +50,11 @@ class IHeightSensor {
     void calibrateOffset(int offsetValue) {
         std::lock_guard<std::mutex> lock(mutex_cal);
         adcOffset = offsetValue;
+        Logger::debug("[HeightSensor] Calibrated offset: " + std::to_string(adcOffset));
     }
     void calibrateRefHigh(int highValue) {
         std::lock_guard<std::mutex> lock(mutex_cal);
         adcIncPerMillimeter = (adcOffset - highValue) / HEIGHT_HIGH;
+        Logger::debug("[HeightSensor] Calibrated reference (25.0mm): " + std::to_string(highValue) + " -> " + std::to_string(adcIncPerMillimeter) + " inc/mm");
     }
 };

@@ -13,7 +13,11 @@
 
 #include <iostream>
 
-void SubEStopOnePressed::entry() { Logger::info("One E-Stop is pressed"); }
+void SubEStopOnePressed::entry() {
+	Logger::info("One E-Stop is pressed");
+    actions->master_btnResetLedOff();
+    actions->slave_btnResetLedOff();
+}
 
 void SubEStopOnePressed::exit() {}
 

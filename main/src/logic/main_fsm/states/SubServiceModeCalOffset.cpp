@@ -17,8 +17,10 @@ void SubServiceModeCalOffset::entry() {
     Logger::user_info(
         "Make sure no workpiece is below the HeightSensor at both Master and "
         "Slave and press START to calibrate offset.");
-    actions->btnStartLedOn();
-    actions->btnResetLedOff();
+    actions->master_btnStartLedOn();
+    actions->master_btnResetLedOff();
+    actions->slave_btnStartLedOn();
+    actions->slave_btnResetLedOff();
     done = false;
 }
 
@@ -28,7 +30,7 @@ bool SubServiceModeCalOffset::master_btnStart_PressedShort() {
     actions->calibrateOffset();
     Logger::user_info(
         "Calibration done. Press RESET button to continue or START to repeat");
-    actions->btnResetLedOn();
+    actions->master_btnResetLedOn();
     done = true;
     return true;
 }

@@ -92,6 +92,7 @@ void HeightContext::heightValueReceived(float valueMM) {
     if (running) {
         if (getCurrentState() != HeightState::WAIT_FOR_WS) {
             data->addValue(valueMM);
+            Logger::debug("[HM] New value: " + std::to_string(valueMM));
         }
 
         bool handled;
@@ -103,8 +104,8 @@ void HeightContext::heightValueReceived(float valueMM) {
             handled = state->highDetected();
         } else if (valueMM < HEIGHT_CONV_MAX) {
             handled = state->beltDetected();
-        } else if (valueMM > HEIGHT_HOLE - HEIGHT_TOL &&
-                   valueMM < HEIGHT_HOLE + HEIGHT_TOL) {
+        } else if (valueMM >= HEIGHT_HOLE_MIN &&
+                   valueMM <= HEIGHT_HOLE_MAX) {
             handled = state->holeDetected();
         } else {
             handled = state->unknownDetected();

@@ -21,9 +21,6 @@
 #define ATTACH_POINT_LOCAL_M "EventMgrMaster"
 #define ATTACH_POINT_LOCAL_S "EventMgrSlave"
 
-#define ATTACH_POINT_GNS_M "/dev/name/global/EventMgrMaster"
-#define ATTACH_POINT_GNS_S "/dev/name/global/EventMgrSlave"
-
 // qnx message declarations
 typedef struct _pulse header_t;
 /* Second header: used by application - if required */
@@ -116,8 +113,11 @@ private:
 	std::map<EventType, std::vector<EventCallback>> subscribers;
 	std::mutex mtx;
 	name_attach_t *attachedService;
+	std::string ownServiceName;
+	std::string otherServiceName;
 	void openInternalChannel();
-	void createService(const std::string& name);
+	void sendToSelf(Event event);
+	void createService();
 	void stopService();
 	void disconnectFromService();
 	void rcvInternalEventsThread();

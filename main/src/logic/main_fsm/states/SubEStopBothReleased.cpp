@@ -20,6 +20,8 @@ void SubEStopBothReleased::entry() {
                       "Slave to leave EStop mode");
     masterReset = false;
     slaveReset = false;
+    actions->master_btnResetLedOn();
+    actions->slave_btnResetLedOn();
 }
 
 void SubEStopBothReleased::exit() {}
@@ -27,6 +29,7 @@ void SubEStopBothReleased::exit() {}
 bool SubEStopBothReleased::master_btnReset_Pressed() {
     Logger::debug("[EStop] Master confirmed reset");
     this->masterReset = true;
+    actions->master_btnResetLedOff();
     if (masterReset && slaveReset) {
         Logger::debug("EStop was resetted -> leave EStop mode");
         exit();
@@ -40,6 +43,7 @@ bool SubEStopBothReleased::master_btnReset_Pressed() {
 bool SubEStopBothReleased::slave_btnReset_Pressed() {
     Logger::debug("[EStop] Slave confirmed reset");
     this->slaveReset = true;
+    actions->slave_btnResetLedOff();
     if (masterReset && slaveReset) {
         Logger::debug("EStop was resetted -> leave EStop mode");
         exit();

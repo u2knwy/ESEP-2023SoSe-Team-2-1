@@ -13,6 +13,8 @@ void SubErrorSolvedUnresigned::entry() {
     actions->redLampFlashingSlow();
     Logger::user_info("Error has solved itself - Push the Reset button to "
                       "resign it and leave Error mode");
+    actions->master_btnResetLedOn();
+    actions->slave_btnResetLedOn();
 }
 
 void SubErrorSolvedUnresigned::exit() {}

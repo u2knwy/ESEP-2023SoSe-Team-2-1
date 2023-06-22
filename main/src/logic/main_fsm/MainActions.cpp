@@ -193,23 +193,36 @@ void MainActions::saveCalibration() {
     Logger::debug(ss.str());
 }
 
-void MainActions::btnStartLedOn() {
+void MainActions::master_btnStartLedOn() {
     sendEvent(Event{EventType::LED_M_START, (int) LampState::ON});
+}
+
+void MainActions::master_btnResetLedOn() {
+    sendEvent(Event{EventType::LED_M_RESET, (int) LampState::ON});
+}
+
+void MainActions::master_btnStartLedOff() {
+    sendEvent(Event{EventType::LED_M_START, (int) LampState::OFF});
+}
+
+void MainActions::master_btnResetLedOff() {
+    sendEvent(Event{EventType::LED_M_RESET, (int) LampState::OFF});
+}
+
+
+void MainActions::slave_btnStartLedOn() {
     sendEvent(Event{EventType::LED_S_START, (int) LampState::ON});
 }
 
-void MainActions::btnResetLedOn() {
-    sendEvent(Event{EventType::LED_M_RESET, (int) LampState::ON});
+void MainActions::slave_btnResetLedOn() {
     sendEvent(Event{EventType::LED_S_RESET, (int) LampState::ON});
 }
 
-void MainActions::btnStartLedOff() {
-    sendEvent(Event{EventType::LED_M_START, (int) LampState::OFF});
+void MainActions::slave_btnStartLedOff() {
     sendEvent(Event{EventType::LED_S_START, (int) LampState::OFF});
 }
 
-void MainActions::btnResetLedOff() {
-    sendEvent(Event{EventType::LED_M_RESET, (int) LampState::OFF});
+void MainActions::slave_btnResetLedOff() {
     sendEvent(Event{EventType::LED_S_RESET, (int) LampState::OFF});
 }
 

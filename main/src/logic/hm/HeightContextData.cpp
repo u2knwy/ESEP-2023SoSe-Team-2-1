@@ -108,7 +108,7 @@ bool HeightContextData::isHigh(float value) {
 }
 
 bool HeightContextData::isHole(float value) {
-    if (value > HEIGHT_HOLE - HEIGHT_TOL && value < HEIGHT_HOLE + HEIGHT_TOL) {
+    if (value >= HEIGHT_HOLE_MIN && value <= HEIGHT_HOLE_MAX) {
         return true;
     } else {
         return false;

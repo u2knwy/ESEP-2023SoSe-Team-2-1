@@ -47,9 +47,16 @@ Sensors::Sensors(std::shared_ptr<EventManager> mngr) : eventManager(mngr) {
         Logger::error("[Sensors] Error while connecting to EventManager");
     }
 
+    // Check if EStop is already pressed
     if (eStopPressed()) {
-        isMaster ? sendEvent(EventType::ESTOP_M_PRESSED)
-                 : sendEvent(EventType::ESTOP_S_PRESSED);
+        isMaster ? sendEvent(Event{EventType::ESTOP_M_PRESSED})
+                 : sendEvent(Event{EventType::ESTOP_S_PRESSED});
+    }
+
+    // Check if ramp is already blocked
+    if (lbRampBlocked()) {
+        isMaster ? sendEvent(Event{EventType::LBR_M_BLOCKED})
+                 : sendEvent(Event{EventType::LBR_S_BLOCKED});
     }
 }
 
@@ -353,15 +360,14 @@ void Sensors::handleGpioInterrupt() {
     } else if (BIT_SET(SE_METAL_PIN, intrStatusReg)) {
         if (metalDetected()) {
             Logger::debug("[Sensors] Metal detected");
-            event.type =
-                isMaster ? EventType::MD_M_PAYLOAD : EventType::MD_S_PAYLOAD;
+            event.type = isMaster ? EventType::MD_M_PAYLOAD : EventType::MD_S_PAYLOAD;
             event.data = 1;
-        } else {
+        } /*else {
             Logger::debug("[Sensors] Metal not detected");
             event.type =
                 isMaster ? EventType::MD_M_PAYLOAD : EventType::MD_S_PAYLOAD;
             event.data = 0;
-        }
+        }*/
     }
 
     // If IRQ is associated to an event, we send it!

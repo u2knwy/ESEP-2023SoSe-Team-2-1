@@ -14,8 +14,8 @@
 #include <thread>
 
 
-#define WD_SEND_INTERVAL_SEC 3
-#define WD_TIMEOUT_SEC       5
+#define WD_SEND_INTERVAL_SEC 1
+#define WD_TIMEOUT_SEC       3
 
 class Watchdog : public IEventHandler, public EventSender {
   public:

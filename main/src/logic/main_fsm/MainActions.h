@@ -40,10 +40,14 @@ class MainActions : public EventSender {
     void calibrateOffset();
     void calibrateReference();
     void saveCalibration();
-    void btnStartLedOn();
-    void btnStartLedOff();
-    void btnResetLedOn();
-    void btnResetLedOff();
+    void master_btnStartLedOn();
+    void master_btnStartLedOff();
+    void master_btnResetLedOn();
+    void master_btnResetLedOff();
+    void slave_btnStartLedOn();
+    void slave_btnStartLedOff();
+    void slave_btnResetLedOn();
+    void slave_btnResetLedOff();
     void master_q1LedOn();
     void master_q1LedOff();
     void master_q2LedOn();

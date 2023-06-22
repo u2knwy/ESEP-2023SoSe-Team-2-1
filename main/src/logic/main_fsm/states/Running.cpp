@@ -68,6 +68,10 @@ bool Running::master_metalDetected() {
 		{
 			wp->M_type = WorkpieceType::WS_BUM;
 		}
+
+		std::stringstream ss;
+		ss << "FBM1 metal detected - type=" << WP_TYPE_TO_STRING(wp->M_type);
+		Logger::info(ss.str());
 	}
 	return true;
 }
@@ -78,11 +82,6 @@ bool Running::master_LBW_Blocked()
 		Workpiece *wp = data->wpManager->getHeadOfArea(AreaType::AREA_B);
 		WorkpieceType detected_type = wp->M_type;
 		WorkpieceType config_type = data->wpManager->getNextWorkpieceType();
-
-		std::stringstream ss;
-		ss << "FBM1 sort out: expected=" << WP_TYPE_TO_STRING(config_type);
-		ss << ", detected=" << WP_TYPE_TO_STRING(detected_type);
-		Logger::info(ss.str());
 
 		if(!data->wpManager->getRamp_one() && data->wpManager->getRamp_two()) //compare()
 		{
@@ -96,6 +95,11 @@ bool Running::master_LBW_Blocked()
 		{
 			wp->sortOut = detected_type == WorkpieceType::WS_F && detected_type != config_type;
 		}
+
+		std::stringstream ss;
+		ss << "FBM1 sort out? expected=" << WP_TYPE_TO_STRING(config_type);
+		ss << ", detected=" << WP_TYPE_TO_STRING(detected_type) << (wp->sortOut ? " -> sort out" : " -> let pass");
+		Logger::info(ss.str());
 
 		if (wp->sortOut)
 		{
@@ -205,12 +209,15 @@ bool Running::slave_metalDetected() {
 		if (wp->S_type == WorkpieceType::WS_BOM) {     // setType()
 			wp->S_type = WorkpieceType::WS_BUM;
 		}
+
+		std::stringstream ss;
+		ss << "FBM2 metal detected - type=" << WP_TYPE_TO_STRING(wp->S_type);
+		Logger::info(ss.str());
 	}
 	return true;
 }
 
 bool Running::slave_LBW_Blocked() {
-	Logger::debug("Running::slave_LBW_Blocked");
 	if (!data->wpManager->isQueueempty(AreaType::AREA_D)) {
 		Workpiece *wp = data->wpManager->getHeadOfArea(AreaType::AREA_D);
 		WorkpieceType slave_type = wp->S_type;
@@ -220,8 +227,8 @@ bool Running::slave_LBW_Blocked() {
 		wp->sortOut = expected_type != slave_type;   // sortOut()
 
 		std::stringstream ss;
-		ss << "FBM2 sort out: expected=" << WP_TYPE_TO_STRING(expected_type);
-		ss << ", detected=" << WP_TYPE_TO_STRING(slave_type);
+		ss << "FBM2 sort out? expected=" << WP_TYPE_TO_STRING(expected_type);
+		ss << ", detected=" << WP_TYPE_TO_STRING(slave_type) << (wp->sortOut ? " -> sort out" : " -> let pass");
 		Logger::info(ss.str());
 
 		if (wp->sortOut) {

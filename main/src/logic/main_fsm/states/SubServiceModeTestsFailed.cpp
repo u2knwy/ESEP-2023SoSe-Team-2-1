@@ -14,8 +14,8 @@ void SubServiceModeTestsFailed::entry() {
     Logger::error("[ServiceMode] Tests have failed. Press RESET to return to "
                   "Standby mode.");
     actions->master_warningOn();
-    actions->btnStartLedOff();
-    actions->btnResetLedOff();
+    actions->master_btnStartLedOff();
+    actions->master_btnResetLedOff();
 }
 
 void SubServiceModeTestsFailed::exit() { actions->master_warningOff(); }

@@ -46,9 +46,18 @@ std::atomic<bool> running(true);
  * Does all necessary stuff for cleanup to avoid memory leaks.
  */
 void cleanup(int exitCode) {
+	if(exitCode == EXIT_SUCCESS) {
+		return;
+	}
     Logger::info("Exit code received: " + std::to_string(exitCode));
     //	heightSensor->stop();
     //eventManager->stop();
+    bool master = Configuration::getInstance().systemIsMaster();
+    if(master) {
+		eventManager->sendExternalEvent(Event{ERROR_M_MAN_SOLVABLE});
+    } else {
+    	eventManager->sendExternalEvent(Event{ERROR_S_MAN_SOLVABLE});
+    }
     actuators->allOff();
     running = false;
     exit(EXIT_FAILURE);
@@ -115,13 +124,14 @@ int main(int argc, char **argv) {
     actuators->standbyMode();
 
     eventManager->start();
-
+    std::this_thread::sleep_for(std::chrono::seconds(1));
     // Start Watchdog -> send and receive heartbeats via EventManager
-    Watchdog wd(eventManager);
-    wd.start();
+//    Watchdog wd(eventManager);
+//    wd.start();
 
     sensors = std::make_shared<Sensors>(eventManager);
     sensors->startEventLoop();
+
     heightSensor = std::make_shared<HeightSensor>(eventManager);
     heightFSM = std::make_shared<HeightContext>(eventManager, heightSensor);
 
@@ -138,16 +148,18 @@ int main(int argc, char **argv) {
     // Register handler function to be called if the program is not
     // terminated properly
     std::signal(SIGINT, cleanup);
-    std::signal(SIGABRT, cleanup);
+    std::signal(SIGQUIT, cleanup);
     std::signal(SIGTERM, cleanup);
-    std::signal(SIGKILL, cleanup);
     std::signal(SIGSEGV, cleanup);
 
-    // Endless loop - wait until termination
+    // do nothing until termination...
+    //std::cin.get();
     while (running) {
         // Sleep to save CPU resources
         std::this_thread::sleep_for(std::chrono::seconds(10));
     }
+
+    cleanup(EXIT_SUCCESS);
 
     Logger::info("Sorting Machine was terminated.");
     return EXIT_SUCCESS;

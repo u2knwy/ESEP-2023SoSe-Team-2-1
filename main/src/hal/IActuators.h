@@ -191,6 +191,16 @@ class IActuators : public IEventHandler {
         bool handled = true;
 
         switch (event.type) {
+        case EventType::ESTOP_M_PRESSED:
+        case EventType::ESTOP_S_PRESSED:
+            allOff();
+            break;
+        case EventType::ERROR_M_SELF_SOLVABLE:
+        case EventType::ERROR_S_SELF_SOLVABLE:
+        case EventType::ERROR_M_MAN_SOLVABLE:
+        case EventType::ERROR_S_MAN_SOLVABLE:
+        	errorMode();
+        	break;
         case EventType::MOTOR_M_STOP:
         case EventType::MOTOR_S_STOP:
             motorStop();
@@ -202,10 +212,6 @@ class IActuators : public IEventHandler {
         case EventType::MOTOR_M_SLOW:
         case EventType::MOTOR_S_SLOW:
             motorSlow();
-            break;
-        case EventType::ESTOP_M_PRESSED:
-        case EventType::ESTOP_S_PRESSED:
-            motorStop();
             break;
         case EventType::MODE_STANDBY:
             standbyMode();
@@ -345,9 +351,22 @@ class IActuators : public IEventHandler {
         eventManager->subscribe(
             EventType::MODE_ERROR,
             std::bind(&IActuators::handleEvent, this, std::placeholders::_1));
+        eventManager->subscribe(
+			EventType::ESTOP_M_PRESSED,
+			std::bind(&IActuators::handleEvent, this, std::placeholders::_1));
+        eventManager->subscribe(
+			EventType::ESTOP_S_PRESSED,
+			std::bind(&IActuators::handleEvent, this, std::placeholders::_1));
+
 
         // System-dependent events
         if (isMaster) {
+            eventManager->subscribe(
+    			EventType::ERROR_M_MAN_SOLVABLE,
+    			std::bind(&IActuators::handleEvent, this, std::placeholders::_1));
+            eventManager->subscribe(
+    			EventType::ERROR_M_SELF_SOLVABLE,
+    			std::bind(&IActuators::handleEvent, this, std::placeholders::_1));
             eventManager->subscribe(EventType::LAMP_M_RED,
                                     std::bind(&IActuators::handleEvent, this,
                                               std::placeholders::_1));
@@ -355,9 +374,6 @@ class IActuators : public IEventHandler {
                                     std::bind(&IActuators::handleEvent, this,
                                               std::placeholders::_1));
             eventManager->subscribe(EventType::LAMP_M_GREEN,
-                                    std::bind(&IActuators::handleEvent, this,
-                                              std::placeholders::_1));
-            eventManager->subscribe(EventType::ESTOP_M_PRESSED,
                                     std::bind(&IActuators::handleEvent, this,
                                               std::placeholders::_1));
             eventManager->subscribe(EventType::LED_M_START,
@@ -385,6 +401,12 @@ class IActuators : public IEventHandler {
                                     std::bind(&IActuators::handleEvent, this,
                                               std::placeholders::_1));
         } else {
+            eventManager->subscribe(
+    			EventType::ERROR_S_MAN_SOLVABLE,
+    			std::bind(&IActuators::handleEvent, this, std::placeholders::_1));
+            eventManager->subscribe(
+    			EventType::ERROR_S_SELF_SOLVABLE,
+    			std::bind(&IActuators::handleEvent, this, std::placeholders::_1));
             eventManager->subscribe(EventType::LAMP_S_RED,
                                     std::bind(&IActuators::handleEvent, this,
                                               std::placeholders::_1));
@@ -392,9 +414,6 @@ class IActuators : public IEventHandler {
                                     std::bind(&IActuators::handleEvent, this,
                                               std::placeholders::_1));
             eventManager->subscribe(EventType::LAMP_S_GREEN,
-                                    std::bind(&IActuators::handleEvent, this,
-                                              std::placeholders::_1));
-            eventManager->subscribe(EventType::ESTOP_S_PRESSED,
                                     std::bind(&IActuators::handleEvent, this,
                                               std::placeholders::_1));
             eventManager->subscribe(EventType::LED_S_START,

@@ -22,10 +22,18 @@
 #define STR_MSG (_IO_MAX + 1)
 #define DATA_MSG (_IO_MAX + 2)
 
-EventManager::EventManager()
-    : internal_chid(-1), internal_coid(-1), server_coid(-1) {
+EventManager::EventManager() : internal_chid(-1), internal_coid(-1), server_coid(-1) {
     isMaster = Configuration::getInstance().systemIsMaster();
     rcvInternalRunning = false;
+    rcvExternalRunning = false;
+    externConnected = false;
+    if(isMaster) {
+    	ownServiceName = ATTACH_POINT_LOCAL_M;
+    	otherServiceName = ATTACH_POINT_LOCAL_S;
+    } else {
+    	ownServiceName = ATTACH_POINT_LOCAL_S;
+		otherServiceName = ATTACH_POINT_LOCAL_M;
+    }
 }
 
 EventManager::~EventManager() {
@@ -45,6 +53,13 @@ void EventManager::openInternalChannel() {
     if (internal_coid == -1) {
         Logger::error("[EventManager] Attaching to internal channel failed");
         throw std::runtime_error("ConnectAttach failed");
+    }
+}
+
+void EventManager::sendToSelf(Event event) {
+    int res = MsgSendPulse(internal_coid, -1, (int) event.type, event.data);
+    if (res < 0) {
+        Logger::error("Failed to send pulse message to self");
     }
 }
 
@@ -82,14 +97,14 @@ void EventManager::rcvInternalEventsThread() {
 }
 
 void EventManager::rcvExternalEventsThread() {
-    rcvExternalRunning = true;
     Logger::debug("[EventManager] Ready to receive external events");
+    rcvExternalRunning = true;
     while (rcvExternalRunning) {
         // Waiting for a message and read first header
         header_t header;
         int rcvid = MsgReceive(attachedService->chid, &header, sizeof (header_t), NULL);
         if (rcvid == -1) { // Error occurred
-            perror("Server: MsgReceived failed");
+            Logger::error("[EventManager] MsgReceive @GNS failed");
             break;
         }
         if (rcvid == 0) {// Pulse was received
@@ -106,6 +121,7 @@ void EventManager::rcvExternalEventsThread() {
         // A sync msg (presumable ours) was received; handle it
         handle_app_msg(header, rcvid);
     }
+    rcvExternalRunning = false;
     Logger::debug("[EventManager] Stopped receiving external events");
 }
 
@@ -114,10 +130,12 @@ void EventManager::handle_pulse(header_t hdr, int rcvid){
     switch (hdr.code) {
     case _PULSE_CODE_DISCONNECT:
         Logger::debug("Server received _PULSE_CODE_DISCONNECT");
+        Logger::info("[EventManager] Other system was disconnected");
         /* A client disconnected all its connections (called
          * name_close() for each name_open() of our name) or
          * terminated. */
         ConnectDetach(hdr.scoid);
+        sendToSelf(Event{EventType::WD_CONN_LOST});
         externConnected = false;
         break;
     case _PULSE_CODE_UNBLOCK:
@@ -140,10 +158,9 @@ void EventManager::handle_pulse(header_t hdr, int rcvid){
 }
 
 void EventManager::handle_ONX_IO_msg(header_t hdr, int rcvid){
-	Logger::debug("handle_ONX_IO_msg: " + std::to_string(rcvid));
     if (hdr.type == _IO_CONNECT ) {
         // QNX IO msg _IO_CONNECT was received; answer with EOK
-    	Logger::debug("Server received _IO_CONNECT (sync. msg) \n");
+    	Logger::debug("Server received _IO_CONNECT (sync. msg)");
         MsgReply( rcvid, EOK, NULL, 0 );
     } else {
     	// Some other QNX IO message was received; reject it
@@ -154,7 +171,7 @@ void EventManager::handle_ONX_IO_msg(header_t hdr, int rcvid){
 
 void EventManager::handle_app_msg(header_t hdr, int rcvid){
     if (DATA_MSG == hdr.type) {
-    	Logger::debug("handle_app_msg: DATA_MSG not supported.\n");
+    	Logger::debug("handle_app_msg: DATA_MSG not supported.");
         MsgError(rcvid,EPERM);
     } else if (STR_MSG == hdr.type) {
         // read app header
@@ -179,34 +196,36 @@ void EventManager::handle_app_msg(header_t hdr, int rcvid){
     }
 }
 
-void EventManager::createService(const std::string& name) {
-    if ((attachedService = name_attach(NULL, name.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
+void EventManager::createService() {
+    if ((attachedService = name_attach(NULL, ownServiceName.c_str(), NAME_FLAG_ATTACH_GLOBAL)) == NULL) {
         Logger::error("name_attach failed");
     } else {
-        Logger::info("Service created: " + name);
+        Logger::info("Service created: " + ownServiceName);
+    }
+}
+
+void EventManager::stopService() {
+    if (name_detach(attachedService, 0) == -1) {
+        Logger::error("[EventManager] Failed detaching Service");
+    } else {
+		Logger::info("[EventManager] GNS Service was stopped");
+		externConnected = false;
     }
 }
 
 void EventManager::connectToService(const std::string& name) {
     Logger::info("[EventManager] Connecting to service: " + name + " ...");
-    bool connected = false;
-    while(!connected) {
+    externConnected = false;
+    while(!externConnected) {
         server_coid = name_open(name.c_str(), NAME_FLAG_ATTACH_GLOBAL);
-        connected = server_coid != -1;
-        if(!connected) {
+        externConnected = server_coid != -1;
+        if(!externConnected) {
             std::this_thread::sleep_for(std::chrono::seconds(1));
         }
     }
 
     externConnected = true;
     Logger::info("[EventManager] Connected to service: " + name);
-}
-
-void EventManager::stopService() {
-    if (name_detach(attachedService, 0) == -1) {
-        Logger::error("[EventManager] Failed detaching Service");
-    }
-    Logger::info("[EventManager] GNS Service was stopped");
 }
 
 void EventManager::disconnectFromService() {
@@ -240,35 +259,28 @@ int EventManager::subscribeToAllEvents(EventCallback callback) {
 void EventManager::unsubscribe(EventType type, EventCallback callback) {}
 
 void EventManager::handleEvent(const Event &event) {
-	if(isMaster && event.type == WD_M_CONN_LOST) {
-        externConnected = false;
-        disconnectFromService();
-		std::thread(&EventManager::connectToService, this, ATTACH_POINT_LOCAL_S);
-	} else if(!isMaster && event.type == WD_S_CONN_LOST) {
-        externConnected = false;
-        disconnectFromService();
-		std::thread(&EventManager::connectToService, this, ATTACH_POINT_LOCAL_M);
-	} else if(isMaster && event.type == WD_M_CONN_REESTABLISHED) {
-		externConnected = true;
-	} else if(!isMaster && event.type == WD_S_CONN_REESTABLISHED) {
-		externConnected = true;
-	}
-
     std::stringstream ss;
     ss << "[EventManager] handleEvent: " << EVENT_TO_STRING(event.type);
-
     if (event.data != -1)
         ss << ", data: " << event.data;
 
+	if(event.type == EventType::WD_CONN_LOST) {
+        externConnected = false;
+		handleEvent(Event{EventType::ERROR_M_SELF_SOLVABLE});
+		handleEvent(Event{EventType::ERROR_S_SELF_SOLVABLE});
+//		stopService();
+//        disconnectFromService();
+//		std::thread(&EventManager::connectToService, this, ATTACH_POINT_LOCAL_S);
+	} else if(event.type == EventType::WD_CONN_REESTABLISHED) {
+		externConnected = true;
+		handleEvent(Event{EventType::ERROR_M_SELF_SOLVED});
+		handleEvent(Event{EventType::ERROR_S_SELF_SOLVED});
+	}
+
     if (subscribers.find(event.type) != subscribers.end()) {
-        Logger::debug("[EventManager] Notifiying " +
-                      std::to_string(subscribers[event.type].size()) +
-                      " subscribers about Event " +
-                      EVENT_TO_STRING(event.type));
+        Logger::debug("[EventManager] Notifiying " + std::to_string(subscribers[event.type].size()) + " subscribers about Event " + EVENT_TO_STRING(event.type));
         int i = 1;
         for (const auto &callback : subscribers[event.type]) {
-            Logger::debug("[EventManager] Notifiying subscriber #" +
-                          std::to_string(i++));
             callback(event);
         }
     } else {
@@ -278,7 +290,7 @@ void EventManager::handleEvent(const Event &event) {
 }
 
 void EventManager::sendExternalEvent(const Event &event) {
-	if(!externConnected) {
+	if(!externConnected || server_coid < 0) {
 		return;
 	}
     // TODO: Send event to other system
@@ -309,13 +321,11 @@ void EventManager::sendExternalEvent(const Event &event) {
 }
 
 int EventManager::start() {
+    createService();
+    thRcvExternal = std::thread(&EventManager::rcvExternalEventsThread, this);
     if(isMaster) {
-        createService(ATTACH_POINT_LOCAL_M);
-        thRcvExternal = std::thread(&EventManager::rcvExternalEventsThread, this);
         connectToService(ATTACH_POINT_LOCAL_S);
     } else {
-        createService(ATTACH_POINT_LOCAL_S);
-        thRcvExternal = std::thread(&EventManager::rcvExternalEventsThread, this);
         connectToService(ATTACH_POINT_LOCAL_M);
     }
     thRcvInternal = std::thread(&EventManager::rcvInternalEventsThread, this);

@@ -333,8 +333,11 @@ void Actuators::letPass() {
 
 void Actuators::allOff() {
 	motorStop();
+	setGreenBlinking(false);
 	greenLampOff();
+	setYellowBlinking(false);
 	yellowLampOff();
+	setRedBlinking(false, false);
 	redLampOff();
 	q1LedOff();
 	q2LedOff();

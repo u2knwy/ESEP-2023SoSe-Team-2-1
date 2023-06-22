@@ -19,20 +19,14 @@ Watchdog::Watchdog(std::shared_ptr<EventManager> eventManager) {
     this->eventManager = eventManager;
     this->isMaster = Configuration::getInstance().systemIsMaster();
 
-    if (connect(eventManager)) {
-        Logger::debug("[Watchdog] Connected to EventManager");
-    } else {
-        Logger::error("[Watchdog] Error while connecting to EventManager");
+    if (!connect(eventManager)) {
+        throw std::runtime_error("[Watchdog] Error while connecting to EventManager");
     }
 
     if (isMaster) {
-        eventManager->subscribe(
-            EventType::WD_S_HEARTBEAT,
-            std::bind(&Watchdog::handleEvent, this, std::placeholders::_1));
+        eventManager->subscribe(EventType::WD_S_HEARTBEAT, std::bind(&Watchdog::handleEvent, this, std::placeholders::_1));
     } else {
-        eventManager->subscribe(
-            EventType::WD_M_HEARTBEAT,
-            std::bind(&Watchdog::handleEvent, this, std::placeholders::_1));
+        eventManager->subscribe(EventType::WD_M_HEARTBEAT, std::bind(&Watchdog::handleEvent, this, std::placeholders::_1));
     }
 }
 
@@ -100,22 +94,16 @@ void Watchdog::receivingThread() {
         const auto now = steady_clock::now();
         int elapsed_msec = duration_cast<milliseconds>(now - lastReceiveTime).count();
         if (elapsed_msec > WD_TIMEOUT_SEC*1000) {
-            Logger::debug("[WD] Heartbeat received " +
-                          std::to_string(elapsed_msec/1000) +
-                          " seconds ago -> ERROR!");
             if (!connectionLost) {
                 Logger::error("[WD] Connection lost! (Timeout)");
                 connectionLost = true;
-                isMaster ? sendEvent(WD_M_CONN_LOST) : sendEvent(WD_S_CONN_LOST);
+                sendEvent(WD_CONN_LOST);
             }
         } else {
-            Logger::debug("[WD] Heartbeat received " +
-                          std::to_string(elapsed_msec/1000) + " seconds ago -> OK!");
             if (connectionLost) {
                 Logger::info("[WD] Connection reestablished");
                 connectionLost = false;
-                isMaster ? sendEvent(WD_M_CONN_REESTABLISHED)
-                         : sendEvent(WD_S_CONN_REESTABLISHED);
+                sendEvent(WD_CONN_REESTABLISHED);
             }
         }
     }

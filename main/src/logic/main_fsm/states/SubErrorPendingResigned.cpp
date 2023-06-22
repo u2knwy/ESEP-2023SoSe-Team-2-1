@@ -13,6 +13,10 @@ void SubErrorPendingResigned::entry() {
     Logger::user_info(
         "Pending error was resigned - Press Start button to leave Error mode");
     actions->redLampFlashingSlow();
+    actions->master_btnStartLedOn();
+    actions->slave_btnStartLedOn();
+    actions->master_btnResetLedOff();
+    actions->slave_btnResetLedOff();
 }
 
 void SubErrorPendingResigned::exit() {}

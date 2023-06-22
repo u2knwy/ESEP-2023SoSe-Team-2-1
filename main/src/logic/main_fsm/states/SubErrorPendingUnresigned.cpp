@@ -11,7 +11,9 @@
 #include "logger/logger.hpp"
 
 
-void SubErrorPendingUnresigned::entry() { actions->redLampFlashingFast(); }
+void SubErrorPendingUnresigned::entry() {
+	actions->redLampFlashingFast();
+}
 
 void SubErrorPendingUnresigned::exit() {}
 
@@ -23,6 +25,8 @@ bool SubErrorPendingUnresigned::selfSolvableErrorOccurred() {
 
 bool SubErrorPendingUnresigned::nonSelfSolvableErrorOccurred() {
     Logger::user_info("Error pending - Press Reset button to resign it");
+    actions->master_btnResetLedOn();
+    actions->slave_btnResetLedOn();
     manualSolving = true;
     return true;
 }
