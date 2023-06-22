@@ -13,7 +13,8 @@
 
 #include <memory>
 
-MainContext::MainContext(std::shared_ptr<EventManager> mngr) : eventManager(mngr) {
+MainContext::MainContext(std::shared_ptr<EventManager> mngr) :
+		eventManager(mngr) {
 	this->actions = new MainActions(eventManager);
 	this->data = new MainContextData();
 	this->state = new Standby();
@@ -110,9 +111,9 @@ void MainContext::subscribeToEvents() {
 
 	// Metal Sensor
 	eventManager->subscribe(EventType::MD_M_PAYLOAD,
-				std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 	eventManager->subscribe(EventType::MD_S_PAYLOAD,
-				std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 
 	// Subscribe to errors and error-solved event
 	eventManager->subscribe(EventType::ERROR_M_SELF_SOLVABLE,
@@ -128,10 +129,10 @@ void MainContext::subscribeToEvents() {
 	eventManager->subscribe(EventType::ERROR_S_SELF_SOLVED,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 
-	eventManager->subscribe(EventType::WD_CONN_LOST,
-			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::WD_CONN_REESTABLISHED,
-			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	/*	eventManager->subscribe(EventType::WD_CONN_LOST,
+	 std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	 eventManager->subscribe(EventType::WD_CONN_REESTABLISHED,
+	 std::bind(&MainContext::handleEvent, this, std::placeholders::_1));*/
 }
 
 void MainContext::handleEvent(Event event) {
