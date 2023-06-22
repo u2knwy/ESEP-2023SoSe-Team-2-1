@@ -397,6 +397,6 @@ void MainContext::errorSelfSolved() {
 }
 
 void MainContext::nonSelfSolvableErrorOccurred() {
-	Logger::error("Error occurred (not self-solvable)");
+	Logger::error("Error occurred (manual solvable)");
 	state->nonSelfSolvableErrorOccurred();
 }

@@ -20,6 +20,7 @@ class MainBasestate {
     MainBasestate *substateError = nullptr;
     MainActions *actions;
     MainContextData *data;
+    MainState previousState = MAIN_NONE;
 
   public:
     virtual ~MainBasestate() {}

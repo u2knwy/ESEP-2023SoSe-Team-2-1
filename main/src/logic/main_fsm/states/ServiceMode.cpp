@@ -23,7 +23,10 @@ void ServiceMode::entry() {
     actions->slave_sendMotorStopRequest(false);
 }
 
-void ServiceMode::exit() { delete substateServiceMode; }
+void ServiceMode::exit() {
+	delete substateServiceMode;
+	previousState = MainState::SERVICEMODE;
+}
 
 void ServiceMode::initSubStateServiceMode() {
     substateServiceMode = new SubServiceModeCalOffset;

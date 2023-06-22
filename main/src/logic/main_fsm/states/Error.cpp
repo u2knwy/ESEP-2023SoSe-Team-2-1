@@ -8,6 +8,8 @@
 #include "Error.h"
 
 #include "Standby.h"
+#include "Running.h"
+#include "ServiceMode.h"
 #include "SubErrorPendingUnresigned.h"
 #include "logger/logger.hpp"
 
@@ -18,7 +20,10 @@ void Error::entry() {
     actions->setErrorMode();
 }
 
-void Error::exit() { actions->master_sendMotorStopRequest(false); }
+void Error::exit() {
+	actions->master_sendMotorStopRequest(false);
+	previousState = MainState::ERROR;
+}
 
 void Error::initSubStateError() {
     substateError = new SubErrorPendingUnresigned;
@@ -42,8 +47,16 @@ bool Error::nonSelfSolvableErrorOccurred() {
 bool Error::master_btnReset_Pressed() {
     substateError->master_btnReset_Pressed();
     if (substateError->isSubEndState()) {
-        exit();
-        new (this) Standby;   // TODO: Go to previous state in history
+        if(previousState == MainState::RUNNING) {
+            exit();
+        	new(this) Running;
+        }else if(previousState == MainState::SERVICEMODE) {
+            exit();
+        	new(this) ServiceMode;
+        } else {
+            exit();
+        	new(this) Standby;
+        }
         entry();
         return true;
     }
@@ -54,7 +67,13 @@ bool Error::slave_btnReset_Pressed() {
     substateError->slave_btnReset_Pressed();
     if (substateError->isSubEndState()) {
         exit();
-        new (this) Standby;   // TODO: Go to previous state in history
+        if(previousState == MainState::RUNNING) {
+        	new(this) Running;
+        }else if(previousState == MainState::SERVICEMODE) {
+        	new(this) ServiceMode;
+        } else {
+        	new(this) Standby;
+        }
         entry();
         return true;
     }
@@ -65,7 +84,13 @@ bool Error::master_btnStart_PressedShort() {
     substateError->master_btnStart_PressedShort();
     if (substateError->isSubEndState()) {
         exit();
-        new (this) Standby;   // TODO: Go to previous state in history
+        if(previousState == MainState::RUNNING) {
+        	new(this) Running;
+        }else if(previousState == MainState::SERVICEMODE) {
+        	new(this) ServiceMode;
+        } else {
+        	new(this) Standby;
+        }
         entry();
         return true;
     }
@@ -76,7 +101,13 @@ bool Error::slave_btnStart_PressedShort() {
     substateError->slave_btnStart_PressedShort();
     if (substateError->isSubEndState()) {
         exit();
-        new (this) Standby;   // TODO: Go to previous state in history
+        if(previousState == MainState::RUNNING) {
+        	new(this) Running;
+        }else if(previousState == MainState::SERVICEMODE) {
+        	new(this) ServiceMode;
+        } else {
+        	new(this) Standby;
+        }
         entry();
         return true;
     }
