@@ -104,7 +104,8 @@ public:
 
 private:
 	Logger() {
-		logFile.open("/tmp/log.txt");
+		system("rm /tmp/esep_21_log.txt");
+		logFile.open("/tmp/esep_21_log.txt");
 		if (!logFile.is_open()) {
 			throw std::runtime_error("Failed to open file.");
 		}
