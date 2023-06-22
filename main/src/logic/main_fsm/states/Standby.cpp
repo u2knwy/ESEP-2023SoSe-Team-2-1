@@ -26,9 +26,15 @@ void Standby::entry() {
     actions->setStandbyMode();
 }
 
-void Standby::exit() {}
+void Standby::exit() {
+	previousState = MainState::STANDBY;
+}
 
 bool Standby::master_btnStart_PressedShort() {
+	actions->master_sendMotorRightRequest(false);
+	actions->slave_sendMotorRightRequest(false);
+	actions->master_sendMotorStopRequest(false);
+	actions->slave_sendMotorStopRequest(false);
     exit();
     new (this) Running;
     entry();
@@ -50,6 +56,10 @@ bool Standby::master_EStop_Pressed() {
 }
 
 bool Standby::slave_btnStart_PressedShort() {
+	actions->master_sendMotorRightRequest(false);
+	actions->slave_sendMotorRightRequest(false);
+	actions->master_sendMotorStopRequest(false);
+	actions->slave_sendMotorStopRequest(false);
     exit();
     new (this) Running;
     entry();

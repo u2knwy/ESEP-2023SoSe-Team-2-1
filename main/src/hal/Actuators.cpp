@@ -124,7 +124,6 @@ void Actuators::standbyMode() {
 
 void Actuators::runningMode() {
     setGreenBlinking(false);
-    setYellowBlinking(false);
     setRedBlinking(false, false);
     greenLampOn();
     yellowLampOff();
@@ -140,7 +139,6 @@ void Actuators::runningMode() {
 }
 
 void Actuators::serviceMode() {
-    yellowLampOff();
     redLampOff();
     setGreenBlinking(true);
     q1LedOff();
@@ -154,8 +152,8 @@ void Actuators::serviceMode() {
 }
 
 void Actuators::errorMode() {
+    setGreenBlinking(false);
     greenLampOff();
-    yellowLampOff();
     setRedBlinking(true, true);
     setMotorStop(true);
     setMotorRight(false);

@@ -21,14 +21,12 @@ MainState Running::getCurrentState() { return MainState::RUNNING; };
 void Running::entry() {
 	Logger::info("Entered Running mode");
 	actions->setRunningMode();
-	actions->master_sendMotorRightRequest(false);
-	actions->slave_sendMotorRightRequest(false);
-	actions->master_sendMotorStopRequest(false);
-	actions->slave_sendMotorStopRequest(false);
 	transferPending = false;
 }
 
-void Running::exit() {}
+void Running::exit() {
+	previousState = MainState::RUNNING;
+}
 
 bool Running::master_LBA_Blocked() {
 	if(data->wpManager->isFBM_MEmpty())
