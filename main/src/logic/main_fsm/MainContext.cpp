@@ -13,9 +13,8 @@
 
 #include <memory>
 
-MainContext::MainContext(std::shared_ptr<EventManager> mngr) :
-		eventManager(mngr) {
-	this->actions = new MainActions(mngr);
+MainContext::MainContext(std::shared_ptr<EventManager> mngr) : eventManager(mngr) {
+	this->actions = new MainActions(eventManager);
 	this->data = new MainContextData();
 	this->state = new Standby();
 	state->setAction(actions);

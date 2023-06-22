@@ -27,6 +27,8 @@ void EStop::exit() { delete substateEStop; }
 
 void EStop::initSubStateEStop() {
     substateEStop = new SubEStopOnePressed;
+    substateEStop->setAction(actions);
+    substateEStop->setData(data);
     substateEStop->entry();
 }
 

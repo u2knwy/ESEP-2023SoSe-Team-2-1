@@ -117,23 +117,17 @@ int main(int argc, char **argv) {
     Logger::info("Started GNS -> exited with " + to_string(gnsExitCode));
 
     eventManager = std::make_shared<EventManager>();
-    Logger::registerEvents(eventManager);
-
     // Create components running on Master AND Slave
     actuators = std::make_shared<Actuators>(eventManager);
     actuators->standbyMode();
 
+    Logger::registerEvents(eventManager);
     eventManager->start();
-    std::this_thread::sleep_for(std::chrono::seconds(1));
+    std::this_thread::sleep_for(std::chrono::seconds(3));
+
     // Start Watchdog -> send and receive heartbeats via EventManager
 //    Watchdog wd(eventManager);
 //    wd.start();
-
-    sensors = std::make_shared<Sensors>(eventManager);
-    sensors->startEventLoop();
-
-    heightSensor = std::make_shared<HeightSensor>(eventManager);
-    heightFSM = std::make_shared<HeightContext>(eventManager, heightSensor);
 
     // Run FSM's only at Master
     if (options.mode == Mode::MASTER) {
@@ -142,8 +136,15 @@ int main(int argc, char **argv) {
         mainFSM = std::make_shared<MainContext>(eventManager);
     } else {
         Logger::info("Program started as SLAVE");
-        conf.setMaster(false);
     }
+
+    std::this_thread::sleep_for(std::chrono::seconds(3));
+
+    sensors = std::make_shared<Sensors>(eventManager);
+    sensors->startEventLoop();
+
+    heightSensor = std::make_shared<HeightSensor>(eventManager);
+    heightFSM = std::make_shared<HeightContext>(eventManager, heightSensor);
 
     // Register handler function to be called if the program is not
     // terminated properly
