@@ -28,6 +28,12 @@ Actuators::Actuators(std::shared_ptr<EventManager> mngr) : IActuators(mngr) {
     redBlinking = false;
 
     standbyMode();
+
+	if(hasPusher) {
+		openSwitch();
+	} else {
+		closeSwitch();
+	}
 }
 
 Actuators::~Actuators() {
@@ -290,11 +296,19 @@ void Actuators::setMotorLeft(bool left) {
 }
 
 void Actuators::openSwitch() {
-    out32(GPIO_SETDATAOUT(gpio_bank_1), SWITCH_PIN);
+	if(hasPusher) {
+		out32(GPIO_CLEARDATAOUT(gpio_bank_1), SWITCH_PIN);
+	} else {
+		out32(GPIO_SETDATAOUT(gpio_bank_1), SWITCH_PIN);
+	}
 }
 
 void Actuators::closeSwitch() {
-    out32(GPIO_CLEARDATAOUT(gpio_bank_1), SWITCH_PIN);
+	if(hasPusher) {
+		out32(GPIO_SETDATAOUT(gpio_bank_1), SWITCH_PIN);
+	} else {
+		out32(GPIO_CLEARDATAOUT(gpio_bank_1), SWITCH_PIN);
+	}
 }
 
 void Actuators::sortOut() {
@@ -303,8 +317,7 @@ void Actuators::sortOut() {
     if (hasPusher) {
         std::thread t([=]() {
             closeSwitch();
-            std::this_thread::sleep_for(
-                std::chrono::milliseconds(ON_TIME_PUSHER_MS));
+            std::this_thread::sleep_for(std::chrono::milliseconds(ON_TIME_PUSHER_MS));
             openSwitch();
         });
         t.detach();
