@@ -141,8 +141,10 @@ bool Running::master_LBE_Blocked()
 
 bool Running::master_LBE_Unblocked() {
 	if (!data->wpManager->isQueueempty(AreaType::AREA_C)) {
-		data->wpManager->moveFromAreaToArea(AreaType::AREA_C, AreaType::AREA_D);
-		actions->slave_sendMotorRightRequest(true);
+		if(data->wpManager->isQueueempty(AreaType::AREA_D)){
+			data->wpManager->moveFromAreaToArea(AreaType::AREA_C, AreaType::AREA_D);
+			actions->slave_sendMotorRightRequest(true);
+		}
 		return true;
 	}
 	return false;
@@ -259,6 +261,8 @@ bool Running::slave_LBE_Blocked() {
 	if (!data->wpManager->isQueueempty(AreaType::AREA_D)) {
 		Workpiece *wp = data->wpManager->getHeadOfArea(AreaType::AREA_D);
 		if (!data->wpManager->isQueueempty(AreaType::AREA_D)) {
+			if(wp->M_type!=wp->S_type)
+					wp->flipped=true;
 			std::cout << data->wpManager->to_string_Workpiece(wp) << std::endl;   // print()
 			actions->slave_sendMotorRightRequest(false);
 		}
