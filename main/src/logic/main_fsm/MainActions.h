@@ -56,6 +56,8 @@ class MainActions : public EventSender {
     void slave_q1LedOff();
     void slave_q2LedOn();
     void slave_q2LedOff();
+    void master_manualSolvingErrorOccurred();
+    void slave_manualSolvingErrorOccurred();
 
   private:
     std::shared_ptr<EventManager> eventManager;

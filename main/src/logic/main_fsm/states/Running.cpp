@@ -104,6 +104,10 @@ bool Running::master_LBW_Blocked()
 
 		if (wp->sortOut)
 		{
+			if(data->wpManager->getRamp_one()) {
+				actions->master_manualSolvingErrorOccurred();
+				return true;
+			}
 			actions->master_openGate(false);													//closegate()
 			Logger::info("WP id: " + std::to_string(wp->id) + " kicked out");
 		}
@@ -232,7 +236,12 @@ bool Running::slave_LBW_Blocked() {
 		ss << ", detected=" << WP_TYPE_TO_STRING(slave_type) << (wp->sortOut ? " -> sort out" : " -> let pass");
 		Logger::info(ss.str());
 
+
 		if (wp->sortOut) {
+			if(data->wpManager->getRamp_two()) {
+				actions->slave_manualSolvingErrorOccurred();
+				return true;
+			}
 			actions->slave_openGate(false);   // opengate()
 			Logger::info("WP id: " + std::to_string(wp->id) + " kicked out");
 		} else {

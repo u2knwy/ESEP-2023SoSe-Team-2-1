@@ -257,3 +257,11 @@ void MainActions::slave_q2LedOn() {
 void MainActions::slave_q2LedOff() {
     sendEvent(Event{EventType::LED_S_Q2, (int) LampState::OFF});
 }
+
+void MainActions::master_manualSolvingErrorOccurred() {
+    sendEvent(Event{EventType::ERROR_M_MAN_SOLVABLE});
+
+}
+void MainActions::slave_manualSolvingErrorOccurred() {
+    sendEvent(Event{EventType::ERROR_S_MAN_SOLVABLE});
+}

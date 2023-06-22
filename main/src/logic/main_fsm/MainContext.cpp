@@ -209,9 +209,11 @@ void MainContext::handleEvent(Event event) {
 		state->slave_LBA_Unblocked();
 		break;
 	case EventType::LBW_S_BLOCKED:
+		data->setRampFBM2Blocked(true);
 		state->slave_LBW_Blocked();
 		break;
 	case EventType::LBW_S_UNBLOCKED:
+		data->setRampFBM2Blocked(false);
 		state->slave_LBW_Unblocked();
 		break;
 	case EventType::LBE_S_BLOCKED:
