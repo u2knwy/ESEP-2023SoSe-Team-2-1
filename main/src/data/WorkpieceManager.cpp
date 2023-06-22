@@ -205,3 +205,18 @@ std::queue<Workpiece *> &WorkpieceManager::getArea(AreaType area) {
         throw std::invalid_argument("Invalid area type");
     }
 }
+
+void WorkpieceManager::clearqueue(std::queue<Workpiece*> list){
+	while (!list.empty()){
+		list.pop();
+	}
+}
+
+
+void WorkpieceManager::reset_wpm(){
+	clearqueue(Area_A);
+	clearqueue(Area_B);
+	clearqueue(Area_C);
+	clearqueue(Area_D);
+	nextId=1;
+}

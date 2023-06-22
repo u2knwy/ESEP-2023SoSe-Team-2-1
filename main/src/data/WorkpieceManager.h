@@ -48,9 +48,11 @@ class WorkpieceManager {
     bool isFBM_SEmpty();
     bool isQueueempty(AreaType area);
 
+    void reset_wpm();
     std::string to_string_Workpiece(Workpiece *wp);
 
     void testWorkpieceManager();
+    void clearqueue(std::queue<Workpiece*> list);
 
   private:
     int nextId;
