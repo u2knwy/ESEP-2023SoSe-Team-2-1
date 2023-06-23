@@ -204,8 +204,7 @@ void MainContext::handleEvent(Event event) {
 		slave_LBA_Unblocked();
 		break;
 	case EventType::LBW_S_BLOCKED:
-		data->setRampFBM2Blocked(true);
-		state->slave_LBW_Blocked();
+		slave_LBW_Blocked();
 		break;
 	case EventType::LBW_S_UNBLOCKED:
 		slave_LBW_Unblocked();
@@ -309,7 +308,6 @@ void MainContext::master_metalDetected() {
 }
 
 void MainContext::slave_LBA_Blocked() {
-	data->setRampFBM2Blocked(true);
 	state->slave_LBA_Blocked();
 }
 
