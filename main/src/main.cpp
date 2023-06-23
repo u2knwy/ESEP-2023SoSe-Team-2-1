@@ -92,7 +92,7 @@ int main(int argc, char **argv) {
         Logger::info("Program started as SLAVE");
     }
 
-    conf.setConfigFilePath("/tmp/esep_conf.txt");
+    conf.setConfigFilePath("/tmp/esep_2.1/conf.txt");
     if (!conf.readConfigFromFile()) {
         Logger::error("Error reading config file - terminating...");
         return EXIT_FAILURE;
