@@ -5,10 +5,9 @@
  *      Author: Maik
  */
 
-#include <tests/hal/ActuatorMock.h>
+#include "ActuatorMock.h"
 
-ActuatorMock::ActuatorMock(std::shared_ptr<EventManager> mngr)
-    : IActuators(mngr) {}
+ActuatorMock::ActuatorMock(std::shared_ptr<IEventManager> mngr) : IActuators(mngr) {}
 
 void ActuatorMock::standbyMode() {}
 

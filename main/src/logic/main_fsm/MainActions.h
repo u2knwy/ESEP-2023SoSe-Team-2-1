@@ -8,14 +8,14 @@
 #ifndef SRC_LOGIC_MAIN_FSM_MAINACTIONS_H_
 #define SRC_LOGIC_MAIN_FSM_MAINACTIONS_H_
 
-#include "events/EventManager.h"
-#include "events/EventSender.h"
+#include "events/IEventManager.h"
+#include "events/IEventSender.h"
 
 #include <memory>
 
-class MainActions : public EventSender {
+class MainActions {
   public:
-    MainActions(std::shared_ptr<EventManager> mngr);
+    MainActions(std::shared_ptr<IEventManager> mngr, IEventSender* eventSender);
     virtual ~MainActions();
     void master_sendMotorStopRequest(bool stop);
     void slave_sendMotorStopRequest(bool stop);
@@ -59,8 +59,9 @@ class MainActions : public EventSender {
     void master_manualSolvingErrorOccurred();
     void slave_manualSolvingErrorOccurred();
 
+    std::shared_ptr<IEventManager> eventManager;
   private:
-    std::shared_ptr<EventManager> eventManager;
+    IEventSender* sender;
 };
 
 #endif /* SRC_LOGIC_MAIN_FSM_MAINACTIONS_H_ */

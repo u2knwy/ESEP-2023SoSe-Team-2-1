@@ -10,10 +10,11 @@
 
 #include "hal/IActuators.h"
 #include "logic/motor_fsm/MotorBasestate.h"
+#include "EventManagerMock.h"
 
 class ActuatorMock : public IActuators {
   public:
-    ActuatorMock(std::shared_ptr<EventManager> mngr);
+    ActuatorMock(std::shared_ptr<IEventManager> mngr);
 
     void standbyMode() override;
     void runningMode() override;

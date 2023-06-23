@@ -13,9 +13,8 @@
 
 #include <memory>
 
-MainContext::MainContext(std::shared_ptr<EventManager> mngr) :
-		eventManager(mngr) {
-	this->actions = new MainActions(eventManager);
+MainContext::MainContext(MainActions* actions) {
+	this->actions = actions;
 	this->data = new MainContextData();
 	this->state = new Standby();
 	state->setAction(actions);
@@ -31,107 +30,107 @@ MainContext::~MainContext() {
 }
 
 void MainContext::subscribeToEvents() {
-	eventManager->subscribe(EventType::START_M_SHORT,
+	actions->eventManager->subscribe(EventType::START_M_SHORT,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::START_M_LONG,
+	actions->eventManager->subscribe(EventType::START_M_LONG,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::STOP_M_SHORT,
+	actions->eventManager->subscribe(EventType::STOP_M_SHORT,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::RESET_M_SHORT,
+	actions->eventManager->subscribe(EventType::RESET_M_SHORT,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::ESTOP_M_PRESSED,
+	actions->eventManager->subscribe(EventType::ESTOP_M_PRESSED,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::ESTOP_M_RELEASED,
-			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-
-	eventManager->subscribe(EventType::START_S_SHORT,
-			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::START_S_LONG,
-			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::STOP_S_SHORT,
-			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::RESET_S_SHORT,
-			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::ESTOP_S_PRESSED,
-			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::ESTOP_S_RELEASED,
+	actions->eventManager->subscribe(EventType::ESTOP_M_RELEASED,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 
-	eventManager->subscribe(EventType::LBA_M_BLOCKED,
+	actions->eventManager->subscribe(EventType::START_S_SHORT,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::LBA_M_UNBLOCKED,
+	actions->eventManager->subscribe(EventType::START_S_LONG,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::LBW_M_BLOCKED,
+	actions->eventManager->subscribe(EventType::STOP_S_SHORT,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::LBW_M_UNBLOCKED,
+	actions->eventManager->subscribe(EventType::RESET_S_SHORT,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::LBE_M_BLOCKED,
+	actions->eventManager->subscribe(EventType::ESTOP_S_PRESSED,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::LBE_M_UNBLOCKED,
-			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::LBR_M_BLOCKED,
-			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::LBR_M_UNBLOCKED,
+	actions->eventManager->subscribe(EventType::ESTOP_S_RELEASED,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 
-	eventManager->subscribe(EventType::LBA_S_BLOCKED,
+	actions->eventManager->subscribe(EventType::LBA_M_BLOCKED,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::LBA_S_UNBLOCKED,
+	actions->eventManager->subscribe(EventType::LBA_M_UNBLOCKED,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::LBW_S_BLOCKED,
+	actions->eventManager->subscribe(EventType::LBW_M_BLOCKED,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::LBW_S_UNBLOCKED,
+	actions->eventManager->subscribe(EventType::LBW_M_UNBLOCKED,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::LBE_S_BLOCKED,
+	actions->eventManager->subscribe(EventType::LBE_M_BLOCKED,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::LBE_S_UNBLOCKED,
+	actions->eventManager->subscribe(EventType::LBE_M_UNBLOCKED,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::LBR_S_BLOCKED,
+	actions->eventManager->subscribe(EventType::LBR_M_BLOCKED,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::LBR_S_UNBLOCKED,
+	actions->eventManager->subscribe(EventType::LBR_M_UNBLOCKED,
+			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+
+	actions->eventManager->subscribe(EventType::LBA_S_BLOCKED,
+			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	actions->eventManager->subscribe(EventType::LBA_S_UNBLOCKED,
+			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	actions->eventManager->subscribe(EventType::LBW_S_BLOCKED,
+			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	actions->eventManager->subscribe(EventType::LBW_S_UNBLOCKED,
+			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	actions->eventManager->subscribe(EventType::LBE_S_BLOCKED,
+			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	actions->eventManager->subscribe(EventType::LBE_S_UNBLOCKED,
+			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	actions->eventManager->subscribe(EventType::LBR_S_BLOCKED,
+			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	actions->eventManager->subscribe(EventType::LBR_S_UNBLOCKED,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 
 	// Height Sensor
-	eventManager->subscribe(EventType::HM_M_WS_UNKNOWN,
+	actions->eventManager->subscribe(EventType::HM_M_WS_UNKNOWN,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::HM_M_WS_F,
+	actions->eventManager->subscribe(EventType::HM_M_WS_F,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::HM_M_WS_OB,
+	actions->eventManager->subscribe(EventType::HM_M_WS_OB,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::HM_M_WS_BOM,
+	actions->eventManager->subscribe(EventType::HM_M_WS_BOM,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::HM_S_WS_UNKNOWN,
+	actions->eventManager->subscribe(EventType::HM_S_WS_UNKNOWN,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::HM_S_WS_F,
+	actions->eventManager->subscribe(EventType::HM_S_WS_F,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::HM_S_WS_OB,
+	actions->eventManager->subscribe(EventType::HM_S_WS_OB,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::HM_S_WS_BOM,
+	actions->eventManager->subscribe(EventType::HM_S_WS_BOM,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 
 	// Metal Sensor
-	eventManager->subscribe(EventType::MD_M_PAYLOAD,
+	actions->eventManager->subscribe(EventType::MD_M_PAYLOAD,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::MD_S_PAYLOAD,
+	actions->eventManager->subscribe(EventType::MD_S_PAYLOAD,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 
 	// Subscribe to errors and error-solved event
-	eventManager->subscribe(EventType::ERROR_M_SELF_SOLVABLE,
+	actions->eventManager->subscribe(EventType::ERROR_M_SELF_SOLVABLE,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::ERROR_M_MAN_SOLVABLE,
+	actions->eventManager->subscribe(EventType::ERROR_M_MAN_SOLVABLE,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::ERROR_M_SELF_SOLVED,
+	actions->eventManager->subscribe(EventType::ERROR_M_SELF_SOLVED,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::ERROR_S_SELF_SOLVABLE,
+	actions->eventManager->subscribe(EventType::ERROR_S_SELF_SOLVABLE,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::ERROR_S_MAN_SOLVABLE,
+	actions->eventManager->subscribe(EventType::ERROR_S_MAN_SOLVABLE,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	eventManager->subscribe(EventType::ERROR_S_SELF_SOLVED,
+	actions->eventManager->subscribe(EventType::ERROR_S_SELF_SOLVED,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 
-	/*	eventManager->subscribe(EventType::WD_CONN_LOST,
+	/*	actions->eventManager->subscribe(EventType::WD_CONN_LOST,
 	 std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	 eventManager->subscribe(EventType::WD_CONN_REESTABLISHED,
+	 actions->eventManager->subscribe(EventType::WD_CONN_REESTABLISHED,
 	 std::bind(&MainContext::handleEvent, this, std::placeholders::_1));*/
 }
 
@@ -139,116 +138,109 @@ void MainContext::handleEvent(Event event) {
 	Logger::debug("MainFSM handle Event: " + EVENT_TO_STRING(event.type));
 	switch (event.type) {
 	case EventType::START_M_SHORT:
-		state->master_btnStart_PressedShort();
+		master_btnStart_PressedShort();
 		break;
 	case EventType::START_M_LONG:
-		state->master_btnStart_PressedLong();
+		master_btnStart_PressedLong();
 		break;
 	case EventType::STOP_M_SHORT:
-		state->master_btnStop_Pressed();
+		master_btnStop_Pressed();
 		break;
 	case EventType::RESET_M_SHORT:
-		state->master_btnReset_Pressed();
+		master_btnReset_Pressed();
 		break;
 	case EventType::ESTOP_M_PRESSED:
-		state->master_EStop_Pressed();
+		master_EStop_Pressed();
 		break;
 	case EventType::ESTOP_M_RELEASED:
-		state->master_EStop_Released();
+		master_EStop_Released();
 		break;
 	case EventType::START_S_SHORT:
-		state->slave_btnStart_PressedShort();
+		slave_btnStart_PressedShort();
 		break;
 	case EventType::START_S_LONG:
-		state->slave_btnStart_PressedLong();
+		slave_btnStart_PressedLong();
 		break;
 	case EventType::STOP_S_SHORT:
-		state->slave_btnStop_Pressed();
+		slave_btnStop_Pressed();
 		break;
 	case EventType::RESET_S_SHORT:
-		state->slave_btnReset_Pressed();
+		slave_btnReset_Pressed();
 		break;
 	case EventType::ESTOP_S_PRESSED:
-		state->slave_EStop_Pressed();
+		slave_EStop_Pressed();
 		break;
 	case EventType::ESTOP_S_RELEASED:
-		state->slave_EStop_Released();
+		slave_EStop_Released();
 		break;
 	case EventType::LBA_M_BLOCKED:
-		state->master_LBA_Blocked();
+		master_LBA_Blocked();
 		break;
 	case EventType::LBA_M_UNBLOCKED:
-		state->master_LBA_Unblocked();
+		master_LBA_Unblocked();
 		break;
 	case EventType::LBW_M_BLOCKED:
-		state->master_LBW_Blocked();
+		master_LBW_Blocked();
 		break;
 	case EventType::LBW_M_UNBLOCKED:
-		state->master_LBW_Unblocked();
+		master_LBW_Unblocked();
 		break;
 	case EventType::LBE_M_BLOCKED:
-		state->master_LBE_Blocked();
+		master_LBE_Blocked();
 		break;
 	case EventType::LBE_M_UNBLOCKED:
-		state->master_LBE_Unblocked();
+		master_LBE_Unblocked();
 		break;
 	case EventType::LBR_M_BLOCKED:
-		data->setRampFBM1Blocked(true);
-		state->master_LBR_Blocked();
+		master_LBR_Blocked();
 		break;
 	case EventType::LBR_M_UNBLOCKED:
-		data->setRampFBM1Blocked(false);
-		state->master_LBR_Unblocked();
+		master_LBR_Unblocked();
 		break;
 	case EventType::LBA_S_BLOCKED:
-		data->setRampFBM2Blocked(true);
-		state->slave_LBA_Blocked();
+		slave_LBA_Blocked();
 		break;
 	case EventType::LBA_S_UNBLOCKED:
-		data->setRampFBM2Blocked(false);
-		state->slave_LBA_Unblocked();
+		slave_LBA_Unblocked();
 		break;
 	case EventType::LBW_S_BLOCKED:
 		data->setRampFBM2Blocked(true);
 		state->slave_LBW_Blocked();
 		break;
 	case EventType::LBW_S_UNBLOCKED:
-		data->setRampFBM2Blocked(false);
-		state->slave_LBW_Unblocked();
+		slave_LBW_Unblocked();
 		break;
 	case EventType::LBE_S_BLOCKED:
-		state->slave_LBE_Blocked();
+		slave_LBE_Blocked();
 		break;
 	case EventType::LBE_S_UNBLOCKED:
-		state->slave_LBE_Unblocked();
+		slave_LBE_Unblocked();
 		break;
 	case EventType::LBR_S_BLOCKED:
-		state->slave_LBR_Blocked();
+		slave_LBR_Blocked();
 		break;
 	case EventType::LBR_S_UNBLOCKED:
-		state->slave_LBR_Unblocked();
+		slave_LBR_Unblocked();
 		break;
 	case EventType::HM_M_WS_F:
 	case EventType::HM_M_WS_OB:
 	case EventType::HM_M_WS_BOM:
 	case EventType::HM_M_WS_UNKNOWN: {
-		state->master_heightResultReceived(event.type,
-				((float) event.data) / 10);
+		master_heightResultReceived(event.type, ((float) event.data) / 10);
 		break;
 	}
 	case EventType::HM_S_WS_F:
 	case EventType::HM_S_WS_OB:
 	case EventType::HM_S_WS_BOM:
 	case EventType::HM_S_WS_UNKNOWN: {
-		state->slave_heightResultReceived(event.type,
-				((float) event.data) / 10);
+		slave_heightResultReceived(event.type, ((float) event.data) / 10);
 		break;
 	}
 	case EventType::MD_M_PAYLOAD:
-		state->master_metalDetected();
+		master_metalDetected();
 		break;
 	case EventType::MD_S_PAYLOAD:
-		state->slave_metalDetected();
+		slave_metalDetected();
 		break;
 	case EventType::ERROR_M_SELF_SOLVABLE:
 	case EventType::ERROR_S_SELF_SOLVABLE:
@@ -299,14 +291,25 @@ void MainContext::master_LBE_Unblocked() {
 }
 
 void MainContext::master_LBR_Blocked() {
+	data->setRampFBM1Blocked(true);
 	state->master_LBR_Blocked();
 }
 
 void MainContext::master_LBR_Unblocked() {
+	data->setRampFBM1Blocked(false);
 	state->master_LBR_Unblocked();
 }
 
+void MainContext::master_heightResultReceived(EventType event, float average) {
+	state->master_heightResultReceived(event, average);
+}
+
+void MainContext::master_metalDetected() {
+	state->master_metalDetected();
+}
+
 void MainContext::slave_LBA_Blocked() {
+	data->setRampFBM2Blocked(true);
 	state->slave_LBA_Blocked();
 }
 
@@ -331,11 +334,21 @@ void MainContext::slave_LBE_Unblocked() {
 }
 
 void MainContext::slave_LBR_Blocked() {
+	data->setRampFBM2Blocked(true);
 	state->slave_LBR_Blocked();
 }
 
 void MainContext::slave_LBR_Unblocked() {
+	data->setRampFBM2Blocked(false);
 	state->slave_LBR_Unblocked();
+}
+
+void MainContext::slave_heightResultReceived(EventType event, float average) {
+	state->slave_heightResultReceived(event, average);
+}
+
+void MainContext::slave_metalDetected() {
+	state->slave_metalDetected();
 }
 
 void MainContext::master_btnStart_PressedShort() {

@@ -10,17 +10,21 @@
 #include "logger/logger.hpp"
 
 
-MotorActions::MotorActions(std::shared_ptr<EventManager> mngr, bool master) {
+MotorActions::MotorActions(std::shared_ptr<IEventManager> mngr, IEventSender* eventSender, bool master) {
     this->eventManager = mngr;
+    this->eventSender = eventSender;
     this->isMaster = master;
-    if (connect(eventManager)) {
+    if (eventSender->connect(eventManager)) {
         Logger::debug("[MotorActions] Connected to EventManager");
     } else {
         Logger::error("[MotorActions] Error while connecting to EventManager");
     }
 }
 
-MotorActions::~MotorActions() { disconnect(); }
+MotorActions::~MotorActions() {
+	eventSender->disconnect();
+	delete eventSender;
+}
 
 void MotorActions::motorStop() {
     Event ev;
@@ -31,7 +35,7 @@ void MotorActions::motorStop() {
 		Logger::debug("[MotorFSM_S] Motor stop");
 		ev.type = EventType::MOTOR_S_STOP;
 	}
-    sendEvent(ev);
+    eventSender->sendEvent(ev);
 }
 
 void MotorActions::motorRightFast() {
@@ -43,7 +47,7 @@ void MotorActions::motorRightFast() {
 		Logger::debug("[MotorFSM_S] Motor right fast");
 		ev.type = EventType::MOTOR_S_FAST;
 	}
-    sendEvent(ev);
+    eventSender->sendEvent(ev);
 }
 
 void MotorActions::motorRightSlow() {
@@ -55,5 +59,5 @@ void MotorActions::motorRightSlow() {
 		Logger::debug("[MotorFSM_S] Motor right slow");
 		ev.type = EventType::MOTOR_S_SLOW;
 	}
-    sendEvent(ev);
+    eventSender->sendEvent(ev);
 }

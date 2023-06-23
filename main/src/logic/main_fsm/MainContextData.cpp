@@ -25,6 +25,6 @@ void MainContextData::setRampFBM2Blocked(bool blocked) {
     wpManager->setRamp_two(blocked);
 }
 
-bool MainContextData::isRampFBM1Blocked() { return this->rampFBM1Blocked; }
+bool MainContextData::isRampFBM1Blocked() { return wpManager->getRamp_one(); }
 
-bool MainContextData::isRampFBM2Blocked() { return this->rampFBM2Blocked; }
+bool MainContextData::isRampFBM2Blocked() { return wpManager->getRamp_two(); }

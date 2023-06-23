@@ -4,23 +4,28 @@
  *  Created on: 09.06.2023
  *      Author: Maik
  */
+#include "mocks/EventSenderMock.h"
+#include "mocks/EventManagerMock.h"
+
 #include "configuration/Configuration.h"
-#include "events/EventManager.h"
+#include "events/IEventManager.h"
 #include "logic/main_fsm/MainContext.h"
 #include "logic/motor_fsm/MotorContext.h"
+
 #include <gtest/gtest.h>
 
-
-class MotorFSM_Test : public ::testing::Test {
+class UnitTest_MotorFSM : public ::testing::Test {
   protected:
-    std::shared_ptr<EventManager> eventManager =
-        std::make_shared<EventManager>();
+    std::shared_ptr<IEventManager> eventManager =
+        std::make_shared<EventManagerMock>();
     std::shared_ptr<MotorContext> motorfsm_master;
     std::shared_ptr<MotorContext> motorfsm_slave;
 
     void SetUp() override {
-        motorfsm_master = std::make_shared<MotorContext>(eventManager, true);
-        motorfsm_slave = std::make_shared<MotorContext>(eventManager, false);
+    	MotorActions* actionsM = new MotorActions(eventManager, new EventSenderMock(), true);
+    	motorfsm_master = std::make_shared<MotorContext>(actionsM, true);
+    	MotorActions* actionsS = new MotorActions(eventManager, new EventSenderMock(), false);
+    	motorfsm_slave = std::make_shared<MotorContext>(actionsS, false);
         Configuration::getInstance().setMaster(true);
     }
 
@@ -35,7 +40,7 @@ static Event createMotorRequest(EventType type, bool motorFlag) {
 }
 
 // When launching the FSM -> Current state must be STOPPED
-TEST_F(MotorFSM_Test, StartStateStopped) {
+TEST_F(UnitTest_MotorFSM, StartStateStopped) {
     EXPECT_EQ(MotorState::STOPPED, motorfsm_master->getCurrentState());
     EXPECT_EQ(MotorState::STOPPED, motorfsm_slave->getCurrentState());
     // Clear "Stop" flag -> still stopped
@@ -48,7 +53,7 @@ TEST_F(MotorFSM_Test, StartStateStopped) {
 }
 
 // STOPPED -> FAST -> STOPPED
-TEST_F(MotorFSM_Test, StoppedToFastToStopped) {
+TEST_F(UnitTest_MotorFSM, StoppedToFastToStopped) {
     EXPECT_EQ(MotorState::STOPPED, motorfsm_master->getCurrentState());
     EXPECT_EQ(MotorState::STOPPED, motorfsm_slave->getCurrentState());
 
@@ -73,7 +78,7 @@ TEST_F(MotorFSM_Test, StoppedToFastToStopped) {
 }
 
 // STOPPED -> SLOW
-TEST_F(MotorFSM_Test, StoppedToSlowToStopped) {
+TEST_F(UnitTest_MotorFSM, StoppedToSlowToStopped) {
     EXPECT_EQ(MotorState::STOPPED, motorfsm_master->getCurrentState());
 
     // Clear "Stop" flag and set "Slow" flag -> must be in state "right slow"
@@ -91,7 +96,7 @@ TEST_F(MotorFSM_Test, StoppedToSlowToStopped) {
 }
 
 // FAST -> SLOW
-TEST_F(MotorFSM_Test, FastToSlow) {
+TEST_F(UnitTest_MotorFSM, FastToSlow) {
     // Clear "Stop" flag and set "Fast" flag -> must be in state "right fast"
     motorfsm_master->handleEvent(
         createMotorRequest(EventType::MOTOR_M_STOP_REQ, false));
@@ -107,7 +112,7 @@ TEST_F(MotorFSM_Test, FastToSlow) {
 }
 
 // SLOW -> FAST
-TEST_F(MotorFSM_Test, SlowToFast) {
+TEST_F(UnitTest_MotorFSM, SlowToFast) {
     // Clear "Stop" flag and set "Fast" and "Slow" flag -> must be in state
     // "right slow"
     motorfsm_master->handleEvent(

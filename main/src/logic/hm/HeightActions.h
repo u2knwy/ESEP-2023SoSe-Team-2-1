@@ -10,23 +10,23 @@
 
 #include "HeightContextData.h"
 #include "configuration/Configuration.h"
-#include "events/EventManager.h"
-#include "events/EventSender.h"
+#include "events/IEventManager.h"
+#include "events/IEventSender.h"
 #include "events/eventtypes_enum.h"
-
 
 #include <memory>
 
-class HeightActions : public EventSender {
+class HeightActions {
   public:
-    HeightActions(HeightContextData *data, std::shared_ptr<EventManager> mngr);
+    HeightActions(HeightContextData *data, IEventSender* sender, std::shared_ptr<IEventManager> mngr);
     virtual ~HeightActions();
     void sendMotorSlowRequest(bool slow);
     void sendHeightResult();
 
+    std::shared_ptr<IEventManager> eventManager;
   private:
+    IEventSender* sender;
     HeightContextData *data;
-    std::shared_ptr<EventManager> eventManager;
     bool isMaster;
 };
 

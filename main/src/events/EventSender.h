@@ -6,11 +6,13 @@
  */
 #pragma once
 
-#include "events/EventManager.h"
+#include "IEventSender.h"
+#include "events/IEventManager.h"
+#include "events/events.h"
 #include "logger/logger.hpp"
 #include <sys/neutrino.h>
 
-class EventSender {
+class EventSender : public IEventSender {
   public:
     EventSender() { coid = -1; }
 
@@ -23,7 +25,7 @@ class EventSender {
      * @param evm Reference to the EventManager instance
      * @return true if connecting was successful.
      */
-    bool connect(std::shared_ptr<EventManager> evm) {
+    bool connect(std::shared_ptr<IEventManager> evm) override {
         coid = evm->connectInternalClient();
         return coid != -1;
     }
@@ -31,7 +33,7 @@ class EventSender {
     /**
      * Disconnects from the EventManager channel if connected
      */
-    void disconnect() {
+    void disconnect() override {
         int ret = ConnectDetach(this->coid);
         if (ret < 0) {
             Logger::error("[EventSender] ConnectDetach failed");
@@ -44,7 +46,7 @@ class EventSender {
      * @param event Event to send
      * @return true if send was successful
      */
-    bool sendEvent(Event event) {
+    bool sendEvent(Event event) override {
         if (coid == -1) {
             Logger::error("It was tried to send an internal event without "
                           "being connected to the EventManager");

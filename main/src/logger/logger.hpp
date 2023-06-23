@@ -94,8 +94,7 @@ public:
 	 * subscribe to all events
 	 */
 	static void registerEvents(std::shared_ptr<EventManager> eventManager) {
-		int nEvents = eventManager->subscribeToAllEvents(
-				std::bind(&Logger::logEvent, std::placeholders::_1));
+		int nEvents = eventManager->subscribeToAllEvents(std::bind(&Logger::logEvent, std::placeholders::_1));
 		std::stringstream ss;
 		ss << "[Logger] Registered to all events (" << nEvents
 				<< ") from EventManager";

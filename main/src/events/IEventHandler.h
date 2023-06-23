@@ -11,6 +11,9 @@
 #include "eventtypes_enum.h"
 
 
+// ENum value to attach to event data for controlling lamps
+enum LampState { OFF, ON, FLASHING_SLOW, FLASHING_FAST };
+
 struct Event {
     Event() {}
     Event(EventType evType) : type(evType), data(-1) {}

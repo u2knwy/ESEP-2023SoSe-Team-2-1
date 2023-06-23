@@ -11,51 +11,63 @@
  *  Created on: 04.04.2023
  *      Author: Maik
  */
-#include "events/EventManager.h"
+#include "mocks/EventManagerMock.h"
+#include "mocks/EventSenderMock.h"
+
 #include "logic/main_fsm/MainContext.h"
+
 #include <gtest/gtest.h>
 
-
-class MainFSM_Test : public ::testing::Test {
+class UnitTest_MainFSM : public ::testing::Test {
   protected:
-    std::shared_ptr<MainContext> fsm;
-    std::shared_ptr<EventManager> eventManager;
+	std::shared_ptr<IEventManager> eventManager = std::make_shared<EventManagerMock>();
+    IEventSender* sender;
+    MainActions* mainActions;
+    MainContext* fsm;
 
     void SetUp() override {
-        eventManager = std::make_shared<EventManager>();
-        fsm = std::make_shared<MainContext>(eventManager);
+    	sender = new EventSenderMock();
+        mainActions = new MainActions(eventManager, sender);
+        fsm = new MainContext(mainActions);
     }
 
-    void TearDown() override {}
+    void TearDown() override {
+    	delete fsm;
+    }
 };
 
 // When launching the FSM -> Current state must be STANDBY
-TEST_F(MainFSM_Test, StartStateStandby) {
+TEST_F(UnitTest_MainFSM, StartStateStandby) {
     EXPECT_EQ(MainState::STANDBY, fsm->getCurrentState());
+    EXPECT_TRUE(true);
 }
 
 // Start pressed short -> Current state must be RUNNING
-TEST_F(MainFSM_Test, StateRunningAfterStartPressedShort) {
+TEST_F(UnitTest_MainFSM, StateRunningAfterStartPressedShort) {
     fsm->master_btnStart_PressedShort();
     EXPECT_EQ(MainState::RUNNING, fsm->getCurrentState());
 
-    fsm.reset();
-    fsm = std::make_shared<MainContext>(eventManager);
+    delete fsm;
+	sender = new EventSenderMock();
+    mainActions = new MainActions(eventManager, sender);
+    fsm = new MainContext(mainActions);
 
     fsm->slave_btnStart_PressedShort();
     EXPECT_EQ(MainState::RUNNING, fsm->getCurrentState());
 }
 
 // Start pressed long -> Current state must be SERVICE_MODE
-TEST_F(MainFSM_Test, StateServiceModeAfterStartPressedLong) {
+TEST_F(UnitTest_MainFSM, StateServiceModeAfterStartPressedLong) {
     fsm->master_btnStart_PressedLong();
     EXPECT_EQ(MainState::SERVICEMODE,
               fsm->getCurrentState());                       // in ServiceMode
     fsm->master_btnStop_Pressed();
     EXPECT_EQ(MainState::STANDBY, fsm->getCurrentState());   // back in Standby
 
-    fsm.reset();
-    fsm = std::make_shared<MainContext>(eventManager);
+    delete fsm;
+	sender = new EventSenderMock();
+    mainActions = new MainActions(eventManager, sender);
+    fsm = new MainContext(mainActions);
 
     fsm->slave_btnStart_PressedLong();
     EXPECT_EQ(MainState::SERVICEMODE,
@@ -65,7 +77,7 @@ TEST_F(MainFSM_Test, StateServiceModeAfterStartPressedLong) {
 }
 
 // In state running and stop pressed -> Current state must be STANDBY
-TEST_F(MainFSM_Test, StateStandbyAfterRunningAndStopPressed) {
+TEST_F(UnitTest_MainFSM, StateStandbyAfterRunningAndStopPressed) {
     // Buttons pressed at master
     fsm->master_btnStart_PressedShort();
     fsm->master_btnStop_Pressed();
@@ -78,7 +90,7 @@ TEST_F(MainFSM_Test, StateStandbyAfterRunningAndStopPressed) {
 }
 
 // In state running and EStop pressed -> Current state must be ESTOP
-TEST_F(MainFSM_Test, StateEStopAfterRunningAndEStopPressed) {
+TEST_F(UnitTest_MainFSM, StateEStopAfterRunningAndEStopPressed) {
     // Buttons pressed at master
     fsm->master_btnStart_PressedShort();
     EXPECT_EQ(MainState::RUNNING, fsm->getCurrentState());
@@ -114,7 +126,7 @@ TEST_F(MainFSM_Test, StateEStopAfterRunningAndEStopPressed) {
     EXPECT_EQ(MainState::STANDBY, fsm->getCurrentState());   // now in Standby
 }
 
-TEST_F(MainFSM_Test, ErrorManualSolvedAfterRunning) {
+TEST_F(UnitTest_MainFSM, ErrorManualSolvedAfterRunning) {
     EXPECT_EQ(MainState::STANDBY, fsm->getCurrentState());
     fsm->master_btnStart_PressedShort();
     EXPECT_EQ(MainState::RUNNING, fsm->getCurrentState());
@@ -129,7 +141,7 @@ TEST_F(MainFSM_Test, ErrorManualSolvedAfterRunning) {
     EXPECT_EQ(MainState::STANDBY, fsm->getCurrentState());
 }
 
-TEST_F(MainFSM_Test, ErrorSelfSolvedAfterRunning) {
+TEST_F(UnitTest_MainFSM, ErrorSelfSolvedAfterRunning) {
     // Running -> Error
     EXPECT_EQ(MainState::STANDBY, fsm->getCurrentState());
     fsm->master_btnStart_PressedShort();

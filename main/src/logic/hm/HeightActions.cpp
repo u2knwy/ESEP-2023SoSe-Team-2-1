@@ -6,22 +6,26 @@
  */
 
 #include "HeightActions.h"
+#include "events/IEventSender.h"
 
 #include "logger/logger.hpp"
 
-HeightActions::HeightActions(HeightContextData *data,
-                             std::shared_ptr<EventManager> mngr) {
+HeightActions::HeightActions(HeightContextData* data, IEventSender* sender, std::shared_ptr<IEventManager> mngr) {
     this->data = data;
+    this->sender = sender;
     this->eventManager = mngr;
     this->isMaster = Configuration::getInstance().systemIsMaster();
-    if (connect(mngr)) {
+    if (sender->connect(mngr)) {
         Logger::debug("[HeightActions] Connected to EventManager");
     } else {
         Logger::error("[HeightActions] Error while connecting to EventManager");
     }
 }
 
-HeightActions::~HeightActions() { disconnect(); }
+HeightActions::~HeightActions() {
+	sender->disconnect();
+	delete sender;
+}
 
 void HeightActions::sendMotorSlowRequest(bool slow) {
     Event ev;
@@ -34,7 +38,7 @@ void HeightActions::sendMotorSlowRequest(bool slow) {
         Logger::debug("[HFSM] Reset motor slow request");
         ev.data = 0;
     }
-    sendEvent(ev);
+    sender->sendEvent(ev);
 }
 
 void HeightActions::sendHeightResult() {
@@ -70,5 +74,5 @@ void HeightActions::sendHeightResult() {
             ", max (mm): " + std::to_string(result.max));
     }
 
-    sendEvent(event);
+    sender->sendEvent(event);
 }

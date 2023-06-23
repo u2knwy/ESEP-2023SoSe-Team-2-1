@@ -9,7 +9,6 @@
 #include "configuration/Configuration.h"
 #include "logger/logger.hpp"
 
-
 #include <chrono>
 #include <sys/neutrino.h>
 #include <thread>
@@ -67,7 +66,6 @@ void Watchdog::sendingThread() {
     Logger::debug("[WD] Started sending heartbeats...");
     sendingRunning = true;
     while (sendingRunning) {
-        Logger::debug("[WD] Sending heartbeat...");
         sendHeartbeat();
         std::this_thread::sleep_for(std::chrono::seconds(WD_SEND_INTERVAL_SEC));
     }

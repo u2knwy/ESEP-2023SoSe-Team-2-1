@@ -10,4 +10,3 @@
 #include "IEventHandler.h"
 #include "eventtypes_enum.h"
 #include "eventtypes_stringlist.h"
-

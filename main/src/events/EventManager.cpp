@@ -10,7 +10,6 @@
 #include "events.h"
 #include "logger/logger.hpp"
 
-
 #include <errno.h>
 #include <iostream>
 #include <sstream>
@@ -34,6 +33,7 @@ EventManager::EventManager() : internal_chid(-1), internal_coid(-1), server_coid
     	ownServiceName = ATTACH_POINT_LOCAL_S;
 		otherServiceName = ATTACH_POINT_LOCAL_M;
     }
+    attachedService = nullptr;
 }
 
 EventManager::~EventManager() {
@@ -256,7 +256,9 @@ int EventManager::subscribeToAllEvents(EventCallback callback) {
     return nEvents;
 }
 
-void EventManager::unsubscribe(EventType type, EventCallback callback) {}
+void EventManager::unsubscribe(EventType type, EventCallback callback) {
+
+}
 
 void EventManager::handleEvent(const Event &event) {
     std::stringstream ss;

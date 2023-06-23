@@ -9,6 +9,7 @@
 #include "EStop.h"
 #include "Standby.h"
 #include "SubServiceModeCalOffset.h"
+#include "SubServiceModeSelftestSensors.h"
 #include "logger/logger.hpp"
 
 #include <iostream>

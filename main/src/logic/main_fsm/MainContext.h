@@ -9,16 +9,15 @@
 #include "MainActions.h"
 #include "MainBasestate.h"
 #include "MainContextData.h"
-#include "events/EventManager.h"
+#include "events/IEventManager.h"
 #include "events/IEventHandler.h"
 #include "events/events.h"
-
 
 #include <memory>
 
 class MainContext : public IEventHandler {
   public:
-    MainContext(std::shared_ptr<EventManager> mngr);
+    MainContext(MainActions* actions);
     virtual ~MainContext();
 
     void handleEvent(Event event) override;
@@ -34,7 +33,8 @@ class MainContext : public IEventHandler {
     void master_LBR_Blocked();
     void master_LBR_Unblocked();
 
-    void master_MetalDetected();
+    void master_heightResultReceived(EventType event, float average);
+    void master_metalDetected();
 
     void slave_LBA_Blocked();
     void slave_LBA_Unblocked();
@@ -45,7 +45,8 @@ class MainContext : public IEventHandler {
     void slave_LBR_Blocked();
     void slave_LBR_Unblocked();
 
-    void slave_MetalDetected();
+    void slave_heightResultReceived(EventType event, float average);
+    void slave_metalDetected();
 
     // Buttons
     void master_btnStart_PressedShort();
@@ -69,10 +70,10 @@ class MainContext : public IEventHandler {
     void errorSelfSolved();
     void nonSelfSolvableErrorOccurred();
 
+    MainContextData *data;
   private:
     MainActions *actions;
-    MainContextData *data;
     MainBasestate *state;
-    std::shared_ptr<EventManager> eventManager;
+    std::shared_ptr<IEventManager> eventManager;
     void subscribeToEvents();
 };

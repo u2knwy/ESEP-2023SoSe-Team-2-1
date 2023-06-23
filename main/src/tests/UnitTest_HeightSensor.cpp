@@ -11,7 +11,10 @@
  *  Created on: 04.04.2023
  *      Author: Maik
  */
-#include "HeightSensorMock.h"
+#include "mocks/HeightSensorMock.h"
+#include "mocks/EventManagerMock.h"
+#include "mocks/EventSenderMock.h"
+
 #include "events/EventManager.h"
 #include "events/events.h"
 #include "hal/HeightSensor.h"
@@ -19,23 +22,27 @@
 #include "logic/hm/HeightBasestate.h"
 #include "logic/hm/states/WaitForBelt.h"
 #include "logic/hm/states/WaitForWorkpiece.h"
+#include "logic/hm/HeightContext.h"
+
 #include <gtest/gtest.h>
-#include <logic/hm/HeightContext.h>
 
-
-class HeightSensor_Test : public ::testing::Test {
+class UnitTest_HeightSensor : public ::testing::Test {
   protected:
+	std::shared_ptr<IEventManager> eventManager = std::make_shared<EventManagerMock>();
     HeightContext *fsm;
     std::shared_ptr<HeightSensorMock> sensor;
 
     void SetUp() override {
-        std::shared_ptr<EventManager> eventManager =
-            std::make_shared<EventManager>();
         sensor = std::make_shared<HeightSensorMock>();
-        fsm = new HeightContext(eventManager, sensor);
+        HeightContextData* data = new HeightContextData();
+		IEventSender* sender = new EventSenderMock();
+        HeightActions* actions = new HeightActions(data, sender, eventManager);
+        fsm = new HeightContext(actions, data, sensor);
     }
 
-    void TearDown() override { delete fsm; }
+    void TearDown() override {
+    	delete fsm;
+    }
 };
 
 static std::string formatFloat(float value, int decimalPlaces) {
@@ -44,11 +51,11 @@ static std::string formatFloat(float value, int decimalPlaces) {
     return stream.str();
 }
 
-TEST_F(HeightSensor_Test, InitialStateAfterStartup) {
+TEST_F(UnitTest_HeightSensor, InitialStateAfterStartup) {
     EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
 }
 
-TEST_F(HeightSensor_Test, WaitForWorkpieceWhenMotorRunning) {
+TEST_F(UnitTest_HeightSensor, WaitForWorkpieceWhenMotorRunning) {
     Event ev;
     ev.type = EventType::MOTOR_M_FAST;
     fsm->handleEvent(ev);
@@ -63,7 +70,7 @@ TEST_F(HeightSensor_Test, WaitForWorkpieceWhenMotorRunning) {
     EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
 }
 
-TEST_F(HeightSensor_Test, HighDetected) {
+TEST_F(UnitTest_HeightSensor, HighDetected) {
     Event ev;
     ev.type = EventType::MOTOR_M_FAST;
     fsm->handleEvent(ev);
@@ -89,7 +96,7 @@ TEST_F(HeightSensor_Test, HighDetected) {
     EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
 }
 
-TEST_F(HeightSensor_Test, FlatDetected) {
+TEST_F(UnitTest_HeightSensor, FlatDetected) {
     Event ev;
     ev.type = EventType::MOTOR_M_FAST;
     fsm->handleEvent(ev);
@@ -110,7 +117,7 @@ TEST_F(HeightSensor_Test, FlatDetected) {
     EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
 }
 
-TEST_F(HeightSensor_Test, HighWithHoleDetected) {
+TEST_F(UnitTest_HeightSensor, HighWithHoleDetected) {
     Event ev;
     ev.type = EventType::MOTOR_M_FAST;
     fsm->handleEvent(ev);
@@ -129,7 +136,7 @@ TEST_F(HeightSensor_Test, HighWithHoleDetected) {
     EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
 }
 
-TEST_F(HeightSensor_Test, UnknownDetected) {
+TEST_F(UnitTest_HeightSensor, UnknownDetected) {
     Event ev;
     ev.type = EventType::MOTOR_M_FAST;
     fsm->handleEvent(ev);
@@ -143,7 +150,7 @@ TEST_F(HeightSensor_Test, UnknownDetected) {
     EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
 }
 
-TEST_F(HeightSensor_Test, CalculateAverageAndMaxValue) {
+TEST_F(UnitTest_HeightSensor, CalculateAverageAndMaxValue) {
     Event ev;
     HeightResult res;
 
@@ -171,8 +178,7 @@ TEST_F(HeightSensor_Test, CalculateAverageAndMaxValue) {
     EXPECT_EQ("26.00", formatFloat(res.max, 2));
 }
 
-TEST_F(HeightSensor_Test,
-       CalculateAverageAndMaxValueWhenMotorStoppedInBetween) {
+TEST_F(UnitTest_HeightSensor, CalculateAverageAndMaxValueWhenMotorStoppedInBetween) {
     HeightResult res;
 
     Event ev;

@@ -21,7 +21,7 @@ void EStop::entry() {
     actions->master_sendMotorStopRequest(true);
     actions->slave_sendMotorStopRequest(true);
     actions->setEStopMode();
-    data->wpManager->reset_wp();
+    data->wpManager->reset_wpm();
 }
 
 void EStop::exit() { delete substateEStop; }

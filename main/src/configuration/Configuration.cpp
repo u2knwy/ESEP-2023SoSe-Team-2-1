@@ -20,7 +20,7 @@ Configuration::Configuration() {
     this->cal = Calibration{.calOffset = ADC_DEFAULT_OFFSET,
                             .calRef = ADC_DEFAULT_HIGH};
     this->configFilePath = std::string(DEFAULT_CONFIG_FILE_PATH);
-    this->order = {WS_F, WS_OB, WS_BOM};
+    this->order = {WS_F, WS_OB, WS_BUM};
 }
 
 Configuration::~Configuration() {}

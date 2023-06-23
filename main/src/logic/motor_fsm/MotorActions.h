@@ -7,18 +7,19 @@
 #pragma once
 
 #include "events/EventManager.h"
-#include "events/EventSender.h"
+#include "events/IEventSender.h"
 #include <memory>
 
-class MotorActions : public EventSender {
-  public:
-    MotorActions(std::shared_ptr<EventManager> mngr, bool master);
-    virtual ~MotorActions();
-    void motorStop();
-    void motorRightFast();
-    void motorRightSlow();
+class MotorActions {
+public:
+	MotorActions(std::shared_ptr<IEventManager> mngr, IEventSender* eventSender, bool master);
+	virtual ~MotorActions();
+	void motorStop();
+	void motorRightFast();
+	void motorRightSlow();
 
-  private:
-    std::shared_ptr<EventManager> eventManager;
-    bool isMaster;
+	std::shared_ptr<IEventManager> eventManager;
+private:
+	IEventSender* eventSender;
+	bool isMaster;
 };

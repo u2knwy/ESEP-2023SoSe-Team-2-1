@@ -49,4 +49,6 @@ class Running : public MainBasestate {
 
   private:
     bool transferPending{false};
+    void setRampBlocked_M(bool blocked);
+    void setRampBlocked_S(bool blocked);
 };

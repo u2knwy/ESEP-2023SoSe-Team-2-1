@@ -24,6 +24,7 @@ void Standby::entry() {
     actions->master_sendMotorStopRequest(true);
     actions->slave_sendMotorStopRequest(true);
     actions->setStandbyMode();
+    data->wpManager->reset_wpm();
 }
 
 void Standby::exit() {

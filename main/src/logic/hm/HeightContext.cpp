@@ -11,13 +11,11 @@
 #include "hal/IHeightSensor.h"
 #include "states/WaitForWorkpiece.h"
 
-HeightContext::HeightContext(std::shared_ptr<EventManager> mngr,
-                             std::shared_ptr<IHeightSensor> heightSensor) {
+HeightContext::HeightContext(HeightActions* actions, HeightContextData* data, std::shared_ptr<IHeightSensor> heightSensor) {
 	this->isMaster = Configuration::getInstance().systemIsMaster();
-    this->eventManager = mngr;
+    this->actions = actions;
     this->sensor = heightSensor;
-    data = new HeightContextData();
-    actions = new HeightActions(data, mngr);
+    this->data = data;
     state = new WaitForWorkpiece();
     state->setData(data);
     state->setAction(actions);
@@ -33,30 +31,30 @@ HeightContext::~HeightContext() {
     if (sensor != nullptr) {
         sensor->stop();
     }
-    delete data;
-    delete actions;
     delete state;
+    delete actions;
+    delete data;
 }
 
 void HeightContext::subscribeToEvents() {
 	if(isMaster) {
-	    eventManager->subscribe(
+	    actions->eventManager->subscribe(
 	        EventType::MOTOR_M_FAST,
 	        std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
-	    eventManager->subscribe(
+	    actions->eventManager->subscribe(
 	        EventType::MOTOR_M_SLOW,
 	        std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
-	    eventManager->subscribe(
+	    actions->eventManager->subscribe(
 	        EventType::MOTOR_M_STOP,
 	        std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
 	} else {
-	    eventManager->subscribe(
+	    actions->eventManager->subscribe(
 	        EventType::MOTOR_S_FAST,
 	        std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
-	    eventManager->subscribe(
+	    actions->eventManager->subscribe(
 	        EventType::MOTOR_S_SLOW,
 	        std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
-	    eventManager->subscribe(
+	    actions->eventManager->subscribe(
 	        EventType::MOTOR_S_STOP,
 	        std::bind(&HeightContext::handleEvent, this, std::placeholders::_1));
 	}
@@ -92,7 +90,7 @@ void HeightContext::heightValueReceived(float valueMM) {
     if (running) {
         if (getCurrentState() != HeightState::WAIT_FOR_WS) {
             data->addValue(valueMM);
-            Logger::debug("[HM] New value: " + std::to_string(valueMM));
+            //Logger::debug("[HM] New value: " + std::to_string(valueMM));
         }
 
         bool handled;

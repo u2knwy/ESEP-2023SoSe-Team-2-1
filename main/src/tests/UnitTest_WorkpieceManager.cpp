@@ -7,10 +7,11 @@
 #include "data/Workpiece.h"
 #include "data/WorkpieceManager.h"
 #include "data/workpiecetype_enum.h"
+
 #include <gtest/gtest.h>
 
 
-class Workpieces_Test : public ::testing::Test {
+class UnitTest_WorkpieceManager : public ::testing::Test {
   protected:
     WorkpieceManager *mngr;
 
@@ -25,7 +26,7 @@ class Workpieces_Test : public ::testing::Test {
     void TearDown() override { delete mngr; }
 };
 
-TEST_F(Workpieces_Test, InitiallyNoWorkpiecesAddNewAndIncrementId) {
+TEST_F(UnitTest_WorkpieceManager, InitiallyNoWorkpiecesAddNewAndIncrementId) {
     EXPECT_TRUE(mngr->isFBM_MEmpty());
     EXPECT_TRUE(mngr->isFBM_SEmpty());
 

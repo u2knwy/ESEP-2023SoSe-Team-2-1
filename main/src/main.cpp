@@ -119,9 +119,17 @@ int main(int argc, char **argv) {
     eventManager = std::make_shared<EventManager>();
     // Create components running on Master AND Slave
     actuators = std::make_shared<Actuators>(eventManager);
+
+    // Register handler function to be called if the program is not
+    // terminated properly
+    std::signal(SIGINT, cleanup);
+    std::signal(SIGQUIT, cleanup);
+    std::signal(SIGTERM, cleanup);
+    std::signal(SIGSEGV, cleanup);
+
     actuators->standbyMode();
 
-    Logger::registerEvents(eventManager);
+    //Logger::registerEvents(eventManager);
     eventManager->start();
     std::this_thread::sleep_for(std::chrono::seconds(3));
 
@@ -131,9 +139,12 @@ int main(int argc, char **argv) {
 
     // Run FSM's only at Master
     if (options.mode == Mode::MASTER) {
-        motorFSM_Master = std::make_shared<MotorContext>(eventManager, true);
-        motorFSM_Slave = std::make_shared<MotorContext>(eventManager, false);
-        mainFSM = std::make_shared<MainContext>(eventManager);
+    	MotorActions* actionsM = new MotorActions(eventManager, new EventSender(), true);
+        motorFSM_Master = std::make_shared<MotorContext>(actionsM, true);
+    	MotorActions* actionsS = new MotorActions(eventManager, new EventSender(), false);
+        motorFSM_Slave = std::make_shared<MotorContext>(actionsS, false);
+        MainActions* mainActions = new MainActions(eventManager, new EventSender());
+        mainFSM = std::make_shared<MainContext>(mainActions);
     } else {
         Logger::info("Program started as SLAVE");
     }
@@ -144,14 +155,9 @@ int main(int argc, char **argv) {
     sensors->startEventLoop();
 
     heightSensor = std::make_shared<HeightSensor>(eventManager);
-    heightFSM = std::make_shared<HeightContext>(eventManager, heightSensor);
-
-    // Register handler function to be called if the program is not
-    // terminated properly
-    std::signal(SIGINT, cleanup);
-    std::signal(SIGQUIT, cleanup);
-    std::signal(SIGTERM, cleanup);
-    std::signal(SIGSEGV, cleanup);
+    HeightContextData* heightData = new HeightContextData();
+    HeightActions* heightActions = new HeightActions(heightData, new EventSender(), eventManager);
+    heightFSM = std::make_shared<HeightContext>(heightActions, heightData, heightSensor);
 
     // do nothing until termination...
     //std::cin.get();

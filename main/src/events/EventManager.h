@@ -6,13 +6,7 @@
  */
 #pragma once
 
-#include "events.h"
-#include <functional>
-#include <string>
-#include <map>
-#include <mutex>
-#include <atomic>
-#include <thread>
+#include "IEventManager.h"
 
 #include <sys/dispatch.h>
 #include <sys/neutrino.h>
@@ -33,63 +27,44 @@ typedef struct
 } app_header_t;
 
 
-class EventManager {
+class EventManager : public IEventManager {
 public:
-	using EventCallback = std::function<void(const Event &)>;
-
 	EventManager();
-	virtual ~EventManager();
+	~EventManager() override;
 
 	/**
 	 * Connects a client by creating a new connection to the internal Channel
 	 *
 	 * @return Connection ID - Client can use this to send events to the EventManager
 	 */
-	int connectInternalClient();
+	int connectInternalClient() override;
 
-	/**
-	 * Subscribe an Event to an EventHandler
-	 *
-	 * @param type EventType to subscribe to
-	 * @param callback Function to call if the event has occurred
-	 */
-	void subscribe(EventType type, EventCallback callback);
+	void subscribe(EventType type, EventCallback callback) override;
 
-	/**
-	 * Subscribe to be notified about all events
-	 *
-	 * @return number of events subscribed
-	 */
-	int subscribeToAllEvents(EventCallback callback);
+	int subscribeToAllEvents(EventCallback callback) override;
 
-	/**
-	 * Unsubscribe from an event
-	 *
-	 * @param type EventType to unsubscribe from
-	 * @param callback Callback function to remove
-	 */
-	void unsubscribe(EventType type, EventCallback callback);
+	void unsubscribe(EventType type, EventCallback callback) override;
 
 	/**
 	 * Handle a received event
 	 *
 	 * @param event Event to handle
 	 */
-	void handleEvent(const Event &event);
+	void handleEvent(const Event &event) override;
 
 	/**
 	 * Send an Event to the other system via GNS
 	 *
 	 * @param event Event to send externally
 	 */
-	void sendExternalEvent(const Event &event);
+	void sendExternalEvent(const Event &event) override;
 
 	/**
 	 * Starts the "Receive internal Events" thread
 	 *
 	 * @return 0 if start was successful
 	 */
-	int start();
+	int start() override;
 
 	/**
 	 * Stops the "Receive internal Events" thread.
@@ -97,9 +72,9 @@ public:
 	 *
 	 * @return 0 if stop was successful
 	 */
-	int stop();
+	int stop() override;
 
-	void connectToService(const std::string& name);
+	void connectToService(const std::string& name) override;
 private:
 	bool isMaster;
 	int internal_chid;

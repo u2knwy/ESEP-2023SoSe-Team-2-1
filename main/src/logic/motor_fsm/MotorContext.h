@@ -9,7 +9,7 @@
 #include "MotorActions.h"
 #include "MotorBasestate.h"
 #include "MotorContextData.h"
-#include "events/EventManager.h"
+#include "events/IEventManager.h"
 #include "events/IEventHandler.h"
 #include "events/events.h"
 
@@ -17,7 +17,7 @@
 
 class MotorContext : public IEventHandler {
   public:
-    MotorContext(std::shared_ptr<EventManager> mngr, bool master);
+    MotorContext(MotorActions* actions, bool master);
     virtual ~MotorContext();
 
     void handleEvent(Event event) override;
@@ -27,7 +27,7 @@ class MotorContext : public IEventHandler {
     MotorActions *actions;
     MotorContextData *data;
     MotorBasestate *state;
-    std::shared_ptr<EventManager> eventManager;
+    std::shared_ptr<IEventManager> eventManager;
     void subscribeToEvents();
     bool isMaster;
 };

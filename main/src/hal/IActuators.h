@@ -10,12 +10,10 @@
 #include <thread>
 
 #include "configuration/Configuration.h"
-#include "events/EventManager.h"
+#include "events/IEventManager.h"
 #include "events/events.h"
 #include "logger/logger.hpp"
 
-// ENum value to attach to event data for controlling lamps
-enum LampState { OFF, ON, FLASHING_SLOW, FLASHING_FAST };
 
 class IActuators : public IEventHandler {
   public:
@@ -327,7 +325,7 @@ class IActuators : public IEventHandler {
     }
 
   protected:
-    IActuators(std::shared_ptr<EventManager> mngr) : eventManager(mngr) {
+    IActuators(std::shared_ptr<IEventManager> mngr) : eventManager(mngr) {
         isMaster = Configuration::getInstance().systemIsMaster();
         subscribeToEvents();
     }
@@ -444,7 +442,7 @@ class IActuators : public IEventHandler {
     }
 
   private:
-    std::shared_ptr<EventManager> eventManager;
+    std::shared_ptr<IEventManager> eventManager;
     std::mutex mutex;
     bool isMaster;
 };

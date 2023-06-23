@@ -20,8 +20,15 @@ MainState Running::getCurrentState() { return MainState::RUNNING; };
 
 void Running::entry() {
 	Logger::info("Entered Running mode");
+	Logger::user_info("Put new workpieces at start of FBM1 to start sorting");
 	actions->setRunningMode();
 	transferPending = false;
+	if(data->isRampFBM1Blocked()) {
+		setRampBlocked_M(true);
+	}
+	if(data->isRampFBM2Blocked()) {
+		setRampBlocked_S(true);
+	}
 }
 
 void Running::exit() {
@@ -29,8 +36,9 @@ void Running::exit() {
 }
 
 bool Running::master_LBA_Blocked() {
-	if(data->wpManager->isFBM_MEmpty())
+	if(data->wpManager->isFBM_MEmpty()) {
 		actions->master_sendMotorRightRequest(true);
+	}
 	Workpiece *wp = data->wpManager->addWorkpiece();   // addWorkpiece
 	Logger::info("Workpiece with id: " + std::to_string(wp->id) +
 			" created and added to Area_A");
@@ -149,16 +157,7 @@ bool Running::master_LBE_Unblocked() {
 }
 
 bool Running::master_LBR_Blocked() {
-	data->setRampFBM1Blocked(true);
-	// If still blocked after 1s -> display warning
-	std::thread t([=]() {
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-		if (data->isRampFBM1Blocked()) {
-			actions->master_warningOn();
-			actions->master_q2LedOn();
-		}
-	});
-	t.detach();
+	setRampBlocked_M(true);
 
 	if (!data->wpManager->isQueueempty(AreaType::AREA_B)) {
 		data->wpManager->removeFromArea(AreaType::AREA_B);
@@ -172,13 +171,8 @@ bool Running::master_LBR_Blocked() {
 }
 
 bool Running::master_LBR_Unblocked() {
-	if (data->isRampFBM1Blocked()) {
-		data->setRampFBM1Blocked(false);
-		actions->master_warningOff();
-		actions->master_q2LedOff();
-		return true;
-	}
-	return false;
+	setRampBlocked_M(false);
+	return true;
 }
 
 //---------------------------------------------------------------------------------
@@ -286,16 +280,7 @@ bool Running::slave_LBE_Unblocked() {
 }
 
 bool Running::slave_LBR_Blocked() {
-	data->setRampFBM2Blocked(true);
-	// If still blocked after 1s -> display warning
-	std::thread t([=]() {
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-		if (data->isRampFBM2Blocked()) {
-			actions->slave_warningOn();
-			actions->slave_q1LedOn();
-		}
-	});
-	t.detach();
+	setRampBlocked_S(true);
 
 	Workpiece *wp = data->wpManager->removeFromArea(AreaType::AREA_D);
 	if (wp == nullptr)
@@ -313,13 +298,8 @@ bool Running::slave_LBR_Blocked() {
 }
 
 bool Running::slave_LBR_Unblocked() {
-	if (data->isRampFBM2Blocked()) {
-		data->setRampFBM2Blocked(false);
-		actions->slave_warningOff();
-		actions->slave_q1LedOff();
-		return true;
-	}
-	return false;
+	setRampBlocked_S(false);
+	return true;
 }
 
 bool Running::master_btnStop_Pressed() {
@@ -364,4 +344,42 @@ bool Running::nonSelfSolvableErrorOccurred() {
 	entry();
 	nonSelfSolvableErrorOccurred();
 	return true;
+}
+
+void Running::setRampBlocked_M(bool blocked) {
+	data->setRampFBM1Blocked(blocked);
+
+	if(blocked) {
+		// If still blocked after 1s -> display warning
+		std::thread t([=]() {
+			std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+			if (data->isRampFBM1Blocked()) {
+				actions->master_warningOn();
+				actions->master_q2LedOn();
+			}
+		});
+		t.detach();
+	} else {
+		actions->master_warningOff();
+		actions->master_q2LedOff();
+	}
+}
+
+void Running::setRampBlocked_S(bool blocked) {
+	data->setRampFBM2Blocked(blocked);
+
+	if(blocked) {
+		// If still blocked after 1s -> display warning
+		std::thread t([=]() {
+			std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+			if (data->isRampFBM2Blocked()) {
+				actions->slave_warningOn();
+				actions->slave_q1LedOn();
+			}
+		});
+		t.detach();
+	} else {
+		actions->slave_warningOff();
+		actions->slave_q1LedOff();
+	}
 }

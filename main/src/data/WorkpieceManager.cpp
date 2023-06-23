@@ -11,8 +11,8 @@
 
 WorkpieceManager::WorkpieceManager() : nextId(1)
 {
-	bool ramp_one=false;
-    bool ramp_two=false;
+	ramp_one_B=false;
+    ramp_two_B=false;
 	auto confOrder = Configuration::getInstance().getDesiredOrder();
 	for (int i = 0; i < 3; i++)
 	{
@@ -206,17 +206,10 @@ std::queue<Workpiece *> &WorkpieceManager::getArea(AreaType area) {
     }
 }
 
-void WorkpieceManager::clearqueue(std::queue<Workpiece*> list){
-	while (!list.empty()){
-		list.pop();
-	}
-}
-
-
 void WorkpieceManager::reset_wpm(){
-	clearqueue(Area_A);
-	clearqueue(Area_B);
-	clearqueue(Area_C);
-	clearqueue(Area_D);
+	std::queue<Workpiece*>().swap(Area_A);
+	std::queue<Workpiece*>().swap(Area_B);
+	std::queue<Workpiece*>().swap(Area_C);
+	std::queue<Workpiece*>().swap(Area_D);
 	nextId=1;
 }

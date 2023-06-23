@@ -12,17 +12,15 @@
 #include "HeightActions.h"
 #include "HeightBasestate.h"
 #include "HeightContextData.h"
-#include "events/EventManager.h"
+#include "events/IEventManager.h"
 #include "events/IEventHandler.h"
 #include "events/events.h"
 #include "hal/HeightSensor.h"
 #include "hal/IHeightSensor.h"
-#include "tests/hm/HeightSensorMock.h"
 
 class HeightContext : public IEventHandler {
   public:
-    HeightContext(std::shared_ptr<EventManager> mngr,
-                  std::shared_ptr<IHeightSensor> sensor);
+    HeightContext(HeightActions* actions, HeightContextData* data, std::shared_ptr<IHeightSensor> sensor);
     virtual ~HeightContext();
     HeightState getCurrentState();
 
@@ -38,7 +36,7 @@ class HeightContext : public IEventHandler {
     void handleEvent(Event event) override;
 
   private:
-    std::shared_ptr<EventManager> eventManager;
+    std::shared_ptr<IEventManager> eventManager;
     HeightActions *actions;
     HeightBasestate *state;
     HeightContextData *data;

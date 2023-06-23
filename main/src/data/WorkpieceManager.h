@@ -52,7 +52,6 @@ class WorkpieceManager {
     std::string to_string_Workpiece(Workpiece *wp);
 
     void testWorkpieceManager();
-    void clearqueue(std::queue<Workpiece*> list);
 
   private:
     int nextId;

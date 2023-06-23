@@ -13,10 +13,9 @@
 #include "configuration/Configuration.h"
 #include "logger/logger.hpp"
 
-MotorContext::MotorContext(std::shared_ptr<EventManager> mngr, bool master) {
+MotorContext::MotorContext(MotorActions* actions, bool master) {
     isMaster = master;
-    this->eventManager = mngr;
-    this->actions = new MotorActions(mngr, master);
+    this->actions = actions;
     this->data = new MotorContextData();
     this->state = new Stopped();
     state->setAction(actions);
@@ -35,23 +34,23 @@ MotorState MotorContext::getCurrentState() { return state->getCurrentState(); }
 
 void MotorContext::subscribeToEvents() {
     if (isMaster) {
-        eventManager->subscribe(
+        actions->eventManager->subscribe(
             EventType::MOTOR_M_STOP_REQ,
             std::bind(&MotorContext::handleEvent, this, std::placeholders::_1));
-        eventManager->subscribe(
+        actions->eventManager->subscribe(
             EventType::MOTOR_M_SLOW_REQ,
             std::bind(&MotorContext::handleEvent, this, std::placeholders::_1));
-        eventManager->subscribe(
+        actions->eventManager->subscribe(
             EventType::MOTOR_M_RIGHT_REQ,
             std::bind(&MotorContext::handleEvent, this, std::placeholders::_1));
     } else {
-        eventManager->subscribe(
+        actions->eventManager->subscribe(
             EventType::MOTOR_S_STOP_REQ,
             std::bind(&MotorContext::handleEvent, this, std::placeholders::_1));
-        eventManager->subscribe(
+        actions->eventManager->subscribe(
             EventType::MOTOR_S_SLOW_REQ,
             std::bind(&MotorContext::handleEvent, this, std::placeholders::_1));
-        eventManager->subscribe(
+        actions->eventManager->subscribe(
             EventType::MOTOR_S_RIGHT_REQ,
             std::bind(&MotorContext::handleEvent, this, std::placeholders::_1));
     }
