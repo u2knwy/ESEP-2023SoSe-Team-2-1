@@ -131,11 +131,11 @@ int main(int argc, char **argv) {
 
     //Logger::registerEvents(eventManager);
     eventManager->start();
-    std::this_thread::sleep_for(std::chrono::seconds(3));
+    std::this_thread::sleep_for(std::chrono::seconds(2));
 
     // Start Watchdog -> send and receive heartbeats via EventManager
-//    Watchdog wd(eventManager);
-//    wd.start();
+    Watchdog wd(eventManager);
+    wd.start();
 
     // Run FSM's only at Master
     if (options.mode == Mode::MASTER) {
@@ -149,7 +149,7 @@ int main(int argc, char **argv) {
         Logger::info("Program started as SLAVE");
     }
 
-    std::this_thread::sleep_for(std::chrono::seconds(3));
+    std::this_thread::sleep_for(std::chrono::seconds(2));
 
     sensors = std::make_shared<Sensors>(eventManager);
     sensors->startEventLoop();

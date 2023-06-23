@@ -90,7 +90,15 @@ void EventManager::rcvInternalEventsThread() {
             continue;
         }
         Event ev{(EventType) pulse.code, pulse.value.sival_int};
+        if((isMaster && ev.type == EventType::WD_S_HEARTBEAT)
+        || (!isMaster && ev.type == EventType::WD_M_HEARTBEAT)){
+        	Logger::debug("attempted rebound msg");
+        	continue; }
         handleEvent(ev);
+        if(ev.type == EventType::WD_CONN_LOST){ disconnected = true; }
+        if(ev.type == EventType::WD_CONN_REESTABLISHED){ disconnected = false; }
+        if(disconnected){continue;}
+
         sendExternalEvent(ev);
     }
     Logger::debug("[EventManager] Stopped receiving internal events");
@@ -261,26 +269,17 @@ void EventManager::unsubscribe(EventType type, EventCallback callback) {
 }
 
 void EventManager::handleEvent(const Event &event) {
+   if(event.type == EventType::WD_M_HEARTBEAT && isMaster){ return; }
+   if(event.type == EventType::WD_S_HEARTBEAT && !isMaster){ return; }
+
     std::stringstream ss;
     ss << "[EventManager] handleEvent: " << EVENT_TO_STRING(event.type);
+
     if (event.data != -1)
         ss << ", data: " << event.data;
 
-	if(event.type == EventType::WD_CONN_LOST) {
-        externConnected = false;
-		handleEvent(Event{EventType::ERROR_M_SELF_SOLVABLE});
-		handleEvent(Event{EventType::ERROR_S_SELF_SOLVABLE});
-//		stopService();
-//        disconnectFromService();
-//		std::thread(&EventManager::connectToService, this, ATTACH_POINT_LOCAL_S);
-	} else if(event.type == EventType::WD_CONN_REESTABLISHED) {
-		externConnected = true;
-		handleEvent(Event{EventType::ERROR_M_SELF_SOLVED});
-		handleEvent(Event{EventType::ERROR_S_SELF_SOLVED});
-	}
-
     if (subscribers.find(event.type) != subscribers.end()) {
-        Logger::debug("[EventManager] Notifiying " + std::to_string(subscribers[event.type].size()) + " subscribers about Event " + EVENT_TO_STRING(event.type));
+        //Logger::debug("[EventManager] Notifiying " + std::to_string(subscribers[event.type].size()) + " subscribers about Event " + EVENT_TO_STRING(event.type));
         int i = 1;
         for (const auto &callback : subscribers[event.type]) {
             callback(event);
@@ -288,6 +287,9 @@ void EventManager::handleEvent(const Event &event) {
     } else {
         ss << " -> No subscribers for Event!";
     }
+
+
+
     Logger::debug(ss.str());
 }
 

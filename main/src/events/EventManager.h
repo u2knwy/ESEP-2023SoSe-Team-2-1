@@ -81,6 +81,7 @@ private:
 	int internal_coid;
 	int server_coid; // for GNS connection?
 	bool externConnected;
+	bool disconnected = false;
 	std::atomic<bool> rcvInternalRunning;
 	std::thread thRcvInternal;
     std::atomic<bool> rcvExternalRunning;

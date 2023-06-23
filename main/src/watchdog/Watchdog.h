@@ -14,8 +14,8 @@
 #include <thread>
 
 
-#define WD_SEND_INTERVAL_SEC 1
-#define WD_TIMEOUT_SEC       3
+#define WD_SEND_INTERVAL_MILLIS 200
+#define WD_TIMEOUT_MILLIS       500
 
 class Watchdog : public IEventHandler, public EventSender {
   public:
@@ -31,6 +31,7 @@ class Watchdog : public IEventHandler, public EventSender {
     std::shared_ptr<EventManager> eventManager;
     bool isMaster;
     bool connectionLost{false};
+    bool heartBeatreceived = true;
     std::thread th_receive;
     std::thread th_send;
     std::atomic<bool> sendingRunning;
