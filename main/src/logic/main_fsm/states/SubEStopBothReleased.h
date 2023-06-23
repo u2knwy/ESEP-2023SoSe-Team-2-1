@@ -8,16 +8,17 @@
 
 #include "../MainBasestate.h"
 
-class SubEStopBothReleased: public MainBasestate {
-	void entry() override;
-	void exit() override;
+class SubEStopBothReleased : public MainBasestate {
+    void entry() override;
+    void exit() override;
 
-	bool master_btnReset_Pressed() override;
-	bool slave_btnReset_Pressed() override;
+    bool master_btnReset_Pressed() override;
+    bool slave_btnReset_Pressed() override;
 
-	bool master_EStop_Pressed() override;
-	bool slave_EStop_Pressed() override;
-private:
-	bool masterReset{false};
-	bool slaveReset{false};
+    bool master_EStop_Pressed() override;
+    bool slave_EStop_Pressed() override;
+
+  private:
+    bool masterReset{false};
+    bool slaveReset{false};
 };

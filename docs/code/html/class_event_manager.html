@@ -85,19 +85,223 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>EventCallback</b> = 
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ae4a43097be2de90e5bc704706342a931"><td class="memItemLeft" align="right" valign="top"><a id="ae4a43097be2de90e5bc704706342a931" name="ae4a43097be2de90e5bc704706342a931"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>subscribe</b> (EventType type, EventCallback callback)</td></tr>
+<tr class="memitem:ac7237bb747bcccd69decfc337e465db4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_event_manager.html#ac7237bb747bcccd69decfc337e465db4">connectInternalClient</a> ()</td></tr>
+<tr class="separator:ac7237bb747bcccd69decfc337e465db4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4a43097be2de90e5bc704706342a931"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_event_manager.html#ae4a43097be2de90e5bc704706342a931">subscribe</a> (EventType type, EventCallback callback)</td></tr>
 <tr class="separator:ae4a43097be2de90e5bc704706342a931"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2fda2833bdeb5927366d6a4aac9a889b"><td class="memItemLeft" align="right" valign="top"><a id="a2fda2833bdeb5927366d6a4aac9a889b" name="a2fda2833bdeb5927366d6a4aac9a889b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>unsubscribe</b> (EventType type, EventCallback callback)</td></tr>
+<tr class="memitem:a5bb3328d7435b7f5edad30aa8e191705"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_event_manager.html#a5bb3328d7435b7f5edad30aa8e191705">subscribeToAllEvents</a> (EventCallback callback)</td></tr>
+<tr class="separator:a5bb3328d7435b7f5edad30aa8e191705"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2fda2833bdeb5927366d6a4aac9a889b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_event_manager.html#a2fda2833bdeb5927366d6a4aac9a889b">unsubscribe</a> (EventType type, EventCallback callback)</td></tr>
 <tr class="separator:a2fda2833bdeb5927366d6a4aac9a889b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaf50027616ae687bca1bd0ee9815b932"><td class="memItemLeft" align="right" valign="top"><a id="aaf50027616ae687bca1bd0ee9815b932" name="aaf50027616ae687bca1bd0ee9815b932"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>sendEvent</b> (const <a class="el" href="struct_event.html">Event</a> &amp;event)</td></tr>
+<tr class="memitem:a5039cc6c27469fe5ce12e89a69194b89"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_event_manager.html#a5039cc6c27469fe5ce12e89a69194b89">handleEvent</a> (const <a class="el" href="struct_event.html">Event</a> &amp;event)</td></tr>
+<tr class="separator:a5039cc6c27469fe5ce12e89a69194b89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf50027616ae687bca1bd0ee9815b932"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_event_manager.html#aaf50027616ae687bca1bd0ee9815b932">sendEvent</a> (const <a class="el" href="struct_event.html">Event</a> &amp;event)</td></tr>
 <tr class="separator:aaf50027616ae687bca1bd0ee9815b932"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e5215c719820f72044874a57daf6f55"><td class="memItemLeft" align="right" valign="top"><a id="a0e5215c719820f72044874a57daf6f55" name="a0e5215c719820f72044874a57daf6f55"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>start</b> ()</td></tr>
+<tr class="memitem:a0e5215c719820f72044874a57daf6f55"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_event_manager.html#a0e5215c719820f72044874a57daf6f55">start</a> ()</td></tr>
 <tr class="separator:a0e5215c719820f72044874a57daf6f55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0bbca77c7f6cd28178bdc5bee323c3d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_event_manager.html#ad0bbca77c7f6cd28178bdc5bee323c3d">stop</a> ()</td></tr>
+<tr class="separator:ad0bbca77c7f6cd28178bdc5bee323c3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ac7237bb747bcccd69decfc337e465db4" name="ac7237bb747bcccd69decfc337e465db4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7237bb747bcccd69decfc337e465db4">&#9670;&#160;</a></span>connectInternalClient()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int EventManager::connectInternalClient </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Connects a client by creating a new connection to the internal Channel</p>
+<dl class="section return"><dt>Returns</dt><dd>Connection ID - Client can use this to send events to the <a class="el" href="class_event_manager.html">EventManager</a> </dd></dl>
+
+</div>
+</div>
+<a id="a5039cc6c27469fe5ce12e89a69194b89" name="a5039cc6c27469fe5ce12e89a69194b89"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5039cc6c27469fe5ce12e89a69194b89">&#9670;&#160;</a></span>handleEvent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void EventManager::handleEvent </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_event.html">Event</a> &amp;&#160;</td>
+          <td class="paramname"><em>event</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Handle a received event</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">event</td><td><a class="el" href="struct_event.html">Event</a> to handle </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aaf50027616ae687bca1bd0ee9815b932" name="aaf50027616ae687bca1bd0ee9815b932"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf50027616ae687bca1bd0ee9815b932">&#9670;&#160;</a></span>sendEvent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void EventManager::sendEvent </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_event.html">Event</a> &amp;&#160;</td>
+          <td class="paramname"><em>event</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Send an <a class="el" href="struct_event.html">Event</a> to the other system via GNS</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">event</td><td><a class="el" href="struct_event.html">Event</a> to send externally </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a0e5215c719820f72044874a57daf6f55" name="a0e5215c719820f72044874a57daf6f55"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e5215c719820f72044874a57daf6f55">&#9670;&#160;</a></span>start()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int EventManager::start </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Starts the "Receive internal Events" thread</p>
+<dl class="section return"><dt>Returns</dt><dd>0 if start was successful </dd></dl>
+
+</div>
+</div>
+<a id="ad0bbca77c7f6cd28178bdc5bee323c3d" name="ad0bbca77c7f6cd28178bdc5bee323c3d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0bbca77c7f6cd28178bdc5bee323c3d">&#9670;&#160;</a></span>stop()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int EventManager::stop </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Stops the "Receive internal Events" thread. Blocks until the thread has stopped</p>
+<dl class="section return"><dt>Returns</dt><dd>0 if stop was successful </dd></dl>
+
+</div>
+</div>
+<a id="ae4a43097be2de90e5bc704706342a931" name="ae4a43097be2de90e5bc704706342a931"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4a43097be2de90e5bc704706342a931">&#9670;&#160;</a></span>subscribe()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void EventManager::subscribe </td>
+          <td>(</td>
+          <td class="paramtype">EventType&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">EventCallback&#160;</td>
+          <td class="paramname"><em>callback</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Subscribe an <a class="el" href="struct_event.html">Event</a> to an EventHandler</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td>EventType to subscribe to </td></tr>
+    <tr><td class="paramname">callback</td><td>Function to call if the event has occurred </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a5bb3328d7435b7f5edad30aa8e191705" name="a5bb3328d7435b7f5edad30aa8e191705"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5bb3328d7435b7f5edad30aa8e191705">&#9670;&#160;</a></span>subscribeToAllEvents()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int EventManager::subscribeToAllEvents </td>
+          <td>(</td>
+          <td class="paramtype">EventCallback&#160;</td>
+          <td class="paramname"><em>callback</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Subscribe to be notified about all events</p>
+<dl class="section return"><dt>Returns</dt><dd>number of events subscribed </dd></dl>
+
+</div>
+</div>
+<a id="a2fda2833bdeb5927366d6a4aac9a889b" name="a2fda2833bdeb5927366d6a4aac9a889b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2fda2833bdeb5927366d6a4aac9a889b">&#9670;&#160;</a></span>unsubscribe()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void EventManager::unsubscribe </td>
+          <td>(</td>
+          <td class="paramtype">EventType&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">EventCallback&#160;</td>
+          <td class="paramname"><em>callback</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Unsubscribe from an event</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td>EventType to unsubscribe from </td></tr>
+    <tr><td class="paramname">callback</td><td>Callback function to remove </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>main/src/events/<a class="el" href="_event_manager_8h_source.html">EventManager.h</a></li>
 <li>main/src/events/EventManager.cpp</li>

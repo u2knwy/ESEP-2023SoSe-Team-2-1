@@ -9,17 +9,17 @@
 
 #include "../MainBasestate.h"
 
-class Standby: public MainBasestate {
-	void entry() override;
-	void exit() override;
+class Standby : public MainBasestate {
+    void entry() override;
+    void exit() override;
 
-	MainState getCurrentState() override;
+    MainState getCurrentState() override;
 
-	bool master_btnStart_PressedShort() override;
-	bool master_btnStart_PressedLong() override;
-	bool master_EStop_Pressed() override;
+    bool master_btnStart_PressedShort() override;
+    bool master_btnStart_PressedLong() override;
+    bool master_EStop_Pressed() override;
 
-	bool slave_btnStart_PressedShort() override;
-	bool slave_btnStart_PressedLong() override;
-	bool slave_EStop_Pressed() override;
+    bool slave_btnStart_PressedShort() override;
+    bool slave_btnStart_PressedLong() override;
+    bool slave_EStop_Pressed() override;
 };

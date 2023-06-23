@@ -10,10 +10,10 @@
 #include "../HeightBasestate.h"
 
 class WaitForBelt : public HeightBasestate {
-	void entry() override;
+    void entry() override;
 
-	HeightState getCurrentState() override;
+    HeightState getCurrentState() override;
 
-	bool beltDetected() override;
-	bool unknownDetected() override;
+    bool beltDetected() override;
+    bool unknownDetected() override;
 };

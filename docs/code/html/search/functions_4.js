@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['fifoadcdataread_0',['fifoADCDataRead',['../class_t_s_c_a_d_c.html#a8c2bd0f7cc62132c827d1cd8f236f7ce',1,'TSCADC']]],
-  ['fifoirqthresholdlevelconfig_1',['fifoIRQThresholdLevelConfig',['../class_t_s_c_a_d_c.html#a7d3c87015cc31cfcb3d7d5fdf79ce39c',1,'TSCADC']]],
-  ['flatdetected_2',['flatDetected',['../class_height_basestate.html#a36057a2e55e937990f67c42709158acb',1,'HeightBasestate']]]
+  ['errormode_0',['errorMode',['../class_actuators.html#a676265e7f89e224245ce4f9dea379ebc',1,'Actuators::errorMode()'],['../class_i_actuators.html#aff7fc5c82f5ea6b43771b23ec4a5d65a',1,'IActuators::errorMode()'],['../class_actuator_mock.html#af230380ba75657ff5f7843f4ebeebe5d',1,'ActuatorMock::errorMode()']]],
+  ['estopmode_1',['estopMode',['../class_actuators.html#ad7b1c2fa821acefe5fce9a3842f3e545',1,'Actuators::estopMode()'],['../class_i_actuators.html#aa2e83e6dfb7e625daefb1fe778db57e5',1,'IActuators::estopMode()'],['../class_actuator_mock.html#a78ef1576f036ac445d904a7c8253e5a5',1,'ActuatorMock::estopMode()']]],
+  ['eventinterruptdisable_2',['eventInterruptDisable',['../class_t_s_c_a_d_c.html#a13694855884c21c49cf7c0e7fb22fc68',1,'TSCADC']]],
+  ['eventinterruptenable_3',['eventInterruptEnable',['../class_t_s_c_a_d_c.html#a5742422ed05c6d31f7b69352c6a59c5c',1,'TSCADC']]]
 ];

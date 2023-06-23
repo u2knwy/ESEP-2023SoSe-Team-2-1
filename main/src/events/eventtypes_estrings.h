@@ -21,15 +21,18 @@ ESTRING(ESTOP_M_RELEASED)
 ESTRING(ESTOP_S_PRESSED)
 ESTRING(ESTOP_S_RELEASED)
 
-// ErrorFSM/EStoppFSM/Standby -> MotorFSM - Motor stop requests (data=0: clear flag, data=1: set flag)
+// ErrorFSM/EStoppFSM/Standby -> MotorFSM - Motor stop requests (data=0: clear
+// flag, data=1: set flag)
 ESTRING(MOTOR_M_STOP_REQ)
 ESTRING(MOTOR_S_STOP_REQ)
 
-// Running (within MainFSM) -> MotorFSM - Motor start requests (data=0: clear flag, data=1: set flag)
+// Running (within MainFSM) -> MotorFSM - Motor start requests (data=0: clear
+// flag, data=1: set flag)
 ESTRING(MOTOR_M_RIGHT_REQ)
 ESTRING(MOTOR_S_RIGHT_REQ)
 
-// HeightFSM -> MotorFSM - Motor slow requests (data=0: clear flag, data=1: set flag)
+// HeightFSM -> MotorFSM - Motor slow requests (data=0: clear flag, data=1: set
+// flag)
 ESTRING(MOTOR_M_SLOW_REQ)
 ESTRING(MOTOR_S_SLOW_REQ)
 
@@ -46,7 +49,8 @@ ESTRING(SORT_M_OUT)
 ESTRING(SORT_S_OUT)
 
 // Actuators - control lamps (off/on/flashing slow/flashing fast)
-// attach one of the enum values of LampState (defined in events.h) to event.data to set the desired state
+// attach one of the enum values of LampState (defined in events.h) to
+// event.data to set the desired state
 ESTRING(LAMP_M_GREEN)
 ESTRING(LAMP_M_YELLOW)
 ESTRING(LAMP_M_RED)
@@ -112,10 +116,13 @@ ESTRING(MODE_ERROR)
 ESTRING(WD_CONN_ESTABLISHED)
 ESTRING(WD_CONN_LOST)
 ESTRING(WD_CONN_REESTABLISHED)
-ESTRING(WD_M_HEARTBEAT) // Heartbeat FBM1 -> FBM2
-ESTRING(WD_S_HEARTBEAT) // Heartbeat FBM2 -> FBM1
+ESTRING(WD_M_HEARTBEAT)   // Heartbeat FBM1 -> FBM2
+ESTRING(WD_S_HEARTBEAT)   // Heartbeat FBM2 -> FBM1
 
 // Error occurred / solved
-ESTRING(ERROR_SELF_SOLVABLE)
-ESTRING(ERROR_MAN_SOLVABLE)
-ESTRING(ERROR_SELF_SOLVED)
+ESTRING(ERROR_M_SELF_SOLVABLE)
+ESTRING(ERROR_M_MAN_SOLVABLE)
+ESTRING(ERROR_M_SELF_SOLVED)
+ESTRING(ERROR_S_SELF_SOLVABLE)
+ESTRING(ERROR_S_MAN_SOLVABLE)
+ESTRING(ERROR_S_SELF_SOLVED)

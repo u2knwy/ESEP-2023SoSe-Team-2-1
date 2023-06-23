@@ -7,15 +7,12 @@
  *          	Labor f�r technische Informatik
  *          	Berliner Tor  7
  *          	D-20099 Hamburg
- * @version 	
- * @details		
- * @copybrief	Based on the StarterWareFree for AM335X provided by Texas Instrument
- *				
+ * @version
+ * @details
+ * @copybrief	Based on the StarterWareFree for AM335X provided by Texas
+ *Instrument
+ *
  */
-
-
-
-
 
 #include "TSCADC.h"
 
@@ -23,52 +20,46 @@
 #include <sys/mman.h>
 #include <sys/neutrino.h>
 
-#include <cstdlib>
-#include "tscadc_hw.h"
 #include "Util.h"
-
+#include "tscadc_hw.h"
+#include <cstdlib>
 
 using namespace std;
 
-TSCADC::TSCADC()
-	: 	baseAdd(MAP_DEVICE_FAILED){
-	gainAccess();
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Woverflow"
+TSCADC::TSCADC() : baseAdd(MAP_DEVICE_FAILED) { gainAccess(); }
+#pragma GCC diagnostic pop
+
+TSCADC::~TSCADC() { munmap_device_io(baseAdd, SIZE); }
+
+void TSCADC::gainAccess(void) {
+    if (baseAdd == MAP_DEVICE_FAILED) {
+        if (-1 == ThreadCtl(_NTO_TCTL_IO, 0)) {
+            DBG_ERROR("ThreadCtl access failed\n");
+            exit(EXIT_FAILURE);
+        }
+        baseAdd = mmap_device_io(SIZE, BASE);
+        if (baseAdd == MAP_DEVICE_FAILED) {
+            DBG_ERROR("allocation of GPIO failed");
+            exit(EXIT_FAILURE);
+        }
+    }
 }
-
-TSCADC::~TSCADC() {
-	munmap_device_io(baseAdd, SIZE);
-}
-
-
-void TSCADC::gainAccess(void){
-	if(baseAdd ==  MAP_DEVICE_FAILED){
-		if (-1 == ThreadCtl(_NTO_TCTL_IO, 0)) {
-			DBG_ERROR("ThreadCtl access failed\n");
-			exit(EXIT_FAILURE);
-		}
-		baseAdd = mmap_device_io(SIZE, BASE);
-		if(baseAdd ==  MAP_DEVICE_FAILED){
-			DBG_ERROR("allocation of GPIO failed");
-			exit(EXIT_FAILURE);
-		}
-	}
-}
-
 
 /** !IMPORTANT: These functions is not in the sources!! */
 /*==========*/
-void TSCADC::clearBitsInReg(uintptr_t addr,uint32_t value){
-	uint32_t prevVal = in32((uintptr_t ) addr);
-	out32((uintptr_t ) addr, prevVal & (~value));
+void TSCADC::clearBitsInReg(uintptr_t addr, uint32_t value) {
+    uint32_t prevVal = in32((uintptr_t) addr);
+    out32((uintptr_t) addr, prevVal & (~value));
 }
 
-void TSCADC::setBitsInReg(uintptr_t addr, uint32_t value){
-	uint32_t prevVal = in32((uintptr_t ) addr);
-	out32((uintptr_t ) addr, prevVal | value);
+void TSCADC::setBitsInReg(uintptr_t addr, uint32_t value) {
+    uint32_t prevVal = in32((uintptr_t) addr);
+    out32((uintptr_t) addr, prevVal | value);
 }
 
 /*==========*/
-
 
 /**
  * @brief   This API gets the revision information of the Touch Screen Module.
@@ -76,9 +67,7 @@ void TSCADC::setBitsInReg(uintptr_t addr, uint32_t value){
  * @return  returns the revision ID.
  *
  **/
-unsigned int TSCADC::getRevision() {
-	return in32(baseAdd + REVISION );
-}
+unsigned int TSCADC::getRevision() { return in32(baseAdd + REVISION); }
 
 /**
  * @brief   This API enables the protection of Step Config Registers.
@@ -99,7 +88,7 @@ void TSCADC::stepConfigProtectionEnable() {
  *
  **/
 void TSCADC::stepConfigProtectionDisable() {
-	setBitsInReg(baseAdd + CTRL, CTRL_STEPCONFIG_WRITEPROTECT_N);
+    setBitsInReg(baseAdd + CTRL, CTRL_STEPCONFIG_WRITEPROTECT_N);
 }
 
 /**
@@ -117,7 +106,7 @@ void TSCADC::stepConfigProtectionDisable() {
  *
  **/
 void TSCADC::tsModeConfig(TSMode tsMode) {
-	clearBitsInReg(baseAdd + CTRL, CTRL_AFE_PEN_CTRL);
+    clearBitsInReg(baseAdd + CTRL, CTRL_AFE_PEN_CTRL);
     setBitsInReg(baseAdd + CTRL, tsMode << CTRL_AFE_PEN_CTRL_SHIFT);
 }
 
@@ -137,8 +126,8 @@ void TSCADC::tsModeConfig(TSMode tsMode) {
  *
  **/
 void TSCADC::idleModeSet(IdleMode idleMode) {
-	 clearBitsInReg(baseAdd + SYSCONFIG, SYSCONFIG_IDLEMODE);
-	 setBitsInReg(baseAdd + SYSCONFIG, idleMode << SYSCONFIG_IDLEMODE_SHIFT);
+    clearBitsInReg(baseAdd + SYSCONFIG, SYSCONFIG_IDLEMODE);
+    setBitsInReg(baseAdd + SYSCONFIG, idleMode << SYSCONFIG_IDLEMODE_SHIFT);
 }
 
 /**
@@ -158,8 +147,8 @@ void TSCADC::idleModeSet(IdleMode idleMode) {
  *
  **/
 void TSCADC::tsStepModeConfig(unsigned int stepSel, StepMode mode) {
-	clearBitsInReg(baseAdd + STEPCONFIG(stepSel), STEPCONFIG_MODE);
-	setBitsInReg(baseAdd + STEPCONFIG(stepSel), mode << STEPCONFIG_MODE_SHIFT);
+    clearBitsInReg(baseAdd + STEPCONFIG(stepSel), STEPCONFIG_MODE);
+    setBitsInReg(baseAdd + STEPCONFIG(stepSel), mode << STEPCONFIG_MODE_SHIFT);
 }
 
 /**
@@ -186,7 +175,7 @@ void TSCADC::tsStepModeConfig(unsigned int stepSel, StepMode mode) {
  *
  **/
 void TSCADC::intStatusClear(unsigned int intFlag) {
-	out32(baseAdd + IRQSTATUS, intFlag & 0x7FF);
+    out32(baseAdd + IRQSTATUS, intFlag & 0x7FF);
 }
 
 /**
@@ -212,7 +201,7 @@ void TSCADC::intStatusClear(unsigned int intFlag) {
  *
  **/
 void TSCADC::eventInterruptEnable(IntFlag event) {
-	setBitsInReg(baseAdd + IRQENABLE_SET, event);
+    setBitsInReg(baseAdd + IRQENABLE_SET, event);
 }
 
 /**
@@ -238,7 +227,7 @@ void TSCADC::eventInterruptEnable(IntFlag event) {
  *
  **/
 void TSCADC::eventInterruptDisable(IntFlag event) {
-	 out32(baseAdd + IRQENABLE_CLR, event);
+    out32(baseAdd + IRQENABLE_CLR, event);
 }
 
 /**
@@ -256,8 +245,9 @@ void TSCADC::eventInterruptDisable(IntFlag event) {
  *
  **/
 void TSCADC::tsStepFIFOSelConfig(unsigned int stepSel, Fifo FIFOSel) {
-	clearBitsInReg(baseAdd + STEPCONFIG(stepSel), STEPCONFIG_FIFO_SELECT);
-	setBitsInReg(baseAdd + STEPCONFIG(stepSel), FIFOSel << STEPCONFIG_FIFO_SELECT_SHIFT);
+    clearBitsInReg(baseAdd + STEPCONFIG(stepSel), STEPCONFIG_FIFO_SELECT);
+    setBitsInReg(baseAdd + STEPCONFIG(stepSel),
+                 FIFOSel << STEPCONFIG_FIFO_SELECT_SHIFT);
 }
 
 /**
@@ -277,78 +267,86 @@ void TSCADC::tsStepFIFOSelConfig(unsigned int stepSel, Fifo FIFOSel) {
  *
  **/
 void TSCADC::tsStepAverageConfig(unsigned int stepSel, AverageSamples average) {
-	clearBitsInReg(baseAdd + STEPCONFIG(stepSel), STEPCONFIG_AVERAGING);
-	    setBitsInReg(baseAdd + STEPCONFIG(stepSel), average <<  STEPCONFIG_AVERAGING_SHIFT);
+    clearBitsInReg(baseAdd + STEPCONFIG(stepSel), STEPCONFIG_AVERAGING);
+    setBitsInReg(baseAdd + STEPCONFIG(stepSel),
+                 average << STEPCONFIG_AVERAGING_SHIFT);
 }
 
 /**
-	 * @brief  This API configures the reference voltage and input for
-	 *         given Step (other than Idle and Touch Screen charge Step)
-	 *
-	 * @param   stepSelect	 	Step to be configured.
-	 *
-	 * @param   adcNegativeRef	Selects the ADC Negative Reference Voltage.\n
-	 *
-	 *          adcNegativeRef can take following values.\n
-	 *
-	 *           NEGATIVE_REF_VSSA.\n
-	 *           NEGATIVE_REF_XNUR.\n
-	 *           NEGATIVE_REF_YNLR.\n
-	 *           NEGATIVE_REF_ADCREFM.\n
-	 *
-	 * @param   adcPositiveInput 	Selects the Positive Analog Input Source.\n
-	 *
-	 *           adcPositiveInput can take following values.\n
-	 *
-	 *           POSITIVE_INP_CHANNEL1.\n
-	 *           POSITIVE_INP_CHANNEL2.\n
-	 *           POSITIVE_INP_CHANNEL3.\n
-	 *           POSITIVE_INP_CHANNEL4.\n
-	 *           POSITIVE_INP_CHANNEL5.\n
-	 *           POSITIVE_INP_CHANNEL6.\n
-	 *           POSITIVE_INP_CHANNEL7.\n
-	 *           POSITIVE_INP_CHANNEL8.\n
-	 *           POSITIVE_INP_ADCREFM.\n
-	 *
-	 * @param   adcNegativeInput 	Selects the Negative Analog Input Source.\n
-	 *
-	 *          adcNegativeInput can take following values.\n
-	 *
-	 *          NEGATIVE_INP_CHANNEL1.\n
-	 *          NEGATIVE_INP_CHANNEL2.\n
-	 *          NEGATIVE_INP_CHANNEL3.\n
-	 *          NEGATIVE_INP_CHANNEL4.\n
-	 *          NEGATIVE_INP_CHANNEL5.\n
-	 *          NEGATIVE_INP_CHANNEL6.\n
-	 *          NEGATIVE_INP_CHANNEL8.\n
-	 *          NEGATIVE_INP_ADCREFM.\n
-	 *
-	 * @param   adcPositiveRef 	Selects the ADC Positive Reference Voltage.\n
-	 *
-	 *          adcPositiveRef can take following values.\n
-	 *
-	 *          POSITIVE_REF_VDDA.\n
-	 *          TSCADC_POSITIVE_REF_XNUR.\n
-	 *          TSCADC_POSITIVE_REF_YNLR.\n
-	 *          POSITIVE_REF_ADCREFP.\n
-	 *
-	 * @return  none
-	 *
-	 * Note: stepSelect can take any integer value b/w 0 to 15
-	 *
-	 **/
-void TSCADC::tsStepConfig(unsigned int stepSelect, NegativeRef adcNegativeRef, PositiveInput adcPositiveInp, NegativeInput adcNegativeInp, PositiveRef adcPositiveRef) {
-	clearBitsInReg(baseAdd + STEPCONFIG(stepSelect), STEPCONFIG_SEL_RFM_SWC);
-	setBitsInReg(baseAdd + STEPCONFIG(stepSelect), adcNegativeRef << STEPCONFIG_SEL_RFM_SWC_SHIFT);
+ * @brief  This API configures the reference voltage and input for
+ *         given Step (other than Idle and Touch Screen charge Step)
+ *
+ * @param   stepSelect	 	Step to be configured.
+ *
+ * @param   adcNegativeRef	Selects the ADC Negative Reference Voltage.\n
+ *
+ *          adcNegativeRef can take following values.\n
+ *
+ *           NEGATIVE_REF_VSSA.\n
+ *           NEGATIVE_REF_XNUR.\n
+ *           NEGATIVE_REF_YNLR.\n
+ *           NEGATIVE_REF_ADCREFM.\n
+ *
+ * @param   adcPositiveInput 	Selects the Positive Analog Input Source.\n
+ *
+ *           adcPositiveInput can take following values.\n
+ *
+ *           POSITIVE_INP_CHANNEL1.\n
+ *           POSITIVE_INP_CHANNEL2.\n
+ *           POSITIVE_INP_CHANNEL3.\n
+ *           POSITIVE_INP_CHANNEL4.\n
+ *           POSITIVE_INP_CHANNEL5.\n
+ *           POSITIVE_INP_CHANNEL6.\n
+ *           POSITIVE_INP_CHANNEL7.\n
+ *           POSITIVE_INP_CHANNEL8.\n
+ *           POSITIVE_INP_ADCREFM.\n
+ *
+ * @param   adcNegativeInput 	Selects the Negative Analog Input Source.\n
+ *
+ *          adcNegativeInput can take following values.\n
+ *
+ *          NEGATIVE_INP_CHANNEL1.\n
+ *          NEGATIVE_INP_CHANNEL2.\n
+ *          NEGATIVE_INP_CHANNEL3.\n
+ *          NEGATIVE_INP_CHANNEL4.\n
+ *          NEGATIVE_INP_CHANNEL5.\n
+ *          NEGATIVE_INP_CHANNEL6.\n
+ *          NEGATIVE_INP_CHANNEL8.\n
+ *          NEGATIVE_INP_ADCREFM.\n
+ *
+ * @param   adcPositiveRef 	Selects the ADC Positive Reference Voltage.\n
+ *
+ *          adcPositiveRef can take following values.\n
+ *
+ *          POSITIVE_REF_VDDA.\n
+ *          TSCADC_POSITIVE_REF_XNUR.\n
+ *          TSCADC_POSITIVE_REF_YNLR.\n
+ *          POSITIVE_REF_ADCREFP.\n
+ *
+ * @return  none
+ *
+ * Note: stepSelect can take any integer value b/w 0 to 15
+ *
+ **/
+void TSCADC::tsStepConfig(unsigned int stepSelect, NegativeRef adcNegativeRef,
+                          PositiveInput adcPositiveInp,
+                          NegativeInput adcNegativeInp,
+                          PositiveRef adcPositiveRef) {
+    clearBitsInReg(baseAdd + STEPCONFIG(stepSelect), STEPCONFIG_SEL_RFM_SWC);
+    setBitsInReg(baseAdd + STEPCONFIG(stepSelect),
+                 adcNegativeRef << STEPCONFIG_SEL_RFM_SWC_SHIFT);
 
-	clearBitsInReg(baseAdd + STEPCONFIG(stepSelect), STEPCONFIG_SEL_INP_SWC);
-	setBitsInReg(baseAdd + STEPCONFIG(stepSelect), adcPositiveInp << STEPCONFIG_SEL_INP_SWC_SHIFT);
+    clearBitsInReg(baseAdd + STEPCONFIG(stepSelect), STEPCONFIG_SEL_INP_SWC);
+    setBitsInReg(baseAdd + STEPCONFIG(stepSelect),
+                 adcPositiveInp << STEPCONFIG_SEL_INP_SWC_SHIFT);
 
-	clearBitsInReg(baseAdd + STEPCONFIG(stepSelect), STEPCONFIG_SEL_INM_SWM);
-	setBitsInReg(baseAdd + STEPCONFIG(stepSelect), adcNegativeInp << STEPCONFIG_SEL_INM_SWM_SHIFT);
+    clearBitsInReg(baseAdd + STEPCONFIG(stepSelect), STEPCONFIG_SEL_INM_SWM);
+    setBitsInReg(baseAdd + STEPCONFIG(stepSelect),
+                 adcNegativeInp << STEPCONFIG_SEL_INM_SWM_SHIFT);
 
-	clearBitsInReg(baseAdd + STEPCONFIG(stepSelect), STEPCONFIG_SEL_RFP_SWC);
-	setBitsInReg(baseAdd + STEPCONFIG(stepSelect), adcPositiveRef << STEPCONFIG_SEL_RFP_SWC_SHIFT);
+    clearBitsInReg(baseAdd + STEPCONFIG(stepSelect), STEPCONFIG_SEL_RFP_SWC);
+    setBitsInReg(baseAdd + STEPCONFIG(stepSelect),
+                 adcPositiveRef << STEPCONFIG_SEL_RFP_SWC_SHIFT);
 }
 
 /**
@@ -361,11 +359,11 @@ void TSCADC::tsStepConfig(unsigned int stepSelect, NegativeRef adcNegativeRef, P
  *
  **/
 void TSCADC::configureAFEClock(unsigned int moduleClk, unsigned int inputClk) {
-	unsigned int clkDiv = 0;
+    unsigned int clkDiv = 0;
 
-	clkDiv = moduleClk / inputClk;
-	clearBitsInReg(baseAdd + ADC_CLKDIV, ADC_CLKDIV_ADC_CLK_DIV);
-	out32(baseAdd + ADC_CLKDIV, clkDiv - 1);
+    clkDiv = moduleClk / inputClk;
+    clearBitsInReg(baseAdd + ADC_CLKDIV, ADC_CLKDIV_ADC_CLK_DIV);
+    out32(baseAdd + ADC_CLKDIV, clkDiv - 1);
 }
 
 /**
@@ -391,14 +389,12 @@ void TSCADC::configureAFEClock(unsigned int moduleClk, unsigned int inputClk) {
  * @return  none
  *
  **/
-void TSCADC::tsStepOperationModeControl(OperationMode mode, unsigned int stepSelect) {
-    if(mode == DIFFERENTIAL_OPER_MODE)
-    {
-         setBitsInReg(baseAdd + STEPCONFIG(stepSelect), STEPCONFIG_DIFF_CNTRL);
-    }
-    else
-    {
-         clearBitsInReg(baseAdd + STEPCONFIG(stepSelect), STEPCONFIG_DIFF_CNTRL);
+void TSCADC::tsStepOperationModeControl(OperationMode mode,
+                                        unsigned int stepSelect) {
+    if (mode == DIFFERENTIAL_OPER_MODE) {
+        setBitsInReg(baseAdd + STEPCONFIG(stepSelect), STEPCONFIG_DIFF_CNTRL);
+    } else {
+        clearBitsInReg(baseAdd + STEPCONFIG(stepSelect), STEPCONFIG_DIFF_CNTRL);
     }
 }
 
@@ -416,21 +412,24 @@ void TSCADC::tsStepOperationModeControl(OperationMode mode, unsigned int stepSel
  *
  * Note: stepSelect can take any integer value b/w 0 to 15
  **/
-void TSCADC::tsStepAnalogSupplyConfig(bool xppsw, bool xnpsw, bool yppsw, unsigned int stepSelect) {
-	clearBitsInReg(baseAdd + STEPCONFIG(stepSelect), STEPCONFIG_XPPSW_SWC);
-	clearBitsInReg(baseAdd + STEPCONFIG(stepSelect), STEPCONFIG_XNPSW_SWC);
-	clearBitsInReg(baseAdd + STEPCONFIG(stepSelect), STEPCONFIG_YPPSW_SWC);
-	if(xppsw){
-		setBitsInReg(baseAdd + STEPCONFIG(stepSelect), 1 << STEPCONFIG_XPPSW_SWC_SHIFT);
-	}
-	if(xnpsw){
-		setBitsInReg(baseAdd + STEPCONFIG(stepSelect), 1 << STEPCONFIG_XNPSW_SWC_SHIFT);
-	}
-	if(yppsw){
-		setBitsInReg(baseAdd + STEPCONFIG(stepSelect), 1 << STEPCONFIG_YPPSW_SWC_SHIFT);
-	}
+void TSCADC::tsStepAnalogSupplyConfig(bool xppsw, bool xnpsw, bool yppsw,
+                                      unsigned int stepSelect) {
+    clearBitsInReg(baseAdd + STEPCONFIG(stepSelect), STEPCONFIG_XPPSW_SWC);
+    clearBitsInReg(baseAdd + STEPCONFIG(stepSelect), STEPCONFIG_XNPSW_SWC);
+    clearBitsInReg(baseAdd + STEPCONFIG(stepSelect), STEPCONFIG_YPPSW_SWC);
+    if (xppsw) {
+        setBitsInReg(baseAdd + STEPCONFIG(stepSelect),
+                     1 << STEPCONFIG_XPPSW_SWC_SHIFT);
+    }
+    if (xnpsw) {
+        setBitsInReg(baseAdd + STEPCONFIG(stepSelect),
+                     1 << STEPCONFIG_XNPSW_SWC_SHIFT);
+    }
+    if (yppsw) {
+        setBitsInReg(baseAdd + STEPCONFIG(stepSelect),
+                     1 << STEPCONFIG_YPPSW_SWC_SHIFT);
+    }
 }
-
 
 /**
  * @brief   This API configure the TouchScreen Step Transistor Biasing for
@@ -447,25 +446,29 @@ void TSCADC::tsStepAnalogSupplyConfig(bool xppsw, bool xnpsw, bool yppsw, unsign
  *
  * Note: stepSelect can take any integer value b/w 0 to 15
  **/
-void TSCADC::tsStepAnalogGroundConfig(bool xnnsw, bool ypnsw, bool ynnsw, bool wpnsw, unsigned int stepSelect) {
-	clearBitsInReg(baseAdd + STEPCONFIG(stepSelect), STEPCONFIG_XNNSW_SWC);
-	clearBitsInReg(baseAdd + STEPCONFIG(stepSelect), STEPCONFIG_YPNSW_SWC);
-	clearBitsInReg(baseAdd + STEPCONFIG(stepSelect), STEPCONFIG_YNNSW_SWC);
-	clearBitsInReg(baseAdd + STEPCONFIG(stepSelect), STEPCONFIG_WPNSW_SWC);
+void TSCADC::tsStepAnalogGroundConfig(bool xnnsw, bool ypnsw, bool ynnsw,
+                                      bool wpnsw, unsigned int stepSelect) {
+    clearBitsInReg(baseAdd + STEPCONFIG(stepSelect), STEPCONFIG_XNNSW_SWC);
+    clearBitsInReg(baseAdd + STEPCONFIG(stepSelect), STEPCONFIG_YPNSW_SWC);
+    clearBitsInReg(baseAdd + STEPCONFIG(stepSelect), STEPCONFIG_YNNSW_SWC);
+    clearBitsInReg(baseAdd + STEPCONFIG(stepSelect), STEPCONFIG_WPNSW_SWC);
 
-	if(xnnsw){
-		setBitsInReg(baseAdd + STEPCONFIG(stepSelect), 1 << STEPCONFIG_XNNSW_SWC_SHIFT);
-	}
-	if(ypnsw){
-		setBitsInReg(baseAdd + STEPCONFIG(stepSelect), 1 << STEPCONFIG_YPNSW_SWC_SHIFT);
-	}
-	if(ynnsw){
-		setBitsInReg(baseAdd + STEPCONFIG(stepSelect), 1 << STEPCONFIG_YNNSW_SWC_SHIFT);
-	}
-	if(wpnsw){
-		setBitsInReg(baseAdd + STEPCONFIG(stepSelect), 1 << STEPCONFIG_WPNSW_SWC_SHIFT);
-	}
-
+    if (xnnsw) {
+        setBitsInReg(baseAdd + STEPCONFIG(stepSelect),
+                     1 << STEPCONFIG_XNNSW_SWC_SHIFT);
+    }
+    if (ypnsw) {
+        setBitsInReg(baseAdd + STEPCONFIG(stepSelect),
+                     1 << STEPCONFIG_YPNSW_SWC_SHIFT);
+    }
+    if (ynnsw) {
+        setBitsInReg(baseAdd + STEPCONFIG(stepSelect),
+                     1 << STEPCONFIG_YNNSW_SWC_SHIFT);
+    }
+    if (wpnsw) {
+        setBitsInReg(baseAdd + STEPCONFIG(stepSelect),
+                     1 << STEPCONFIG_WPNSW_SWC_SHIFT);
+    }
 }
 
 /**
@@ -484,8 +487,8 @@ void TSCADC::tsStepAnalogGroundConfig(bool xnnsw, bool ypnsw, bool ynnsw, bool w
  *
  **/
 void TSCADC::configureStepEnable(unsigned int stepSel, bool stepEn_Dis) {
-	clearBitsInReg(baseAdd + STEPENABLE, 1 << stepSel);
-	setBitsInReg(baseAdd + STEPENABLE, stepEn_Dis << stepSel);
+    clearBitsInReg(baseAdd + STEPENABLE, 1 << stepSel);
+    setBitsInReg(baseAdd + STEPENABLE, stepEn_Dis << stepSel);
 }
 
 /**
@@ -502,11 +505,11 @@ void TSCADC::configureStepEnable(unsigned int stepSel, bool stepEn_Dis) {
  *
  **/
 void TSCADC::moduleStateSet(bool enableModule) {
-		if(enableModule){
-			setBitsInReg(baseAdd + CTRL, CTRL_ENABLE);
-		}else{
-			clearBitsInReg(baseAdd + CTRL, CTRL_ENABLE);
-		}
+    if (enableModule) {
+        setBitsInReg(baseAdd + CTRL, CTRL_ENABLE);
+    } else {
+        clearBitsInReg(baseAdd + CTRL, CTRL_ENABLE);
+    }
 }
 
 /**
@@ -519,11 +522,11 @@ void TSCADC::moduleStateSet(bool enableModule) {
  *
  **/
 void TSCADC::stepIDTagConfig(bool enableStepIDTag) {
-	if(enableStepIDTag){
-		setBitsInReg(baseAdd + CTRL, CTRL_STERP_ID_TAG);
-	}else{
-		clearBitsInReg(baseAdd + CTRL, CTRL_STERP_ID_TAG);
-	}
+    if (enableStepIDTag) {
+        setBitsInReg(baseAdd + CTRL, CTRL_STERP_ID_TAG);
+    } else {
+        clearBitsInReg(baseAdd + CTRL, CTRL_STERP_ID_TAG);
+    }
 }
 
 /**
@@ -535,7 +538,7 @@ void TSCADC::stepIDTagConfig(bool enableStepIDTag) {
  *
  **/
 unsigned int TSCADC::fifoADCDataRead(Fifo FIFOSel) {
-	return (in32(baseAdd + FIFODATA(FIFOSel)) & FIFODATA_ADC_DATA);
+    return (in32(baseAdd + FIFODATA(FIFOSel)) & FIFODATA_ADC_DATA);
 }
 
 /**
@@ -553,11 +556,11 @@ unsigned int TSCADC::fifoADCDataRead(Fifo FIFOSel) {
  *
  **/
 void TSCADC::tsTransistorConfig(bool enableTSTransistor) {
-	 if(enableTSTransistor){
-		setBitsInReg(baseAdd + CTRL, CTRL_TOUCH_SCREEN_ENABLE);
-	}else{
-		clearBitsInReg(baseAdd + CTRL, CTRL_TOUCH_SCREEN_ENABLE);
-	}
+    if (enableTSTransistor) {
+        setBitsInReg(baseAdd + CTRL, CTRL_TOUCH_SCREEN_ENABLE);
+    } else {
+        clearBitsInReg(baseAdd + CTRL, CTRL_TOUCH_SCREEN_ENABLE);
+    }
 }
 
 /**
@@ -577,8 +580,9 @@ void TSCADC::tsTransistorConfig(bool enableTSTransistor) {
  * @return  none
  *
  **/
-void TSCADC::fifoIRQThresholdLevelConfig(Fifo FIFOSel, unsigned char numberOfSamples) {
-	out32(baseAdd + FIFOTHRESHOLD(FIFOSel), numberOfSamples - 1);
+void TSCADC::fifoIRQThresholdLevelConfig(Fifo FIFOSel,
+                                         unsigned char numberOfSamples) {
+    out32(baseAdd + FIFOTHRESHOLD(FIFOSel), numberOfSamples - 1);
 }
 
 /**
@@ -587,7 +591,4 @@ void TSCADC::fifoIRQThresholdLevelConfig(Fifo FIFOSel, unsigned char numberOfSam
  * @return  The status of the interrupts.
  *
  **/
-unsigned int TSCADC::intStatus() {
-	return (in32(baseAdd + IRQSTATUS));
-}
-
+unsigned int TSCADC::intStatus() { return (in32(baseAdd + IRQSTATUS)); }

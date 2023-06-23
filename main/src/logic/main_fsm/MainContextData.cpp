@@ -8,27 +8,23 @@
 #include "MainContextData.h"
 
 MainContextData::MainContextData() {
-	wpManager = new WorkpieceManager();
-	setRampFBM1Blocked(false);
-	setRampFBM2Blocked(false);
+    wpManager = new WorkpieceManager();
+    setRampFBM1Blocked(false);
+    setRampFBM2Blocked(false);
 }
 
-MainContextData::~MainContextData() {
-	delete wpManager;
-}
+MainContextData::~MainContextData() { delete wpManager; }
 
 void MainContextData::setRampFBM1Blocked(bool blocked) {
-	this->rampFBM1Blocked = blocked;
+    this->rampFBM1Blocked = blocked;
+    wpManager->setRamp_one(blocked);
 }
 
 void MainContextData::setRampFBM2Blocked(bool blocked) {
-	this->rampFBM2Blocked = blocked;
+    this->rampFBM2Blocked = blocked;
+    wpManager->setRamp_two(blocked);
 }
 
-bool MainContextData::isRampFBM1Blocked() {
-	return this->rampFBM1Blocked;
-}
+bool MainContextData::isRampFBM1Blocked() { return wpManager->getRamp_one(); }
 
-bool MainContextData::isRampFBM2Blocked() {
-	return this->rampFBM2Blocked;
-}
+bool MainContextData::isRampFBM2Blocked() { return wpManager->getRamp_two(); }

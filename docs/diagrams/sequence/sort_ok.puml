@@ -8,21 +8,22 @@ participant "EventManager" as EVM_S << Slave >>
 participant "HAL" as HAL_S << Slave >>
 
 note left of HAL_M : Neues WS an\nFBM1 eingelegt
-HAL_M ->> EVM_M : LB1_1_BLOCKED
-EVM_M ->> Logic : handleEvent(LB1_1_BLOCKED)
-Logic -> WPM : createWp()
+HAL_M ->> EVM_M : LBA_M_BLOCKED
+EVM_M ->> Logic : handleEvent(LBA_M_BLOCKED)
+Logic -> WPM : addWorkpiece()
 note right of WPM : WS mit neuer ID anlegen
 activate WPM
-WPM -->> Logic : createWp(): Workpiece
+WPM -->> Logic : addWorkpiece(): Workpiece*
 deactivate WPM
-EVM_M ->> HM_M : handleEvent(LB1_1_BLOCKED)
+Logic ->> EVM_M : MOTOR_M_FAST
+EVM_M ->> HM_M : handleEvent(MOTOR_M_FAST)
 activate HM_M
 HM_M -> HM_M : start()
-HM_M ->> EVM_M : HM_RESULT_BOM
-HM_M -> HM_M : stop()
+note left of HM_M : HM wird gestartet und\nerkannter Typ und\navg(22.4mm) gesendet
+HM_M ->> EVM_M : HM_M_WS_BOM(data=224)
 deactivate HM_M
-EVM_M ->> Logic : handleEvent(HM_RESULT_BOM)
-Logic -> WPM : handleHeightResult(HM_RESULT_BOM)
+EVM_M ->> Logic : handleEvent(HM_M_WS_BOM(data=224))
+Logic -> WPM : setHeight(HM_M_WS_BOM, data)
 activate WPM
 note right of WPM : Erstes WS das auf\nHM wartet updaten
 WPM -> WPM : getWpByPos(START_HM): wp
@@ -30,65 +31,68 @@ WPM -> WPM : wp.type = WS_BOM\nwp.result = VALID
 WPM -->> Logic
 deactivate WPM
 
-HAL_M ->> EVM_M : LB2_1_BLOCKED
-EVM_M ->> Logic : handleEvent(LB2_1_BLOCKED)
+HAL_M ->> EVM_M : LBW_M_BLOCKED
+EVM_M ->> Logic : handleEvent(LBW_M_BLOCKED)
 Logic -> WPM : sortOut()
 activate WPM
 note right of WPM : Bestimmen ob WP an Weiche\naussortiert werden soll
 WPM -->> Logic : sortOut(): false
 deactivate WPM
-Logic ->> EVM_M : SORT_1_PASS
-EVM_M ->> HAL_M : handleEvent(SORT_1_PASS)
+Logic ->> EVM_M : SORT_M_OUT(data=0)
+EVM_M ->> HAL_M : handleEvent(SORT_M_OUT(data=0))
 note left of HAL_M : Weiche öffnen bis\nWS passiert ist
 activate HAL_M
 HAL_M -> HAL_M : openSwitch()
 deactivate HAL_M
-HAL_M ->> EVM_M : LB3_1_BLOCKED
-EVM_M ->> Logic : handleEvent(LB3_1_BLOCKED)
+HAL_M ->> EVM_M : LBE_M_BLOCKED
+EVM_M ->> Logic : handleEvent(LBE_M_BLOCKED)
 note right of Logic : FBM2 ist belegt -> Motor stoppt
-HAL_S ->> EVM_S : LB3_2_UNBLOCKED
-EVM_S ->> EVM_M : LB3_2_UNBLOCKED
-EVM_M ->> Logic : handleEvent(LB3_2_UNBLOCKED)
+Logic ->> EVM_M : MOTOR_M_STOP
+EVM_M ->> HAL_M : handleEvent(MOTOR_M_STOP)
+note left of HAL_M : Motor stoppen
+HAL_S ->> EVM_S : LBE_S_UNBLOCKED
+EVM_S ->> EVM_M : LBE_S_UNBLOCKED
+EVM_M ->> Logic : handleEvent(LBE_S_UNBLOCKED)
 note right of Logic : FBM2 ist wieder frei -> State Wechsel\n(auch möglich wenn WS\naussortiert worden wäre)
-Logic ->> EVM_M : MOTOR_2_FAST
-EVM_M ->> EVM_S : MOTOR_2_FAST
-EVM_S ->> HAL_S : handleEvent(MOTOR_2_FAST)
+Logic ->> EVM_M : MOTOR_M_FAST
+EVM_M ->> EVM_S : MOTOR_M_FAST
+EVM_S ->> HAL_M : handleEvent(MOTOR_M_FAST)
 activate HAL_S
 HAL_S -> HAL_S : motorRightFast()
 deactivate HAL_S
-Logic ->> EVM_M : MOTOR_1_FAST
-EVM_M ->> HAL_M : handleEvent(MOTOR_1_FAST)
+Logic ->> EVM_M : MOTOR_M_FAST
+EVM_M ->> HAL_M : handleEvent(MOTOR_M_FAST)
 activate HAL_M
 HAL_M -> HAL_M : motorRightFast()
 deactivate HAL_M
 
 ' WS an FBM2 angekommen -> 
-HAL_S ->> EVM_S : LB1_2_BLOCKED
-EVM_S ->> EVM_M : LB1_2_BLOCKED
-EVM_M ->> Logic : handleEvent(LB1_2_BLOCKED)
+HAL_S ->> EVM_S : LBA_S_BLOCKED
+EVM_S ->> EVM_M : LBA_S_BLOCKED
+EVM_M ->> Logic : handleEvent(LBA_S_BLOCKED)
 note right of Logic : WS an FBM2 angekommen,\nkeine weiteren auf FBM1\n-> Motor kann stoppen
-Logic ->> EVM_M : MOTOR_STOP
-EVM_M ->> HAL_M : handleEvent(MOTOR_STOP)
+Logic ->> EVM_M : MOTOR_M_STOP
+EVM_M ->> HAL_M : handleEvent(MOTOR_M_STOP)
 activate HAL_M
 HAL_M -> HAL_M : motorStop()
 deactivate HAL_M
 
 note right of HAL_S : WS läuft bis Ende, gleicher\nAblauf wie bei FBM1\n...
-HAL_S ->> EVM_S : LB3_2_BLOCKED
-EVM_S ->> EVM_M : LB3_2_BLOCKED
-EVM_M ->> Logic : handleEvent(LB3_2_BLOCKED)
+HAL_S ->> EVM_S : LBE_S_BLOCKED
+EVM_S ->> EVM_M : LBE_S_BLOCKED
+EVM_M ->> Logic : handleEvent(LBE_S_BLOCKED)
 note right of Logic : WS ist am Ende von FBM2\nangekommen -> Motor stoppt
-Logic ->> EVM_M : MOTOR_STOP
-EVM_M ->> HAL_M : handleEvent(MOTOR_STOP)
-activate HAL_M
-HAL_M -> HAL_M : motorStop()
-deactivate HAL_M
+Logic ->> EVM_M : MOTOR_S_STOP
+EVM_M ->> EVM_S : MOTOR_S_STOP
+EVM_S ->> HAL_S : handleEvent(MOTOR_S_STOP)
+activate HAL_S
+HAL_S -> HAL_S : motorStop()
+deactivate HAL_S
 
-HAL_S ->> EVM_S : LB3_2_UNBLOCKED
 note right of HAL_S : WS wurde entnommen\n-> FBM2 ist frei
-HAL_S ->> EVM_S : LB3_2_UNBLOCKED
-EVM_S ->> EVM_M : LB3_2_UNBLOCKED
-EVM_M ->> Logic : handleEvent(LB3_2_UNBLOCKED)
-note right of Logic : State Wechsel -> Nächstes WS kann direkt\nübergeben werden ohne zu warten...
+HAL_S ->> EVM_S : LBE_S_UNBLOCKED
+EVM_S ->> EVM_M : LBE_S_UNBLOCKED
+EVM_M ->> Logic : handleEvent(LBE_S_UNBLOCKED)
+note right of Logic : Nächstes WS kann nun direkt\nübergeben werden ohne zu warten...
 
 @enduml

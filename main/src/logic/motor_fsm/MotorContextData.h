@@ -7,17 +7,18 @@
 #pragma once
 
 class MotorContextData {
-public:
-	MotorContextData();
-	virtual ~MotorContextData();
-	void setStopFlag(bool stop);
-	void setSlowFlag(bool slow);
-	void setRightFlag(bool right);
-	bool getStop();
-	bool getRight();
-	bool getSlow();
-private:
-	bool stop;
-	bool right;
-	bool slow;
+  public:
+    MotorContextData();
+    virtual ~MotorContextData();
+    void setStopFlag(bool stop);
+    void setSlowFlag(bool slow);
+    void setRightFlag(bool right);
+    bool getStop();
+    bool getRight();
+    bool getSlow();
+
+  private:
+    bool stop;
+    bool right;
+    bool slow;
 };

@@ -8,15 +8,16 @@
 
 #include "../MainBasestate.h"
 
-class SubServiceModeCalRef: public MainBasestate {
-	void entry() override;
-	void exit() override;
+class SubServiceModeCalRef : public MainBasestate {
+    void entry() override;
+    void exit() override;
 
-	bool master_btnStart_PressedShort() override;
-	bool master_btnReset_Pressed() override;
+    bool master_btnStart_PressedShort() override;
+    bool master_btnReset_Pressed() override;
 
-	bool slave_btnStart_PressedShort() override;
-	bool slave_btnReset_Pressed() override;
-private:
-	bool done;
+    bool slave_btnStart_PressedShort() override;
+    bool slave_btnReset_Pressed() override;
+
+  private:
+    bool done;
 };

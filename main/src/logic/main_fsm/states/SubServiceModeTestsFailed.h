@@ -8,9 +8,9 @@
 
 #include "../MainBasestate.h"
 
-class SubServiceModeTestsFailed: public MainBasestate {
-	void entry() override;
-	void exit() override;
+class SubServiceModeTestsFailed : public MainBasestate {
+    void entry() override;
+    void exit() override;
 
-	bool isSubEndState() override;
+    bool isSubEndState() override;
 };

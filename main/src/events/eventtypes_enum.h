@@ -13,5 +13,4 @@ enum EventType {
 
 #undef ESTRING
 
-
-#endif //CONSTRUCT_EVENTTYPES_ENUM_H
+#endif   // CONSTRUCT_EVENTTYPES_ENUM_H
