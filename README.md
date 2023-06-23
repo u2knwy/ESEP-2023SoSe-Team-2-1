@@ -28,3 +28,7 @@ Der positionale Parameter `mode` ist dabei obligatorisch und muss einer der folg
 Die optionalen Parameter haben folgende Bedeutung:
 
 - `-p,--pusher`: An der Hardware ist ein Auswerfer anstatt einer Weiche montiert. Wenn nicht angegeben, wird angenommen dass eine Weiche montiert ist.
+
+### Anzeige der Konsolenausgaben
+
+Zur besseren Lesbarkeit der Konsolenausgaben werden diese mittels [ANSI Escape Codes](https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797) farbig dargestellt. Standardmäßig wird die farbige Darstellung in der Konsole der Momentics IDE nicht unterstützt. Deshalb ist es notwendig, das Plugin [ANSI Escape in Console](https://marketplace.eclipse.org/content/ansi-escape-console) zu installieren.

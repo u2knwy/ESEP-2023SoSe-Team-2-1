@@ -10,12 +10,11 @@
 #include "../HeightBasestate.h"
 
 class WaitForWorkpiece : public HeightBasestate {
-	void entry() override;
-	void exit() override;
+    void entry() override;
+    void exit() override;
 
-	HeightState getCurrentState() override;
+    HeightState getCurrentState() override;
 
-	bool flatDetected() override;
-	bool highDetected() override;
+    bool flatDetected() override;
+    bool highDetected() override;
 };
-

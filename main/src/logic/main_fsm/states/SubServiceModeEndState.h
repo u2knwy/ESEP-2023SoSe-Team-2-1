@@ -8,9 +8,6 @@
 
 #include "../MainBasestate.h"
 
-class SubServiceModeEndState: public MainBasestate {
-	bool isSubEndState() override {
-		return true;
-	}
-
+class SubServiceModeEndState : public MainBasestate {
+    bool isSubEndState() override { return true; }
 };

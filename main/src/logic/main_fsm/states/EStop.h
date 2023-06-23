@@ -8,20 +8,20 @@
 
 #include "../MainBasestate.h"
 
-class EStop: public MainBasestate {
-	void entry() override;
-	void exit() override;
+class EStop : public MainBasestate {
+    void entry() override;
+    void exit() override;
 
-	MainState getCurrentState() override;
+    MainState getCurrentState() override;
 
-	void initSubStateEStop() override;
+    void initSubStateEStop() override;
 
-	bool master_EStop_Pressed() override;
-	bool master_EStop_Released() override;
+    bool master_EStop_Pressed() override;
+    bool master_EStop_Released() override;
 
-	bool slave_EStop_Pressed() override;
-	bool slave_EStop_Released() override;
+    bool slave_EStop_Pressed() override;
+    bool slave_EStop_Released() override;
 
-	bool master_btnReset_Pressed() override;
-	bool slave_btnReset_Pressed() override;
+    bool master_btnReset_Pressed() override;
+    bool slave_btnReset_Pressed() override;
 };

@@ -8,17 +8,18 @@
 
 #include "../MainBasestate.h"
 
-class SubErrorPendingUnresigned: public MainBasestate {
-	void entry() override;
-	void exit() override;
+class SubErrorPendingUnresigned : public MainBasestate {
+    void entry() override;
+    void exit() override;
 
-	bool selfSolvableErrorOccurred() override;
-	bool nonSelfSolvableErrorOccurred() override;
+    bool selfSolvableErrorOccurred() override;
+    bool nonSelfSolvableErrorOccurred() override;
 
-	bool errorSelfSolved() override;
-	bool master_btnReset_Pressed() override;
-	bool slave_btnReset_Pressed() override;
-private:
-	bool selfSolving{false};
-	bool manualSolving{false};
+    bool errorSelfSolved() override;
+    bool master_btnReset_Pressed() override;
+    bool slave_btnReset_Pressed() override;
+
+  private:
+    bool selfSolving{false};
+    bool manualSolving{false};
 };

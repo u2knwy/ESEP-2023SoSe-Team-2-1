@@ -8,10 +8,10 @@
 
 #include "../MainBasestate.h"
 
-class SubErrorPendingResigned: public MainBasestate {
-	void entry() override;
-	void exit() override;
+class SubErrorPendingResigned : public MainBasestate {
+    void entry() override;
+    void exit() override;
 
-	bool master_btnStart_PressedShort() override;
-	bool slave_btnStart_PressedShort() override;
+    bool master_btnStart_PressedShort() override;
+    bool slave_btnStart_PressedShort() override;
 };

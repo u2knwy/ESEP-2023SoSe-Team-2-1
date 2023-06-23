@@ -5,27 +5,24 @@
  *      Author: Maik
  */
 
-#include "hal/HeightSensor.h"
-#include "WaitForWorkpiece.h"
 #include "WaitForBelt.h"
+#include "WaitForWorkpiece.h"
+#include "hal/HeightSensor.h"
 
-void WaitForBelt::entry() {
-	Logger::debug("[HFSM] Waiting for belt...");
-}
+
+void WaitForBelt::entry() { Logger::debug("[HFSM] Waiting for belt..."); }
 
 HeightState WaitForBelt::getCurrentState() {
-	return HeightState::WAIT_FOR_BELT;
+    return HeightState::WAIT_FOR_BELT;
 }
 
 bool WaitForBelt::beltDetected() {
-	actions->sendHeightResult();
-	actions->sendMotorSlowRequest(false);
-	exit();
-	new(this) WaitForWorkpiece;
-	entry();
-	return true;
+    actions->sendHeightResult();
+    actions->sendMotorSlowRequest(false);
+    exit();
+    new (this) WaitForWorkpiece;
+    entry();
+    return true;
 }
 
-bool WaitForBelt::unknownDetected() {
-	return false;
-}
+bool WaitForBelt::unknownDetected() { return false; }

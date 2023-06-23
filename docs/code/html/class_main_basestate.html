@@ -83,19 +83,24 @@ Inheritance diagram for MainBasestate:</div>
   <img src="class_main_basestate.png" usemap="#MainBasestate_map" alt=""/>
   <map id="MainBasestate_map" name="MainBasestate_map">
 <area href="class_e_stop.html" alt="EStop" shape="rect" coords="215,56,420,80"/>
-<area href="class_running.html" alt="Running" shape="rect" coords="215,112,420,136"/>
-<area href="class_service_mode.html" alt="ServiceMode" shape="rect" coords="215,168,420,192"/>
-<area href="class_standby.html" alt="Standby" shape="rect" coords="215,224,420,248"/>
-<area href="class_sub_e_stop_both_released.html" alt="SubEStopBothReleased" shape="rect" coords="215,280,420,304"/>
-<area href="class_sub_e_stop_end_state.html" alt="SubEStopEndState" shape="rect" coords="215,336,420,360"/>
-<area href="class_sub_e_stop_one_pressed.html" alt="SubEStopOnePressed" shape="rect" coords="215,392,420,416"/>
-<area href="class_sub_e_stop_two_pressed.html" alt="SubEStopTwoPressed" shape="rect" coords="215,448,420,472"/>
-<area href="class_sub_service_mode_cal_offset.html" alt="SubServiceModeCalOffset" shape="rect" coords="215,504,420,528"/>
-<area href="class_sub_service_mode_cal_ref.html" alt="SubServiceModeCalRef" shape="rect" coords="215,560,420,584"/>
-<area href="class_sub_service_mode_end_state.html" alt="SubServiceModeEndState" shape="rect" coords="215,616,420,640"/>
-<area href="class_sub_service_mode_selftest_actuators.html" alt="SubServiceModeSelftestActuators" shape="rect" coords="215,672,420,696"/>
-<area href="class_sub_service_mode_selftest_sensors.html" alt="SubServiceModeSelftestSensors" shape="rect" coords="215,728,420,752"/>
-<area href="class_sub_service_mode_tests_failed.html" alt="SubServiceModeTestsFailed" shape="rect" coords="215,784,420,808"/>
+<area href="class_error.html" alt="Error" shape="rect" coords="215,112,420,136"/>
+<area href="class_running.html" alt="Running" shape="rect" coords="215,168,420,192"/>
+<area href="class_service_mode.html" alt="ServiceMode" shape="rect" coords="215,224,420,248"/>
+<area href="class_standby.html" alt="Standby" shape="rect" coords="215,280,420,304"/>
+<area href="class_sub_e_stop_both_released.html" alt="SubEStopBothReleased" shape="rect" coords="215,336,420,360"/>
+<area href="class_sub_e_stop_end_state.html" alt="SubEStopEndState" shape="rect" coords="215,392,420,416"/>
+<area href="class_sub_e_stop_one_pressed.html" alt="SubEStopOnePressed" shape="rect" coords="215,448,420,472"/>
+<area href="class_sub_e_stop_two_pressed.html" alt="SubEStopTwoPressed" shape="rect" coords="215,504,420,528"/>
+<area href="class_sub_error_end_state.html" alt="SubErrorEndState" shape="rect" coords="215,560,420,584"/>
+<area href="class_sub_error_pending_resigned.html" alt="SubErrorPendingResigned" shape="rect" coords="215,616,420,640"/>
+<area href="class_sub_error_pending_unresigned.html" alt="SubErrorPendingUnresigned" shape="rect" coords="215,672,420,696"/>
+<area href="class_sub_error_solved_unresigned.html" alt="SubErrorSolvedUnresigned" shape="rect" coords="215,728,420,752"/>
+<area href="class_sub_service_mode_cal_offset.html" alt="SubServiceModeCalOffset" shape="rect" coords="215,784,420,808"/>
+<area href="class_sub_service_mode_cal_ref.html" alt="SubServiceModeCalRef" shape="rect" coords="215,840,420,864"/>
+<area href="class_sub_service_mode_end_state.html" alt="SubServiceModeEndState" shape="rect" coords="215,896,420,920"/>
+<area href="class_sub_service_mode_selftest_actuators.html" alt="SubServiceModeSelftestActuators" shape="rect" coords="215,952,420,976"/>
+<area href="class_sub_service_mode_selftest_sensors.html" alt="SubServiceModeSelftestSensors" shape="rect" coords="215,1008,420,1032"/>
+<area href="class_sub_service_mode_tests_failed.html" alt="SubServiceModeTestsFailed" shape="rect" coords="215,1064,420,1088"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -122,6 +127,9 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>initSubStateE
 <tr class="memitem:abc0279ac47b3568f4a1ec0a8c68ad515"><td class="memItemLeft" align="right" valign="top"><a id="abc0279ac47b3568f4a1ec0a8c68ad515" name="abc0279ac47b3568f4a1ec0a8c68ad515"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>initSubStateServiceMode</b> ()</td></tr>
 <tr class="separator:abc0279ac47b3568f4a1ec0a8c68ad515"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7f97fcb3b62c630f517834cf2901990"><td class="memItemLeft" align="right" valign="top"><a id="ab7f97fcb3b62c630f517834cf2901990" name="ab7f97fcb3b62c630f517834cf2901990"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>initSubStateError</b> ()</td></tr>
+<tr class="separator:ab7f97fcb3b62c630f517834cf2901990"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a53513249a075f2d4bd519ee987999f9e"><td class="memItemLeft" align="right" valign="top"><a id="a53513249a075f2d4bd519ee987999f9e" name="a53513249a075f2d4bd519ee987999f9e"></a>
 virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>isSubEndState</b> ()</td></tr>
 <tr class="separator:a53513249a075f2d4bd519ee987999f9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -149,6 +157,18 @@ virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>master_LBR_Bl
 <tr class="memitem:a9397304d38d5972ba0073c9a3d8be24b"><td class="memItemLeft" align="right" valign="top"><a id="a9397304d38d5972ba0073c9a3d8be24b" name="a9397304d38d5972ba0073c9a3d8be24b"></a>
 virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>master_LBR_Unblocked</b> ()</td></tr>
 <tr class="separator:a9397304d38d5972ba0073c9a3d8be24b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21b94e160460f6f1fbecfc6d502683ef"><td class="memItemLeft" align="right" valign="top"><a id="a21b94e160460f6f1fbecfc6d502683ef" name="a21b94e160460f6f1fbecfc6d502683ef"></a>
+virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>master_heightResultReceived</b> (EventType event, float average)</td></tr>
+<tr class="separator:a21b94e160460f6f1fbecfc6d502683ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a397019a26fabd22752f0dc5e95d36d60"><td class="memItemLeft" align="right" valign="top"><a id="a397019a26fabd22752f0dc5e95d36d60" name="a397019a26fabd22752f0dc5e95d36d60"></a>
+virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>slave_heightResultReceived</b> (EventType event, float average)</td></tr>
+<tr class="separator:a397019a26fabd22752f0dc5e95d36d60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad56d5f4fa38ab38e1244af6a8019d29d"><td class="memItemLeft" align="right" valign="top"><a id="ad56d5f4fa38ab38e1244af6a8019d29d" name="ad56d5f4fa38ab38e1244af6a8019d29d"></a>
+virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>master_metalDetected</b> ()</td></tr>
+<tr class="separator:ad56d5f4fa38ab38e1244af6a8019d29d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9bc213804b0049f9b11f11180cddf273"><td class="memItemLeft" align="right" valign="top"><a id="a9bc213804b0049f9b11f11180cddf273" name="a9bc213804b0049f9b11f11180cddf273"></a>
+virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>slave_metalDetected</b> ()</td></tr>
+<tr class="separator:a9bc213804b0049f9b11f11180cddf273"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a26a1951791f11082c1c6a5d8dc9c4ca1"><td class="memItemLeft" align="right" valign="top"><a id="a26a1951791f11082c1c6a5d8dc9c4ca1" name="a26a1951791f11082c1c6a5d8dc9c4ca1"></a>
 virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>slave_LBA_Blocked</b> ()</td></tr>
 <tr class="separator:a26a1951791f11082c1c6a5d8dc9c4ca1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -209,6 +229,15 @@ virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>slave_EStop_P
 <tr class="memitem:a25b5051be9bed99d3d9c27a93bd85a36"><td class="memItemLeft" align="right" valign="top"><a id="a25b5051be9bed99d3d9c27a93bd85a36" name="a25b5051be9bed99d3d9c27a93bd85a36"></a>
 virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>slave_EStop_Released</b> ()</td></tr>
 <tr class="separator:a25b5051be9bed99d3d9c27a93bd85a36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd2f042f540a73e001e654bf500f2584"><td class="memItemLeft" align="right" valign="top"><a id="afd2f042f540a73e001e654bf500f2584" name="afd2f042f540a73e001e654bf500f2584"></a>
+virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>selfSolvableErrorOccurred</b> ()</td></tr>
+<tr class="separator:afd2f042f540a73e001e654bf500f2584"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af194624495a5f2dfdcc5e508b5980f37"><td class="memItemLeft" align="right" valign="top"><a id="af194624495a5f2dfdcc5e508b5980f37" name="af194624495a5f2dfdcc5e508b5980f37"></a>
+virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>errorSelfSolved</b> ()</td></tr>
+<tr class="separator:af194624495a5f2dfdcc5e508b5980f37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa15019766b15030db3360882dd1cbf8"><td class="memItemLeft" align="right" valign="top"><a id="aaa15019766b15030db3360882dd1cbf8" name="aaa15019766b15030db3360882dd1cbf8"></a>
+virtual bool&#160;</td><td class="memItemRight" valign="bottom"><b>nonSelfSolvableErrorOccurred</b> ()</td></tr>
+<tr class="separator:aaa15019766b15030db3360882dd1cbf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -218,6 +247,9 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:ade33c522924d79a3e77ba404f48bd213"><td class="memItemLeft" align="right" valign="top"><a id="ade33c522924d79a3e77ba404f48bd213" name="ade33c522924d79a3e77ba404f48bd213"></a>
 <a class="el" href="class_main_basestate.html">MainBasestate</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>substateServiceMode</b> = nullptr</td></tr>
 <tr class="separator:ade33c522924d79a3e77ba404f48bd213"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6c280917ed673f818d7c62a899cf326"><td class="memItemLeft" align="right" valign="top"><a id="ad6c280917ed673f818d7c62a899cf326" name="ad6c280917ed673f818d7c62a899cf326"></a>
+<a class="el" href="class_main_basestate.html">MainBasestate</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>substateError</b> = nullptr</td></tr>
+<tr class="separator:ad6c280917ed673f818d7c62a899cf326"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a97154d5abf5e5e9b76b05379ad318989"><td class="memItemLeft" align="right" valign="top"><a id="a97154d5abf5e5e9b76b05379ad318989" name="a97154d5abf5e5e9b76b05379ad318989"></a>
 <a class="el" href="class_main_actions.html">MainActions</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>actions</b></td></tr>
 <tr class="separator:a97154d5abf5e5e9b76b05379ad318989"><td class="memSeparator" colspan="2">&#160;</td></tr>

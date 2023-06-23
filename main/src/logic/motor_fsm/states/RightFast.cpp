@@ -6,34 +6,29 @@
  */
 
 #include "RightFast.h"
-#include "Stopped.h"
 #include "RightSlow.h"
+#include "Stopped.h"
 #include "logger/logger.hpp"
 
-void RightFast::entry() {
-	actions->motorRightFast();
-}
 
-void RightFast::exit() {
+void RightFast::entry() { actions->motorRightFast(); }
 
-}
+void RightFast::exit() {}
 
-MotorState RightFast::getCurrentState() {
-	return MotorState::RIGHT_FAST;
-};
+MotorState RightFast::getCurrentState() { return MotorState::RIGHT_FAST; };
 
 bool RightFast::handleFlagsUpdated() {
-	std::stringstream ss;
-	if(data->getStop() || !data->getRight()) {
-		exit();
-		new(this) Stopped;
-		entry();
-		return true;
-	} else if(!data->getStop() && data->getRight() && data->getSlow()) {
-		exit();
-		new(this) RightSlow;
-		entry();
-		return true;
-	}
-	return false;
+    std::stringstream ss;
+    if (data->getStop() || !data->getRight()) {
+        exit();
+        new (this) Stopped;
+        entry();
+        return true;
+    } else if (!data->getStop() && data->getRight() && data->getSlow()) {
+        exit();
+        new (this) RightSlow;
+        entry();
+        return true;
+    }
+    return false;
 }

@@ -8,35 +8,21 @@
 #include <logic/motor_fsm/MotorContextData.h>
 
 MotorContextData::MotorContextData() {
-	stop = false;
-	right = false;
-	slow = false;
+    stop = false;
+    right = false;
+    slow = false;
 }
 
-MotorContextData::~MotorContextData() {
-	// TODO Auto-generated destructor stub
-}
+MotorContextData::~MotorContextData() {}
 
-void MotorContextData::setStopFlag(bool stop) {
-	this->stop = stop;
-}
+void MotorContextData::setStopFlag(bool stop) { this->stop = stop; }
 
-void MotorContextData::setSlowFlag(bool slow) {
-	this->slow = slow;
-}
+void MotorContextData::setSlowFlag(bool slow) { this->slow = slow; }
 
-void MotorContextData::setRightFlag(bool right) {
-	this->right = right;
-}
+void MotorContextData::setRightFlag(bool right) { this->right = right; }
 
-bool MotorContextData::getStop() {
-	return stop;
-}
+bool MotorContextData::getStop() { return stop; }
 
-bool MotorContextData::getRight() {
-	return right;
-}
+bool MotorContextData::getRight() { return right; }
 
-bool MotorContextData::getSlow() {
-	return slow;
-}
+bool MotorContextData::getSlow() { return slow; }
