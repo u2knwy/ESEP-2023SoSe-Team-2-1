@@ -11,6 +11,7 @@
 #include <sys/dispatch.h>
 #include <sys/neutrino.h>
 #include <sys/iofunc.h>
+#include <mutex>
 
 #define ATTACH_POINT_LOCAL_M "EventMgrMaster"
 #define ATTACH_POINT_LOCAL_S "EventMgrSlave"
@@ -86,7 +87,7 @@ private:
     std::atomic<bool> rcvExternalRunning;
     std::thread thRcvExternal;
 	std::map<EventType, std::vector<EventCallback>> subscribers;
-	std::mutex mtx;
+	std::mutex mtx_handle_event;
 	name_attach_t *attachedService;
 	std::string ownServiceName;
 	std::string otherServiceName;

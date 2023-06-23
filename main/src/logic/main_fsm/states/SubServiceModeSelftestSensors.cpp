@@ -13,10 +13,19 @@
 #include <iostream>
 
 void SubServiceModeSelftestSensors::entry() {
-    Logger::info("[ServiceMode] +++ SELFTEST SENSORS +++");
+    Logger::info("+++ SELFTEST SENSORS +++");
     Logger::user_info("Place any workpiece at Start of FBM1 and wait until it arrives at the end of FBM2.");
     actions->master_btnStartLedOn();
     actions->master_btnResetLedOff();
+
+    master_lbStartOk = false;
+    master_lbSwitchOk = false;
+    master_lbRampOk = false;
+    master_lbEndOk = false;
+    slave_lbStartOk = false;
+    slave_lbSwitchOk = false;
+    slave_lbRampOk = false;
+    slave_lbEndOk = false;
 }
 
 void SubServiceModeSelftestSensors::exit() {}
@@ -88,14 +97,14 @@ bool SubServiceModeSelftestSensors::slave_btnReset_Pressed() {
 }
 
 bool SubServiceModeSelftestSensors::master_LBA_Blocked() {
-    master_lbStartOk = true;
     actions->master_sendMotorRightRequest(true);
+    master_lbStartOk = true;
     return true;
 }
 
 bool SubServiceModeSelftestSensors::master_LBW_Blocked() {
-    master_lbSwitchOk = true;
     actions->master_openGate(true);
+    master_lbSwitchOk = true;
     return true;
 }
 
@@ -105,22 +114,22 @@ bool SubServiceModeSelftestSensors::master_LBE_Blocked() {
 }
 
 bool SubServiceModeSelftestSensors::slave_LBA_Blocked() {
-    slave_lbStartOk = true;
     actions->master_sendMotorRightRequest(false);
     actions->slave_sendMotorRightRequest(true);
+    slave_lbStartOk = true;
     return true;
 }
 
 bool SubServiceModeSelftestSensors::slave_LBW_Blocked() {
-    slave_lbSwitchOk = true;
     actions->slave_openGate(true);
+    slave_lbSwitchOk = true;
     return true;
 }
 
 bool SubServiceModeSelftestSensors::slave_LBE_Blocked() {
-    slave_lbEndOk = true;
     actions->slave_sendMotorRightRequest(false);
     Logger::user_info("[ServiceMode] Block ramp at FBM1 and FBM2 and then press START to continue");
+    slave_lbEndOk = true;
     return true;
 }
 

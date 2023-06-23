@@ -24,9 +24,9 @@ MainContext::MainContext(MainActions* actions) {
 }
 
 MainContext::~MainContext() {
-	delete state;
+	Logger::error("MainContext Destructor called!");
 	delete data;
-	delete actions;
+	delete state;
 }
 
 void MainContext::subscribeToEvents() {
@@ -135,6 +135,7 @@ void MainContext::subscribeToEvents() {
 }
 
 void MainContext::handleEvent(Event event) {
+	std::lock_guard<std::mutex> lock(mtx);
 	Logger::debug("MainFSM handle Event: " + EVENT_TO_STRING(event.type));
 	switch (event.type) {
 	case EventType::START_M_SHORT:

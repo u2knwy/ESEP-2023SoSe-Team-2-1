@@ -261,6 +261,7 @@ void EventManager::unsubscribe(EventType type, EventCallback callback) {
 }
 
 void EventManager::handleEvent(const Event &event) {
+	std::lock_guard<std::mutex> lock{mtx_handle_event};
     std::stringstream ss;
     ss << "[EventManager] handleEvent: " << EVENT_TO_STRING(event.type);
     if (event.data != -1)
@@ -268,15 +269,15 @@ void EventManager::handleEvent(const Event &event) {
 
 	if(event.type == EventType::WD_CONN_LOST) {
         externConnected = false;
-		handleEvent(Event{EventType::ERROR_M_SELF_SOLVABLE});
-		handleEvent(Event{EventType::ERROR_S_SELF_SOLVABLE});
+//		handleEvent(Event{EventType::ERROR_M_SELF_SOLVABLE});
+//		handleEvent(Event{EventType::ERROR_S_SELF_SOLVABLE});
 //		stopService();
 //        disconnectFromService();
 //		std::thread(&EventManager::connectToService, this, ATTACH_POINT_LOCAL_S);
 	} else if(event.type == EventType::WD_CONN_REESTABLISHED) {
 		externConnected = true;
-		handleEvent(Event{EventType::ERROR_M_SELF_SOLVED});
-		handleEvent(Event{EventType::ERROR_S_SELF_SOLVED});
+//		handleEvent(Event{EventType::ERROR_M_SELF_SOLVED});
+//		handleEvent(Event{EventType::ERROR_S_SELF_SOLVED});
 	}
 
     if (subscribers.find(event.type) != subscribers.end()) {

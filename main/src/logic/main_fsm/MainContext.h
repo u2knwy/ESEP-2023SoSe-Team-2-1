@@ -14,6 +14,7 @@
 #include "events/events.h"
 
 #include <memory>
+#include <mutex>
 
 class MainContext : public IEventHandler {
   public:
@@ -75,5 +76,6 @@ class MainContext : public IEventHandler {
     MainActions *actions;
     MainBasestate *state;
     std::shared_ptr<IEventManager> eventManager;
+    std::mutex mtx;
     void subscribeToEvents();
 };

@@ -14,7 +14,9 @@ class IEventSender {
   public:
 	IEventSender() { coid = -1; }
 
-    virtual ~IEventSender() = default;
+    virtual ~IEventSender() {
+    	std::cout << "IEventSender Destructor called" << std::endl;
+    };
 
     /**
      * Connects to the EventManager by attaching to its internal channel.

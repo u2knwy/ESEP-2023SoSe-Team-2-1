@@ -32,8 +32,6 @@ HeightContext::~HeightContext() {
         sensor->stop();
     }
     delete state;
-    delete actions;
-    delete data;
 }
 
 void HeightContext::subscribeToEvents() {

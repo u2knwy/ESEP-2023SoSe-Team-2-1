@@ -70,8 +70,15 @@ TEST_F(UnitTest_MainFSM, StateServiceModeAfterStartPressedLong) {
     fsm = new MainContext(mainActions);
 
     fsm->slave_btnStart_PressedLong();
-    EXPECT_EQ(MainState::SERVICEMODE,
-              fsm->getCurrentState());                       // in ServiceMode
+    EXPECT_EQ(MainState::SERVICEMODE, fsm->getCurrentState()); // in ServiceMode
+
+    fsm->master_btnStart_PressedShort();
+    fsm->master_btnReset_Pressed();
+    fsm->master_btnStart_PressedShort();
+    fsm->master_btnReset_Pressed();
+    fsm->master_btnStart_PressedShort();
+    fsm->master_btnStart_PressedShort();
+
     fsm->slave_btnStop_Pressed();
     EXPECT_EQ(MainState::STANDBY, fsm->getCurrentState());   // back in Standby
 }

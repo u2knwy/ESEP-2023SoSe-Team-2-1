@@ -29,14 +29,8 @@ using namespace std;
 
 // Components which will be launched in main-function and cleaned up if program
 // is terminated
-std::shared_ptr<HeightContext> heightFSM;
-std::shared_ptr<IHeightSensor> heightSensor;
-std::shared_ptr<Sensors> sensors;
 std::shared_ptr<Actuators> actuators;
 std::shared_ptr<EventManager> eventManager;
-std::shared_ptr<MainContext> mainFSM;
-std::shared_ptr<MotorContext> motorFSM_Master;
-std::shared_ptr<MotorContext> motorFSM_Slave;
 
 // Set this variable to false to stop main function from executing...
 std::atomic<bool> running(true);
@@ -92,7 +86,7 @@ int main(int argc, char **argv) {
         Logger::info("Program started as SLAVE");
     }
 
-    conf.setConfigFilePath("/tmp/esep_2.1/conf.txt");
+    conf.setConfigFilePath("/tmp/esep_21_conf.txt");
     if (!conf.readConfigFromFile()) {
         Logger::error("Error reading config file - terminating...");
         return EXIT_FAILURE;
@@ -137,27 +131,42 @@ int main(int argc, char **argv) {
 //    Watchdog wd(eventManager);
 //    wd.start();
 
+    // MotorFSM - MASTER
+	std::shared_ptr<MotorActions> actionsM;
+	std::shared_ptr<MotorContext> motorFSM_Master;
+
+    // MotorFSM - SLAVE
+	std::shared_ptr<MotorActions> actionsS;
+	std::shared_ptr<MotorContext> motorFSM_Slave;
+
+	// MainFSM
+	std::shared_ptr<MainActions> mainActions;
+	std::shared_ptr<MainContext> mainFSM;
+
     // Run FSM's only at Master
     if (options.mode == Mode::MASTER) {
-    	MotorActions* actionsM = new MotorActions(eventManager, new EventSender(), true);
-        motorFSM_Master = std::make_shared<MotorContext>(actionsM, true);
-    	MotorActions* actionsS = new MotorActions(eventManager, new EventSender(), false);
-        motorFSM_Slave = std::make_shared<MotorContext>(actionsS, false);
-        MainActions* mainActions = new MainActions(eventManager, new EventSender());
-        mainFSM = std::make_shared<MainContext>(mainActions);
+    	actionsM = std::make_shared<MotorActions>(eventManager, new EventSender(), true);
+    	motorFSM_Master = std::make_shared<MotorContext>(actionsM.get(), true);
+
+    	actionsS = std::make_shared<MotorActions>(eventManager, new EventSender(), false);
+    	motorFSM_Slave = std::make_shared<MotorContext>(actionsS.get(), false);
+
+    	mainActions = std::make_shared<MainActions>(eventManager, new EventSender());
+    	mainFSM = std::make_shared<MainContext>(mainActions.get());
     } else {
         Logger::info("Program started as SLAVE");
     }
 
     std::this_thread::sleep_for(std::chrono::seconds(3));
 
-    sensors = std::make_shared<Sensors>(eventManager);
+    std::shared_ptr<Sensors> sensors = std::make_shared<Sensors>(eventManager);
     sensors->startEventLoop();
 
-    heightSensor = std::make_shared<HeightSensor>(eventManager);
-    HeightContextData* heightData = new HeightContextData();
-    HeightActions* heightActions = new HeightActions(heightData, new EventSender(), eventManager);
-    heightFSM = std::make_shared<HeightContext>(heightActions, heightData, heightSensor);
+    // HeightSensor and HeightFSM
+    std::shared_ptr<HeightSensor> heightSensor = std::make_shared<HeightSensor>(eventManager);
+    std::shared_ptr<HeightContextData> heightData = std::make_shared<HeightContextData>();
+    std::shared_ptr<HeightActions> heightActions = std::make_shared<HeightActions>(heightData.get(), new EventSender(), eventManager);
+    std::shared_ptr<HeightContext> heightFSM = std::make_shared<HeightContext>(heightActions.get(), heightData.get(), heightSensor);
 
     // do nothing until termination...
     //std::cin.get();

@@ -26,6 +26,7 @@ MainActions::MainActions(std::shared_ptr<IEventManager> mngr, IEventSender* even
 }
 
 MainActions::~MainActions() {
+	std::cout << "MainActions Destructor called" << std::endl;
 	sender->disconnect();
 	delete sender;
 }

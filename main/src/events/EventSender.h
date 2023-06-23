@@ -27,6 +27,7 @@ class EventSender : public IEventSender {
      */
     bool connect(std::shared_ptr<IEventManager> evm) override {
         coid = evm->connectInternalClient();
+        Logger::debug("[EventSender] connected with ID: " + std::to_string(coid));
         return coid != -1;
     }
 
@@ -34,6 +35,7 @@ class EventSender : public IEventSender {
      * Disconnects from the EventManager channel if connected
      */
     void disconnect() override {
+        Logger::debug("[EventSender] disconnecting from ID: " + std::to_string(coid));
         int ret = ConnectDetach(this->coid);
         if (ret < 0) {
             Logger::error("[EventSender] ConnectDetach failed");
@@ -47,6 +49,7 @@ class EventSender : public IEventSender {
      * @return true if send was successful
      */
     bool sendEvent(Event event) override {
+        Logger::debug("[EventSender] sendEvent to connection: " + std::to_string(coid));
         if (coid == -1) {
             Logger::error("It was tried to send an internal event without "
                           "being connected to the EventManager");
@@ -59,6 +62,8 @@ class EventSender : public IEventSender {
                 "Failed to send pulse message to EventManager. errno = " +
                 std::to_string(errno));
             return false;
+        } else {
+            Logger::debug("[EventSender] sendEvent SUCCESS");
         }
         return true;
     }

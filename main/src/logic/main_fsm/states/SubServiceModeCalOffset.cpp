@@ -28,8 +28,7 @@ void SubServiceModeCalOffset::exit() {}
 
 bool SubServiceModeCalOffset::master_btnStart_PressedShort() {
     actions->calibrateOffset();
-    Logger::user_info(
-        "Calibration done. Press RESET button to continue or START to repeat");
+    Logger::user_info("Calibration done. Press RESET button to continue or START to repeat");
     actions->master_btnResetLedOn();
     done = true;
     return true;
