@@ -18,8 +18,7 @@
 #include "logic/main_fsm/MainContext.h"
 
 #include <gtest/gtest.h>
-#include <cmath>
-#include <limits>
+#include <tests/helpers.h>
 
 class UnitTest_MainFSM : public ::testing::Test {
   protected:
@@ -39,11 +38,6 @@ class UnitTest_MainFSM : public ::testing::Test {
     	delete fsm;
     }
 };
-
-
-static bool compareFloats(float a, float b, float tolerance = std::numeric_limits<float>::epsilon()) {
-    return std::fabs(a - b) <= tolerance;
-}
 
 // When launching the FSM -> Current state must be STANDBY
 TEST_F(UnitTest_MainFSM, StartStateStandby) {

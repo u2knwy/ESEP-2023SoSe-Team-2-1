@@ -15,6 +15,7 @@
 #include "data/workpiecetype_enum.h"
 #include "logic/main_fsm/MainContext.h"
 #include <gtest/gtest.h>
+#include <tests/helpers.h>
 #include <thread>
 #include <chrono>
 
@@ -280,4 +281,33 @@ TEST_F(IntegrationTest_Running, WorkpieceNotInOrderSortOutAtFBM2) {
 	EXPECT_EQ(WorkpieceType::WS_BOM, wp1->M_type);
 	EXPECT_EQ(25, wp1->avgHeightFBM1);
 	EXPECT_FALSE(wp1->sortOut);
+}
+
+TEST_F(IntegrationTest_Running, SendHeightEventHandledSuccess) {
+	EventSenderMock* sender = new EventSenderMock();
+	sender->connect(evm);
+
+	fsm->master_LBA_Blocked();
+	Workpiece* wp = wpm->getHeadOfArea(AreaType::AREA_A);
+	fsm->master_LBA_Unblocked();
+
+	// HM Result at FBM1
+	evm->handleEvent(Event{EventType::HM_M_WS_BOM, 244});
+	EXPECT_EQ(WorkpieceType::WS_BOM, wp->M_type);
+	EXPECT_TRUE(compareFloats(24.4, wp->avgHeightFBM1, 0.1));
+
+	// go to FBM2 HeightSensor
+	fsm->master_LBW_Blocked();
+	fsm->master_LBW_Unblocked();
+	fsm->master_LBE_Blocked();
+	fsm->master_LBE_Unblocked();
+	fsm->slave_LBA_Blocked();
+	fsm->slave_LBA_Unblocked();
+
+	evm->handleEvent(Event{EventType::HM_S_WS_OB, 252, 268});
+	EXPECT_EQ(WorkpieceType::WS_OB, wp->S_type);
+	EXPECT_TRUE(compareFloats(25.2, wp->avgHeightFBM2, 0.1));
+	EXPECT_TRUE(compareFloats(26.8, wp->maxHeightFBM2, 0.1));
+
+	delete sender;
 }

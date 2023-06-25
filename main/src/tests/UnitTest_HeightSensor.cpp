@@ -25,6 +25,7 @@
 #include "logic/hm/HeightContext.h"
 
 #include <gtest/gtest.h>
+#include <tests/helpers.h>
 
 class UnitTest_HeightSensor : public ::testing::Test {
   protected:
@@ -44,12 +45,6 @@ class UnitTest_HeightSensor : public ::testing::Test {
     	delete fsm;
     }
 };
-
-static std::string formatFloat(float value, int decimalPlaces) {
-    std::ostringstream stream;
-    stream << std::fixed << std::setprecision(decimalPlaces) << value;
-    return stream.str();
-}
 
 TEST_F(UnitTest_HeightSensor, InitialStateAfterStartup) {
     EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
@@ -158,8 +153,8 @@ TEST_F(UnitTest_HeightSensor, CalculateAverageAndMaxValue) {
     fsm->handleEvent(ev);
     EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
     res = fsm->getCurrentResult();
-    EXPECT_EQ("0.00", formatFloat(res.average, 2));
-    EXPECT_EQ("0.00", formatFloat(res.max, 2));
+    EXPECT_TRUE(compareFloats(0.0, res.average, 0.1));
+    EXPECT_TRUE(compareFloats(0.0, res.max, 0.1));
 
     // 1 invalid measurement - first value must be discarded
     fsm->heightValueReceived(11.0);
@@ -174,8 +169,8 @@ TEST_F(UnitTest_HeightSensor, CalculateAverageAndMaxValue) {
     fsm->heightValueReceived(11.0);
 
     res = fsm->getCurrentResult();
-    EXPECT_EQ("25.00", formatFloat(res.average, 2));
-    EXPECT_EQ("26.00", formatFloat(res.max, 2));
+    EXPECT_TRUE(compareFloats(25.0, res.average, 0.1));
+    EXPECT_TRUE(compareFloats(26.0, res.max, 0.1));
 }
 
 TEST_F(UnitTest_HeightSensor, CalculateAverageAndMaxValueWhenMotorStoppedInBetween) {
@@ -215,6 +210,6 @@ TEST_F(UnitTest_HeightSensor, CalculateAverageAndMaxValueWhenMotorStoppedInBetwe
     fsm->heightValueReceived(11.0);
 
     res = fsm->getCurrentResult();
-    EXPECT_EQ("25.0", formatFloat(res.average, 1));
-    EXPECT_EQ("26.0", formatFloat(res.max, 1));
+    EXPECT_TRUE(compareFloats(25.0, res.average, 0.1));
+    EXPECT_TRUE(compareFloats(26.0, res.max, 0.1));
 }

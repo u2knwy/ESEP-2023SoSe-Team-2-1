@@ -95,7 +95,7 @@ Event EventManagerMock::getLastHandledEvent() {
 
 bool EventManagerMock::lastHandledEventsContain(const Event& event) {
 	for(auto const& ev: lastEvents) {
-		if(ev.type == event.type && ev.data == event.data) {
+		if(ev.type == event.type && ev.data == event.data && ev.additional_data == event.additional_data) {
 			return true;
 		}
 	}
