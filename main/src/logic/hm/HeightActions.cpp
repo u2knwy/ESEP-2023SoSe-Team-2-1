@@ -10,7 +10,8 @@
 
 #include "logger/logger.hpp"
 
-HeightActions::HeightActions(HeightContextData* data, IEventSender* sender, std::shared_ptr<IEventManager> mngr) {
+HeightActions::HeightActions(HeightContextData *data, IEventSender *sender,
+                             std::shared_ptr<IEventManager> mngr) {
     this->data = data;
     this->sender = sender;
     this->eventManager = mngr;
@@ -23,8 +24,8 @@ HeightActions::HeightActions(HeightContextData* data, IEventSender* sender, std:
 }
 
 HeightActions::~HeightActions() {
-	sender->disconnect();
-	delete sender;
+    sender->disconnect();
+    delete sender;
 }
 
 void HeightActions::sendMotorSlowRequest(bool slow) {
@@ -63,16 +64,17 @@ void HeightActions::sendHeightResult() {
     ss.precision(1);
 
     if (isMaster) {
-    	// master: send average value (1 decimal place)
+        // master: send average value (1 decimal place)
         event.data = (int) (result.average * 10);
         ss << "[HM] Height Result at FBM1: " << EVENT_TO_STRING(event.type);
         ss << " - average(mm): " << result.average;
     } else {
-    	// slave: send average and max value (1 decimal place)
+        // slave: send average and max value (1 decimal place)
         event.data = (int) (result.average * 10);
         event.additional_data = (int) (result.max * 10);
         ss << "[HM] Height Result at FBM2: " << EVENT_TO_STRING(event.type);
-        ss << " - average(mm): " << result.average << " - max(mm): " << result.max;
+        ss << " - average(mm): " << result.average
+           << " - max(mm): " << result.max;
     }
     Logger::debug(ss.str());
 
