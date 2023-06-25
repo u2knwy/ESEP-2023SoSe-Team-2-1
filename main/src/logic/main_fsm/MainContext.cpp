@@ -17,16 +17,16 @@ MainContext::MainContext(MainActions* actions) {
 	this->actions = actions;
 	this->data = new MainContextData();
 	this->state = new Standby();
-	state->setAction(actions);
 	state->setData(data);
+	state->setAction(actions);
 	state->entry();
 	subscribeToEvents();
 }
 
 MainContext::~MainContext() {
 	Logger::error("MainContext Destructor called!");
-	delete data;
 	delete state;
+	delete data;
 }
 
 void MainContext::subscribeToEvents() {

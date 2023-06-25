@@ -32,6 +32,18 @@ using namespace std;
 std::shared_ptr<Actuators> actuators;
 std::shared_ptr<EventManager> eventManager;
 
+// MotorFSM - MASTER
+std::shared_ptr<MotorActions> motorActions_Master;
+std::shared_ptr<MotorContext> motorFSM_Master;
+
+// MotorFSM - SLAVE
+std::shared_ptr<MotorActions> motorActions_Slave;
+std::shared_ptr<MotorContext> motorFSM_Slave;
+
+// MainFSM
+std::shared_ptr<MainActions> mainActions;
+std::shared_ptr<MainContext> mainFSM;
+
 // Set this variable to false to stop main function from executing...
 std::atomic<bool> running(true);
 
@@ -123,7 +135,7 @@ int main(int argc, char **argv) {
 
     actuators->standbyMode();
 
-    //Logger::registerEvents(eventManager);
+    Logger::registerEvents(eventManager);
     eventManager->start();
     std::this_thread::sleep_for(std::chrono::seconds(3));
 
@@ -131,25 +143,13 @@ int main(int argc, char **argv) {
 //    Watchdog wd(eventManager);
 //    wd.start();
 
-    // MotorFSM - MASTER
-	std::shared_ptr<MotorActions> actionsM;
-	std::shared_ptr<MotorContext> motorFSM_Master;
-
-    // MotorFSM - SLAVE
-	std::shared_ptr<MotorActions> actionsS;
-	std::shared_ptr<MotorContext> motorFSM_Slave;
-
-	// MainFSM
-	std::shared_ptr<MainActions> mainActions;
-	std::shared_ptr<MainContext> mainFSM;
-
     // Run FSM's only at Master
     if (options.mode == Mode::MASTER) {
-    	actionsM = std::make_shared<MotorActions>(eventManager, new EventSender(), true);
-    	motorFSM_Master = std::make_shared<MotorContext>(actionsM.get(), true);
+    	motorActions_Master = std::make_shared<MotorActions>(eventManager, new EventSender(), true);
+    	motorFSM_Master = std::make_shared<MotorContext>(motorActions_Master.get(), true);
 
-    	actionsS = std::make_shared<MotorActions>(eventManager, new EventSender(), false);
-    	motorFSM_Slave = std::make_shared<MotorContext>(actionsS.get(), false);
+    	motorActions_Slave = std::make_shared<MotorActions>(eventManager, new EventSender(), false);
+    	motorFSM_Slave = std::make_shared<MotorContext>(motorActions_Slave.get(), false);
 
     	mainActions = std::make_shared<MainActions>(eventManager, new EventSender());
     	mainFSM = std::make_shared<MainContext>(mainActions.get());

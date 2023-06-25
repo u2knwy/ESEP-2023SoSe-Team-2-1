@@ -21,10 +21,10 @@
 
 class IntegrationTest_Running : public ::testing::Test {
   protected:
-	std::shared_ptr<EventManagerMock> evm = std::make_shared<EventManagerMock>();
-    IEventSender* sender;
-    MainActions* mainActions;
-    MainContext* fsm;
+	std::shared_ptr<EventManagerMock> evm;
+	IEventSender* sender;
+	MainActions* mainActions;
+	MainContext* fsm;
     WorkpieceManager* wpm;
 
     /**
@@ -32,11 +32,12 @@ class IntegrationTest_Running : public ::testing::Test {
      */
     void SetUp() override {
     	Configuration::getInstance().setDesiredWorkpieceOrder({WS_F, WS_BOM, WS_OB});
-    	sender = new EventSenderMock();
-        mainActions = new MainActions(evm, sender);
-        fsm = new MainContext(mainActions);
-    	wpm = fsm->data->wpManager;
+    	evm = std::make_shared<EventManagerMock>();
+    	IEventSender* sender = new EventSenderMock();
+    	MainActions* mainActions = new MainActions(evm, sender);
+    	fsm = new MainContext(mainActions);
     	fsm->master_btnStart_PressedShort();
+    	wpm = fsm->data->wpManager;
     	evm->clearLastHandledEvents();
     	clearBelt();
     }
@@ -45,8 +46,8 @@ class IntegrationTest_Running : public ::testing::Test {
      * OPTIONAL: Release any resources allocated in SetUp() method
      */
     void TearDown() override {
-    	delete fsm;
     	delete mainActions;
+    	delete fsm;
     }
 
     void clearBelt() {
@@ -103,7 +104,7 @@ TEST_F(IntegrationTest_Running, RampBlockedWhenRunningStarted) {
 //	EXPECT_TRUE(evm->lastHandledEventsContain(Event{EventType::LAMP_S_YELLOW, (int) LampState::FLASHING_SLOW}));
 }
 
-/*TEST_F(IntegrationTest_Running, IfRampOccupiedDisplayWarning) {
+TEST_F(IntegrationTest_Running, IfRampOccupiedDisplayWarning) {
 	// both ramps are free
 	EXPECT_FALSE(wpm->getRamp_one());
 	EXPECT_FALSE(wpm->getRamp_two());
@@ -134,7 +135,7 @@ TEST_F(IntegrationTest_Running, RampBlockedWhenRunningStarted) {
 	fsm->slave_LBR_Unblocked();
 	EXPECT_FALSE(wpm->getRamp_two());
 	EXPECT_TRUE(evm->lastHandledEventsContain(Event{EventType::LAMP_S_YELLOW, (int) LampState::OFF}));
-}*/
+}
 
 TEST_F(IntegrationTest_Running, NewWorkpieceInsertedStartMotor) {
 	fsm->master_btnStop_Pressed();

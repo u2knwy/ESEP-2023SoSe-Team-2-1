@@ -16,7 +16,7 @@ class EventSender : public IEventSender {
   public:
     EventSender() { coid = -1; }
 
-    virtual ~EventSender() {}
+    ~EventSender() {}
 
     /**
      * Connects to the EventManager by attaching to its internal channel.
