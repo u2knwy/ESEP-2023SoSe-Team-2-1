@@ -11,3 +11,5 @@
 !helloworld/.project
 !helloworld/.cproject
 .dtmp
+.vscode/
+.settings/
