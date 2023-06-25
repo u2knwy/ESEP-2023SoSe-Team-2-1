@@ -7,6 +7,8 @@
 #include <thread>
 #include <chrono>
 
+#include "logger.hpp"
+
 #define NO_OF_MSGS 5
 #define ATTACH_POINT_MASTER "masterService"
 #define ATTACH_POINT_SLAVE "clientService"
@@ -32,17 +34,17 @@ name_attach_t *attachedService;
 int server_coid;
 
 static void handle_pulse(header_t hdr, int rcvid){
-	std::cout << "handle_pulse: " << std::to_string(rcvid) << std::endl;
+	Logger::info("handle_pulse: " + std::to_string(rcvid));
 	switch (hdr.code) {
 	case _PULSE_CODE_DISCONNECT:
-		printf("Server received _PULSE_CODE_DISCONNECT\n");
+		Logger::info("Server received _PULSE_CODE_DISCONNECT");
 		/* A client disconnected all its connections (called
 		 * name_close() for each name_open() of our name) or
 		 * terminated. */
 		ConnectDetach(hdr.scoid);
 		break;
 	case _PULSE_CODE_UNBLOCK:
-		printf("Server received _PULSE_CODE_UNBLOCK\n");
+		Logger::info("Server received _PULSE_CODE_UNBLOCK");
 		/* REPLY blocked client wants to unblock (was hit by
 		 * a signal or timed out). It's up to you if you
 		 * reply now or later. */
@@ -51,13 +53,13 @@ static void handle_pulse(header_t hdr, int rcvid){
 		/* A pulse sent by one of your processes or a
 		 * _PULSE_CODE_COIDDEATH or _PULSE_CODE_THREADDEATH
 		 * from the kernel? */
-		printf("Server received some pulse msg.\n");
+		Logger::info("Server received some pulse code: " + std::to_string(hdr.code));
 		break;
 	}
 }
 
 static void handle_ONX_IO_msg(header_t hdr, int rcvid){
-	std::cout << "handle_pulse: " << std::to_string(rcvid) << std::endl;
+	Logger::info("handle_ONX_IO_msg: " + std::to_string(rcvid));
 	if (hdr.type == _IO_CONNECT ) {
 		// QNX IO msg _IO_CONNECT was received; answer with EOK
 		printf("Server received _IO_CONNECT (sync. msg) \n");
@@ -97,9 +99,10 @@ void receive_msg() {
 	while (1) {
 		// Waiting for a message and read first header
 		header_t header;
-		int rcvid = MsgReceive (attachedService->chid, &header, sizeof (header_t), NULL);
+		int rcvid = MsgReceive(attachedService->chid, &header, sizeof (header_t), NULL);
 		if (rcvid == -1) { // Error occurred
 			perror("Server: MsgReceived failed");
+			Logger::error("Server: MsgReceived failed");
 			break;
 		}
 		if (rcvid == 0) {// Pulse was received
@@ -127,7 +130,7 @@ int create_service(const std::string& serviceName) {
 		return EXIT_FAILURE;
 	}
 
-	std::cout << "Service was created: " << serviceName << std::endl;
+	Logger::info("Service was created: " + serviceName);
 
 	return EXIT_SUCCESS;
 }
@@ -150,13 +153,22 @@ int connect_to_service(const std::string& serviceName) {
 		server_coid = name_open(serviceName.c_str(), NAME_FLAG_ATTACH_GLOBAL);
 		connected = server_coid != -1;
 		if(!connected) {
-			std::cout << "Service not reachable - try again..." << std::endl;
 			std::this_thread::sleep_for(std::chrono::seconds(1));
 		}
 	}
 
-	std::cout << "Connected to service: " << serviceName << std::endl;
+	std::stringstream ss;
+	ss << "Connected to service: " << serviceName;
+	Logger::info(ss.str());
 
+	return EXIT_SUCCESS;
+}
+
+int send_pulse(int code) {
+	if (-1 == MsgSendPulse(server_coid, -1, code, 0)){
+		Logger::error("MsgSendPulse failed " + std::to_string(errno));
+		return EXIT_FAILURE;
+	}
 	return EXIT_SUCCESS;
 }
 
@@ -175,23 +187,27 @@ int send_msg(const std::string& msg) {
 	SETIOV(iov+2, msg.c_str(), payload_size);
 
 	if (-1 == MsgSendvs(server_coid, iov, 3, r_msg, sizeof(r_msg))){
-		perror("Client: MsgSend failed");
+		Logger::error("MsgSendvs failed");
 		return EXIT_FAILURE;
 	}
 
 	// Answer form server should be structured, too.
-	printf("Client: Answer from server: %s \n", r_msg);
+	std::stringstream ss;
+	ss << "Client: Answer from server:" << r_msg;
+	Logger::info(ss.str());
 	return EXIT_SUCCESS;
 }
 
 int main(int argc, char **argv) {
 	std::string msg;
 	int ret;
+//	system("slay -f gns");
 	if (argc < 2) {
 		printf("Usage %s -s | -c \n", argv[0]);
 		ret = EXIT_FAILURE;
 	}
 	else if (strcmp(argv[1], "-c") == 0) {
+		system("gns -s");
 		printf("Running Slave ... \n");
 		msg = "hi from slave";
 		create_service(ATTACH_POINT_SLAVE);
@@ -199,6 +215,7 @@ int main(int argc, char **argv) {
 		connect_to_service(ATTACH_POINT_MASTER);
 	}
 	else if (strcmp(argv[1], "-s") == 0) {
+        system("gns -c");
 		printf("Running Master ... \n");
 		msg = "hi from master";
 		create_service(ATTACH_POINT_MASTER);
@@ -210,8 +227,11 @@ int main(int argc, char **argv) {
 		ret = EXIT_FAILURE;
 	}
 
+	int code = 0;
 	while(true) {
-		ret = send_msg(msg);
-		std::this_thread::sleep_for(std::chrono::seconds(10));
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		//ret = send_msg(msg);
+		ret = send_pulse(code++);
+		//std::this_thread::sleep_for(std::chrono::seconds(10));
 	}
 }
