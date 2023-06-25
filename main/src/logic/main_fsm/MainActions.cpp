@@ -16,6 +16,7 @@
 #define HM_CAL_MEASUREMENTS 10
 
 MainActions::MainActions(std::shared_ptr<IEventManager> mngr, IEventSender* eventSender) {
+    pusherMounted = Configuration::getInstance().pusherMounted();
     this->eventManager = mngr;
     this->sender = eventSender;
     if (sender->connect(mngr)) {
@@ -59,12 +60,20 @@ void MainActions::slave_sendMotorRightRequest(bool right) {
 }
 
 void MainActions::master_openGate(bool open) {
+	if(open && pusherMounted) {
+		// Pusher and open gate -> nothing to do
+		return;
+	}
     // (EventData) 0: sort out, 1: open gate
     int eventData = open ? 0 : 1;
     sender->sendEvent(Event{SORT_M_OUT, eventData});
 }
 
 void MainActions::slave_openGate(bool open) {
+	if(open && pusherMounted) {
+		// Pusher and open gate -> nothing to do
+		return;
+	}
     // (EventData) 0: sort out, 1: open gate
     int eventData = open ? 0 : 1;
     sender->sendEvent(Event{SORT_S_OUT, eventData});
@@ -130,8 +139,13 @@ void MainActions::allActuatorsOn() {
     sender->sendEvent(Event{EventType::LED_S_Q1, (int) LampState::ON});
     sender->sendEvent(Event{EventType::LED_S_Q2, (int) LampState::ON});
 
-    sender->sendEvent(Event{EventType::SORT_M_OUT, 0});
-    sender->sendEvent(Event{EventType::SORT_S_OUT, 0});
+    if(pusherMounted) {
+    	// Pusher mounted -> sort out
+    	sender->sendEvent(Event{EventType::SORT_M_OUT, 1});
+    } else {
+    	// Switch mounted -> let pass
+    	sender->sendEvent(Event{EventType::SORT_S_OUT, 0});
+    }
 }
 
 void MainActions::allActuatorsOff() {
@@ -151,8 +165,13 @@ void MainActions::allActuatorsOff() {
     sender->sendEvent(Event{EventType::LED_S_Q1, (int) LampState::OFF});
     sender->sendEvent(Event{EventType::LED_S_Q2, (int) LampState::OFF});
 
-    sender->sendEvent(Event{EventType::SORT_M_OUT, 1});
-    sender->sendEvent(Event{EventType::SORT_S_OUT, 1});
+    if(pusherMounted) {
+    	// Pusher mounted -> let pass
+    	sender->sendEvent(Event{EventType::SORT_M_OUT, 0});
+    } else {
+    	// Switch mounted -> sort out (deactivate)
+    	sender->sendEvent(Event{EventType::SORT_S_OUT, 1});
+    }
 }
 
 void MainActions::master_warningOn() {

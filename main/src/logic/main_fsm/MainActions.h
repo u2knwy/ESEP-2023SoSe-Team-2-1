@@ -62,6 +62,7 @@ class MainActions {
     std::shared_ptr<IEventManager> eventManager;
   private:
     IEventSender* sender;
+    bool pusherMounted;
 };
 
 #endif /* SRC_LOGIC_MAIN_FSM_MAINACTIONS_H_ */
