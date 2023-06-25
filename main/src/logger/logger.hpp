@@ -84,6 +84,9 @@ public:
 		if (event.data != -1) {
 			ss << " - data=" << event.data;
 		}
+		if (event.additional_data != -1) {
+			ss << " - additional=" << event.additional_data;
+		}
 		info(ss.str());
 	}
 

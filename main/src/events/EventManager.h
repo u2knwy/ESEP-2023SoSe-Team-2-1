@@ -22,6 +22,7 @@ typedef struct
 {
     int size;  // size of data block
     int data;
+    int additional_data;
     int eventnr;// some counter used by the application
                // further data fields required by our application
 } app_header_t;

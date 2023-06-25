@@ -61,7 +61,7 @@ class IntegrationTest_Running : public ::testing::Test {
     	fsm->master_LBW_Blocked();
     }
 
-    void wpRunUntilRemovedAtFBM2(EventType heightType, float avg, bool metal) {
+    void wpRunUntilRemovedAtFBM2(EventType heightType, float avg, float max, bool metal) {
     	fsm->master_LBA_Blocked();
     	fsm->master_LBA_Unblocked();
     	fsm->master_heightResultReceived(heightType, avg);
@@ -73,7 +73,7 @@ class IntegrationTest_Running : public ::testing::Test {
     	fsm->master_LBE_Unblocked();
     	fsm->slave_LBA_Blocked();
     	fsm->slave_LBA_Unblocked();
-    	fsm->slave_heightResultReceived(heightType, avg);
+    	fsm->slave_heightResultReceived(heightType, avg, max);
     	if(metal)
     		fsm->slave_metalDetected();
     	fsm->slave_LBW_Blocked();
@@ -195,7 +195,7 @@ TEST_F(IntegrationTest_Running, WorkpieceGetHeadOfArea) {
 	wp1 = wpm->getHeadOfArea(AreaType::AREA_D);
 	EXPECT_EQ(1, wp1->id);
 
-	fsm->slave_heightResultReceived(EventType::HM_M_WS_F, 20);
+	fsm->slave_heightResultReceived(EventType::HM_M_WS_F, 20, 22);
 	wp1 = wpm->getHeadOfArea(AreaType::AREA_D);
 	EXPECT_EQ(1, wp1->id);
 	fsm->slave_metalDetected();
@@ -259,7 +259,7 @@ TEST_F(IntegrationTest_Running, WorkpieceInOrderLetPass) {
 
 TEST_F(IntegrationTest_Running, WorkpieceNotInOrderSortOutAtFBM1) {
 	// first one is flat - next one will be BOM
-	wpRunUntilRemovedAtFBM2(EventType::HM_M_WS_F, 20, false);
+	wpRunUntilRemovedAtFBM2(EventType::HM_M_WS_F, 20, 22, false);
 	EXPECT_EQ(WorkpieceType::WS_BOM, wpm->getNextWorkpieceType());
 
 	// make sure ramp is free

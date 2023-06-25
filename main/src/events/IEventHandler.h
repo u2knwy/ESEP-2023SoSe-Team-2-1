@@ -18,8 +18,10 @@ struct Event {
     Event() {}
     Event(EventType evType) : type(evType), data(-1) {}
     Event(EventType evType, int evData) : type(evType), data(evData) {}
+    Event(EventType evType, int evData, int addData) : type(evType), data(evData), additional_data(addData) {}
     EventType type;
     int data{-1};
+    int additional_data{-1};
 };
 
 class IEventHandler {

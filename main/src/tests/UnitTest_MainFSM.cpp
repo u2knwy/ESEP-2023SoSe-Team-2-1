@@ -185,7 +185,7 @@ TEST_F(UnitTest_MainFSM, RunningToErrorToRunningHistory) {
 	fsm->master_LBE_Unblocked();
 	fsm->slave_LBA_Blocked();
 	fsm->slave_LBA_Unblocked();
-	fsm->slave_heightResultReceived(EventType::HM_M_WS_F, 21);
+	fsm->slave_heightResultReceived(EventType::HM_M_WS_F, 21, 22);
     EXPECT_FALSE(fsm->data->wpManager->isFBM_MEmpty());
     EXPECT_FALSE(fsm->data->wpManager->isFBM_SEmpty());
 

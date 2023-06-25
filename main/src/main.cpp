@@ -64,7 +64,6 @@ void cleanup(int exitCode) {
 }
 
 int main(int argc, char **argv) {
-
     // Initialize Logger
     const char *debugValue = getenv("QNX_DEBUG");
     const std::string debug = debugValue ? debugValue : "";

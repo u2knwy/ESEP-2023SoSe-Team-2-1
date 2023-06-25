@@ -89,9 +89,13 @@ void EventManager::rcvInternalEventsThread() {
             rcvInternalRunning = false;
             continue;
         }
-        Event ev{(EventType) pulse.code, pulse.value.sival_int};
-        handleEvent(ev);
-        sendExternalEvent(ev);
+        int eventData = pulse.value.sival_int;
+        Event event;
+        event.type = (EventType) pulse.code;
+        event.data = eventData & 0xFFFF;
+        event.additional_data = (int) (eventData >> 16);
+        handleEvent(event);
+        sendExternalEvent(event);
     }
     Logger::debug("[EventManager] Stopped receiving internal events");
 }
@@ -308,6 +312,7 @@ void EventManager::sendExternalEvent(const Event &event) {
     header.subtype = 0x00;
     app_header.size = payload_size;
     app_header.data = event.data;
+    app_header.additional_data = event.additional_data;
     app_header.eventnr = (int) event.type;
     SETIOV(iov+0, &header, sizeof(header));
     SETIOV(iov+1, &app_header, sizeof(app_header));

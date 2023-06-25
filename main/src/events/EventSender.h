@@ -53,7 +53,18 @@ class EventSender : public IEventSender {
             return false;
         }
 
-        int res = MsgSendPulse(this->coid, -1, (int) event.type, event.data);
+        int eventData;
+        if(event.additional_data != -1) {
+        	// Lower 16 bits: data
+        	// Upper 16 bits: additional data
+        	eventData = (event.additional_data << 16) | event.data;
+        } else {
+        	// Lower 16 bits: data
+        	// Upper 16 bits: 0x0000
+        	eventData = (-1 << 16) | event.data;
+        }
+
+        int res = MsgSendPulse(this->coid, -1, (int) event.type, eventData);
         if (res < 0) {
             Logger::error(
                 "Failed to send pulse message to EventManager. errno = " +
