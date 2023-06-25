@@ -64,9 +64,11 @@ bool Running::master_LBA_Unblocked() {
 }
 
 bool Running::master_heightResultReceived(EventType event, float average) {
-	Logger::debug(
-			"[MainFSM] Received FBM1 height result: " + EVENT_TO_STRING(event) +
-			" - avg: " + std::to_string(average) + " mm");
+	std::stringstream ss;
+	ss.precision(1);
+	ss << "HeightSensor result at FBM1: " << EVENT_TO_STRING(event);
+	ss << " (average: " << average << " mm)";
+	Logger::info(ss.str());
 
 	if (!data->wpManager->isQueueempty(AreaType::AREA_A)) {
 		Workpiece *wp = data->wpManager->getHeadOfArea(AreaType::AREA_A);
@@ -201,10 +203,12 @@ bool Running::slave_LBA_Blocked() {
 
 bool Running::slave_LBA_Unblocked() { return true; }
 
-bool Running::slave_heightResultReceived(EventType event, float average) {
-	Logger::debug(
-			"[MainFSM] Received FBM1 height result: " + EVENT_TO_STRING(event) +
-			" - avg: " + std::to_string(average) + " mm");
+bool Running::slave_heightResultReceived(EventType event, float average, float max) {
+	std::stringstream ss;
+	ss.precision(1);
+	ss << "HeightSensor result at FBM2: " << EVENT_TO_STRING(event);
+	ss << " (average: " << average << " mm, max: " << max << " mm)";
+	Logger::info(ss.str());
 
 	if (!data->wpManager->isQueueempty(AreaType::AREA_D)) {
 		data->wpManager->setHeight(AreaType::AREA_D, average);    // setheight()

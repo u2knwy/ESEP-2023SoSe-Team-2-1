@@ -45,7 +45,7 @@ class MainContext : public IEventHandler {
     void slave_LBR_Blocked();
     void slave_LBR_Unblocked();
 
-    void slave_heightResultReceived(EventType event, float average);
+    void slave_heightResultReceived(EventType event, float average, float max);
     void slave_metalDetected();
 
     // Buttons

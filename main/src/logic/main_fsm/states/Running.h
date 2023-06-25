@@ -35,7 +35,7 @@ class Running : public MainBasestate {
     bool slave_LBR_Unblocked() override;
 
     bool master_heightResultReceived(EventType event, float average) override;
-    bool slave_heightResultReceived(EventType event, float average) override;
+    bool slave_heightResultReceived(EventType event, float average, float max) override;
 
     bool master_metalDetected() override;
     bool slave_metalDetected() override;

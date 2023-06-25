@@ -59,7 +59,7 @@ class MainBasestate {
     virtual bool master_heightResultReceived(EventType event, float average) {
         return false;
     }
-    virtual bool slave_heightResultReceived(EventType event, float average) {
+    virtual bool slave_heightResultReceived(EventType event, float average, float max) {
         return false;
     }
 

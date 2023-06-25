@@ -225,14 +225,17 @@ void MainContext::handleEvent(Event event) {
 	case EventType::HM_M_WS_OB:
 	case EventType::HM_M_WS_BOM:
 	case EventType::HM_M_WS_UNKNOWN: {
-		master_heightResultReceived(event.type, ((float) event.data) / 10);
+		float avg = ((float) (event.data)) / 10;
+		master_heightResultReceived(event.type, avg);
 		break;
 	}
 	case EventType::HM_S_WS_F:
 	case EventType::HM_S_WS_OB:
 	case EventType::HM_S_WS_BOM:
 	case EventType::HM_S_WS_UNKNOWN: {
-		slave_heightResultReceived(event.type, ((float) event.data) / 10);
+		float avg = ((float) (event.data)) / 10;
+		float max = ((float) (event.additional_data)) / 10;
+		slave_heightResultReceived(event.type, avg, max);
 		break;
 	}
 	case EventType::MD_M_PAYLOAD:
@@ -341,8 +344,8 @@ void MainContext::slave_LBR_Unblocked() {
 	state->slave_LBR_Unblocked();
 }
 
-void MainContext::slave_heightResultReceived(EventType event, float average) {
-	state->slave_heightResultReceived(event, average);
+void MainContext::slave_heightResultReceived(EventType event, float average, float max) {
+	state->slave_heightResultReceived(event, average, max);
 }
 
 void MainContext::slave_metalDetected() {
