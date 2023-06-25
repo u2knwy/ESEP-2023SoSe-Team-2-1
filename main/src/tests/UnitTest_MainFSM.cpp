@@ -14,6 +14,7 @@
 #include "mocks/EventManagerMock.h"
 #include "mocks/EventSenderMock.h"
 
+#include "configuration/Configuration.h"
 #include "logic/main_fsm/MainContext.h"
 
 #include <gtest/gtest.h>
@@ -26,6 +27,7 @@ class UnitTest_MainFSM : public ::testing::Test {
     MainContext* fsm;
 
     void SetUp() override {
+    	Configuration::getInstance().setDesiredWorkpieceOrder({WS_F, WS_BOM, WS_OB});
     	sender = new EventSenderMock();
         mainActions = new MainActions(eventManager, sender);
         fsm = new MainContext(mainActions);
@@ -138,11 +140,11 @@ TEST_F(UnitTest_MainFSM, ErrorManualSolvedAfterRunning) {
     fsm->master_btnReset_Pressed();
     EXPECT_EQ(MainState::ERROR, fsm->getCurrentState());
     fsm->master_btnStart_PressedShort();
-    EXPECT_EQ(MainState::STANDBY, fsm->getCurrentState());
+    EXPECT_EQ(MainState::RUNNING, fsm->getCurrentState());
 }
 
 TEST_F(UnitTest_MainFSM, ErrorSelfSolvedAfterRunning) {
-    // Running -> Error
+    // Standby -> Running
     EXPECT_EQ(MainState::STANDBY, fsm->getCurrentState());
     fsm->master_btnStart_PressedShort();
     EXPECT_EQ(MainState::RUNNING, fsm->getCurrentState());
@@ -161,5 +163,57 @@ TEST_F(UnitTest_MainFSM, ErrorSelfSolvedAfterRunning) {
     EXPECT_EQ(MainState::ERROR, fsm->getCurrentState());
     // Reset pressed -> Leave Error mode
     fsm->master_btnReset_Pressed();
+    EXPECT_EQ(MainState::RUNNING, fsm->getCurrentState());
+}
+
+TEST_F(UnitTest_MainFSM, RunningToErrorToRunningHistory) {
+    // Standby -> Running
     EXPECT_EQ(MainState::STANDBY, fsm->getCurrentState());
+    fsm->master_btnStart_PressedShort();
+    EXPECT_EQ(MainState::RUNNING, fsm->getCurrentState());
+
+    // One workpiece at FBM1 and one on FBM2
+	fsm->master_LBA_Blocked();
+    Workpiece* wp1 = fsm->data->wpManager->getHeadOfArea(AreaType::AREA_A);
+	fsm->master_LBA_Blocked();
+
+	fsm->master_LBA_Unblocked();
+	fsm->master_heightResultReceived(EventType::HM_M_WS_F, 20);
+	fsm->master_LBW_Blocked();
+	fsm->master_LBW_Unblocked();
+	fsm->master_LBE_Blocked();
+	fsm->master_LBE_Unblocked();
+	fsm->slave_LBA_Blocked();
+	fsm->slave_LBA_Unblocked();
+	fsm->slave_heightResultReceived(EventType::HM_M_WS_F, 21);
+    EXPECT_FALSE(fsm->data->wpManager->isFBM_MEmpty());
+    EXPECT_FALSE(fsm->data->wpManager->isFBM_SEmpty());
+
+    // Error occurred - check if both FBM's are still occupied
+    fsm->nonSelfSolvableErrorOccurred();
+    EXPECT_EQ(MainState::ERROR, fsm->getCurrentState());
+    fsm->master_btnReset_Pressed();
+    fsm->master_btnStart_PressedShort();
+    fsm->master_btnStart_PressedShort();
+    EXPECT_FALSE(fsm->data->wpManager->isFBM_MEmpty());
+    EXPECT_FALSE(fsm->data->wpManager->isFBM_SEmpty());
+
+    // Back to Running - change next expected workpiece type
+    EXPECT_EQ(WorkpieceType::WS_F, fsm->data->wpManager->getNextWorkpieceType());
+    fsm->slave_LBW_Blocked();
+    EXPECT_FALSE(wp1->sortOut);
+    fsm->slave_LBW_Unblocked();
+    fsm->slave_LBE_Blocked();
+    fsm->slave_LBE_Unblocked();
+    WorkpieceType nextType = fsm->data->wpManager->getNextWorkpieceType();
+    EXPECT_EQ(WorkpieceType::WS_BOM, fsm->data->wpManager->getNextWorkpieceType());
+
+    // Error occurred - check if next expected workpiece type is preserved
+    fsm->nonSelfSolvableErrorOccurred();
+    EXPECT_EQ(MainState::ERROR, fsm->getCurrentState());
+    fsm->master_btnReset_Pressed();
+    fsm->master_btnStart_PressedShort();
+    fsm->master_btnStart_PressedShort();
+    EXPECT_EQ(MainState::RUNNING, fsm->getCurrentState());
+    EXPECT_EQ(WorkpieceType::WS_BOM, fsm->data->wpManager->getNextWorkpieceType());
 }
