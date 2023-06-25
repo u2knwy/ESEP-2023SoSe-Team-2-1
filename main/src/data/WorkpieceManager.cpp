@@ -97,8 +97,16 @@ Workpiece *WorkpieceManager::getHeadOfArea(AreaType area) {
 void WorkpieceManager::setHeight(AreaType area, double height) {
     Workpiece *wp = getHeadOfArea(area);
     if (wp != nullptr) {
-        wp->avgHeight = height;
+        wp->avgHeightFBM1 = height;
     }
+}
+
+void WorkpieceManager::setFBM2Height(AreaType area, double height, double max) {
+	Workpiece *wp = getHeadOfArea(AreaType::AREA_D);
+	if (wp != nullptr) {
+		wp->avgHeightFBM2 = height;
+		wp->maxHeightFBM2 = max;
+	}
 }
 
 void WorkpieceManager::setTypeEvent(EventType event, AreaType area) {
@@ -194,7 +202,7 @@ std::string WorkpieceManager::to_string_Workpiece(Workpiece *wp) {
     std::string str = "wp [id= " + std::to_string(wp->id) + ", " +
                       " master_type= " + std::to_string(wp->M_type) + ", " +
                       " slave_type= " + std::to_string(wp->S_type) + ", " +
-                      " height= " + std::to_string(wp->avgHeight) +
+                      " height= " + std::to_string(wp->avgHeightFBM1) +
                       " flipped= " + std::to_string(wp->flipped) + "] ";
 
     return str;

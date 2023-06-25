@@ -18,6 +18,8 @@
 #include "logic/main_fsm/MainContext.h"
 
 #include <gtest/gtest.h>
+#include <cmath>
+#include <limits>
 
 class UnitTest_MainFSM : public ::testing::Test {
   protected:
@@ -37,6 +39,11 @@ class UnitTest_MainFSM : public ::testing::Test {
     	delete fsm;
     }
 };
+
+
+static bool compareFloats(float a, float b, float tolerance = std::numeric_limits<float>::epsilon()) {
+    return std::fabs(a - b) <= tolerance;
+}
 
 // When launching the FSM -> Current state must be STANDBY
 TEST_F(UnitTest_MainFSM, StartStateStandby) {
@@ -216,4 +223,28 @@ TEST_F(UnitTest_MainFSM, RunningToErrorToRunningHistory) {
     fsm->master_btnStart_PressedShort();
     EXPECT_EQ(MainState::RUNNING, fsm->getCurrentState());
     EXPECT_EQ(WorkpieceType::WS_BOM, fsm->data->wpManager->getNextWorkpieceType());
+}
+
+TEST_F(UnitTest_MainFSM, HandleReceivedHeightResult) {
+    fsm->master_btnStart_PressedShort();
+    EXPECT_EQ(MainState::RUNNING, fsm->getCurrentState());
+
+    // Insert workpiece
+	fsm->master_LBA_Blocked();
+    Workpiece* wp1 = fsm->data->wpManager->getHeadOfArea(AreaType::AREA_A);
+	fsm->master_LBA_Blocked();
+
+	fsm->master_LBA_Unblocked();
+	fsm->master_heightResultReceived(EventType::HM_M_WS_F, 20.6);
+	fsm->master_LBW_Blocked();
+	fsm->master_LBW_Unblocked();
+	fsm->master_LBE_Blocked();
+	fsm->master_LBE_Unblocked();
+	fsm->slave_LBA_Blocked();
+	fsm->slave_LBA_Unblocked();
+	fsm->slave_heightResultReceived(EventType::HM_M_WS_F, 21.1, 22.8);
+
+	EXPECT_TRUE(compareFloats(20.6, wp1->avgHeightFBM1, 0.1));
+	EXPECT_TRUE(compareFloats(21.1, wp1->avgHeightFBM2, 0.1));
+	EXPECT_TRUE(compareFloats(22.8, wp1->maxHeightFBM2, 0.1));
 }

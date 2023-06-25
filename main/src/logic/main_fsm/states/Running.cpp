@@ -211,7 +211,7 @@ bool Running::slave_heightResultReceived(EventType event, float average, float m
 	Logger::info(ss.str());
 
 	if (!data->wpManager->isQueueempty(AreaType::AREA_D)) {
-		data->wpManager->setHeight(AreaType::AREA_D, average);    // setheight()
+		data->wpManager->setFBM2Height(AreaType::AREA_D, average, max); // setheight()
 		data->wpManager->setTypeEvent(event, AreaType::AREA_D);   // setType()
 	}
 

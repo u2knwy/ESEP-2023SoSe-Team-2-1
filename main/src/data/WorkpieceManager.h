@@ -39,6 +39,7 @@ class WorkpieceManager {
     Workpiece *getHeadOfArea(AreaType area);
 
     void setHeight(AreaType area, double height);
+    void setFBM2Height(AreaType area, double height, double max);
     void setMetal(AreaType area);
     void setType(AreaType area, WorkpieceType type);
     void setTypeEvent(EventType event, AreaType area);

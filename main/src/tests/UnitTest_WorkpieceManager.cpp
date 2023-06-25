@@ -55,7 +55,7 @@ TEST_F(UnitTest_WorkpieceManager, InitiallyNoWorkpiecesAddNewAndIncrementId) {
     mngr->setSortOut(AreaType::AREA_B, true);
 
     EXPECT_EQ(wp1b->metal, true);
-    EXPECT_EQ(wp1b->avgHeight, 23);
+    EXPECT_EQ(wp1b->avgHeightFBM1, 23);
     EXPECT_EQ(wp1b->M_type, WorkpieceType::WS_F);
     EXPECT_EQ(wp1b->sortOut, true);
 
@@ -66,7 +66,7 @@ TEST_F(UnitTest_WorkpieceManager, InitiallyNoWorkpiecesAddNewAndIncrementId) {
 
     Workpiece *wp1c = mngr->getHeadOfArea(AreaType::AREA_C);
     EXPECT_EQ(wp1c->metal, true);
-    EXPECT_EQ(wp1c->avgHeight, 23);
+    EXPECT_EQ(wp1c->avgHeightFBM1, 23);
     EXPECT_EQ(wp1c->M_type, WorkpieceType::WS_F);
     EXPECT_EQ(wp1c->sortOut, true);
     EXPECT_EQ(wp1c->flipped, false);
@@ -74,7 +74,7 @@ TEST_F(UnitTest_WorkpieceManager, InitiallyNoWorkpiecesAddNewAndIncrementId) {
     mngr->moveFromAreaToArea(AreaType::AREA_A, AreaType::AREA_B);
     Workpiece *wp2b = mngr->getHeadOfArea(AreaType::AREA_B);
     EXPECT_EQ(wp2b->metal, false);
-    EXPECT_EQ(wp2b->avgHeight, 0);
+    EXPECT_EQ(wp2b->avgHeightFBM1, 0);
     EXPECT_EQ(wp2b->M_type, WorkpieceType::WS_UNKNOWN);
     EXPECT_EQ(wp2b->sortOut, false);
     EXPECT_EQ(wp2b->flipped, false);
@@ -86,7 +86,7 @@ TEST_F(UnitTest_WorkpieceManager, InitiallyNoWorkpiecesAddNewAndIncrementId) {
     mngr->moveFromAreaToArea(AreaType::AREA_C, AreaType::AREA_D);
     Workpiece *wp1d = mngr->getHeadOfArea(AreaType::AREA_D);
     EXPECT_EQ(wp1d->metal, true);
-    EXPECT_EQ(wp1d->avgHeight, 23);
+    EXPECT_EQ(wp1d->avgHeightFBM1, 23);
     EXPECT_EQ(wp1d->M_type, WorkpieceType::WS_F);
     EXPECT_EQ(wp1d->S_type, WorkpieceType::WS_UNKNOWN);
     EXPECT_EQ(wp1d->sortOut, true);

@@ -221,7 +221,7 @@ TEST_F(IntegrationTest_Running, WorkpieceDefaultValues) {
 	EXPECT_EQ(1, wp1->id);
 	EXPECT_EQ(WorkpieceType::WS_UNKNOWN, wp1->M_type);
 	EXPECT_EQ(WorkpieceType::WS_UNKNOWN, wp1->S_type);
-	EXPECT_EQ(0.0, wp1->avgHeight);
+	EXPECT_EQ(0.0, wp1->avgHeightFBM1);
 	EXPECT_EQ(0.0, wp1->maxHeightFBM2);
 	EXPECT_EQ(false, wp1->metal);
 	EXPECT_EQ(false, wp1->flipped);
@@ -233,7 +233,7 @@ TEST_F(IntegrationTest_Running, SetHeightResult) {
 	fsm->master_heightResultReceived(EventType::HM_M_WS_F, 20.5);
 	Workpiece* wp1 = wpm->getHeadOfArea(AreaType::AREA_B);
 	EXPECT_EQ(WorkpieceType::WS_F, wp1->M_type);
-	EXPECT_EQ(20.5, wp1->avgHeight);
+	EXPECT_EQ(20.5, wp1->avgHeightFBM1);
 }
 
 TEST_F(IntegrationTest_Running, SetMetalResult) {
@@ -253,7 +253,7 @@ TEST_F(IntegrationTest_Running, WorkpieceInOrderLetPass) {
 	wpRunUntilSwitchAtFBM1(EventType::HM_M_WS_F, 21, false);
 	Workpiece* wp1 = wpm->getHeadOfArea(AreaType::AREA_C);
 	EXPECT_EQ(WorkpieceType::WS_F, wp1->M_type);
-	EXPECT_EQ(21, wp1->avgHeight);
+	EXPECT_EQ(21, wp1->avgHeightFBM1);
 	EXPECT_FALSE(wp1->sortOut);
 }
 
@@ -270,7 +270,7 @@ TEST_F(IntegrationTest_Running, WorkpieceNotInOrderSortOutAtFBM1) {
 	wpRunUntilSwitchAtFBM1(EventType::HM_M_WS_F, 20, false);
 	Workpiece* wp1 = wpm->getHeadOfArea(AreaType::AREA_B);
 	EXPECT_EQ(WorkpieceType::WS_F, wp1->M_type);
-	EXPECT_EQ(20, wp1->avgHeight);
+	EXPECT_EQ(20, wp1->avgHeightFBM1);
 	EXPECT_TRUE(wp1->sortOut);
 }
 
@@ -278,6 +278,6 @@ TEST_F(IntegrationTest_Running, WorkpieceNotInOrderSortOutAtFBM2) {
 	wpRunUntilSwitchAtFBM1(EventType::HM_M_WS_BOM, 25, false);
 	Workpiece* wp1 = wpm->getHeadOfArea(AreaType::AREA_C);
 	EXPECT_EQ(WorkpieceType::WS_BOM, wp1->M_type);
-	EXPECT_EQ(25, wp1->avgHeight);
+	EXPECT_EQ(25, wp1->avgHeightFBM1);
 	EXPECT_FALSE(wp1->sortOut);
 }

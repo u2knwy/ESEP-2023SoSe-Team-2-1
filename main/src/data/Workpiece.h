@@ -21,17 +21,22 @@ struct Workpiece {
     /**
      * The average measured height at FBM1
      */
-    float avgHeight{0.0};
+    float avgHeightFBM1{0.0};
 
     /**
-     * Whether the Workpiece contains a metal.
+     * The average measured height at FBM2
      */
-    bool metal{false};
+    float avgHeightFBM2{0.0};
 
     /**
      * Maximum measured height at FBM2
      */
     float maxHeightFBM2{0.0};
+
+    /**
+     * Whether the Workpiece contains a metal.
+     */
+    bool metal{false};
 
     /**
      * if the workpiece was flipped between FBM1 and FBM2.
