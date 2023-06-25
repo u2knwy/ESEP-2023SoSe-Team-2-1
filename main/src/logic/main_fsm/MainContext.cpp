@@ -24,7 +24,7 @@ MainContext::MainContext(MainActions* actions) {
 }
 
 MainContext::~MainContext() {
-	Logger::error("MainContext Destructor called!");
+//	Logger::error("MainContext Destructor called!");
 	delete state;
 	delete data;
 }

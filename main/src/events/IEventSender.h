@@ -15,7 +15,7 @@ class IEventSender {
 	IEventSender() { coid = -1; }
 
     virtual ~IEventSender() {
-    	std::cout << "IEventSender Destructor called" << std::endl;
+//    	std::cout << "IEventSender Destructor called" << std::endl;
     };
 
     /**

@@ -20,18 +20,20 @@
 
 class UnitTest_MainFSM : public ::testing::Test {
   protected:
-	std::shared_ptr<IEventManager> eventManager = std::make_shared<EventManagerMock>();
+	std::shared_ptr<EventManagerMock> evm;
     IEventSender* sender;
     MainActions* mainActions;
     MainContext* fsm;
 
     void SetUp() override {
+    	evm = std::make_shared<EventManagerMock>();
     	sender = new EventSenderMock();
-        mainActions = new MainActions(eventManager, sender);
+        mainActions = new MainActions(evm, sender);
         fsm = new MainContext(mainActions);
     }
 
     void TearDown() override {
+    	delete mainActions;
     	delete fsm;
     }
 };
@@ -49,7 +51,7 @@ TEST_F(UnitTest_MainFSM, StateRunningAfterStartPressedShort) {
 
     delete fsm;
 	sender = new EventSenderMock();
-    mainActions = new MainActions(eventManager, sender);
+    mainActions = new MainActions(evm, sender);
     fsm = new MainContext(mainActions);
 
     fsm->slave_btnStart_PressedShort();
@@ -66,21 +68,64 @@ TEST_F(UnitTest_MainFSM, StateServiceModeAfterStartPressedLong) {
 
     delete fsm;
 	sender = new EventSenderMock();
-    mainActions = new MainActions(eventManager, sender);
+    mainActions = new MainActions(evm, sender);
     fsm = new MainContext(mainActions);
 
     fsm->slave_btnStart_PressedLong();
     EXPECT_EQ(MainState::SERVICEMODE, fsm->getCurrentState()); // in ServiceMode
 
+    // Calibrate offset
+    evm->clearLastHandledEvents();
     fsm->master_btnStart_PressedShort();
+    EXPECT_TRUE(evm->lastHandledEventsContain(Event{HM_M_CAL_OFFSET}));
     fsm->master_btnReset_Pressed();
-    fsm->master_btnStart_PressedShort();
-    fsm->master_btnReset_Pressed();
-    fsm->master_btnStart_PressedShort();
-    fsm->master_btnStart_PressedShort();
 
-    fsm->slave_btnStop_Pressed();
-    EXPECT_EQ(MainState::STANDBY, fsm->getCurrentState());   // back in Standby
+    // Calibrate reference
+    evm->clearLastHandledEvents();
+    fsm->master_btnStart_PressedShort();
+    EXPECT_TRUE(evm->lastHandledEventsContain(Event{HM_M_CAL_REF}));
+    fsm->master_btnReset_Pressed();
+
+    // Selftest Sensors
+    evm->clearLastHandledEvents();
+    fsm->master_LBA_Blocked();
+    EXPECT_TRUE(evm->lastHandledEventsContain(Event{MOTOR_M_RIGHT_REQ, 1}));
+    fsm->master_LBW_Blocked();
+    fsm->master_LBE_Blocked();
+    fsm->slave_LBA_Blocked();
+    EXPECT_TRUE(evm->lastHandledEventsContain(Event{MOTOR_S_RIGHT_REQ, 1}));
+    fsm->slave_LBW_Blocked();
+    fsm->slave_LBE_Blocked();
+    fsm->master_LBR_Blocked();
+    fsm->slave_LBR_Blocked();
+    evm->clearLastHandledEvents();
+    fsm->master_btnStart_PressedShort();
+    // All tests pass - still in ServiceMode in SelftestActuators
+    EXPECT_EQ(MainState::SERVICEMODE, fsm->getCurrentState());
+
+    // Selftest actuators
+    evm->lastHandledEventsContain(Event{EventType::LAMP_M_GREEN, (int) LampState::ON});
+    evm->lastHandledEventsContain(Event{EventType::LAMP_M_YELLOW, (int) LampState::ON});
+    evm->lastHandledEventsContain(Event{EventType::LAMP_M_RED, (int) LampState::ON});
+    evm->lastHandledEventsContain(Event{EventType::LED_M_START, (int) LampState::ON});
+    evm->lastHandledEventsContain(Event{EventType::LED_M_RESET, (int) LampState::ON});
+    evm->lastHandledEventsContain(Event{EventType::LED_M_Q1, (int) LampState::ON});
+    evm->lastHandledEventsContain(Event{EventType::LED_M_Q2, (int) LampState::ON});
+    evm->lastHandledEventsContain(Event{EventType::LAMP_S_GREEN, (int) LampState::ON});
+    evm->lastHandledEventsContain(Event{EventType::LAMP_S_YELLOW, (int) LampState::ON});
+    evm->lastHandledEventsContain(Event{EventType::LAMP_S_RED, (int) LampState::ON});
+    evm->lastHandledEventsContain(Event{EventType::LED_S_START, (int) LampState::ON});
+    evm->lastHandledEventsContain(Event{EventType::LED_S_RESET, (int) LampState::ON});
+    evm->lastHandledEventsContain(Event{EventType::LED_S_Q1, (int) LampState::ON});
+    evm->lastHandledEventsContain(Event{EventType::LED_S_Q2, (int) LampState::ON});
+    evm->lastHandledEventsContain(Event{EventType::SORT_M_OUT, 0});
+    evm->lastHandledEventsContain(Event{EventType::SORT_S_OUT, 0});
+
+    // Start -> actuators also pass - go to Standby
+    fsm->master_btnStart_PressedShort();
+    evm->clearLastHandledEvents();
+    EXPECT_EQ(MainState::STANDBY, fsm->getCurrentState());
+    evm->lastHandledEventsContain(Event{EventType::MODE_STANDBY});
 }
 
 // In state running and stop pressed -> Current state must be STANDBY
