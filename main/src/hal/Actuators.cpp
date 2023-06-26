@@ -197,38 +197,74 @@ void Actuators::redLampOff() {
 }
 
 void Actuators::thRedLampFlashing(bool fast) {
-    int t_ms;
-    t_ms = fast ? ON_TIME_FAST_MS : ON_TIME_SLOW_MS;
+    int t_ms = fast ? ON_TIME_FAST_MS : ON_TIME_SLOW_MS;
+    int t_actual;
     redBlinking = true;
     while (redBlinking) {
         redLampOn();
-        std::this_thread::sleep_for(std::chrono::milliseconds(t_ms));
+        t_actual = 0;
+        while(t_actual < t_ms) {
+			std::this_thread::sleep_for(std::chrono::milliseconds(BLINK_POLL_TIME_MS));
+			if(!redBlinking)
+				return;
+			t_actual += 100;
+        }
         redLampOff();
-        std::this_thread::sleep_for(std::chrono::milliseconds(t_ms));
+        t_actual = 0;
+		while(t_actual < t_ms) {
+			std::this_thread::sleep_for(std::chrono::milliseconds(BLINK_POLL_TIME_MS));
+			if(!redBlinking)
+				return;
+			t_actual += 100;
+		}
     }
 }
 
 void Actuators::thYellowLampFlashing(bool fast) {
-    int t_ms;
-    t_ms = fast ? ON_TIME_FAST_MS : ON_TIME_SLOW_MS;
+    int t_ms = fast ? ON_TIME_FAST_MS : ON_TIME_SLOW_MS;
+    int t_actual;
     yellowBlinking = true;
     while (yellowBlinking) {
         yellowLampOn();
-        std::this_thread::sleep_for(std::chrono::milliseconds(t_ms));
+        t_actual = 0;
+        while(t_actual < t_ms) {
+			std::this_thread::sleep_for(std::chrono::milliseconds(BLINK_POLL_TIME_MS));
+			if(!yellowBlinking)
+				return;
+			t_actual += 100;
+        }
         yellowLampOff();
-        std::this_thread::sleep_for(std::chrono::milliseconds(t_ms));
+        t_actual = 0;
+		while(t_actual < t_ms) {
+			std::this_thread::sleep_for(std::chrono::milliseconds(BLINK_POLL_TIME_MS));
+			if(!yellowBlinking)
+				return;
+			t_actual += 100;
+		}
     }
 }
 
 void Actuators::thGreenLampFlashing(bool fast) {
-    int t_ms;
-    t_ms = fast ? ON_TIME_FAST_MS : ON_TIME_SLOW_MS;
+    int t_ms = fast ? ON_TIME_FAST_MS : ON_TIME_SLOW_MS;
+    int t_actual;
     greenBlinking = true;
     while (greenBlinking) {
-        greenLampOn();
-        std::this_thread::sleep_for(std::chrono::milliseconds(t_ms));
+    	greenLampOn();
+        t_actual = 0;
+        while(t_actual < t_ms) {
+			std::this_thread::sleep_for(std::chrono::milliseconds(BLINK_POLL_TIME_MS));
+			if(!greenBlinking)
+				return;
+			t_actual += 100;
+        }
         greenLampOff();
-        std::this_thread::sleep_for(std::chrono::milliseconds(t_ms));
+        t_actual = 0;
+		while(t_actual < t_ms) {
+			std::this_thread::sleep_for(std::chrono::milliseconds(BLINK_POLL_TIME_MS));
+			if(!greenBlinking)
+				return;
+			t_actual += 100;
+		}
     }
 }
 

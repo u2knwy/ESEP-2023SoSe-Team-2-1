@@ -24,6 +24,9 @@
 #define ON_TIME_PUSHER_MS 300
 #define ON_TIME_SWITCH_MS 1000
 
+// Check every x ms if "blinking thread" should be terminated
+#define BLINK_POLL_TIME_MS 100
+
 class Actuators : public IActuators {
   public:
     Actuators(std::shared_ptr<EventManager> mngr);
