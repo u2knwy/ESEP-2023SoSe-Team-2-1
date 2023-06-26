@@ -318,6 +318,11 @@ bool Running::slave_LBR_Unblocked() {
 }
 
 bool Running::master_btnStop_Pressed() {
+	bool warning = data->wpManager->getRamp_one() || data->wpManager->getRamp_two();
+	if(warning) {
+		Logger::warn("You cannot go to Standby mode, because a warning is active. Fix the warning first!");
+		return false;
+	}
 	exit();
 	new (this) Standby;
 	entry();
@@ -325,6 +330,11 @@ bool Running::master_btnStop_Pressed() {
 }
 
 bool Running::slave_btnStop_Pressed() {
+	bool warning = data->wpManager->getRamp_one() || data->wpManager->getRamp_two();
+	if(warning) {
+		Logger::warn("You cannot go to Standby mode, because a warning is active. Fix the warning first!");
+		return false;
+	}
 	exit();
 	new (this) Standby;
 	entry();
