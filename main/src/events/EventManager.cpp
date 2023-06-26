@@ -42,6 +42,10 @@ EventManager::~EventManager() {
     ConnectDetach(internal_coid);
     ChannelDestroy(internal_chid);
 }
+void EventManager::connectionLost(){
+	Logger::debug("[EventManager] Disconnected from external");
+	disconnected = true;
+}
 
 void EventManager::openInternalChannel() {
     internal_chid = ChannelCreate(0);
@@ -116,7 +120,12 @@ void EventManager::rcvExternalEventsThread() {
             break;
         }
         if (rcvid == 0) {// Pulse was received
-            handle_pulse(header, rcvid);
+        	if(isMaster){
+        	handleEvent(Event{WD_S_HEARTBEAT});
+        	}else{
+        		handleEvent(Event{WD_M_HEARTBEAT});
+        	}
+        	handle_pulse(header, rcvid);
             continue;
         }
         // continue while (1) loop
@@ -157,10 +166,12 @@ void EventManager::handle_pulse(header_t hdr, int rcvid){
          * _PULSE_CODE_COIDDEATH or _PULSE_CODE_THREADDEATH
          * from the kernel? */
     	Logger::debug("Server received some pulse msg.");
-/*        Event ev;
+    	if(hdr.code > 0){
+    	Event ev;
         ev.type = (EventType) hdr.code;
         ev.data = hdr.value.sival_int;
-        handleEvent(ev);*/
+        handleEvent(ev);
+    	}
         break;
     }
 }
@@ -231,7 +242,6 @@ void EventManager::connectToService(const std::string& name) {
             std::this_thread::sleep_for(std::chrono::seconds(1));
         }
     }
-
     externConnected = true;
     Logger::info("[EventManager] Connected to service: " + name);
 }
@@ -300,23 +310,9 @@ void EventManager::sendExternalEvent(const Event &event) {
     // TODO: Send event to other system
     //int res = MsgSendPulse(this->server_coid, -1, (int) event.type, event.data);
 
-    header_t header;
-    app_header_t app_header;
-    iov_t iov[3];
-    std::string msg = "hello";
-    char r_msg[512];
-    int payload_size = msg.length()+1;
-    header.type = STR_MSG;
-    header.subtype = 0x00;
-    app_header.size = payload_size;
-    app_header.data = event.data;
-    app_header.eventnr = (int) event.type;
-    SETIOV(iov+0, &header, sizeof(header));
-    SETIOV(iov+1, &app_header, sizeof(app_header));
-    SETIOV(iov+2, msg.c_str(), payload_size);
 
-    if (-1 == MsgSendvs(server_coid, iov, 3, r_msg, sizeof(r_msg))){
-        perror("Client: MsgSend failed");
+    if (-1 == MsgSendPulse(server_coid, -1,event.type, event.data)){
+        perror("Client: MsgSendPulse failed");
     }
 
     // Answer form server should be structured, too.

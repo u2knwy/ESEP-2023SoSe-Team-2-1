@@ -17,6 +17,7 @@
 Watchdog::Watchdog(std::shared_ptr<EventManager> eventManager) {
     this->eventManager = eventManager;
     this->isMaster = Configuration::getInstance().systemIsMaster();
+    heartBeatreceived = 0;
 
     if (!connect(eventManager)) {
         throw std::runtime_error("[Watchdog] Error while connecting to EventManager");
@@ -48,7 +49,7 @@ void Watchdog::handleEvent(Event event) {
 }
 
 void Watchdog::start() {
-   // th_send = std::thread(&Watchdog::sendingThread, this);
+	th_send = std::thread(&Watchdog::sendingThread, this);
     th_receive = std::thread(&Watchdog::receivingThread, this);
 }
 
@@ -87,36 +88,29 @@ void Watchdog::sendHeartbeat() {
 
 void Watchdog::receivingThread() {
     using namespace std::chrono;
-	std::this_thread::sleep_for(std::chrono::seconds(5));
+	std::this_thread::sleep_for(std::chrono::seconds(10));
     Logger::debug("[WD] Started receiving heartbeats...");
     receivingRunning = true;
-    while (receivingRunning) {
-        // every second: check if timeout has occurred
-        std::this_thread::sleep_for(milliseconds(WD_TIMEOUT_MILLIS));
-        if (heartBeatreceived) {
-        heartBeatreceived = false;
-        sendHeartbeat();
-        }
-        else {
-        		Logger::error("[WD] Connection lost! (Timeout)");
-        		receivingRunning = false;
-        		sendingRunning = false;
-        		heartBeatreceived = false;
-        		sendEvent(WD_CONN_LOST);
+    while (heartBeatreceived < WD_TIMEOUT_MILLIS) {
 
-        		if(isMaster){sendEvent(Event{EventType::ERROR_M_SELF_SOLVABLE});}
-        		else{sendEvent(Event{EventType::ERROR_S_SELF_SOLVABLE});}
-        		Logger::error("trying to reconnect...");
-
-            }
-
+    	std::this_thread::sleep_for(std::chrono::milliseconds(WD_SEND_INTERVAL_MILLIS));
+    	heartBeatreceived += 100;
     }
+
+    eventManager->connectionLost();
+    eventManager->handleEvent(Event{WD_CONN_LOST});
+
+    eventManager->handleEvent(Event{ERROR_M_SELF_SOLVABLE});
+
+    eventManager->handleEvent(Event{ERROR_S_SELF_SOLVABLE});
+
     Logger::debug("[WD] Stopped receiving heartbeats");
     receivingRunning = false;
+    sendingRunning = false;
 }
 
 void Watchdog::heartbeatReceived() {
 
-    heartBeatreceived = true;
+    heartBeatreceived = 0;
 
 }

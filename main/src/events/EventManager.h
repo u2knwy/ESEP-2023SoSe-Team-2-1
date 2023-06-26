@@ -75,6 +75,7 @@ public:
 	int stop() override;
 
 	void connectToService(const std::string& name) override;
+	void connectionLost();
 private:
 	bool isMaster;
 	int internal_chid;
