@@ -124,6 +124,7 @@ void Actuators::standbyMode() {
     setMotorRight(false);
     setMotorLeft(false);
     setMotorSlow(false);
+    closeSwitch();
 }
 
 void Actuators::runningMode() {
@@ -157,6 +158,7 @@ void Actuators::errorMode() {
     greenLampOff();
     setRedBlinking(true, true);
     setMotorStop(true);
+    closeSwitch();
 }
 
 void Actuators::estopMode() {
@@ -170,6 +172,7 @@ void Actuators::estopMode() {
     setMotorRight(false);
     setMotorLeft(false);
     setMotorSlow(false);
+    closeSwitch();
 }
 
 void Actuators::greenLampOn() {
