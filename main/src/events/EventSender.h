@@ -12,6 +12,10 @@
 #include "logger/logger.hpp"
 #include <sys/neutrino.h>
 
+#define EVENT_DATA(ev) (int)(ev.data | (ev.additional_data << 16))
+#define DATA_FROM_EVENT(data) (int)(data & 0xFFFF)
+#define ADD_DATA_FROM_EVENT(data) (int)(data >> 16)
+
 class EventSender : public IEventSender {
   public:
     EventSender() { coid = -1; }
@@ -54,14 +58,17 @@ class EventSender : public IEventSender {
         }
 
         int eventData;
-        if(event.additional_data != -1) {
+        if(event.data == -1 && event.additional_data == -1) {
+        	eventData = 0;
+        } /*else if(event.additional_data != -1) {
         	// Lower 16 bits: data
         	// Upper 16 bits: additional data
-        	eventData = (event.additional_data << 16) | event.data;
-        } else {
+        	//eventData = (event.additional_data << 16) | event.data;
+        } */else {
         	// Lower 16 bits: data
         	// Upper 16 bits: 0x0000
-        	eventData = (-1 << 16) | event.data;
+        	//eventData = (-1 << 16) | event.data;
+        	eventData = EVENT_DATA(event);
         }
 
         int res = MsgSendPulse(this->coid, -1, (int) event.type, eventData);
