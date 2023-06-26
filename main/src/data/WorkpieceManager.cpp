@@ -28,7 +28,16 @@ void WorkpieceManager::rotateNextWorkpieces() {
     desiredOrder[1] = desiredOrder[2];
     desiredOrder[2] = front;
 
-    Logger::info("Next expected workpiece: " + WP_TYPE_TO_STRING(getNextWorkpieceType()));
+    //Logger::info("Next expected workpiece: " + WP_TYPE_TO_STRING(getNextWorkpieceType()));
+    printCurrentOrder();
+}
+
+void WorkpieceManager::printCurrentOrder() {
+    std::stringstream ss;
+    ss << WP_TYPE_TO_STRING(desiredOrder[0]);
+    ss << " -> " << WP_TYPE_TO_STRING(desiredOrder[1]);
+    ss << " -> " << WP_TYPE_TO_STRING(desiredOrder[2]);
+    Logger::info("Next expected workpieces: " + ss.str());
 }
 
 WorkpieceType WorkpieceManager::getNextWorkpieceType() {

@@ -20,7 +20,7 @@ class MainBasestate {
     MainBasestate *substateError = nullptr;
     MainActions *actions;
     MainContextData *data;
-    MainState previousState = MAIN_NONE;
+    MainState previousState;
 
   public:
     virtual ~MainBasestate() {}
@@ -32,6 +32,8 @@ class MainBasestate {
 
     virtual void entry() {}
     virtual void exit() {}
+
+    virtual void entryHistory() {};
 
     virtual void initSubStateEStop() {}
     virtual void initSubStateServiceMode() {}

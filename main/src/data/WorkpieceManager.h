@@ -23,6 +23,13 @@ class WorkpieceManager {
     ~WorkpieceManager();
 
     void rotateNextWorkpieces();
+
+    /**
+     * Prints the current order in which workpieces should arrive at the end of
+     * FBM2.
+     */
+    void printCurrentOrder();
+
     WorkpieceType getNextWorkpieceType();
     Workpiece *addWorkpiece();
 

@@ -120,6 +120,10 @@ void Actuators::standbyMode() {
     q2LedOff();
     startLedOn();
     resetLedOff();
+    setMotorStop(true);
+    setMotorRight(false);
+    setMotorLeft(false);
+    setMotorSlow(false);
 }
 
 void Actuators::runningMode() {
@@ -133,9 +137,6 @@ void Actuators::runningMode() {
     startLedOff();
     resetLedOff();
     setMotorStop(false);
-    setMotorRight(false);
-    setMotorLeft(false);
-    setMotorSlow(false);
 }
 
 void Actuators::serviceMode() {
@@ -156,9 +157,6 @@ void Actuators::errorMode() {
     greenLampOff();
     setRedBlinking(true, true);
     setMotorStop(true);
-    setMotorRight(false);
-    setMotorLeft(false);
-    setMotorSlow(false);
 }
 
 void Actuators::estopMode() {

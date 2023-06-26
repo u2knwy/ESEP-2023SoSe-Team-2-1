@@ -12,6 +12,8 @@ class Running : public MainBasestate {
     void entry() override;
     void exit() override;
 
+    void entryHistory() override;
+
     MainState getCurrentState() override;
 
     bool master_LBA_Blocked() override;

@@ -77,9 +77,7 @@ void MainActions::setStandbyMode() {
 }
 
 void MainActions::setRunningMode() {
-    Event event;
-    event.type = EventType::MODE_RUNNING;
-    sender->sendEvent(event);
+    sender->sendEvent(Event{EventType::MODE_RUNNING});
 }
 
 void MainActions::setServiceMode() {
