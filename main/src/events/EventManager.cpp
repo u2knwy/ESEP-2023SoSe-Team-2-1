@@ -12,6 +12,7 @@
 
 #include <errno.h>
 #include <iostream>
+#include <watchdog/Watchdog.h>
 #include <sstream>
 #include <string>
 #include <sys/dispatch.h>
@@ -143,7 +144,6 @@ void EventManager::rcvExternalEventsThread() {
 }
 
 void EventManager::handle_pulse(header_t hdr, int rcvid){
-	Logger::debug("handle_pulse: " + std::to_string(rcvid));
     switch (hdr.code) {
     case _PULSE_CODE_DISCONNECT:
         Logger::debug("Server received _PULSE_CODE_DISCONNECT");
@@ -165,7 +165,6 @@ void EventManager::handle_pulse(header_t hdr, int rcvid){
         /* A pulse sent by one of your processes or a
          * _PULSE_CODE_COIDDEATH or _PULSE_CODE_THREADDEATH
          * from the kernel? */
-    	Logger::debug("Server received some pulse msg.");
     	if(hdr.code > 0){
     	Event ev;
         ev.type = (EventType) hdr.code;
@@ -299,7 +298,9 @@ void EventManager::handleEvent(const Event &event) {
     }
 
 
-
+    if(event.type ==EventType::WD_M_HEARTBEAT || event.type== WD_S_HEARTBEAT){
+    	return;
+    }
     Logger::debug(ss.str());
 }
 
