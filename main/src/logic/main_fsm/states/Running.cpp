@@ -303,6 +303,7 @@ bool Running::slave_LBR_Blocked() {
 	if (!data->wpManager->isFBM_MEmpty()) {
 		// FBM1 waiting for FBM2 to get free -> start motor of FBM1 as well
 		actions->master_sendMotorRightRequest(true);
+		actions->slave_sendMotorRightRequest(false);
 	} else {
 		// FBM1 not waiting -> stop FBM2
 		actions->slave_sendMotorRightRequest(false);
