@@ -78,10 +78,8 @@ void Watchdog::sendingThread() {
 
 void Watchdog::sendHeartbeat() {
     if (isMaster) {
-        Logger::debug("sending heartbeat to slave");
         sendEvent(Event{WD_M_HEARTBEAT});
     } else if(!isMaster) {
-        Logger::debug("sending heartbeat to master");
         sendEvent(Event{WD_S_HEARTBEAT});
     }
 }
