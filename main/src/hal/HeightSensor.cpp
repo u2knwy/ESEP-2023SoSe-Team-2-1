@@ -216,6 +216,7 @@ float HeightSensor::getAverageHeight() {
     if (window.empty())
         return 0.0;
     long sum = 0;
+    int outliers = 0;
     for (int val : window) {
         sum += val;
     }

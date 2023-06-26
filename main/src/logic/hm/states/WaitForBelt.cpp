@@ -25,4 +25,7 @@ bool WaitForBelt::beltDetected() {
     return true;
 }
 
-bool WaitForBelt::unknownDetected() { return false; }
+bool WaitForBelt::workpieceHeightDetected(float height) {
+	data->addValue(height);
+	return true;
+}

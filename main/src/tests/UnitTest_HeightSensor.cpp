@@ -92,7 +92,9 @@ TEST_F(UnitTest_HeightSensor, HighDetected) {
     EXPECT_EQ(HeightState::WAIT_FOR_BELT, fsm->getCurrentState());
 
     // NEXT COMES BELT
-    fsm->heightValueReceived(1.0);
+    for(int i = 0; i < BELT_THRESHOLD; i++) {
+        fsm->heightValueReceived(1.0);
+    }
     EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
 }
 
@@ -113,7 +115,9 @@ TEST_F(UnitTest_HeightSensor, FlatDetected) {
     EXPECT_EQ(WorkpieceType::WS_F, fsm->getCurrentResult().type);
 
     // NEXT COMES BELT
-    fsm->heightValueReceived(1.0);
+    for(int i = 0; i < BELT_THRESHOLD; i++) {
+        fsm->heightValueReceived(1.0);
+    }
     EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
 }
 
@@ -132,7 +136,9 @@ TEST_F(UnitTest_HeightSensor, HighWithHoleDetected) {
     fsm->heightValueReceived(25.0);
 
     // Next comes BELT
-    fsm->heightValueReceived(1.0);
+    for(int i = 0; i < BELT_THRESHOLD; i++) {
+        fsm->heightValueReceived(1.0);
+    }
     EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
 }
 
@@ -145,7 +151,9 @@ TEST_F(UnitTest_HeightSensor, UnknownDetected) {
     // UNKNOWN WS detected
     fsm->heightValueReceived(30.0);
     // Next comes BELT
-    fsm->heightValueReceived(1.0);
+    for(int i = 0; i < BELT_THRESHOLD; i++) {
+        fsm->heightValueReceived(1.0);
+    }
     EXPECT_EQ(WorkpieceType::WS_UNKNOWN, fsm->getCurrentResult().type);
     EXPECT_EQ(HeightState::WAIT_FOR_WS, fsm->getCurrentState());
 }

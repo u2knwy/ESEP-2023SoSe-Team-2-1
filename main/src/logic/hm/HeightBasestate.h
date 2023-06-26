@@ -34,24 +34,12 @@ class HeightBasestate {
     virtual bool beltDetected() { return false; }
 
     /**
-     * Height FLAT was detected
+     * A new workpiece was detected at HeightSensor.
+     * (height change from 0-2mm (belt) to > 2mm)
+     *
+     * @param height Measured height
      */
-    virtual bool flatDetected() { return false; }
-
-    /**
-     * Height HIGH was detected
-     */
-    virtual bool highDetected() { return false; }
-
-    /**
-     * Height HOLE was detected
-     */
-    virtual bool holeDetected() { return false; }
-
-    /**
-     * Height UNKNOWN was detected
-     */
-    virtual bool unknownDetected() { return false; }
+    virtual bool workpieceHeightDetected(float height) { return false; }
 
     /**
      * The motor was stopped

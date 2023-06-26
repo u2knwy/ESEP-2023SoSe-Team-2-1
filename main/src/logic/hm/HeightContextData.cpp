@@ -46,8 +46,7 @@ HeightResult HeightContextData::getCurrentResult() {
     HeightResult result;
 
     int totalValues = measurements.size();
-    Logger::debug("[HFSM] Get Result -> # of measurements: " +
-                  std::to_string(totalValues));
+    Logger::debug("[HFSM] Get Result -> # of measurements: " + std::to_string(totalValues));
     if (totalValues == 0) {
         result.type = WorkpieceType::WS_UNKNOWN;
         result.average = 0.0;
