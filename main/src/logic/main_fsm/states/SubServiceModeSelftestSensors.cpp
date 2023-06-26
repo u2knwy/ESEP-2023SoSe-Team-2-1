@@ -16,7 +16,9 @@ void SubServiceModeSelftestSensors::entry() {
     Logger::info("[ServiceMode] +++ SELFTEST SENSORS +++");
     Logger::user_info("Place any workpiece at Start of FBM1 and wait until it arrives at the end of FBM2.");
     actions->master_btnStartLedOn();
+    actions->slave_btnStartLedOn();
     actions->master_btnResetLedOff();
+    actions->slave_btnResetLedOff();
 }
 
 void SubServiceModeSelftestSensors::exit() {}

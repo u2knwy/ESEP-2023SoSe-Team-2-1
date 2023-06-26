@@ -18,7 +18,9 @@ void SubServiceModeSelftestActuators::entry() {
     actions->allActuatorsOn();
     Logger::user_info("Are all actuators on? Press START button if ok.");
     actions->master_btnStartLedOn();
+    actions->slave_btnStartLedOn();
     actions->master_btnResetLedOff();
+    actions->slave_btnResetLedOff();
 }
 
 void SubServiceModeSelftestActuators::exit() {
