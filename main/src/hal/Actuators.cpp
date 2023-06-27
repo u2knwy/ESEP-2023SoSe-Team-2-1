@@ -188,7 +188,6 @@ void Actuators::estopMode() {
     }else{
     closeSwitch();
     }
-    }
 }
 
 void Actuators::greenLampOn() {
