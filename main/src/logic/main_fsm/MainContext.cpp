@@ -127,11 +127,8 @@ void MainContext::subscribeToEvents() {
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 	actions->eventManager->subscribe(EventType::ERROR_S_SELF_SOLVED,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-
-	/*	actions->eventManager->subscribe(EventType::WD_CONN_LOST,
-	 std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
-	 actions->eventManager->subscribe(EventType::WD_CONN_REESTABLISHED,
-	 std::bind(&MainContext::handleEvent, this, std::placeholders::_1));*/
+	actions->eventManager->subscribe(EventType::HAL_PUSHER_MOUNTED,
+				std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 }
 
 void MainContext::handleEvent(Event event) {
@@ -252,6 +249,9 @@ void MainContext::handleEvent(Event event) {
 	case EventType::ERROR_M_SELF_SOLVED:
 	case EventType::ERROR_S_SELF_SOLVED:
 		errorSelfSolved();
+		break;
+	case EventType::HAL_PUSHER_MOUNTED:
+		data->slave_pusherMounted = true;
 		break;
 	default:
 		Logger::warn(

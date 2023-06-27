@@ -6,6 +6,7 @@
  */
 
 #include "Running.h"
+#include "configuration/Configuration.h"
 
 #include <chrono>
 #include <iostream>
@@ -155,7 +156,9 @@ bool Running::master_LBE_Blocked()
 			actions->master_sendMotorRightRequest(false);
 		}
 		// Close switch if open
-		actions->master_openGate(false);
+		if(!data->master_pusherMounted) {
+			actions->master_openGate(false);
+		}
 	}
 	return true;
 }
@@ -275,7 +278,9 @@ bool Running::slave_LBE_Blocked() {
 			actions->slave_sendMotorRightRequest(false);
 		}
 		// Close switch if open
-		actions->slave_openGate(false);
+		if(!data->slave_pusherMounted) {
+			actions->slave_openGate(false);
+		}
 	}
 
 	return true;
