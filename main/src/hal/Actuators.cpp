@@ -30,8 +30,10 @@ Actuators::Actuators(std::shared_ptr<EventManager> mngr) : IActuators(mngr) {
     standbyMode();
 
 	if(hasPusher) {
+        Logger::debug("started with pusher");
 		openSwitch();
 	} else {
+        Logger::debug("started with switch");
 		closeSwitch();
 	}
 }
@@ -124,8 +126,13 @@ void Actuators::standbyMode() {
     setMotorRight(false);
     setMotorLeft(false);
     setMotorSlow(false);
-    closeSwitch();
+    if(hasPusher){
+        openSwitch();
+    }else{
+        closeSwitch();
+    }
 }
+
 
 void Actuators::runningMode() {
     setGreenBlinking(false);
