@@ -78,10 +78,29 @@ TEST_F(UnitTest_MainFSM, StateServiceModeAfterStartPressedLong) {
     EXPECT_EQ(MainState::STANDBY, fsm->getCurrentState());   // back in Standby
 }
 
-// In state running and stop pressed -> Current state must be STANDBY
+// In state running, stop pressed and no warning active -> New state must be STANDBY
 TEST_F(UnitTest_MainFSM, StateStandbyAfterRunningAndStopPressed) {
     // Buttons pressed at master
     fsm->master_btnStart_PressedShort();
+
+    // Check if going to Standby not possible if warning active (ramp blocked)
+	fsm->data->wpManager->setRamp_one(true);
+	fsm->data->wpManager->setRamp_two(false);
+    fsm->master_btnStop_Pressed();
+    EXPECT_EQ(MainState::RUNNING, fsm->getCurrentState());
+
+	fsm->data->wpManager->setRamp_one(false);
+	fsm->data->wpManager->setRamp_two(true);
+    fsm->master_btnStop_Pressed();
+    EXPECT_EQ(MainState::RUNNING, fsm->getCurrentState());
+
+	fsm->data->wpManager->setRamp_one(true);
+	fsm->data->wpManager->setRamp_two(true);
+    fsm->master_btnStop_Pressed();
+    EXPECT_EQ(MainState::RUNNING, fsm->getCurrentState());
+
+	fsm->data->wpManager->setRamp_one(false);
+	fsm->data->wpManager->setRamp_two(false);
     fsm->master_btnStop_Pressed();
     EXPECT_EQ(MainState::STANDBY, fsm->getCurrentState());
 

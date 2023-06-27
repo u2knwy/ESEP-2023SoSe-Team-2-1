@@ -74,6 +74,10 @@ public:
 		Logger::getInstance().log_internal(msg, level::USER);
 	}
 
+	static void to_file(const std::string &msg) {
+		Logger::getInstance().log_to_file(msg);
+	}
+
 	static void set_level(level log_level) {
 		getInstance().minimal_log_level = log_level;
 	}
@@ -103,8 +107,14 @@ public:
 
 private:
 	Logger() {
-		system("rm /tmp/esep_21_log.txt");
-		logFile.open("/tmp/esep_21_log.txt");
+		auto now = std::time(nullptr);
+		auto local_time = std::localtime(&now);
+		std::stringstream ss;
+		ss << "/tmp/esep_2.1/";
+		ss << "log_" << std::put_time(local_time, "%Y%m%d-%H%M%S") << ".txt";
+		std::string logFilePath = ss.str();
+		system(std::string("rm " + ss.str()).c_str());
+		logFile.open(logFilePath);
 		if (!logFile.is_open()) {
 			throw std::runtime_error("Failed to open file.");
 		}
@@ -168,6 +178,9 @@ private:
 
 		std::cout << ss.str() << std::endl;
 
-		logFile << ss.str() << std::endl;
+	}
+
+	void log_to_file(const std::string &log) {
+		logFile << log << std::endl;
 	}
 };

@@ -17,8 +17,8 @@ MainContext::MainContext(MainActions* actions) {
 	this->actions = actions;
 	this->data = new MainContextData();
 	this->state = new Standby();
-	state->setAction(actions);
-	state->setData(data);
+	state->setAction(this->actions);
+	state->setData(this->data);
 	state->entry();
 	subscribeToEvents();
 }

@@ -116,7 +116,6 @@ bool Error::master_btnStart_PressedShort() {
 bool Error::slave_btnStart_PressedShort() {
 	substateError->slave_btnStart_PressedShort();
 	if (substateError->isSubEndState()) {
-		exit();
 		if (previousState == MainState::RUNNING) {
 			exit();
 			new (this) Running;

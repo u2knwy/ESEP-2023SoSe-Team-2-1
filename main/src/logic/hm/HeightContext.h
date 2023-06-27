@@ -18,6 +18,8 @@
 #include "hal/HeightSensor.h"
 #include "hal/IHeightSensor.h"
 
+#define BELT_THRESHOLD 5
+
 class HeightContext : public IEventHandler {
   public:
     HeightContext(HeightActions* actions, HeightContextData* data, std::shared_ptr<IHeightSensor> sensor);
@@ -43,5 +45,6 @@ class HeightContext : public IEventHandler {
     std::shared_ptr<IHeightSensor> sensor;
     bool isMaster;
     bool running;
+    int nBeltDetected;
     void subscribeToEvents();
 };

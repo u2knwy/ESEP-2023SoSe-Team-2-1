@@ -18,13 +18,12 @@
 #define HEIGHT_FLAT        21
 #define HEIGHT_HIGH        25
 #define HEIGHT_HOLE_MIN    4
-#define HEIGHT_HOLE_MAX    9
+#define HEIGHT_HOLE_MAX    10
 #define HEIGHT_TOL         2
 #define ADC_DEFAULT_OFFSET 3333
 #define ADC_DEFAULT_HIGH   2222
 // use N samples for averaging / max. value (sliding window)
 #define ADC_SAMPLE_SIZE  100
-#define HM_SEND_INTERVAL 5
 
 class IHeightSensor {
   public:

@@ -75,12 +75,15 @@ public:
 	int stop() override;
 
 	void connectToService(const std::string& name) override;
+	void connectionLost();
+	void tryreconnect();
 private:
 	bool isMaster;
 	int internal_chid;
 	int internal_coid;
 	int server_coid; // for GNS connection?
 	bool externConnected;
+	bool disconnected = false;
 	std::atomic<bool> rcvInternalRunning;
 	std::thread thRcvInternal;
     std::atomic<bool> rcvExternalRunning;
