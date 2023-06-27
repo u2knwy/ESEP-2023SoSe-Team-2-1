@@ -64,8 +64,11 @@ class Actuators : public IActuators {
     void sortOut() override;
     void letPass() override;
     void allOff() override;
+    void connectionLost() override;
+
 
   private:
+    bool estopped = false;
     uintptr_t gpio_bank_1;
     uintptr_t gpio_bank_2;
     bool isMaster;
@@ -77,11 +80,11 @@ class Actuators : public IActuators {
     std::thread th_YellowBlinking;
     std::thread th_RedBlinking;
     /**
-     * Sets the 'Motor stop' pin.
+     * @brief 
+     * 
      */
     void setMotorStop(bool stop);
-
-    /**
+      /**
      * Sets the 'Motor slow' pin.
      */
     void setMotorSlow(bool slow);

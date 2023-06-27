@@ -111,6 +111,7 @@ void Actuators::setRedBlinking(bool on, bool fast) {
 }
 
 void Actuators::standbyMode() {
+    estopped = false;
     motorStop();
     setGreenBlinking(false);
     setYellowBlinking(false);
@@ -135,6 +136,7 @@ void Actuators::standbyMode() {
 
 
 void Actuators::runningMode() {
+    estopped = false;
     setGreenBlinking(false);
     setRedBlinking(false, false);
     greenLampOn();
@@ -148,6 +150,7 @@ void Actuators::runningMode() {
 }
 
 void Actuators::serviceMode() {
+    estopped = false;
     redLampOff();
     setGreenBlinking(true);
     q1LedOff();
@@ -163,7 +166,21 @@ void Actuators::serviceMode() {
 void Actuators::errorMode() {
     setGreenBlinking(false);
     greenLampOff();
+    if(!estopped){
     setRedBlinking(true, true);
+    }
+    setMotorStop(true);
+    if(hasPusher){
+    openSwitch();
+    }else{
+    closeSwitch();
+    }
+}
+
+void Actuators::connectionLost() {
+    setGreenBlinking(false);
+    greenLampOff();
+    setRedBlinking(false, false);
     setMotorStop(true);
     if(hasPusher){
     openSwitch();
@@ -173,6 +190,7 @@ void Actuators::errorMode() {
 }
 
 void Actuators::estopMode() {
+    estopped = true;
     setGreenBlinking(false);
     setYellowBlinking(false);
     setRedBlinking(false, false);

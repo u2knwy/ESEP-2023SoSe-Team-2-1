@@ -128,7 +128,7 @@ void MainContext::subscribeToEvents() {
 	actions->eventManager->subscribe(EventType::ERROR_S_SELF_SOLVED,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 	actions->eventManager->subscribe(EventType::HAL_PUSHER_MOUNTED,
-				std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 }
 
 void MainContext::handleEvent(Event event) {

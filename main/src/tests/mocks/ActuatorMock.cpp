@@ -44,6 +44,8 @@ void ActuatorMock::setRedBlinking(bool on, bool fast) {
     }
 }
 
+void ActuatorMock::connectionLost(){}
+
 void ActuatorMock::redLampOff() { redLamp = LampState::OFF; }
 
 void ActuatorMock::startLedOn() { startLed = LampState::ON; }
