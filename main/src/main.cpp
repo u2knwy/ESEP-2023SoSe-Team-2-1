@@ -129,6 +129,8 @@ int main(int argc, char **argv) {
     std::signal(SIGABRT, cleanup);
 
     actuators->standbyMode();
+    actuators->setYellowBlinking(true);
+    Logger::info("Waiting for system initialization and connection to partner system...");
 
     //Logger::registerEvents(eventManager);
     eventManager->start();
@@ -146,8 +148,6 @@ int main(int argc, char **argv) {
         motorFSM_Slave = std::make_shared<MotorContext>(actionsS, false);
         MainActions* mainActions = new MainActions(eventManager, new EventSender());
         mainFSM = std::make_shared<MainContext>(mainActions);
-    } else {
-        Logger::info("Program started as SLAVE");
     }
 
     std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -167,6 +167,8 @@ int main(int argc, char **argv) {
     	sender.sendEvent(Event{HAL_PUSHER_MOUNTED});
     	sender.disconnect();
     }
+
+    actuators->setYellowBlinking(false);
 
     // do nothing until termination...
     //std::cin.get();
