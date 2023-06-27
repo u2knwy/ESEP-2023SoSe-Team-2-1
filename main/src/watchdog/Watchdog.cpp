@@ -97,6 +97,7 @@ void Watchdog::receivingThread() {
 
     eventManager->connectionLost();
     eventManager->handleEvent(Event{WD_CONN_LOST});
+    eventManager->handleEvent(Event{MODE_ERROR});
 
     eventManager->handleEvent(Event{ERROR_M_SELF_SOLVABLE});
 
