@@ -350,6 +350,14 @@ bool Running::slave_btnStop_Pressed() {
 	return true;
 }
 
+bool Running::master_btnReset_PressedLong() {
+	data->wpManager->revertNextWorkpiece();
+}
+
+bool Running::slave_btnReset_PressedLong() {
+	data->wpManager->revertNextWorkpiece();
+}
+
 bool Running::master_EStop_Pressed() {
 	exit();
 	new (this) EStop;

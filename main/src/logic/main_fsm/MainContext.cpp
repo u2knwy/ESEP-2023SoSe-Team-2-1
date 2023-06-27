@@ -38,6 +38,8 @@ void MainContext::subscribeToEvents() {
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 	actions->eventManager->subscribe(EventType::RESET_M_SHORT,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	actions->eventManager->subscribe(EventType::RESET_M_LONG,
+			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 	actions->eventManager->subscribe(EventType::ESTOP_M_PRESSED,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 	actions->eventManager->subscribe(EventType::ESTOP_M_RELEASED,
@@ -50,6 +52,8 @@ void MainContext::subscribeToEvents() {
 	actions->eventManager->subscribe(EventType::STOP_S_SHORT,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 	actions->eventManager->subscribe(EventType::RESET_S_SHORT,
+			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
+	actions->eventManager->subscribe(EventType::RESET_S_LONG,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
 	actions->eventManager->subscribe(EventType::ESTOP_S_PRESSED,
 			std::bind(&MainContext::handleEvent, this, std::placeholders::_1));
@@ -146,6 +150,9 @@ void MainContext::handleEvent(Event event) {
 	case EventType::RESET_M_SHORT:
 		master_btnReset_Pressed();
 		break;
+	case EventType::RESET_M_LONG:
+		master_btnReset_PressedLong();
+		break;
 	case EventType::ESTOP_M_PRESSED:
 		master_EStop_Pressed();
 		break;
@@ -163,6 +170,9 @@ void MainContext::handleEvent(Event event) {
 		break;
 	case EventType::RESET_S_SHORT:
 		slave_btnReset_Pressed();
+		break;
+	case EventType::RESET_S_LONG:
+		slave_btnReset_PressedLong();
 		break;
 	case EventType::ESTOP_S_PRESSED:
 		slave_EStop_Pressed();
@@ -365,6 +375,10 @@ void MainContext::master_btnReset_Pressed() {
 	state->master_btnReset_Pressed();
 }
 
+void MainContext::master_btnReset_PressedLong() {
+	state->master_btnReset_PressedLong();
+}
+
 void MainContext::slave_btnStart_PressedShort() {
 	state->slave_btnStart_PressedShort();
 }
@@ -379,6 +393,10 @@ void MainContext::slave_btnStop_Pressed() {
 
 void MainContext::slave_btnReset_Pressed() {
 	state->slave_btnReset_Pressed();
+}
+
+void MainContext::slave_btnReset_PressedLong() {
+	state->slave_btnReset_PressedLong();
 }
 
 void MainContext::master_EStop_Pressed() {

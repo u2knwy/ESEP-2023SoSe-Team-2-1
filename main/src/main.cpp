@@ -132,7 +132,7 @@ int main(int argc, char **argv) {
     actuators->setYellowBlinking(true);
     Logger::info("Waiting for system initialization and connection to partner system...");
 
-    //Logger::registerEvents(eventManager);
+    Logger::registerEvents(eventManager);
     eventManager->start();
     std::this_thread::sleep_for(std::chrono::seconds(2));
 
