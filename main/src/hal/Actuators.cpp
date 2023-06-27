@@ -165,7 +165,11 @@ void Actuators::errorMode() {
     greenLampOff();
     setRedBlinking(true, true);
     setMotorStop(true);
+    if(hasPusher){
+    openSwitch();
+    }else{
     closeSwitch();
+    }
 }
 
 void Actuators::estopMode() {
@@ -179,7 +183,12 @@ void Actuators::estopMode() {
     setMotorRight(false);
     setMotorLeft(false);
     setMotorSlow(false);
+    if(hasPusher){
+    openSwitch();
+    }else{
     closeSwitch();
+    }
+    }
 }
 
 void Actuators::greenLampOn() {
