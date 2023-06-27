@@ -15,6 +15,5 @@ class WaitForWorkpiece : public HeightBasestate {
 
     HeightState getCurrentState() override;
 
-    bool flatDetected() override;
-    bool highDetected() override;
+    bool workpieceHeightDetected(float height) override;
 };

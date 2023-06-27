@@ -13,6 +13,9 @@
 #include "events/eventtypes_enum.h"
 #include "hal/IHeightSensor.h"
 
+// Number of allowed outliers of Height Measurement which should be ignored
+#define HM_ALLOWED_OUTLIERS 3
+
 struct HeightResult {
     WorkpieceType type{WorkpieceType::WS_UNKNOWN};
     float average{0.0};

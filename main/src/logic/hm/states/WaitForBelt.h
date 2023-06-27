@@ -15,5 +15,6 @@ class WaitForBelt : public HeightBasestate {
     HeightState getCurrentState() override;
 
     bool beltDetected() override;
-    bool unknownDetected() override;
+
+    bool workpieceHeightDetected(float height) override;
 };
