@@ -197,7 +197,7 @@ void HeightSensor::threadFunction() {
                 // Every x measurements -> notify via callback
                 if ((nMeasurements % ADC_SAMPLE_SIZE) == 0) {
                     nMeasurements = 0;
-                    float heightMillimeter = getAverageHeight();
+                    float heightMillimeter = getMedianHeight();
                     if (heightValueCallback != nullptr) {
                         heightValueCallback(heightMillimeter);
                     }

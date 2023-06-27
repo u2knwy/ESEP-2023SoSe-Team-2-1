@@ -10,7 +10,10 @@
 #include "hal/HeightSensor.h"
 
 
-void WaitForBelt::entry() { Logger::debug("[HFSM] Waiting for belt..."); }
+void WaitForBelt::entry() {
+	Logger::debug("[HFSM] Waiting for belt...");
+    Logger::to_file("\n+++ [HM] NEW WORKPIECE +++");
+}
 
 HeightState WaitForBelt::getCurrentState() {
     return HeightState::WAIT_FOR_BELT;
