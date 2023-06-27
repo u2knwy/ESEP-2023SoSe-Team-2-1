@@ -37,6 +37,15 @@ EventManager::EventManager() : internal_chid(-1), internal_coid(-1), server_coid
     attachedService = nullptr;
 }
 
+void EventManager::tryreconnect(){
+	Logger::debug("[EventManager] Attempting reconnect");
+	connectToService(otherServiceName);
+	Logger::debug("[EventManager] Reconnected successfully");
+	sendToSelf(Event{WD_CONN_REESTABLISHED});
+	sendToSelf(Event{ERROR_M_SELF_SOLVED});
+	sendToSelf(Event{ERROR_S_SELF_SOLVED});
+}
+
 EventManager::~EventManager() {
     disconnectFromService();
     stopService();
@@ -44,7 +53,7 @@ EventManager::~EventManager() {
     ChannelDestroy(internal_chid);
 }
 void EventManager::connectionLost(){
-	Logger::debug("[EventManager] Disconnected from external");
+	Logger::debug("[EventManager] Disconnected from external, attempting reconnect");
 	disconnected = true;
 }
 
@@ -113,6 +122,9 @@ void EventManager::rcvExternalEventsThread() {
     Logger::debug("[EventManager] Ready to receive external events");
     rcvExternalRunning = true;
     while (rcvExternalRunning) {
+    	if(disconnected){
+    		tryreconnect();
+    	}
         // Waiting for a message and read first header
         header_t header;
         int rcvid = MsgReceive(attachedService->chid, &header, sizeof (header_t), NULL);
@@ -242,6 +254,7 @@ void EventManager::connectToService(const std::string& name) {
         }
     }
     externConnected = true;
+    disconnected = false;
     Logger::info("[EventManager] Connected to service: " + name);
 }
 
@@ -305,7 +318,7 @@ void EventManager::handleEvent(const Event &event) {
 }
 
 void EventManager::sendExternalEvent(const Event &event) {
-	if(!externConnected || server_coid < 0) {
+	if(disconnected || server_coid < 0) {
 		return;
 	}
     // TODO: Send event to other system

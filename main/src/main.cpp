@@ -126,6 +126,7 @@ int main(int argc, char **argv) {
     std::signal(SIGQUIT, cleanup);
     std::signal(SIGTERM, cleanup);
     std::signal(SIGSEGV, cleanup);
+    std::signal(SIGABRT, cleanup);
 
     actuators->standbyMode();
 

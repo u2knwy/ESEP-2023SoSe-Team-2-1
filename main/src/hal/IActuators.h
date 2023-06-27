@@ -193,10 +193,7 @@ class IActuators : public IEventHandler {
         case EventType::ESTOP_S_PRESSED:
             allOff();
             break;
-        case EventType::ERROR_M_SELF_SOLVABLE:
-        case EventType::ERROR_S_SELF_SOLVABLE:
-        case EventType::ERROR_M_MAN_SOLVABLE:
-        case EventType::ERROR_S_MAN_SOLVABLE:
+        case EventType::MODE_ERROR:
         	errorMode();
         	break;
         case EventType::MOTOR_M_STOP:
@@ -222,9 +219,6 @@ class IActuators : public IEventHandler {
             break;
         case EventType::MODE_ESTOP:
             estopMode();
-            break;
-        case EventType::MODE_ERROR:
-            errorMode();
             break;
         case EventType::LAMP_M_GREEN:
         case EventType::LAMP_S_GREEN:

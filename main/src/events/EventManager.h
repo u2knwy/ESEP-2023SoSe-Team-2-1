@@ -76,6 +76,7 @@ public:
 
 	void connectToService(const std::string& name) override;
 	void connectionLost();
+	void tryreconnect();
 private:
 	bool isMaster;
 	int internal_chid;
