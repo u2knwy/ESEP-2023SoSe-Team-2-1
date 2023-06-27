@@ -6,6 +6,7 @@
  */
 
 #include "Running.h"
+#include "configuration/Configuration.h"
 
 #include <chrono>
 #include <iostream>
@@ -20,6 +21,7 @@ MainState Running::getCurrentState() { return MainState::RUNNING; };
 
 void Running::entry() {
 	Logger::info("Entered Running mode");
+	data->wpManager->printCurrentOrder();
 	Logger::user_info("Put new workpieces at start of FBM1 to start sorting");
 	actions->setRunningMode();
 	transferPending = false;
@@ -29,10 +31,23 @@ void Running::entry() {
 	if(data->isRampFBM2Blocked()) {
 		setRampBlocked_S(true);
 	}
+	data->wpManager->reset_wpm();
 }
 
 void Running::exit() {
 	previousState = MainState::RUNNING;
+}
+
+void Running::entryHistory() {
+	Logger::info("Entered Running mode - restored previous state");
+	data->wpManager->printCurrentOrder();
+	actions->setRunningMode();
+	if(data->isRampFBM1Blocked()) {
+		setRampBlocked_M(true);
+	}
+	if(data->isRampFBM2Blocked()) {
+		setRampBlocked_S(true);
+	}
 }
 
 bool Running::master_LBA_Blocked() {
@@ -139,6 +154,10 @@ bool Running::master_LBE_Blocked()
 		} else */{
 			// If FBM2 occupied -> stop FBM1 motor
 			actions->master_sendMotorRightRequest(false);
+		}
+		// Close switch if open
+		if(!data->master_pusherMounted) {
+			actions->master_openGate(false);
 		}
 	}
 	return true;
@@ -258,6 +277,10 @@ bool Running::slave_LBE_Blocked() {
 			std::cout << data->wpManager->to_string_Workpiece(wp) << std::endl;   // print()
 			actions->slave_sendMotorRightRequest(false);
 		}
+		// Close switch if open
+		if(!data->slave_pusherMounted) {
+			actions->slave_openGate(false);
+		}
 	}
 
 	return true;
@@ -289,6 +312,7 @@ bool Running::slave_LBR_Blocked() {
 	if (!data->wpManager->isFBM_MEmpty()) {
 		// FBM1 waiting for FBM2 to get free -> start motor of FBM1 as well
 		actions->master_sendMotorRightRequest(true);
+		actions->slave_sendMotorRightRequest(false);
 	} else {
 		// FBM1 not waiting -> stop FBM2
 		actions->slave_sendMotorRightRequest(false);
@@ -303,6 +327,11 @@ bool Running::slave_LBR_Unblocked() {
 }
 
 bool Running::master_btnStop_Pressed() {
+	bool warning = data->wpManager->getRamp_one() || data->wpManager->getRamp_two();
+	if(warning) {
+		Logger::warn("You cannot go to Standby mode, because a warning is active. Fix the warning first!");
+		return false;
+	}
 	exit();
 	new (this) Standby;
 	entry();
@@ -310,6 +339,11 @@ bool Running::master_btnStop_Pressed() {
 }
 
 bool Running::slave_btnStop_Pressed() {
+	bool warning = data->wpManager->getRamp_one() || data->wpManager->getRamp_two();
+	if(warning) {
+		Logger::warn("You cannot go to Standby mode, because a warning is active. Fix the warning first!");
+		return false;
+	}
 	exit();
 	new (this) Standby;
 	entry();

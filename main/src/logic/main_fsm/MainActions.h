@@ -60,6 +60,7 @@ class MainActions {
     void slave_manualSolvingErrorOccurred();
 
     std::shared_ptr<IEventManager> eventManager;
+    bool pusherMounted;
   private:
     IEventSender* sender;
 };

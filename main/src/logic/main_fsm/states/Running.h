@@ -12,6 +12,8 @@ class Running : public MainBasestate {
     void entry() override;
     void exit() override;
 
+    void entryHistory() override;
+
     MainState getCurrentState() override;
 
     bool master_LBA_Blocked() override;
@@ -49,6 +51,7 @@ class Running : public MainBasestate {
 
   private:
     bool transferPending{false};
+    bool pusherMounted;
     void setRampBlocked_M(bool blocked);
     void setRampBlocked_S(bool blocked);
 };

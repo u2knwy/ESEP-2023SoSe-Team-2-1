@@ -126,16 +126,19 @@ int main(int argc, char **argv) {
     std::signal(SIGQUIT, cleanup);
     std::signal(SIGTERM, cleanup);
     std::signal(SIGSEGV, cleanup);
+    std::signal(SIGABRT, cleanup);
 
     actuators->standbyMode();
+    actuators->setYellowBlinking(true);
+    Logger::info("Waiting for system initialization and connection to partner system...");
 
     //Logger::registerEvents(eventManager);
     eventManager->start();
-    std::this_thread::sleep_for(std::chrono::seconds(3));
+    std::this_thread::sleep_for(std::chrono::seconds(2));
 
     // Start Watchdog -> send and receive heartbeats via EventManager
-//    Watchdog wd(eventManager);
-//    wd.start();
+    Watchdog wd(eventManager);
+    wd.start();
 
     // Run FSM's only at Master
     if (options.mode == Mode::MASTER) {
@@ -145,11 +148,9 @@ int main(int argc, char **argv) {
         motorFSM_Slave = std::make_shared<MotorContext>(actionsS, false);
         MainActions* mainActions = new MainActions(eventManager, new EventSender());
         mainFSM = std::make_shared<MainContext>(mainActions);
-    } else {
-        Logger::info("Program started as SLAVE");
     }
 
-    std::this_thread::sleep_for(std::chrono::seconds(3));
+    std::this_thread::sleep_for(std::chrono::seconds(1));
 
     sensors = std::make_shared<Sensors>(eventManager);
     sensors->startEventLoop();
@@ -158,6 +159,16 @@ int main(int argc, char **argv) {
     HeightContextData* heightData = new HeightContextData();
     HeightActions* heightActions = new HeightActions(heightData, new EventSender(), eventManager);
     heightFSM = std::make_shared<HeightContext>(heightActions, heightData, heightSensor);
+
+    // If Slave: tell master if pusher mounted
+    if(options.mode == Mode::SLAVE && options.pusher) {
+        EventSender sender;
+        sender.connect(eventManager);
+    	sender.sendEvent(Event{HAL_PUSHER_MOUNTED});
+    	sender.disconnect();
+    }
+
+    actuators->setYellowBlinking(false);
 
     // do nothing until termination...
     //std::cin.get();

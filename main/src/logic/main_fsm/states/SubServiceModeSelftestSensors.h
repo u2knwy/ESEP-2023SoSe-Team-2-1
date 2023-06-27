@@ -26,15 +26,4 @@ class SubServiceModeSelftestSensors : public MainBasestate {
     bool slave_LBW_Blocked() override;
     bool master_LBR_Blocked() override;
     bool slave_LBR_Blocked() override;
-
-  private:
-    bool master_lbStartOk{false};
-    bool master_lbSwitchOk{false};
-    bool master_lbRampOk{false};
-    bool master_lbEndOk{false};
-    bool slave_lbStartOk{false};
-    bool slave_lbSwitchOk{false};
-    bool slave_lbRampOk{false};
-    bool slave_lbEndOk{false};
-    bool checkResult();
 };

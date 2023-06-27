@@ -24,6 +24,9 @@
 #define ON_TIME_PUSHER_MS 300
 #define ON_TIME_SWITCH_MS 1000
 
+// Check every x ms if "blinking thread" should be terminated
+#define BLINK_POLL_TIME_MS 100
+
 class Actuators : public IActuators {
   public:
     Actuators(std::shared_ptr<EventManager> mngr);
@@ -61,8 +64,11 @@ class Actuators : public IActuators {
     void sortOut() override;
     void letPass() override;
     void allOff() override;
+    void connectionLost() override;
+
 
   private:
+    bool estopped = false;
     uintptr_t gpio_bank_1;
     uintptr_t gpio_bank_2;
     bool isMaster;
@@ -74,11 +80,11 @@ class Actuators : public IActuators {
     std::thread th_YellowBlinking;
     std::thread th_RedBlinking;
     /**
-     * Sets the 'Motor stop' pin.
+     * @brief 
+     * 
      */
     void setMotorStop(bool stop);
-
-    /**
+      /**
      * Sets the 'Motor slow' pin.
      */
     void setMotorSlow(bool slow);

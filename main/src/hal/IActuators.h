@@ -180,6 +180,8 @@ class IActuators : public IEventHandler {
      */
     virtual void letPass() = 0;
 
+    virtual void connectionLost() = 0;
+
     virtual void allOff() = 0;
 
     void handleEvent(Event event) override {
@@ -193,10 +195,7 @@ class IActuators : public IEventHandler {
         case EventType::ESTOP_S_PRESSED:
             allOff();
             break;
-        case EventType::ERROR_M_SELF_SOLVABLE:
-        case EventType::ERROR_S_SELF_SOLVABLE:
-        case EventType::ERROR_M_MAN_SOLVABLE:
-        case EventType::ERROR_S_MAN_SOLVABLE:
+        case EventType::MODE_ERROR:
         	errorMode();
         	break;
         case EventType::MOTOR_M_STOP:
@@ -223,9 +222,6 @@ class IActuators : public IEventHandler {
         case EventType::MODE_ESTOP:
             estopMode();
             break;
-        case EventType::MODE_ERROR:
-            errorMode();
-            break;
         case EventType::LAMP_M_GREEN:
         case EventType::LAMP_S_GREEN:
         case EventType::LAMP_M_YELLOW:
@@ -245,6 +241,9 @@ class IActuators : public IEventHandler {
         case EventType::SORT_M_OUT:
         case EventType::SORT_S_OUT:
             event.data == 1 ? sortOut() : letPass();
+            break;
+        case EventType::WD_CONN_LOST:
+		    connectionLost();
             break;
         default:
             handled = false;
@@ -436,6 +435,9 @@ class IActuators : public IEventHandler {
                                     std::bind(&IActuators::handleEvent, this,
                                               std::placeholders::_1));
             eventManager->subscribe(EventType::SORT_S_OUT,
+                                    std::bind(&IActuators::handleEvent, this,
+                                              std::placeholders::_1));
+            eventManager->subscribe(EventType::WD_CONN_LOST,
                                     std::bind(&IActuators::handleEvent, this,
                                               std::placeholders::_1));
         }

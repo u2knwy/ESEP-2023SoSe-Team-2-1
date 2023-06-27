@@ -12,6 +12,7 @@
 
 #include <errno.h>
 #include <iostream>
+#include <watchdog/Watchdog.h>
 #include <sstream>
 #include <string>
 #include <sys/dispatch.h>
@@ -36,11 +37,24 @@ EventManager::EventManager() : internal_chid(-1), internal_coid(-1), server_coid
     attachedService = nullptr;
 }
 
+void EventManager::tryreconnect(){
+	Logger::debug("[EventManager] Attempting reconnect");
+	connectToService(otherServiceName);
+	Logger::debug("[EventManager] Reconnected successfully");
+	sendToSelf(Event{WD_CONN_REESTABLISHED});
+	sendToSelf(Event{ERROR_M_SELF_SOLVED});
+	sendToSelf(Event{ERROR_S_SELF_SOLVED});
+}
+
 EventManager::~EventManager() {
     disconnectFromService();
     stopService();
     ConnectDetach(internal_coid);
     ChannelDestroy(internal_chid);
+}
+void EventManager::connectionLost(){
+	Logger::debug("[EventManager] Disconnected from external, attempting reconnect");
+	disconnected = true;
 }
 
 void EventManager::openInternalChannel() {
@@ -90,7 +104,15 @@ void EventManager::rcvInternalEventsThread() {
             continue;
         }
         Event ev{(EventType) pulse.code, pulse.value.sival_int};
+        if((isMaster && ev.type == EventType::WD_S_HEARTBEAT)
+        || (!isMaster && ev.type == EventType::WD_M_HEARTBEAT)){
+        	Logger::debug("attempted rebound msg");
+        	continue; }
         handleEvent(ev);
+        if(ev.type == EventType::WD_CONN_LOST){ disconnected = true; }
+        if(ev.type == EventType::WD_CONN_REESTABLISHED){ disconnected = false; }
+        if(disconnected){continue;}
+
         sendExternalEvent(ev);
     }
     Logger::debug("[EventManager] Stopped receiving internal events");
@@ -100,6 +122,9 @@ void EventManager::rcvExternalEventsThread() {
     Logger::debug("[EventManager] Ready to receive external events");
     rcvExternalRunning = true;
     while (rcvExternalRunning) {
+    	if(disconnected){
+    		tryreconnect();
+    	}
         // Waiting for a message and read first header
         header_t header;
         int rcvid = MsgReceive(attachedService->chid, &header, sizeof (header_t), NULL);
@@ -108,7 +133,12 @@ void EventManager::rcvExternalEventsThread() {
             break;
         }
         if (rcvid == 0) {// Pulse was received
-            handle_pulse(header, rcvid);
+        	if(isMaster){
+        	handleEvent(Event{WD_S_HEARTBEAT});
+        	}else{
+        		handleEvent(Event{WD_M_HEARTBEAT});
+        	}
+        	handle_pulse(header, rcvid);
             continue;
         }
         // continue while (1) loop
@@ -126,7 +156,6 @@ void EventManager::rcvExternalEventsThread() {
 }
 
 void EventManager::handle_pulse(header_t hdr, int rcvid){
-	Logger::debug("handle_pulse: " + std::to_string(rcvid));
     switch (hdr.code) {
     case _PULSE_CODE_DISCONNECT:
         Logger::debug("Server received _PULSE_CODE_DISCONNECT");
@@ -148,11 +177,12 @@ void EventManager::handle_pulse(header_t hdr, int rcvid){
         /* A pulse sent by one of your processes or a
          * _PULSE_CODE_COIDDEATH or _PULSE_CODE_THREADDEATH
          * from the kernel? */
-    	Logger::debug("Server received some pulse msg.");
-/*        Event ev;
+    	if(hdr.code > 0){
+    	Event ev;
         ev.type = (EventType) hdr.code;
         ev.data = hdr.value.sival_int;
-        handleEvent(ev);*/
+        handleEvent(ev);
+    	}
         break;
     }
 }
@@ -223,8 +253,8 @@ void EventManager::connectToService(const std::string& name) {
             std::this_thread::sleep_for(std::chrono::seconds(1));
         }
     }
-
     externConnected = true;
+    disconnected = false;
     Logger::info("[EventManager] Connected to service: " + name);
 }
 
@@ -261,26 +291,17 @@ void EventManager::unsubscribe(EventType type, EventCallback callback) {
 }
 
 void EventManager::handleEvent(const Event &event) {
+   if(event.type == EventType::WD_M_HEARTBEAT && isMaster){ return; }
+   if(event.type == EventType::WD_S_HEARTBEAT && !isMaster){ return; }
+
     std::stringstream ss;
     ss << "[EventManager] handleEvent: " << EVENT_TO_STRING(event.type);
+
     if (event.data != -1)
         ss << ", data: " << event.data;
 
-	if(event.type == EventType::WD_CONN_LOST) {
-        externConnected = false;
-		handleEvent(Event{EventType::ERROR_M_SELF_SOLVABLE});
-		handleEvent(Event{EventType::ERROR_S_SELF_SOLVABLE});
-//		stopService();
-//        disconnectFromService();
-//		std::thread(&EventManager::connectToService, this, ATTACH_POINT_LOCAL_S);
-	} else if(event.type == EventType::WD_CONN_REESTABLISHED) {
-		externConnected = true;
-		handleEvent(Event{EventType::ERROR_M_SELF_SOLVED});
-		handleEvent(Event{EventType::ERROR_S_SELF_SOLVED});
-	}
-
     if (subscribers.find(event.type) != subscribers.end()) {
-        Logger::debug("[EventManager] Notifiying " + std::to_string(subscribers[event.type].size()) + " subscribers about Event " + EVENT_TO_STRING(event.type));
+        //Logger::debug("[EventManager] Notifiying " + std::to_string(subscribers[event.type].size()) + " subscribers about Event " + EVENT_TO_STRING(event.type));
         int i = 1;
         for (const auto &callback : subscribers[event.type]) {
             callback(event);
@@ -288,33 +309,24 @@ void EventManager::handleEvent(const Event &event) {
     } else {
         ss << " -> No subscribers for Event!";
     }
+
+
+    if(event.type ==EventType::WD_M_HEARTBEAT || event.type== WD_S_HEARTBEAT){
+    	return;
+    }
     Logger::debug(ss.str());
 }
 
 void EventManager::sendExternalEvent(const Event &event) {
-	if(!externConnected || server_coid < 0) {
+	if(disconnected || server_coid < 0) {
 		return;
 	}
     // TODO: Send event to other system
     //int res = MsgSendPulse(this->server_coid, -1, (int) event.type, event.data);
 
-    header_t header;
-    app_header_t app_header;
-    iov_t iov[3];
-    std::string msg = "hello";
-    char r_msg[512];
-    int payload_size = msg.length()+1;
-    header.type = STR_MSG;
-    header.subtype = 0x00;
-    app_header.size = payload_size;
-    app_header.data = event.data;
-    app_header.eventnr = (int) event.type;
-    SETIOV(iov+0, &header, sizeof(header));
-    SETIOV(iov+1, &app_header, sizeof(app_header));
-    SETIOV(iov+2, msg.c_str(), payload_size);
 
-    if (-1 == MsgSendvs(server_coid, iov, 3, r_msg, sizeof(r_msg))){
-        perror("Client: MsgSend failed");
+    if (-1 == MsgSendPulse(server_coid, -1,event.type, event.data)){
+        perror("Client: MsgSendPulse failed");
     }
 
     // Answer form server should be structured, too.

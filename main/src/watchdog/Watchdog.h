@@ -9,13 +9,14 @@
 #include "events/EventManager.h"
 #include "events/EventSender.h"
 #include "events/IEventHandler.h"
-#include <atomic>
 #include <memory>
 #include <thread>
 
 
-#define WD_SEND_INTERVAL_SEC 1
-#define WD_TIMEOUT_SEC       3
+#define WD_SEND_INTERVAL_MILLIS 200
+#define WD_CHECK_INTERVAL 100
+#define WD_TIMEOUT_MILLIS       440
+
 
 class Watchdog : public IEventHandler, public EventSender {
   public:
@@ -31,6 +32,7 @@ class Watchdog : public IEventHandler, public EventSender {
     std::shared_ptr<EventManager> eventManager;
     bool isMaster;
     bool connectionLost{false};
+    std::atomic<int> heartBeatreceived;
     std::thread th_receive;
     std::thread th_send;
     std::atomic<bool> sendingRunning;

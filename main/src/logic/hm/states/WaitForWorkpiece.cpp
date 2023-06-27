@@ -21,7 +21,8 @@ HeightState WaitForWorkpiece::getCurrentState() {
     return HeightState::WAIT_FOR_WS;
 }
 
-bool WaitForWorkpiece::flatDetected() {
+bool WaitForWorkpiece::workpieceHeightDetected(float height) {
+	data->addValue(height);
     actions->sendMotorSlowRequest(true);
     exit();
     new (this) WaitForBelt;
@@ -29,10 +30,3 @@ bool WaitForWorkpiece::flatDetected() {
     return true;
 }
 
-bool WaitForWorkpiece::highDetected() {
-    actions->sendMotorSlowRequest(true);
-    exit();
-    new (this) WaitForBelt;
-    entry();
-    return true;
-}

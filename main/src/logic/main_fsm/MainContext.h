@@ -69,6 +69,7 @@ class MainContext : public IEventHandler {
     void selfSolvableErrorOccurred();
     void errorSelfSolved();
     void nonSelfSolvableErrorOccurred();
+   
 
     MainContextData *data;
   private:

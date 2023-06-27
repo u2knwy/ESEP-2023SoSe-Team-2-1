@@ -26,6 +26,10 @@ void HeightContextData::resetMeasurement() {
 
 void HeightContextData::addValue(float newValue) {
     measurements.push_back(newValue);
+	std::stringstream ss;
+	ss << std::fixed << std::setprecision(2);
+	ss << "hm_value: " << newValue << " mm";
+	Logger::to_file(ss.str());
 
     if (nMeasurements == 0) {
         avgValue = newValue;
@@ -46,8 +50,7 @@ HeightResult HeightContextData::getCurrentResult() {
     HeightResult result;
 
     int totalValues = measurements.size();
-    Logger::debug("[HFSM] Get Result -> # of measurements: " +
-                  std::to_string(totalValues));
+    Logger::to_file("[HFSM] Get Result -> # of measurements: " + std::to_string(totalValues));
     if (totalValues == 0) {
         result.type = WorkpieceType::WS_UNKNOWN;
         result.average = 0.0;
@@ -70,12 +73,6 @@ HeightResult HeightContextData::getCurrentResult() {
     float begin = measurements.at(startIndex);
     float middle = measurements.at(totalValues / 2);
     float end = measurements.at(endIndex);
-    std::stringstream ss;
-    ss.precision(1);
-    ss << "[HFSM] Get Result -> begin=" << std::to_string(begin)
-       << ", middle=" << std::to_string(middle)
-       << ", end=" << std::to_string(end);
-    Logger::debug(ss.str());
 
     if (isFlat(begin) && isFlat(middle) && isFlat(end)) {
         result.type = WorkpieceType::WS_F;
@@ -88,6 +85,19 @@ HeightResult HeightContextData::getCurrentResult() {
     }
     result.average = (float) (sum / nValues);
     result.max = maxValue;
+
+    std::stringstream ss;
+    ss.precision(1);
+    ss << std::fixed << std::setprecision(2);
+    ss << "[HFSM] Get Result -> begin=" << begin
+       << ", middle=" << middle
+       << ", end=" << end
+	   << ", avg=" << result.average
+	   << ", max=" << result.max
+	   << ", type=" << WP_TYPE_TO_STRING(result.type);
+    Logger::debug(ss.str());
+    Logger::to_file(ss.str());
+
     return result;
 }
 

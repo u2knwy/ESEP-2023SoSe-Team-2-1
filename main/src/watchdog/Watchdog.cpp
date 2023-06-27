@@ -17,14 +17,17 @@
 Watchdog::Watchdog(std::shared_ptr<EventManager> eventManager) {
     this->eventManager = eventManager;
     this->isMaster = Configuration::getInstance().systemIsMaster();
+    heartBeatreceived = 0;
 
     if (!connect(eventManager)) {
         throw std::runtime_error("[Watchdog] Error while connecting to EventManager");
     }
 
     if (isMaster) {
+        Logger::debug("Watchdog Subscribe to Slave Heartbeat");
         eventManager->subscribe(EventType::WD_S_HEARTBEAT, std::bind(&Watchdog::handleEvent, this, std::placeholders::_1));
     } else {
+        Logger::debug("Watchdog Subscribe to Master Heartbeat");
         eventManager->subscribe(EventType::WD_M_HEARTBEAT, std::bind(&Watchdog::handleEvent, this, std::placeholders::_1));
     }
 }
@@ -46,8 +49,7 @@ void Watchdog::handleEvent(Event event) {
 }
 
 void Watchdog::start() {
-    stop();
-    th_send = std::thread(&Watchdog::sendingThread, this);
+	th_send = std::thread(&Watchdog::sendingThread, this);
     th_receive = std::thread(&Watchdog::receivingThread, this);
 }
 
@@ -63,11 +65,12 @@ void Watchdog::stop() {
 }
 
 void Watchdog::sendingThread() {
+	std::this_thread::sleep_for(std::chrono::seconds(5));
     Logger::debug("[WD] Started sending heartbeats...");
     sendingRunning = true;
     while (sendingRunning) {
         sendHeartbeat();
-        std::this_thread::sleep_for(std::chrono::seconds(WD_SEND_INTERVAL_SEC));
+        std::this_thread::sleep_for(std::chrono::milliseconds(WD_SEND_INTERVAL_MILLIS));
     }
     sendingRunning = false;
     Logger::debug("[WD] Stopped sending heartbeats");
@@ -76,41 +79,37 @@ void Watchdog::sendingThread() {
 void Watchdog::sendHeartbeat() {
     if (isMaster) {
         sendEvent(Event{WD_M_HEARTBEAT});
-    } else {
+    } else if(!isMaster) {
         sendEvent(Event{WD_S_HEARTBEAT});
     }
 }
 
 void Watchdog::receivingThread() {
     using namespace std::chrono;
+	std::this_thread::sleep_for(std::chrono::seconds(10));
     Logger::debug("[WD] Started receiving heartbeats...");
     receivingRunning = true;
-    lastReceiveTime = steady_clock::now();
-    while (receivingRunning) {
-        // every second: check if timeout has occurred
-        std::this_thread::sleep_for(seconds(1));
-        const auto now = steady_clock::now();
-        int elapsed_msec = duration_cast<milliseconds>(now - lastReceiveTime).count();
-        if (elapsed_msec > WD_TIMEOUT_SEC*1000) {
-            if (!connectionLost) {
-                Logger::error("[WD] Connection lost! (Timeout)");
-                connectionLost = true;
-                sendEvent(WD_CONN_LOST);
-            }
-        } else {
-            if (connectionLost) {
-                Logger::info("[WD] Connection reestablished");
-                connectionLost = false;
-                sendEvent(WD_CONN_REESTABLISHED);
-            }
-        }
+    while (heartBeatreceived < WD_TIMEOUT_MILLIS) {
+
+    	std::this_thread::sleep_for(std::chrono::milliseconds(WD_SEND_INTERVAL_MILLIS));
+    	heartBeatreceived += 100;
     }
+
+    eventManager->connectionLost();
+    eventManager->handleEvent(Event{MODE_ERROR});
+    eventManager->handleEvent(Event{WD_CONN_LOST});
+
+    eventManager->handleEvent(Event{ERROR_M_SELF_SOLVABLE});
+
+    eventManager->handleEvent(Event{ERROR_S_SELF_SOLVABLE});
+
     Logger::debug("[WD] Stopped receiving heartbeats");
     receivingRunning = false;
+    sendingRunning = false;
 }
 
 void Watchdog::heartbeatReceived() {
-    using namespace std::chrono;
-    Logger::debug("[WD] Received heartbeat");
-    lastReceiveTime = steady_clock::now();
+
+    heartBeatreceived = 0;
+
 }

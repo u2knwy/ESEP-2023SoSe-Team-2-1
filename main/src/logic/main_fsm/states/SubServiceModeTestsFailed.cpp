@@ -11,13 +11,19 @@
 #include <iostream>
 
 void SubServiceModeTestsFailed::entry() {
-    Logger::error("[ServiceMode] Tests have failed. Press RESET to return to "
-                  "Standby mode.");
     actions->master_warningOn();
+    actions->slave_warningOn();
     actions->master_btnStartLedOff();
+    actions->slave_btnStartLedOff();
     actions->master_btnResetLedOff();
+    actions->slave_btnResetLedOff();
+    std::this_thread::sleep_for(std::chrono::seconds(3));
+    Logger::error("[ServiceMode] Tests have failed. Press RESET to return to Standby mode.");
 }
 
-void SubServiceModeTestsFailed::exit() { actions->master_warningOff(); }
+void SubServiceModeTestsFailed::exit() {
+	actions->master_warningOff();
+    actions->slave_warningOff();
+}
 
 bool SubServiceModeTestsFailed::isSubEndState() { return true; }

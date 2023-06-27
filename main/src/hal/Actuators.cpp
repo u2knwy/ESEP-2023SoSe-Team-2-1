@@ -30,8 +30,10 @@ Actuators::Actuators(std::shared_ptr<EventManager> mngr) : IActuators(mngr) {
     standbyMode();
 
 	if(hasPusher) {
+        Logger::debug("started with pusher");
 		openSwitch();
 	} else {
+        Logger::debug("started with switch");
 		closeSwitch();
 	}
 }
@@ -109,6 +111,7 @@ void Actuators::setRedBlinking(bool on, bool fast) {
 }
 
 void Actuators::standbyMode() {
+    estopped = false;
     motorStop();
     setGreenBlinking(false);
     setYellowBlinking(false);
@@ -120,9 +123,20 @@ void Actuators::standbyMode() {
     q2LedOff();
     startLedOn();
     resetLedOff();
+    setMotorStop(true);
+    setMotorRight(false);
+    setMotorLeft(false);
+    setMotorSlow(false);
+    if(hasPusher){
+        openSwitch();
+    }else{
+        closeSwitch();
+    }
 }
 
+
 void Actuators::runningMode() {
+    estopped = false;
     setGreenBlinking(false);
     setRedBlinking(false, false);
     greenLampOn();
@@ -133,12 +147,10 @@ void Actuators::runningMode() {
     startLedOff();
     resetLedOff();
     setMotorStop(false);
-    setMotorRight(false);
-    setMotorLeft(false);
-    setMotorSlow(false);
 }
 
 void Actuators::serviceMode() {
+    estopped = false;
     redLampOff();
     setGreenBlinking(true);
     q1LedOff();
@@ -154,14 +166,31 @@ void Actuators::serviceMode() {
 void Actuators::errorMode() {
     setGreenBlinking(false);
     greenLampOff();
+    if(!estopped){
     setRedBlinking(true, true);
+    }
     setMotorStop(true);
-    setMotorRight(false);
-    setMotorLeft(false);
-    setMotorSlow(false);
+    if(hasPusher){
+    openSwitch();
+    }else{
+    closeSwitch();
+    }
+}
+
+void Actuators::connectionLost() {
+    setGreenBlinking(false);
+    greenLampOff();
+    setRedBlinking(false, false);
+    setMotorStop(true);
+    if(hasPusher){
+    openSwitch();
+    }else{
+    closeSwitch();
+    }
 }
 
 void Actuators::estopMode() {
+    estopped = true;
     setGreenBlinking(false);
     setYellowBlinking(false);
     setRedBlinking(false, false);
@@ -172,6 +201,11 @@ void Actuators::estopMode() {
     setMotorRight(false);
     setMotorLeft(false);
     setMotorSlow(false);
+    if(hasPusher){
+    openSwitch();
+    }else{
+    closeSwitch();
+    }
 }
 
 void Actuators::greenLampOn() {
@@ -199,38 +233,74 @@ void Actuators::redLampOff() {
 }
 
 void Actuators::thRedLampFlashing(bool fast) {
-    int t_ms;
-    t_ms = fast ? ON_TIME_FAST_MS : ON_TIME_SLOW_MS;
+    int t_ms = fast ? ON_TIME_FAST_MS : ON_TIME_SLOW_MS;
+    int t_actual;
     redBlinking = true;
     while (redBlinking) {
         redLampOn();
-        std::this_thread::sleep_for(std::chrono::milliseconds(t_ms));
+        t_actual = 0;
+        while(t_actual < t_ms) {
+			std::this_thread::sleep_for(std::chrono::milliseconds(BLINK_POLL_TIME_MS));
+			if(!redBlinking)
+				return;
+			t_actual += 100;
+        }
         redLampOff();
-        std::this_thread::sleep_for(std::chrono::milliseconds(t_ms));
+        t_actual = 0;
+		while(t_actual < t_ms) {
+			std::this_thread::sleep_for(std::chrono::milliseconds(BLINK_POLL_TIME_MS));
+			if(!redBlinking)
+				return;
+			t_actual += 100;
+		}
     }
 }
 
 void Actuators::thYellowLampFlashing(bool fast) {
-    int t_ms;
-    t_ms = fast ? ON_TIME_FAST_MS : ON_TIME_SLOW_MS;
+    int t_ms = fast ? ON_TIME_FAST_MS : ON_TIME_SLOW_MS;
+    int t_actual;
     yellowBlinking = true;
     while (yellowBlinking) {
         yellowLampOn();
-        std::this_thread::sleep_for(std::chrono::milliseconds(t_ms));
+        t_actual = 0;
+        while(t_actual < t_ms) {
+			std::this_thread::sleep_for(std::chrono::milliseconds(BLINK_POLL_TIME_MS));
+			if(!yellowBlinking)
+				return;
+			t_actual += 100;
+        }
         yellowLampOff();
-        std::this_thread::sleep_for(std::chrono::milliseconds(t_ms));
+        t_actual = 0;
+		while(t_actual < t_ms) {
+			std::this_thread::sleep_for(std::chrono::milliseconds(BLINK_POLL_TIME_MS));
+			if(!yellowBlinking)
+				return;
+			t_actual += 100;
+		}
     }
 }
 
 void Actuators::thGreenLampFlashing(bool fast) {
-    int t_ms;
-    t_ms = fast ? ON_TIME_FAST_MS : ON_TIME_SLOW_MS;
+    int t_ms = fast ? ON_TIME_FAST_MS : ON_TIME_SLOW_MS;
+    int t_actual;
     greenBlinking = true;
     while (greenBlinking) {
-        greenLampOn();
-        std::this_thread::sleep_for(std::chrono::milliseconds(t_ms));
+    	greenLampOn();
+        t_actual = 0;
+        while(t_actual < t_ms) {
+			std::this_thread::sleep_for(std::chrono::milliseconds(BLINK_POLL_TIME_MS));
+			if(!greenBlinking)
+				return;
+			t_actual += 100;
+        }
         greenLampOff();
-        std::this_thread::sleep_for(std::chrono::milliseconds(t_ms));
+        t_actual = 0;
+		while(t_actual < t_ms) {
+			std::this_thread::sleep_for(std::chrono::milliseconds(BLINK_POLL_TIME_MS));
+			if(!greenBlinking)
+				return;
+			t_actual += 100;
+		}
     }
 }
 
@@ -313,32 +383,27 @@ void Actuators::sortOut() {
     // Has pusher -> push out for 500ms, then return to default position
     // No pusher -> nothing to do, workpiece will be sorted out!
     if (hasPusher) {
+        Logger::debug("[Actuators] Pusher out for " + std::to_string(ON_TIME_PUSHER_MS) + " ms to sort out workpiece");
         std::thread t([=]() {
             closeSwitch();
             std::this_thread::sleep_for(std::chrono::milliseconds(ON_TIME_PUSHER_MS));
             openSwitch();
         });
         t.detach();
-        Logger::debug("[Actuators] Push out for 500ms");
     } else {
-        Logger::debug("[Actuators] Let switch sort out workpiece...");
+        Logger::debug("[Actuators] Let switch sort out workpiece");
+        closeSwitch();
     }
 }
 
 void Actuators::letPass() {
-    // No pusher -> open for 1s, then close again!
+    // No pusher -> open
     // Has pusher -> nothing to do, workpiece will pass!
     if (!hasPusher) {
-        std::thread t([=]() {
-            openSwitch();
-            std::this_thread::sleep_for(
-                std::chrono::milliseconds(ON_TIME_SWITCH_MS));
-            closeSwitch();
-        });
-        t.detach();
-        Logger::debug("[Actuators] Open switch for 1s");
+        Logger::debug("[Actuators] Open switch to let workpiece pass");
+        openSwitch();
     } else {
-        Logger::debug("[Actuators] Let pusher pass workpiece...");
+        Logger::debug("[Actuators] Let pusher pass workpiece");
     }
 }
 
