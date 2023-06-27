@@ -366,32 +366,27 @@ void Actuators::sortOut() {
     // Has pusher -> push out for 500ms, then return to default position
     // No pusher -> nothing to do, workpiece will be sorted out!
     if (hasPusher) {
+        Logger::debug("[Actuators] Pusher out for " + std::to_string(ON_TIME_PUSHER_MS) + " ms to sort out workpiece");
         std::thread t([=]() {
             closeSwitch();
             std::this_thread::sleep_for(std::chrono::milliseconds(ON_TIME_PUSHER_MS));
             openSwitch();
         });
         t.detach();
-        Logger::debug("[Actuators] Push out for 500ms");
     } else {
-        Logger::debug("[Actuators] Let switch sort out workpiece...");
+        Logger::debug("[Actuators] Let switch sort out workpiece");
+        closeSwitch();
     }
 }
 
 void Actuators::letPass() {
-    // No pusher -> open for 1s, then close again!
+    // No pusher -> open
     // Has pusher -> nothing to do, workpiece will pass!
     if (!hasPusher) {
-        std::thread t([=]() {
-            openSwitch();
-            std::this_thread::sleep_for(
-                std::chrono::milliseconds(ON_TIME_SWITCH_MS));
-            closeSwitch();
-        });
-        t.detach();
-        Logger::debug("[Actuators] Open switch for 1s");
+        Logger::debug("[Actuators] Open switch to let workpiece pass");
+        openSwitch();
     } else {
-        Logger::debug("[Actuators] Let pusher pass workpiece...");
+        Logger::debug("[Actuators] Let pusher pass workpiece");
     }
 }
 

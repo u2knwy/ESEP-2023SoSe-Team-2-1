@@ -154,6 +154,8 @@ bool Running::master_LBE_Blocked()
 			// If FBM2 occupied -> stop FBM1 motor
 			actions->master_sendMotorRightRequest(false);
 		}
+		// Close switch if open
+		actions->master_openGate(false);
 	}
 	return true;
 }
@@ -272,6 +274,8 @@ bool Running::slave_LBE_Blocked() {
 			std::cout << data->wpManager->to_string_Workpiece(wp) << std::endl;   // print()
 			actions->slave_sendMotorRightRequest(false);
 		}
+		// Close switch if open
+		actions->slave_openGate(false);
 	}
 
 	return true;
