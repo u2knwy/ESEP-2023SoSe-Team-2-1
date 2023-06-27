@@ -150,7 +150,7 @@ int main(int argc, char **argv) {
         Logger::info("Program started as SLAVE");
     }
 
-    std::this_thread::sleep_for(std::chrono::seconds(2));
+    std::this_thread::sleep_for(std::chrono::seconds(1));
 
     sensors = std::make_shared<Sensors>(eventManager);
     sensors->startEventLoop();
@@ -159,6 +159,14 @@ int main(int argc, char **argv) {
     HeightContextData* heightData = new HeightContextData();
     HeightActions* heightActions = new HeightActions(heightData, new EventSender(), eventManager);
     heightFSM = std::make_shared<HeightContext>(heightActions, heightData, heightSensor);
+
+    // If Slave: tell master if pusher mounted
+    if(options.mode == Mode::SLAVE && options.pusher) {
+        EventSender sender;
+        sender.connect(eventManager);
+    	sender.sendEvent(Event{HAL_PUSHER_MOUNTED});
+    	sender.disconnect();
+    }
 
     // do nothing until termination...
     //std::cin.get();

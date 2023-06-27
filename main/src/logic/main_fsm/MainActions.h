@@ -60,9 +60,9 @@ class MainActions {
     void slave_manualSolvingErrorOccurred();
 
     std::shared_ptr<IEventManager> eventManager;
+    bool pusherMounted;
   private:
     IEventSender* sender;
-    bool pusherMounted;
 };
 
 #endif /* SRC_LOGIC_MAIN_FSM_MAINACTIONS_H_ */
