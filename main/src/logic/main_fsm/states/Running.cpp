@@ -39,6 +39,7 @@ void Running::exit() {
 }
 
 void Running::entryHistory() {
+	actions->slave_openGate(false);
 	Logger::info("Entered Running mode - restored previous state");
 	data->wpManager->printCurrentOrder();
 	actions->setRunningMode();
@@ -132,9 +133,12 @@ bool Running::master_LBW_Blocked()
 		if (wp->sortOut)
 		{
 			if(data->wpManager->getRamp_one()) {
+				
 				actions->master_manualSolvingErrorOccurred();
 				return true;
 			}
+			
+
 			if(Configuration::getInstance().pusherMounted()){
 				actions->master_openGate(true);													//closegate()
 			}
@@ -145,6 +149,7 @@ bool Running::master_LBW_Blocked()
 			if(!Configuration::getInstance().pusherMounted()){
 				actions->master_openGate(true);													//closegate()
 			}
+			
 			data->wpManager->moveFromAreaToArea(AreaType::AREA_B, AreaType::AREA_C);
 			Logger::info("WP id: " + std::to_string(wp->id) + " Passed to Area_C");
 		}
@@ -266,14 +271,10 @@ bool Running::slave_LBW_Blocked() {
 				actions->slave_manualSolvingErrorOccurred();
 				return true;
 			}
-			if(Configuration::getInstance().pusherMounted()){
-				actions->master_openGate(true);													//closegate()
-			}  // opengate()
+			actions->slave_openGate(false);   // opengate()
 			Logger::info("WP id: " + std::to_string(wp->id) + " kicked out");
 		} else {
-			if(!Configuration::getInstance().pusherMounted()){
-				actions->master_openGate(true);													//closegate()
-			}   // closegate()
+			actions->slave_openGate(true);    // closegate()
 			data->wpManager->rotateNextWorkpieces();
 			Logger::info("WP id: " + std::to_string(wp->id) + " Passed to End");
 		}

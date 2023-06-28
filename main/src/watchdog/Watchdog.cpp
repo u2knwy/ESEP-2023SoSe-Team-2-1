@@ -101,11 +101,11 @@ void Watchdog::receivingThread() {
     eventManager->handleEvent(Event{WD_CONN_LOST});
     eventManager->handleEvent(Event{MODE_ERROR});
 
-    /*
+
     eventManager->handleEvent(Event{ERROR_M_SELF_SOLVABLE});
 
     eventManager->handleEvent(Event{ERROR_S_SELF_SOLVABLE});
-	*/
+
 }
 
 void Watchdog::heartbeatReceived() {
