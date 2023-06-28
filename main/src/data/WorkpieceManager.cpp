@@ -176,10 +176,12 @@ void WorkpieceManager::setRamp_two(bool input){
 }
 
 bool WorkpieceManager::getRamp_one(){
+	Logger::debug("Ramp one = " + std::to_string(ramp_one_B));
 	return ramp_one_B;
 }
 
 bool WorkpieceManager::getRamp_two(){
+	Logger::debug("Ramp two = " + std::to_string(ramp_two_B));
 	return ramp_two_B;
 }
 
