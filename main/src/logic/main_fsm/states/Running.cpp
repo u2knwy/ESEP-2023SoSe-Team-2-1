@@ -131,15 +131,11 @@ bool Running::master_LBW_Blocked() {
 				return true;
 			}
 
-			if (Configuration::getInstance().pusherMounted()) {
-				actions->master_openGate(true);					//closegate()
-			}
+			actions->master_openGate(false);					//closegate()
 
 			Logger::info("WP id: " + std::to_string(wp->id) + " kicked out");
 		} else {
-			if (!Configuration::getInstance().pusherMounted()) {
-				actions->master_openGate(true);					//closegate()
-			}
+			actions->master_openGate(true);    // closegate()
 
 			data->wpManager->moveFromAreaToArea(AreaType::AREA_B, AreaType::AREA_C);
 			Logger::info("WP id: " + std::to_string(wp->id) + " Passed to Area_C");
