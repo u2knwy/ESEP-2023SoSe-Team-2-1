@@ -266,14 +266,10 @@ bool Running::slave_LBW_Blocked() {
 				actions->slave_manualSolvingErrorOccurred();
 				return true;
 			}
-			if(Configuration::getInstance().pusherMounted()){
-				actions->master_openGate(true);													//closegate()
-			}  // opengate()
+			actions->slave_openGate(false);   // opengate()
 			Logger::info("WP id: " + std::to_string(wp->id) + " kicked out");
 		} else {
-			if(!Configuration::getInstance().pusherMounted()){
-				actions->master_openGate(true);													//closegate()
-			}   // closegate()
+			actions->slave_openGate(true);    // closegate()
 			data->wpManager->rotateNextWorkpieces();
 			Logger::info("WP id: " + std::to_string(wp->id) + " Passed to End");
 		}
