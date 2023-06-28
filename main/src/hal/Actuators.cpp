@@ -101,8 +101,10 @@ void Actuators::setYellowBlinking(bool on) {
 void Actuators::setRedBlinking(bool on, bool fast) {
     if (redBlinking) {
         redBlinking = false;
-        if (th_RedBlinking.joinable())
+        
+        if (th_RedBlinking.joinable()){
             th_RedBlinking.join();
+        }
     }
 
     if (on) {
@@ -164,11 +166,13 @@ void Actuators::serviceMode() {
 }
 
 void Actuators::errorMode() {
-    setGreenBlinking(false);
-    greenLampOff();
     if(!estopped){
     setRedBlinking(true, true);
+    }else{
+       redLampOff(); 
     }
+    setGreenBlinking(false);
+    greenLampOff();
     setMotorStop(true);
     if(hasPusher){
     openSwitch();
@@ -246,6 +250,7 @@ void Actuators::thRedLampFlashing(bool fast) {
 			t_actual += 100;
         }
         redLampOff();
+        if(!redBlinking){ break; }
         t_actual = 0;
 		while(t_actual < t_ms) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(BLINK_POLL_TIME_MS));
@@ -409,12 +414,12 @@ void Actuators::letPass() {
 
 void Actuators::allOff() {
 	motorStop();
+	redLampOff();
+	setRedBlinking(false, false);
 	setGreenBlinking(false);
 	greenLampOff();
 	setYellowBlinking(false);
 	yellowLampOff();
-	setRedBlinking(false, false);
-	redLampOff();
 	q1LedOff();
 	q2LedOff();
 	startLedOff();

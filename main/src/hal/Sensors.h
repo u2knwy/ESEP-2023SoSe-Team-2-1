@@ -61,6 +61,7 @@ class Sensors : public IEventHandler, public EventSender {
     int interruptID;
     int chanID;
     int conID;
+    bool disconnected = false; //for wd_conn_lost
     std::thread eventLoopThread;
     std::shared_ptr<EventManager> eventManager;
     bool isMaster;
@@ -89,4 +90,5 @@ class Sensors : public IEventHandler, public EventSender {
      * Continuously receive ADC and GPIO events
      */
     void eventLoop();
+    void setDisconnect(Event event); //sets disconnected after wd_conn_lost
 };

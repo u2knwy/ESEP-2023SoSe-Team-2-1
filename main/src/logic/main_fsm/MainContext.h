@@ -53,11 +53,13 @@ class MainContext : public IEventHandler {
     void master_btnStart_PressedLong();
     void master_btnStop_Pressed();
     void master_btnReset_Pressed();
+    void master_btnReset_PressedLong();
 
     void slave_btnStart_PressedShort();
     void slave_btnStart_PressedLong();
     void slave_btnStop_Pressed();
     void slave_btnReset_Pressed();
+    void slave_btnReset_PressedLong();
 
     // EStop
     void master_EStop_Pressed();

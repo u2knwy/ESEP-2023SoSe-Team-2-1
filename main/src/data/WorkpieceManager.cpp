@@ -9,13 +9,11 @@
 #include "configuration/Configuration.h"
 #include "logger/logger.hpp"
 
-WorkpieceManager::WorkpieceManager() : nextId(1)
-{
-	ramp_one_B=false;
-    ramp_two_B=false;
+WorkpieceManager::WorkpieceManager() : nextId(1) {
+	ramp_one_B = false;
+	ramp_two_B = false;
 	auto confOrder = Configuration::getInstance().getDesiredOrder();
-	for (int i = 0; i < 3; i++)
-	{
+	for (int i = 0; i < 3; i++) {
 		desiredOrder[i] = confOrder.at(i);
 	}
 }
@@ -23,12 +21,27 @@ WorkpieceManager::WorkpieceManager() : nextId(1)
 WorkpieceManager::~WorkpieceManager() {}
 
 void WorkpieceManager::rotateNextWorkpieces() {
+	//    0          1          2
+	// <Typ-A> -> <Typ-B> -> <Typ-C>
+	// <Typ-B> -> <Typ-C> -> <Typ-A>
     WorkpieceType front = desiredOrder[0];
     desiredOrder[0] = desiredOrder[1];
     desiredOrder[1] = desiredOrder[2];
     desiredOrder[2] = front;
 
-    //Logger::info("Next expected workpiece: " + WP_TYPE_TO_STRING(getNextWorkpieceType()));
+    printCurrentOrder();
+}
+
+void WorkpieceManager::revertNextWorkpiece() {
+	//    0          1          2
+	// <Typ-A> -> <Typ-B> -> <Typ-C>
+	// <Typ-C> -> <Typ-A> -> <Typ-B>
+    WorkpieceType front = desiredOrder[0];
+    desiredOrder[0] = desiredOrder[2];
+    desiredOrder[2] = desiredOrder[1];
+    desiredOrder[1] = front;
+
+    Logger::info("Workpiece order was manually resetted");
     printCurrentOrder();
 }
 
@@ -97,7 +110,11 @@ Workpiece *WorkpieceManager::getHeadOfArea(AreaType area) {
 void WorkpieceManager::setHeight(AreaType area, double height) {
     Workpiece *wp = getHeadOfArea(area);
     if (wp != nullptr) {
-        wp->avgHeight = height;
+    	if(area == AreaType::AREA_D) {
+    		wp->avgHeightFBM2 = height;
+    	} else {
+			wp->avgHeight = height;
+    	}
     }
 }
 
@@ -163,10 +180,12 @@ void WorkpieceManager::setRamp_two(bool input){
 }
 
 bool WorkpieceManager::getRamp_one(){
+	Logger::debug("Ramp one = " + std::to_string(ramp_one_B));
 	return ramp_one_B;
 }
 
 bool WorkpieceManager::getRamp_two(){
+	Logger::debug("Ramp two = " + std::to_string(ramp_two_B));
 	return ramp_two_B;
 }
 
@@ -191,13 +210,22 @@ bool WorkpieceManager::isQueueempty(AreaType area) {
 }
 
 std::string WorkpieceManager::to_string_Workpiece(Workpiece *wp) {
-    std::string str = "wp [id= " + std::to_string(wp->id) + ", " +
-                      " master_type= " + std::to_string(wp->M_type) + ", " +
-                      " slave_type= " + std::to_string(wp->S_type) + ", " +
-                      " height= " + std::to_string(wp->avgHeight) +
-                      " flipped= " + std::to_string(wp->flipped) + "] ";
+	std::stringstream ss;
+	ss << "WS at FBM1 [id=" << wp->id;
+	ss << ", Type: " << WP_TYPE_TO_STRING(wp->M_type);
+	ss << ", Average Height: " << std::fixed << std::setprecision(1) << wp->avgHeight << " mm]";
 
-    return str;
+    return ss.str();
+}
+
+std::string WorkpieceManager::to_string_Workpiece_FBM2(Workpiece *wp) {
+	std::stringstream ss;
+	ss << "WS at FBM2 [id=" << wp->id;
+	ss << ", Type: " << WP_TYPE_TO_STRING(wp->S_type);
+	ss << ", Average Height: " << std::fixed << std::setprecision(1) << wp->avgHeightFBM2;
+	ss << ", Flipped: " << (wp->flipped ? "true" : "false") << "]";
+
+	return ss.str();
 }
 
 std::queue<Workpiece *> &WorkpieceManager::getArea(AreaType area) {

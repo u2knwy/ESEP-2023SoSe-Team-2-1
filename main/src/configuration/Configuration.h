@@ -11,7 +11,7 @@
 #include <vector>
 
 
-#define DEFAULT_CONFIG_FILE_PATH "conf.txt"
+#define DEFAULT_CONFIG_FILE_PATH "/tmp/esep_2.1/esep_conf.txt"
 #define LINENUM_ORDER            1
 #define LINENUM_OFFSET           2
 #define LINENUM_REF              3
@@ -112,6 +112,8 @@ class Configuration {
      * Saves all currently stored configuration values to config file.
      */
     void saveCurrentConfigToFile();
+
+    bool calibrationValid();
 
   private:
     Configuration();

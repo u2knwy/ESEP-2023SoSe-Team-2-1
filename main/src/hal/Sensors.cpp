@@ -19,6 +19,7 @@
 #include "simqnxirqapi.h"
 #endif
 static std::chrono::steady_clock::time_point lastStartBtnPressTime;
+static std::chrono::steady_clock::time_point lastResetBtnPressTime;
 
 Sensors::Sensors(std::shared_ptr<EventManager> mngr) : eventManager(mngr) {
     gpio_bank_0 = mmap_device_io(SIZE_4KB, (uint64_t) GPIO_BANK_0);
@@ -43,6 +44,10 @@ Sensors::Sensors(std::shared_ptr<EventManager> mngr) : eventManager(mngr) {
 
     if (connect(mngr)) {
         Logger::debug("[Sensors] Connected to EventManager");
+        //belongs to the cheat for wd_conn_lost
+        mngr->subscribe(
+        EventType::WD_CONN_LOST,
+        std::bind(&Sensors::setDisconnect, this, std::placeholders::_1));
     } else {
         Logger::error("[Sensors] Error while connecting to EventManager");
     }
@@ -79,6 +84,8 @@ Sensors::~Sensors() {
 
     disconnect();
 }
+void Sensors::setDisconnect(Event event){ disconnected = true; }
+
 
 void Sensors::configurePins() {
     ThreadCtl(_NTO_TCTL_IO, 0);
@@ -279,6 +286,11 @@ void Sensors::handleGpioInterrupt() {
             Logger::debug("[Sensors] ESTOP pressed");
             event.type = isMaster ? EventType::ESTOP_M_PRESSED
                                   : EventType::ESTOP_S_PRESSED;
+            // not pretty but avoids delay when evm is down
+            // direct call estop functions irq
+            if(disconnected){
+            eventManager->handleEvent(event.type);
+            }
         } else {
             Logger::debug("[Sensors] ESTOP released");
             event.type = isMaster ? EventType::ESTOP_M_RELEASED
@@ -287,10 +299,10 @@ void Sensors::handleGpioInterrupt() {
     } else if (BIT_SET(KEY_START_PIN, intrStatusReg)) {
         using namespace std::chrono;
         if (startPressed()) {
-            Logger::debug("[Sensors] START pressed");
+            Logger::debug("[Sensors] START button pressed");
             lastStartBtnPressTime = steady_clock::now();
         } else {
-            Logger::debug("[Sensors] START released");
+            Logger::debug("[Sensors] START button released");
             const auto now = steady_clock::now();
             int elapsed_ms =
                 duration_cast<milliseconds>(now - lastStartBtnPressTime)
@@ -312,10 +324,23 @@ void Sensors::handleGpioInterrupt() {
                 isMaster ? EventType::STOP_M_SHORT : EventType::STOP_S_SHORT;
         }
     } else if (BIT_SET(KEY_RESET_PIN, intrStatusReg)) {
-        if (!resetPressed()) {
+        using namespace std::chrono;
+    	if(resetPressed()) {
             Logger::debug("[Sensors] RESET button pressed");
-            event.type =
-                isMaster ? EventType::RESET_M_SHORT : EventType::RESET_S_SHORT;
+            lastResetBtnPressTime = steady_clock::now();
+    	} else {
+            Logger::debug("[Sensors] RESET button released");
+            const auto now = steady_clock::now();
+			int elapsed_ms = duration_cast<milliseconds>(now - lastResetBtnPressTime).count();
+			if (elapsed_ms >= BTN_LONG_PRESSED_TIME_MS) {
+				Logger::debug("[Sensors] RESET button pressed long");
+				event.type = isMaster ? EventType::RESET_M_LONG
+									  : EventType::RESET_S_LONG;
+			} else {
+				Logger::debug("[Sensors] RESET button pressed short");
+				event.type = isMaster ? EventType::RESET_M_SHORT
+									  : EventType::RESET_S_SHORT;
+			}
         }
     } else if (BIT_SET(LB_START_PIN, intrStatusReg)) {
         if (lbStartBlocked()) {

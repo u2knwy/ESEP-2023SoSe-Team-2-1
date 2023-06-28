@@ -44,6 +44,10 @@ bool SubErrorPendingUnresigned::errorSelfSolved() {
 
 bool SubErrorPendingUnresigned::master_btnReset_Pressed() {
     if (!selfSolving) {
+		if(data->isRampFBM2Blocked()) {
+			Logger::error("Please empty ramp at FBM2 before resigning Error!");
+			return false;
+		}
         exit();
         new (this) SubErrorPendingResigned;
         entry();
@@ -54,6 +58,10 @@ bool SubErrorPendingUnresigned::master_btnReset_Pressed() {
 
 bool SubErrorPendingUnresigned::slave_btnReset_Pressed() {
     if (!selfSolving) {
+    	if(data->isRampFBM2Blocked()) {
+			Logger::error("Please empty ramp at FBM2 before resigning Error!");
+			return false;
+		}
         exit();
         new (this) SubErrorPendingResigned;
         entry();

@@ -24,6 +24,8 @@ class WorkpieceManager {
 
     void rotateNextWorkpieces();
 
+    void revertNextWorkpiece();
+
     /**
      * Prints the current order in which workpieces should arrive at the end of
      * FBM2.
@@ -57,6 +59,7 @@ class WorkpieceManager {
 
     void reset_wpm();
     std::string to_string_Workpiece(Workpiece *wp);
+    std::string to_string_Workpiece_FBM2(Workpiece *wp);
 
     void testWorkpieceManager();
 

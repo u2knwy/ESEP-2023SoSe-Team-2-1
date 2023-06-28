@@ -63,8 +63,56 @@ void cleanup(int exitCode) {
     exit(EXIT_FAILURE);
 }
 
-int main(int argc, char **argv) {
+/**
+ * If there are some events queued up by the Kernel,
+ * we receive them without handling them.
+ */
+void _flushEvents() {
+    Logger::info("Flushing pending internal events...");
+    using namespace std;
 
+    int chid = ChannelCreate(0);
+    if (chid == -1) {
+        throw std::runtime_error("ChannelCreate failed");
+    }
+    int coid = ConnectAttach(0, 0, chid, _NTO_SIDE_CHANNEL, 0);
+    if (coid == -1) {
+        throw std::runtime_error("ConnectAttach failed");
+    }
+    thread flushThread([chid]() {
+        bool running = true;
+        int eventsFlushed = 0;
+        while(running) {
+        	_pulse pulse;
+        	int rtrn = MsgReceivePulse(chid, &pulse, sizeof(pulse), NULL);
+        	if (rtrn < 0) {
+        		perror("Error during MsgReceivePulse");
+        	}
+        	if (pulse.code == PULSE_STOP_THREAD) {
+        		running = false;
+        		continue;
+        	}
+        	Event event;
+        	event.type = (EventType) pulse.code;
+        	event.data = pulse.value.sival_int;
+    		Logger::info("Event flushed: " + EVENT_TO_STRING(event.type));
+        	eventsFlushed++;
+        }
+        Logger::info("Events flushed during startup: " + std::to_string(eventsFlushed));
+    });
+
+    this_thread::sleep_for(chrono::seconds(3));
+    int res = MsgSendPulse(coid, -1, PULSE_STOP_THREAD, 0);
+    if (res < 0) {
+    	throw std::runtime_error("Failed to send pulse message");
+    }
+    flushThread.join();
+
+    ConnectDetach(coid);
+    ChannelDestroy(chid);
+}
+
+int main(int argc, char **argv) {
     // Initialize Logger
     const char *debugValue = getenv("QNX_DEBUG");
     const std::string debug = debugValue ? debugValue : "";
@@ -130,9 +178,10 @@ int main(int argc, char **argv) {
 
     actuators->standbyMode();
     actuators->setYellowBlinking(true);
+    _flushEvents();
     Logger::info("Waiting for system initialization and connection to partner system...");
 
-    //Logger::registerEvents(eventManager);
+    Logger::registerEvents(eventManager);
     eventManager->start();
     std::this_thread::sleep_for(std::chrono::seconds(2));
 

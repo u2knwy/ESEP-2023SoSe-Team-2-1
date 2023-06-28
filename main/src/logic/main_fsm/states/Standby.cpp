@@ -36,6 +36,10 @@ bool Standby::master_btnStart_PressedShort() {
 	actions->slave_sendMotorRightRequest(false);
 	actions->master_sendMotorStopRequest(false);
 	actions->slave_sendMotorStopRequest(false);
+	if(!Configuration::getInstance().calibrationValid()) {
+		Logger::error("Calibration invalid - please calibrate HeightSensor!");
+		return false;
+	}
     exit();
     new (this) Running;
     entry();
@@ -61,6 +65,10 @@ bool Standby::slave_btnStart_PressedShort() {
 	actions->slave_sendMotorRightRequest(false);
 	actions->master_sendMotorStopRequest(false);
 	actions->slave_sendMotorStopRequest(false);
+	if(!Configuration::getInstance().calibrationValid()) {
+		Logger::error("Calibration invalid - please calibrate HeightSensor!");
+		return false;
+	}
     exit();
     new (this) Running;
     entry();
