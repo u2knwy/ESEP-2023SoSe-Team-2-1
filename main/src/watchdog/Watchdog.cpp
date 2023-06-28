@@ -95,17 +95,17 @@ void Watchdog::receivingThread() {
     	heartBeatreceived += 100;
     }
 
-    eventManager->connectionLost();
-    eventManager->handleEvent(Event{MODE_ERROR});
+    sendingRunning = false;
+    receivingRunning = false;
+    Logger::debug("[WD] Stopped receiving heartbeats");
     eventManager->handleEvent(Event{WD_CONN_LOST});
+    eventManager->handleEvent(Event{MODE_ERROR});
 
+    /*
     eventManager->handleEvent(Event{ERROR_M_SELF_SOLVABLE});
 
     eventManager->handleEvent(Event{ERROR_S_SELF_SOLVABLE});
-
-    Logger::debug("[WD] Stopped receiving heartbeats");
-    receivingRunning = false;
-    sendingRunning = false;
+	*/
 }
 
 void Watchdog::heartbeatReceived() {

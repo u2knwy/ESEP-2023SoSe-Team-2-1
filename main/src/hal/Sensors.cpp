@@ -43,6 +43,10 @@ Sensors::Sensors(std::shared_ptr<EventManager> mngr) : eventManager(mngr) {
 
     if (connect(mngr)) {
         Logger::debug("[Sensors] Connected to EventManager");
+        //belongs to the cheat for wd_conn_lost
+        mngr->subscribe(
+        EventType::WD_CONN_LOST,
+        std::bind(&Sensors::setDisconnect, this, std::placeholders::_1));
     } else {
         Logger::error("[Sensors] Error while connecting to EventManager");
     }
@@ -79,6 +83,8 @@ Sensors::~Sensors() {
 
     disconnect();
 }
+void Sensors::setDisconnect(Event event){ disconnected = true; }
+
 
 void Sensors::configurePins() {
     ThreadCtl(_NTO_TCTL_IO, 0);
@@ -279,6 +285,11 @@ void Sensors::handleGpioInterrupt() {
             Logger::debug("[Sensors] ESTOP pressed");
             event.type = isMaster ? EventType::ESTOP_M_PRESSED
                                   : EventType::ESTOP_S_PRESSED;
+            // not pretty but avoids delay when evm is down
+            // direct call estop functions irq
+            if(disconnected){
+            eventManager->handleEvent(event.type);
+            }
         } else {
             Logger::debug("[Sensors] ESTOP released");
             event.type = isMaster ? EventType::ESTOP_M_RELEASED

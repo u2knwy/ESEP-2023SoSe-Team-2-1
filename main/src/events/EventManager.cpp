@@ -37,14 +37,6 @@ EventManager::EventManager() : internal_chid(-1), internal_coid(-1), server_coid
     attachedService = nullptr;
 }
 
-void EventManager::tryreconnect(){
-	Logger::debug("[EventManager] Attempting reconnect");
-	connectToService(otherServiceName);
-	Logger::debug("[EventManager] Reconnected successfully");
-	sendToSelf(Event{WD_CONN_REESTABLISHED});
-	sendToSelf(Event{ERROR_M_SELF_SOLVED});
-	sendToSelf(Event{ERROR_S_SELF_SOLVED});
-}
 
 EventManager::~EventManager() {
     disconnectFromService();
@@ -53,7 +45,7 @@ EventManager::~EventManager() {
     ChannelDestroy(internal_chid);
 }
 void EventManager::connectionLost(){
-	Logger::debug("[EventManager] Disconnected from external, attempting reconnect");
+	Logger::debug("[EventManager] Disconnected from external");
 	disconnected = true;
 }
 
@@ -111,7 +103,7 @@ void EventManager::rcvInternalEventsThread() {
         handleEvent(ev);
         if(ev.type == EventType::WD_CONN_LOST){ disconnected = true; }
         if(ev.type == EventType::WD_CONN_REESTABLISHED){ disconnected = false; }
-        if(disconnected){continue;}
+        if(disconnected){ continue;  }
 
         sendExternalEvent(ev);
     }
@@ -123,7 +115,7 @@ void EventManager::rcvExternalEventsThread() {
     rcvExternalRunning = true;
     while (rcvExternalRunning) {
     	if(disconnected){
-    		tryreconnect();
+    		return;
     	}
         // Waiting for a message and read first header
         header_t header;
@@ -133,6 +125,7 @@ void EventManager::rcvExternalEventsThread() {
             break;
         }
         if (rcvid == 0) {// Pulse was received
+        	//cheat to avoid disconnect
         	if(isMaster){
         	handleEvent(Event{WD_S_HEARTBEAT});
         	}else{
@@ -293,6 +286,11 @@ void EventManager::unsubscribe(EventType type, EventCallback callback) {
 void EventManager::handleEvent(const Event &event) {
    if(event.type == EventType::WD_M_HEARTBEAT && isMaster){ return; }
    if(event.type == EventType::WD_S_HEARTBEAT && !isMaster){ return; }
+   if(event.type == EventType::WD_CONN_LOST){
+	   disconnected = true;
+	   rcvExternalRunning = false;
+	   disconnectFromService();
+   }
 
     std::stringstream ss;
     ss << "[EventManager] handleEvent: " << EVENT_TO_STRING(event.type);
