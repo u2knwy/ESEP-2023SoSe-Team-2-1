@@ -108,16 +108,19 @@ bool Running::master_LBW_Blocked()
 		bool rampOneBlocked= data->wpManager->getRamp_one();
 		bool rampTwoBlocked= data->wpManager->getRamp_two();
 
-		if(!rampOneBlocked && rampTwoBlocked) //compare()
+		if(!rampOneBlocked && rampTwoBlocked ) //compare()
 		{
+			Logger::debug("Erste Rampe frei und zweite Belegt");
 			wp->sortOut = detected_type != config_type;
 		}
 		else if ((rampOneBlocked && !rampTwoBlocked)||(rampOneBlocked && rampTwoBlocked))
 		{
+			Logger::debug("Erste Rampe belegt und zweite frei oder beide belegt");
 			wp->sortOut = false;
 		}
 		else
 		{
+			Logger::debug("beide frei");
 			wp->sortOut = detected_type == WorkpieceType::WS_F && detected_type != config_type;
 		}
 
@@ -132,11 +135,16 @@ bool Running::master_LBW_Blocked()
 				actions->master_manualSolvingErrorOccurred();
 				return true;
 			}
-			actions->master_openGate(false);													//closegate()
+			if(Configuration::getInstance().pusherMounted()){
+				actions->master_openGate(true);													//closegate()
+			}
+
 			Logger::info("WP id: " + std::to_string(wp->id) + " kicked out");
 		}
 		else {
-			actions->master_openGate(true);														//opengate()
+			if(!Configuration::getInstance().pusherMounted()){
+				actions->master_openGate(true);													//closegate()
+			}
 			data->wpManager->moveFromAreaToArea(AreaType::AREA_B, AreaType::AREA_C);
 			Logger::info("WP id: " + std::to_string(wp->id) + " Passed to Area_C");
 		}
@@ -258,10 +266,14 @@ bool Running::slave_LBW_Blocked() {
 				actions->slave_manualSolvingErrorOccurred();
 				return true;
 			}
-			actions->slave_openGate(false);   // opengate()
+			if(Configuration::getInstance().pusherMounted()){
+				actions->master_openGate(true);													//closegate()
+			}  // opengate()
 			Logger::info("WP id: " + std::to_string(wp->id) + " kicked out");
 		} else {
-			actions->slave_openGate(true);   // closegate()
+			if(!Configuration::getInstance().pusherMounted()){
+				actions->master_openGate(true);													//closegate()
+			}   // closegate()
 			data->wpManager->rotateNextWorkpieces();
 			Logger::info("WP id: " + std::to_string(wp->id) + " Passed to End");
 		}
