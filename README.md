@@ -6,7 +6,6 @@ ESEP Gruppe 2 SS23
 
 Das Repository ist unterteilt in folgende Ordner:
 
-- [helloworld](/helloworld/): Momentics-Projekt zum ausführen von Test-Code
 - [main](/main/): Momentics-Projekt, das den Code zum ausführen der entwickelten Software auf dem Beaglebone enthält
 - [tests](/tests/): Momentics-Projekt, das Unit- und Modultests ausführt. Die Quelldateien aus dem `main`-Projekt sind durch das Makefile inkludiert.
 - [docs](/docs/): Enthält die Dokumentation des Projektes (RDT, Code-Doku, Diagramme etc...)
@@ -24,7 +23,6 @@ Der positionale Parameter `mode` ist dabei obligatorisch und muss einer der folg
 - `master`: Starten des Programms im "Master" Betrieb
 - `slave`: Starten des Programms im "Slave" Betrieb
 - `tests`: Ausführen der Tests mit GoogleTest Suite
-- `demo`: Starten des "Demo-Mode"
 
 Die optionalen Parameter haben folgende Bedeutung:
 

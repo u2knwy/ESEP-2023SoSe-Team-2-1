@@ -110,7 +110,11 @@ Workpiece *WorkpieceManager::getHeadOfArea(AreaType area) {
 void WorkpieceManager::setHeight(AreaType area, double height) {
     Workpiece *wp = getHeadOfArea(area);
     if (wp != nullptr) {
-        wp->avgHeight = height;
+    	if(area == AreaType::AREA_D) {
+    		wp->avgHeightFBM2 = height;
+    	} else {
+			wp->avgHeight = height;
+    	}
     }
 }
 
@@ -206,13 +210,22 @@ bool WorkpieceManager::isQueueempty(AreaType area) {
 }
 
 std::string WorkpieceManager::to_string_Workpiece(Workpiece *wp) {
-    std::string str = "wp [id= " + std::to_string(wp->id) + ", " +
-                      " master_type= " + std::to_string(wp->M_type) + ", " +
-                      " slave_type= " + std::to_string(wp->S_type) + ", " +
-                      " height= " + std::to_string(wp->avgHeight) +
-                      " flipped= " + std::to_string(wp->flipped) + "] ";
+	std::stringstream ss;
+	ss << "WS at FBM1 [id=" << wp->id;
+	ss << ", Type: " << WP_TYPE_TO_STRING(wp->M_type);
+	ss << ", Average Height: " << std::fixed << std::setprecision(1) << wp->avgHeight << " mm]";
 
-    return str;
+    return ss.str();
+}
+
+std::string WorkpieceManager::to_string_Workpiece_FBM2(Workpiece *wp) {
+	std::stringstream ss;
+	ss << "WS at FBM2 [id=" << wp->id;
+	ss << ", Type: " << WP_TYPE_TO_STRING(wp->S_type);
+	ss << ", Average Height: " << std::fixed << std::setprecision(1) << wp->avgHeightFBM2;
+	ss << ", Flipped: " << (wp->flipped ? "true" : "false") << "]";
+
+	return ss.str();
 }
 
 std::queue<Workpiece *> &WorkpieceManager::getArea(AreaType area) {

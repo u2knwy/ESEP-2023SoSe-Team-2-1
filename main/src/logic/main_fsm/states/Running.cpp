@@ -17,7 +17,10 @@
 #include "Standby.h"
 #include "logger/logger.hpp"
 
-MainState Running::getCurrentState() { return MainState::RUNNING; };
+MainState Running::getCurrentState() {
+	return MainState::RUNNING;
+}
+;
 
 void Running::entry() {
 	Logger::info("Entered Running mode");
@@ -25,10 +28,10 @@ void Running::entry() {
 	Logger::user_info("Put new workpieces at start of FBM1 to start sorting");
 	actions->setRunningMode();
 	transferPending = false;
-	if(data->isRampFBM1Blocked()) {
+	if (data->isRampFBM1Blocked()) {
 		setRampBlocked_M(true);
 	}
-	if(data->isRampFBM2Blocked()) {
+	if (data->isRampFBM2Blocked()) {
 		setRampBlocked_S(true);
 	}
 	data->wpManager->reset_wpm();
@@ -43,21 +46,20 @@ void Running::entryHistory() {
 	Logger::info("Entered Running mode - restored previous state");
 	data->wpManager->printCurrentOrder();
 	actions->setRunningMode();
-	if(data->isRampFBM1Blocked()) {
+	if (data->isRampFBM1Blocked()) {
 		setRampBlocked_M(true);
 	}
-	if(data->isRampFBM2Blocked()) {
+	if (data->isRampFBM2Blocked()) {
 		setRampBlocked_S(true);
 	}
 }
 
 bool Running::master_LBA_Blocked() {
-	if(data->wpManager->isFBM_MEmpty()) {
+	if (data->wpManager->isFBM_MEmpty()) {
 		actions->master_sendMotorRightRequest(true);
 	}
 	Workpiece *wp = data->wpManager->addWorkpiece();   // addWorkpiece
-	Logger::info("Workpiece with id: " + std::to_string(wp->id) +
-			" created and added to Area_A");
+	Logger::info("Workpiece with id: " + std::to_string(wp->id) + " created and added to Area_A");
 	return true;
 }
 
@@ -66,18 +68,13 @@ bool Running::master_LBA_Unblocked() {
 }
 
 bool Running::master_heightResultReceived(EventType event, float average) {
-	Logger::debug(
-			"[MainFSM] Received FBM1 height result: " + EVENT_TO_STRING(event) +
-			" - avg: " + std::to_string(average) + " mm");
+	Logger::debug("[MainFSM] Received FBM1 height result: " + EVENT_TO_STRING(event) + " - avg: " + std::to_string(average) + " mm");
 
 	if (!data->wpManager->isQueueempty(AreaType::AREA_A)) {
 		Workpiece *wp = data->wpManager->getHeadOfArea(AreaType::AREA_A);
 		data->wpManager->setHeight(AreaType::AREA_A, average);    // setheight()
 		data->wpManager->setTypeEvent(event, AreaType::AREA_A);   // setType()
-		data->wpManager->moveFromAreaToArea(
-				AreaType::AREA_A, AreaType::AREA_B);   // moveFromArea_AtoArea_B()
-
-		Logger::info(data->wpManager->to_string_Workpiece(wp));
+		data->wpManager->moveFromAreaToArea(AreaType::AREA_A, AreaType::AREA_B); // moveFromArea_AtoArea_B()
 	}
 	return true;
 }
@@ -88,7 +85,7 @@ bool Running::master_metalDetected() {
 		Workpiece *wp = data->wpManager->getHeadOfArea(AreaType::AREA_B);
 
 		if (wp->M_type == WorkpieceType::WS_BOM)   // setType()
-		{
+				{
 			wp->M_type = WorkpieceType::WS_BUM;
 		}
 
@@ -99,57 +96,51 @@ bool Running::master_metalDetected() {
 	return true;
 }
 
-bool Running::master_LBW_Blocked()
-{
-	if(!data->wpManager->isQueueempty(AreaType::AREA_B)){
+bool Running::master_LBW_Blocked() {
+	if (!data->wpManager->isQueueempty(AreaType::AREA_B)) {
 		Workpiece *wp = data->wpManager->getHeadOfArea(AreaType::AREA_B);
+		Logger::info(data->wpManager->to_string_Workpiece(wp));
+
 		WorkpieceType detected_type = wp->M_type;
 		WorkpieceType config_type = data->wpManager->getNextWorkpieceType();
 
-		bool rampOneBlocked= data->wpManager->getRamp_one();
-		bool rampTwoBlocked= data->wpManager->getRamp_two();
+		bool rampOneBlocked = data->wpManager->getRamp_one();
+		bool rampTwoBlocked = data->wpManager->getRamp_two();
 
-		if(!rampOneBlocked && rampTwoBlocked ) //compare()
-		{
+		if (!rampOneBlocked && rampTwoBlocked) {  //compare()
 			Logger::debug("Erste Rampe frei und zweite Belegt");
 			wp->sortOut = detected_type != config_type;
-		}
-		else if ((rampOneBlocked && !rampTwoBlocked)||(rampOneBlocked && rampTwoBlocked))
-		{
+		} else if ((rampOneBlocked && !rampTwoBlocked) || (rampOneBlocked && rampTwoBlocked)) {
 			Logger::debug("Erste Rampe belegt und zweite frei oder beide belegt");
 			wp->sortOut = false;
-		}
-		else
-		{
+		} else {
 			Logger::debug("beide frei");
 			wp->sortOut = detected_type == WorkpieceType::WS_F && detected_type != config_type;
 		}
 
 		std::stringstream ss;
-		ss << "FBM1 sort out? expected=" << WP_TYPE_TO_STRING(config_type);
-		ss << ", detected=" << WP_TYPE_TO_STRING(detected_type) << (wp->sortOut ? " -> sort out" : " -> let pass");
+		ss << "(FBM1) WS at switch -> Expected: " << WP_TYPE_TO_STRING(config_type);
+		ss << ", Detected: " << WP_TYPE_TO_STRING(detected_type);
+		ss << (wp->sortOut ? " -> sort out" : " -> go to FBM2");
 		Logger::info(ss.str());
 
-		if (wp->sortOut)
-		{
-			if(data->wpManager->getRamp_one()) {
-				
+		if (wp->sortOut) {
+			if (data->wpManager->getRamp_one()) {
+				Logger::error("Ramp at FBM1 is full -> Sorting out not possible!");
 				actions->master_manualSolvingErrorOccurred();
 				return true;
 			}
-			
 
-			if(Configuration::getInstance().pusherMounted()){
-				actions->master_openGate(true);													//closegate()
+			if (Configuration::getInstance().pusherMounted()) {
+				actions->master_openGate(true);					//closegate()
 			}
 
 			Logger::info("WP id: " + std::to_string(wp->id) + " kicked out");
-		}
-		else {
-			if(!Configuration::getInstance().pusherMounted()){
-				actions->master_openGate(true);													//closegate()
+		} else {
+			if (!Configuration::getInstance().pusherMounted()) {
+				actions->master_openGate(true);					//closegate()
 			}
-			
+
 			data->wpManager->moveFromAreaToArea(AreaType::AREA_B, AreaType::AREA_C);
 			Logger::info("WP id: " + std::to_string(wp->id) + " Passed to Area_C");
 		}
@@ -157,32 +148,32 @@ bool Running::master_LBW_Blocked()
 	return true;
 }
 
-bool Running::master_LBW_Unblocked() { return true; }
+bool Running::master_LBW_Unblocked() {
+	return true;
+}
 
-bool Running::master_LBE_Blocked()
-{
-	if(!data->wpManager->isQueueempty(AreaType::AREA_C)){
+bool Running::master_LBE_Blocked() {
+	if (!data->wpManager->isQueueempty(AreaType::AREA_C)) {
 		Workpiece *wp = data->wpManager->getHeadOfArea(AreaType::AREA_C);
 		if (!data->wpManager->isFBM_SEmpty())
-			/*{
-			// If FBM2 empty -> start FBM2 motor
-			actions->slave_sendMotorRightRequest(true);
-		} else */{
+		/*{
+		 // If FBM2 empty -> start FBM2 motor
+		 actions->slave_sendMotorRightRequest(true);
+		 } else */{
 			// If FBM2 occupied -> stop FBM1 motor
 			actions->master_sendMotorRightRequest(false);
 		}
 		// Close switch if open
-		if(!data->master_pusherMounted) {
+		if (!data->master_pusherMounted) {
 			actions->master_openGate(false);
 		}
 	}
 	return true;
 }
 
-
 bool Running::master_LBE_Unblocked() {
 	if (!data->wpManager->isQueueempty(AreaType::AREA_C)) {
-		if(data->wpManager->isQueueempty(AreaType::AREA_D)){
+		if (data->wpManager->isQueueempty(AreaType::AREA_D)) {
 			data->wpManager->moveFromAreaToArea(AreaType::AREA_C, AreaType::AREA_D);
 			actions->slave_sendMotorRightRequest(true);
 		}
@@ -220,12 +211,12 @@ bool Running::slave_LBA_Blocked() {
 	return true;
 }
 
-bool Running::slave_LBA_Unblocked() { return true; }
+bool Running::slave_LBA_Unblocked() {
+	return true;
+}
 
 bool Running::slave_heightResultReceived(EventType event, float average) {
-	Logger::debug(
-			"[MainFSM] Received FBM1 height result: " + EVENT_TO_STRING(event) +
-			" - avg: " + std::to_string(average) + " mm");
+	Logger::debug("[MainFSM] Received FBM1 height result: " + EVENT_TO_STRING(event) + " - avg: " + std::to_string(average) + " mm");
 
 	if (!data->wpManager->isQueueempty(AreaType::AREA_D)) {
 		data->wpManager->setHeight(AreaType::AREA_D, average);    // setheight()
@@ -256,18 +247,17 @@ bool Running::slave_LBW_Blocked() {
 		Workpiece *wp = data->wpManager->getHeadOfArea(AreaType::AREA_D);
 		WorkpieceType slave_type = wp->S_type;
 		WorkpieceType expected_type = data->wpManager->getNextWorkpieceType();
-		Logger::debug(data->wpManager->to_string_Workpiece(wp));
 
 		wp->sortOut = expected_type != slave_type;   // sortOut()
 
 		std::stringstream ss;
-		ss << "FBM2 sort out? expected=" << WP_TYPE_TO_STRING(expected_type);
-		ss << ", detected=" << WP_TYPE_TO_STRING(slave_type) << (wp->sortOut ? " -> sort out" : " -> let pass");
+		ss << "(FBM2) WS at switch -> Expected: " << WP_TYPE_TO_STRING(expected_type);
+		ss << ", Detected: " << WP_TYPE_TO_STRING(slave_type) << (wp->sortOut ? " -> sort out" : " -> go to End");
 		Logger::info(ss.str());
 
-
 		if (wp->sortOut) {
-			if(data->wpManager->getRamp_two()) {
+			if (data->wpManager->getRamp_two()) {
+				Logger::error("Cannot sort out, because ramp at FBM2 is full!");
 				actions->slave_manualSolvingErrorOccurred();
 				return true;
 			}
@@ -276,25 +266,27 @@ bool Running::slave_LBW_Blocked() {
 		} else {
 			actions->slave_openGate(true);    // closegate()
 			data->wpManager->rotateNextWorkpieces();
-			Logger::info("WP id: " + std::to_string(wp->id) + " Passed to End");
+			Logger::info("WP id: " + std::to_string(wp->id) + " passed to end");
 		}
 	}
 	return true;
 }
 
-bool Running::slave_LBW_Unblocked() { return true; }
+bool Running::slave_LBW_Unblocked() {
+	return true;
+}
 
 bool Running::slave_LBE_Blocked() {
 	if (!data->wpManager->isQueueempty(AreaType::AREA_D)) {
 		Workpiece *wp = data->wpManager->getHeadOfArea(AreaType::AREA_D);
 		if (!data->wpManager->isQueueempty(AreaType::AREA_D)) {
-			if(wp->M_type!=wp->S_type)
-					wp->flipped=true;
-			std::cout << data->wpManager->to_string_Workpiece(wp) << std::endl;   // print()
+			if (wp->M_type != wp->S_type)
+				wp->flipped = true;
+			Logger::info(data->wpManager->to_string_Workpiece_FBM2(wp)); // print()
 			actions->slave_sendMotorRightRequest(false);
 		}
 		// Close switch if open
-		if(!data->slave_pusherMounted) {
+		if (!data->slave_pusherMounted) {
 			actions->slave_openGate(false);
 		}
 	}
@@ -344,7 +336,7 @@ bool Running::slave_LBR_Unblocked() {
 
 bool Running::master_btnStop_Pressed() {
 	bool warning = data->wpManager->getRamp_one() || data->wpManager->getRamp_two();
-	if(warning) {
+	if (warning) {
 		Logger::warn("You cannot go to Standby mode, because a warning is active. Fix the warning first!");
 		return false;
 	}
@@ -356,7 +348,7 @@ bool Running::master_btnStop_Pressed() {
 
 bool Running::slave_btnStop_Pressed() {
 	bool warning = data->wpManager->getRamp_one() || data->wpManager->getRamp_two();
-	if(warning) {
+	if (warning) {
 		Logger::warn("You cannot go to Standby mode, because a warning is active. Fix the warning first!");
 		return false;
 	}
@@ -407,7 +399,7 @@ bool Running::nonSelfSolvableErrorOccurred() {
 void Running::setRampBlocked_M(bool blocked) {
 	data->setRampFBM1Blocked(blocked);
 
-	if(blocked) {
+	if (blocked) {
 		// If still blocked after 1s -> display warning
 		std::thread t([=]() {
 			std::this_thread::sleep_for(std::chrono::milliseconds(1000));
@@ -426,7 +418,7 @@ void Running::setRampBlocked_M(bool blocked) {
 void Running::setRampBlocked_S(bool blocked) {
 	data->setRampFBM2Blocked(blocked);
 
-	if(blocked) {
+	if (blocked) {
 		// If still blocked after 1s -> display warning
 		std::thread t([=]() {
 			std::this_thread::sleep_for(std::chrono::milliseconds(1000));

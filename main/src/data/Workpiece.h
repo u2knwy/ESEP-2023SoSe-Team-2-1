@@ -29,6 +29,11 @@ struct Workpiece {
     bool metal{false};
 
     /**
+     * The average measured height at FBM1
+     */
+    float avgHeightFBM2{0.0};
+
+    /**
      * Maximum measured height at FBM2
      */
     float maxHeightFBM2{0.0};
