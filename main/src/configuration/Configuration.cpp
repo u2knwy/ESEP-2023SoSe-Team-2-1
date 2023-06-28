@@ -172,6 +172,16 @@ void Configuration::saveCurrentConfigToFile() {
     Logger::info("Config file was saved");
 }
 
+bool Configuration::calibrationValid() {
+	if(cal.calOffset > 4000 || cal.calOffset < 3000)
+		return false;
+	if(cal.calRef > 3300 || cal.calRef < 1500)
+		return false;
+	if((cal.calOffset - cal.calRef) < 500)
+		return false;
+	return true;
+}
+
 void Configuration::writeLineToConfigFile(int lineNumber,
                                           const std::string &newContent) {
     std::ifstream inputFile(configFilePath);

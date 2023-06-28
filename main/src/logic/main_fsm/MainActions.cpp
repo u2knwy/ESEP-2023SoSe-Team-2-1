@@ -60,20 +60,12 @@ void MainActions::slave_sendMotorRightRequest(bool right) {
 }
 
 void MainActions::master_openGate(bool open) {
-	if(open && pusherMounted) {
-		// Pusher and open gate -> nothing to do
-		return;
-	}
     // (EventData) 0: sort out, 1: open gate
     int eventData = open ? 0 : 1;
     sender->sendEvent(Event{SORT_M_OUT, eventData});
 }
 
 void MainActions::slave_openGate(bool open) {
-	if(open && pusherMounted) {
-		// Pusher and open gate -> nothing to do
-		return;
-	}
     // (EventData) 0: sort out, 1: open gate
     int eventData = open ? 0 : 1;
     sender->sendEvent(Event{SORT_S_OUT, eventData});

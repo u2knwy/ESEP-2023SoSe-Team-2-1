@@ -113,6 +113,8 @@ class Configuration {
      */
     void saveCurrentConfigToFile();
 
+    bool calibrationValid();
+
   private:
     Configuration();
     virtual ~Configuration();
