@@ -20,21 +20,18 @@
 MainState Running::getCurrentState() {
 	return MainState::RUNNING;
 }
-;
 
 void Running::entry() {
 	Logger::info("Entered Running mode");
 	data->wpManager->printCurrentOrder();
 	Logger::user_info("Put new workpieces at start of FBM1 to start sorting");
 	actions->setRunningMode();
-	transferPending = false;
 	if (data->isRampFBM1Blocked()) {
 		setRampBlocked_M(true);
 	}
 	if (data->isRampFBM2Blocked()) {
 		setRampBlocked_S(true);
 	}
-	data->wpManager->reset_wpm();
 }
 
 void Running::exit() {

@@ -260,9 +260,10 @@ void MainContext::handleEvent(Event event) {
 	case EventType::ERROR_S_SELF_SOLVED:
 		errorSelfSolved();
 		break;
-	case EventType::HAL_PUSHER_MOUNTED:
+	case EventType::HAL_PUSHER_MOUNTED: {
 		data->slave_pusherMounted = true;
 		break;
+	}
 	default:
 		Logger::warn(
 				"[MainFSM] Event was not handled: "

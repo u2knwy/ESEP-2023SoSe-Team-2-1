@@ -13,6 +13,7 @@
 #include "Running.h"
 #include "ServiceMode.h"
 #include "logger/logger.hpp"
+#include "configuration/Configuration.h"
 
 MainState Standby::getCurrentState() { return MainState::STANDBY; };
 
@@ -24,18 +25,15 @@ void Standby::entry() {
     actions->master_sendMotorStopRequest(true);
     actions->slave_sendMotorStopRequest(true);
     actions->setStandbyMode();
-    data->wpManager->reset_wpm();
 }
 
 void Standby::exit() {
 	previousState = MainState::STANDBY;
+	actions->master_sendMotorStopRequest(false);
+	actions->slave_sendMotorStopRequest(false);
 }
 
 bool Standby::master_btnStart_PressedShort() {
-	actions->master_sendMotorRightRequest(false);
-	actions->slave_sendMotorRightRequest(false);
-	actions->master_sendMotorStopRequest(false);
-	actions->slave_sendMotorStopRequest(false);
 	if(!Configuration::getInstance().calibrationValid()) {
 		Logger::error("Calibration invalid - please calibrate HeightSensor!");
 		return false;
@@ -61,10 +59,6 @@ bool Standby::master_EStop_Pressed() {
 }
 
 bool Standby::slave_btnStart_PressedShort() {
-	actions->master_sendMotorRightRequest(false);
-	actions->slave_sendMotorRightRequest(false);
-	actions->master_sendMotorStopRequest(false);
-	actions->slave_sendMotorStopRequest(false);
 	if(!Configuration::getInstance().calibrationValid()) {
 		Logger::error("Calibration invalid - please calibrate HeightSensor!");
 		return false;
@@ -87,4 +81,14 @@ bool Standby::slave_EStop_Pressed() {
     new (this) EStop;
     entry();
     return true;
+}
+
+bool Standby::master_btnReset_PressedLong() {
+	data->wpManager->reset_wpm();
+	return true;
+}
+
+bool Standby::slave_btnReset_PressedLong() {
+	data->wpManager->reset_wpm();
+	return true;
 }
