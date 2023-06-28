@@ -279,9 +279,13 @@ void MainActions::slave_q2LedOff() {
 }
 
 void MainActions::master_manualSolvingErrorOccurred() {
+    sender->sendEvent(Event{EventType::MOTOR_M_STOP});
+    sender->sendEvent(Event{MOTOR_S_STOP});
     sender->sendEvent(Event{EventType::ERROR_M_MAN_SOLVABLE});
 
 }
 void MainActions::slave_manualSolvingErrorOccurred() {
+    sender->sendEvent(Event{EventType::MOTOR_M_STOP});
+    sender->sendEvent(Event{MOTOR_S_STOP});
     sender->sendEvent(Event{EventType::ERROR_S_MAN_SOLVABLE});
 }

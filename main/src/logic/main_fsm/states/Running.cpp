@@ -39,6 +39,7 @@ void Running::exit() {
 }
 
 void Running::entryHistory() {
+	actions->slave_openGate(false);
 	Logger::info("Entered Running mode - restored previous state");
 	data->wpManager->printCurrentOrder();
 	actions->setRunningMode();
@@ -132,6 +133,7 @@ bool Running::master_LBW_Blocked()
 		if (wp->sortOut)
 		{
 			if(data->wpManager->getRamp_one()) {
+				
 				actions->master_manualSolvingErrorOccurred();
 				return true;
 			}
