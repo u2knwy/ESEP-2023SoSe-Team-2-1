@@ -81,11 +81,13 @@ class MainBasestate {
     virtual bool master_btnStart_PressedLong() { return false; }
     virtual bool master_btnStop_Pressed() { return false; }
     virtual bool master_btnReset_Pressed() { return false; }
+    virtual bool master_btnReset_PressedLong() { return false; }
 
     virtual bool slave_btnStart_PressedShort() { return false; }
     virtual bool slave_btnStart_PressedLong() { return false; }
     virtual bool slave_btnStop_Pressed() { return false; }
     virtual bool slave_btnReset_Pressed() { return false; }
+    virtual bool slave_btnReset_PressedLong() { return false; }
 
     // EStop
     virtual bool master_EStop_Pressed() { return false; }

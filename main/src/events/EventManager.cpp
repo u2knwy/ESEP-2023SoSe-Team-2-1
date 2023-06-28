@@ -270,8 +270,8 @@ void EventManager::subscribe(EventType type, EventCallback callback) {
 
 int EventManager::subscribeToAllEvents(EventCallback callback) {
     int nEvents = 0;
-    for (int i = static_cast<int>(EventType::PULSE_STOP_THREAD);
-         i <= static_cast<int>(EventType::ERROR_S_SELF_SOLVED); i++) {
+    for (int i = static_cast<int>(EventType::START_M_SHORT);
+         i <= static_cast<int>(EventType::WD_CONN_REESTABLISHED); i++) {
         EventType eventType = static_cast<EventType>(i);
         subscribe(eventType, callback);
         nEvents++;

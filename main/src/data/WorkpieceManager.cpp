@@ -9,13 +9,11 @@
 #include "configuration/Configuration.h"
 #include "logger/logger.hpp"
 
-WorkpieceManager::WorkpieceManager() : nextId(1)
-{
-	ramp_one_B=false;
-    ramp_two_B=false;
+WorkpieceManager::WorkpieceManager() : nextId(1) {
+	ramp_one_B = false;
+	ramp_two_B = false;
 	auto confOrder = Configuration::getInstance().getDesiredOrder();
-	for (int i = 0; i < 3; i++)
-	{
+	for (int i = 0; i < 3; i++) {
 		desiredOrder[i] = confOrder.at(i);
 	}
 }
@@ -23,12 +21,27 @@ WorkpieceManager::WorkpieceManager() : nextId(1)
 WorkpieceManager::~WorkpieceManager() {}
 
 void WorkpieceManager::rotateNextWorkpieces() {
+	//    0          1          2
+	// <Typ-A> -> <Typ-B> -> <Typ-C>
+	// <Typ-B> -> <Typ-C> -> <Typ-A>
     WorkpieceType front = desiredOrder[0];
     desiredOrder[0] = desiredOrder[1];
     desiredOrder[1] = desiredOrder[2];
     desiredOrder[2] = front;
 
-    //Logger::info("Next expected workpiece: " + WP_TYPE_TO_STRING(getNextWorkpieceType()));
+    printCurrentOrder();
+}
+
+void WorkpieceManager::revertNextWorkpiece() {
+	//    0          1          2
+	// <Typ-A> -> <Typ-B> -> <Typ-C>
+	// <Typ-C> -> <Typ-A> -> <Typ-B>
+    WorkpieceType front = desiredOrder[0];
+    desiredOrder[0] = desiredOrder[2];
+    desiredOrder[2] = desiredOrder[1];
+    desiredOrder[1] = front;
+
+    Logger::info("Workpiece order was manually resetted");
     printCurrentOrder();
 }
 

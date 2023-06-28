@@ -105,11 +105,14 @@ bool Running::master_LBW_Blocked()
 		WorkpieceType detected_type = wp->M_type;
 		WorkpieceType config_type = data->wpManager->getNextWorkpieceType();
 
-		if(!data->wpManager->getRamp_one() && data->wpManager->getRamp_two()) //compare()
+		bool rampOneBlocked= data->wpManager->getRamp_one();
+		bool rampTwoBlocked= data->wpManager->getRamp_two();
+
+		if(!rampOneBlocked && rampTwoBlocked) //compare()
 		{
 			wp->sortOut = detected_type != config_type;
 		}
-		else if (data->wpManager->getRamp_one() && !data->wpManager->getRamp_two())
+		else if ((rampOneBlocked && !rampTwoBlocked)||(rampOneBlocked && rampTwoBlocked))
 		{
 			wp->sortOut = false;
 		}
@@ -348,6 +351,14 @@ bool Running::slave_btnStop_Pressed() {
 	new (this) Standby;
 	entry();
 	return true;
+}
+
+bool Running::master_btnReset_PressedLong() {
+	data->wpManager->revertNextWorkpiece();
+}
+
+bool Running::slave_btnReset_PressedLong() {
+	data->wpManager->revertNextWorkpiece();
 }
 
 bool Running::master_EStop_Pressed() {

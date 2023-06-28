@@ -37,6 +37,8 @@
 #include "events/EventManager.h"
 #include "events/events.h"
 
+#define DEFAULT_LOG_FILE_FOLDER  "/tmp/esep_2.1/"
+
 using namespace std;
 
 class Logger {
@@ -89,6 +91,7 @@ public:
 			ss << " - data=" << event.data;
 		}
 		info(ss.str());
+		Logger::getInstance().log_to_file(ss.str());
 	}
 
 	/**
@@ -110,13 +113,11 @@ private:
 		auto now = std::time(nullptr);
 		auto local_time = std::localtime(&now);
 		std::stringstream ss;
-		ss << "/tmp/esep_2.1/";
-		ss << "log_" << std::put_time(local_time, "%Y%m%d-%H%M%S") << ".txt";
+		ss << DEFAULT_LOG_FILE_FOLDER << "log_" << std::put_time(local_time, "%Y%m%d-%H%M%S") << ".txt";
 		std::string logFilePath = ss.str();
-		system(std::string("rm " + ss.str()).c_str());
 		logFile.open(logFilePath);
 		if (!logFile.is_open()) {
-			throw std::runtime_error("Failed to open file.");
+			throw std::runtime_error("Failed to open log file for writing");
 		}
 	}
 	~Logger() {
@@ -181,6 +182,9 @@ private:
 	}
 
 	void log_to_file(const std::string &log) {
-		logFile << log << std::endl;
+		using namespace std::chrono;
+		auto now = std::time(nullptr);
+		auto local_time = std::localtime(&now);
+		logFile << '[' << std::put_time(local_time, "%H:%M:%S") << "] " << log << std::endl;
 	}
 };
