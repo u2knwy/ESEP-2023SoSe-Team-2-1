@@ -53,7 +53,6 @@ class Running : public MainBasestate {
     bool nonSelfSolvableErrorOccurred() override;
 
   private:
-    bool transferPending{false};
     bool pusherMounted;
     void setRampBlocked_M(bool blocked);
     void setRampBlocked_S(bool blocked);

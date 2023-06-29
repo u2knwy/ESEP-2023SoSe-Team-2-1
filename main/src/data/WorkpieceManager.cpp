@@ -248,5 +248,6 @@ void WorkpieceManager::reset_wpm(){
 	std::queue<Workpiece*>().swap(Area_B);
 	std::queue<Workpiece*>().swap(Area_C);
 	std::queue<Workpiece*>().swap(Area_D);
-	nextId=1;
+	nextId = 1;
+	Logger::info("Workpieces were resetted - start sorting from the beginning");
 }

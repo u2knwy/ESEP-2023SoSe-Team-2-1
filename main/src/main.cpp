@@ -197,6 +197,7 @@ int main(int argc, char **argv) {
         motorFSM_Slave = std::make_shared<MotorContext>(actionsS, false);
         MainActions* mainActions = new MainActions(eventManager, new EventSender());
         mainFSM = std::make_shared<MainContext>(mainActions);
+        mainActions->setData(mainFSM->data);
     }
 
     std::this_thread::sleep_for(std::chrono::seconds(1));
