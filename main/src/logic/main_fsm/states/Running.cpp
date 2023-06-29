@@ -241,6 +241,8 @@ bool Running::slave_metalDetected() {
 bool Running::slave_LBW_Blocked() {
 	if (!data->wpManager->isQueueempty(AreaType::AREA_D)) {
 		Workpiece *wp = data->wpManager->getHeadOfArea(AreaType::AREA_D);
+		Logger::info(data->wpManager->to_string_Workpiece_FBM2(wp));
+
 		WorkpieceType slave_type = wp->S_type;
 		WorkpieceType expected_type = data->wpManager->getNextWorkpieceType();
 
