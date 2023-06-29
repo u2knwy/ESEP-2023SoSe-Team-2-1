@@ -17,9 +17,11 @@ class Standby : public MainBasestate {
 
     bool master_btnStart_PressedShort() override;
     bool master_btnStart_PressedLong() override;
+    bool master_btnReset_PressedLong() override;
     bool master_EStop_Pressed() override;
 
     bool slave_btnStart_PressedShort() override;
     bool slave_btnStart_PressedLong() override;
+    bool slave_btnReset_PressedLong() override;
     bool slave_EStop_Pressed() override;
 };

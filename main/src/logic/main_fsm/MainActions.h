@@ -10,6 +10,7 @@
 
 #include "events/IEventManager.h"
 #include "events/IEventSender.h"
+#include "MainContextData.h"
 
 #include <memory>
 
@@ -17,6 +18,7 @@ class MainActions {
   public:
     MainActions(std::shared_ptr<IEventManager> mngr, IEventSender* eventSender);
     virtual ~MainActions();
+    void setData(MainContextData* data);
     void master_sendMotorStopRequest(bool stop);
     void slave_sendMotorStopRequest(bool stop);
     void master_sendMotorRightRequest(bool right);
@@ -62,6 +64,7 @@ class MainActions {
     std::shared_ptr<IEventManager> eventManager;
     bool pusherMounted;
   private:
+    MainContextData* data = nullptr;
     IEventSender* sender;
 };
 

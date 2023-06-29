@@ -39,6 +39,8 @@ class IntegrationTest_Running : public ::testing::Test {
     	fsm->master_btnStart_PressedShort();
     	evm->clearLastHandledEvents();
     	clearBelt();
+    	Configuration::getInstance().setOffsetCalibration(3600);
+    	Configuration::getInstance().setReferenceCalibration(2500);
     }
 
     /**
@@ -88,6 +90,8 @@ TEST_F(IntegrationTest_Running, RampBlockedWhenRunningStarted) {
 	EXPECT_FALSE(wpm->getRamp_one());
 	EXPECT_FALSE(wpm->getRamp_two());
 
+	fsm->master_LBR_Unblocked();
+	fsm->slave_LBR_Unblocked();
 	fsm->master_btnStop_Pressed();
 	EXPECT_EQ(MainState::STANDBY, fsm->getCurrentState());
 
@@ -280,4 +284,81 @@ TEST_F(IntegrationTest_Running, WorkpieceNotInOrderSortOutAtFBM2) {
 	EXPECT_EQ(WorkpieceType::WS_BOM, wp1->M_type);
 	EXPECT_EQ(25, wp1->avgHeight);
 	EXPECT_FALSE(wp1->sortOut);
+}
+
+TEST_F(IntegrationTest_Running, CalibrationInvalidDoNotGoToRunning) {
+	// Go to Standby
+	fsm->master_btnStop_Pressed();
+
+	// Set invalid calibration values (default)
+	Configuration::getInstance().setOffsetCalibration(3333);
+	Configuration::getInstance().setReferenceCalibration(2222);
+
+	// Try to go to Running mode - we must stay in Standby
+	fsm->master_btnStart_PressedShort();
+	EXPECT_EQ(MainState::STANDBY, fsm->getCurrentState());
+
+	// Calibration values valid - go to Running
+	Configuration::getInstance().setOffsetCalibration(3600);
+	Configuration::getInstance().setReferenceCalibration(2200);
+	fsm->master_btnStart_PressedShort();
+	EXPECT_EQ(MainState::RUNNING, fsm->getCurrentState());
+}
+
+TEST_F(IntegrationTest_Running, RunningToStandbyToRunningResume) {
+	// Insert two workpieces
+	fsm->master_LBA_Blocked();
+	EXPECT_TRUE(evm->lastHandledEventsContain(Event{EventType::MOTOR_M_RIGHT_REQ, 1}));
+	fsm->master_LBA_Blocked();
+
+	// WP1 go to FBM2
+	fsm->master_LBA_Unblocked();
+	fsm->master_heightResultReceived(EventType::HM_M_WS_F, 21.0);
+	fsm->master_LBW_Blocked();
+	fsm->master_LBW_Unblocked();
+	fsm->master_LBE_Blocked();
+	fsm->master_LBE_Unblocked();
+	EXPECT_FALSE(evm->lastHandledEventsContain(Event{EventType::MOTOR_M_RIGHT_REQ, 0}));
+	fsm->slave_LBA_Blocked();
+
+	// Go to Standby and Running again - state must be continued
+	fsm->master_btnStop_Pressed();
+	EXPECT_FALSE(evm->lastHandledEventsContain(Event{EventType::MOTOR_M_RIGHT_REQ, 0}));
+	EXPECT_FALSE(evm->lastHandledEventsContain(Event{EventType::MOTOR_S_RIGHT_REQ, 0}));
+	evm->clearLastHandledEvents();
+	fsm->master_btnStart_PressedShort();
+	EXPECT_FALSE(wpm->isFBM_MEmpty());
+	EXPECT_FALSE(wpm->isFBM_SEmpty());
+	EXPECT_FALSE(evm->lastHandledEventsContain(Event{EventType::MOTOR_M_RIGHT_REQ, 0}));
+	EXPECT_FALSE(evm->lastHandledEventsContain(Event{EventType::MOTOR_S_RIGHT_REQ, 0}));
+
+	Workpiece* wp1 = wpm->getHeadOfArea(AreaType::AREA_A);
+	EXPECT_NE(nullptr, wp1);
+	EXPECT_EQ(2, wp1->id);
+	Workpiece* wp2 = wpm->getHeadOfArea(AreaType::AREA_D);
+	EXPECT_NE(nullptr, wp2);
+	EXPECT_EQ(1, wp2->id);
+}
+
+TEST_F(IntegrationTest_Running, RunningToStandbyToRunningBothFBMFree) {
+	// Insert two 'OK' workpieces which will be removed at FBM2
+	wpRunUntilRemovedAtFBM2(EventType::HM_M_WS_F, 21.0, false);
+	wpRunUntilRemovedAtFBM2(EventType::HM_M_WS_BOM, 21.0, false);
+
+	// Go to Standby and Running again - state must be continued
+	evm->clearLastHandledEvents();
+	fsm->master_btnStop_Pressed();
+	EXPECT_FALSE(evm->lastHandledEventsContain(Event{EventType::MOTOR_M_RIGHT_REQ, 0}));
+	EXPECT_FALSE(evm->lastHandledEventsContain(Event{EventType::MOTOR_S_RIGHT_REQ, 0}));
+	EXPECT_TRUE(evm->lastHandledEventsContain(Event{EventType::MOTOR_M_STOP_REQ, 1}));
+	EXPECT_TRUE(evm->lastHandledEventsContain(Event{EventType::MOTOR_S_STOP_REQ, 1}));
+	fsm->master_btnStart_PressedShort();
+	EXPECT_TRUE(wpm->isFBM_MEmpty());
+	EXPECT_TRUE(wpm->isFBM_SEmpty());
+	EXPECT_TRUE(evm->lastHandledEventsContain(Event{EventType::MOTOR_M_STOP_REQ, 0}));
+	EXPECT_TRUE(evm->lastHandledEventsContain(Event{EventType::MOTOR_S_STOP_REQ, 0}));
+	EXPECT_FALSE(evm->lastHandledEventsContain(Event{MOTOR_M_RIGHT_REQ, 0}));
+	EXPECT_FALSE(evm->lastHandledEventsContain(Event{MOTOR_S_RIGHT_REQ, 0}));
+	EXPECT_FALSE(evm->lastHandledEventsContain(Event{MOTOR_M_RIGHT_REQ, 1}));
+	EXPECT_FALSE(evm->lastHandledEventsContain(Event{MOTOR_S_RIGHT_REQ, 1}));
 }
