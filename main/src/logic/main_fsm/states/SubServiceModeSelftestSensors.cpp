@@ -26,6 +26,7 @@ void SubServiceModeSelftestSensors::exit() {}
 
 bool SubServiceModeSelftestSensors::master_btnStart_PressedShort() {
     if (data->getSelftestSensorsResult()) {
+    	Logger::info("Sensors selftest pass!");
         exit();
         new (this) SubServiceModeSelftestActuators;
         entry();
@@ -73,6 +74,7 @@ bool SubServiceModeSelftestSensors::master_LBW_Blocked() {
 
 bool SubServiceModeSelftestSensors::master_LBE_Blocked() {
 	data->ssResult.master_lbEndOk = true;
+    actions->master_openGate(false);
     return true;
 }
 
@@ -92,6 +94,7 @@ bool SubServiceModeSelftestSensors::slave_LBW_Blocked() {
 bool SubServiceModeSelftestSensors::slave_LBE_Blocked() {
 	data->ssResult.slave_lbEndOk = true;
     actions->slave_sendMotorRightRequest(false);
+    actions->slave_openGate(false);
     Logger::user_info("[ServiceMode] Block ramp at FBM1 and FBM2 and then press START to continue");
     return true;
 }

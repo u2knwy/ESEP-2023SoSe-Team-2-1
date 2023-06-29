@@ -29,8 +29,7 @@ void SubServiceModeCalRef::exit() {}
 
 bool SubServiceModeCalRef::master_btnStart_PressedShort() {
     actions->calibrateReference();
-    Logger::user_info(
-        "Calibration done. Press RESET button to continue or START to repeat");
+    Logger::user_info("Calibration done. Press RESET button to continue or START to repeat");
     actions->master_btnResetLedOn();
     actions->slave_btnResetLedOn();
     done = true;
@@ -51,9 +50,9 @@ bool SubServiceModeCalRef::master_btnReset_Pressed() {
 
 bool SubServiceModeCalRef::slave_btnStart_PressedShort() {
     actions->calibrateReference();
-    Logger::user_info(
-        "Calibration done. Press RESET button to continue or START to repeat");
+    Logger::user_info("Calibration done. Press RESET button to continue or START to repeat");
     actions->master_btnResetLedOn();
+    actions->slave_btnResetLedOn();
     done = true;
     return true;
 }
