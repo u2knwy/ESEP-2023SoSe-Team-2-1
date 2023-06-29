@@ -113,9 +113,13 @@ void MainActions::redLampOn() {
 }
 
 void MainActions::setEStopMode() {
-    Event event;
-    event.type = EventType::MODE_ESTOP;
-    sender->sendEvent(event);
+    sender->sendEvent(Event{EventType::MODE_ESTOP});
+    sender->sendEvent(Event{EventType::MOTOR_M_STOP_REQ, 1});
+    sender->sendEvent(Event{EventType::MOTOR_M_RIGHT_REQ, 0});
+    sender->sendEvent(Event{EventType::MOTOR_M_SLOW_REQ, 0});
+    sender->sendEvent(Event{EventType::MOTOR_S_STOP_REQ, 1});
+    sender->sendEvent(Event{EventType::MOTOR_S_RIGHT_REQ, 0});
+    sender->sendEvent(Event{EventType::MOTOR_S_SLOW_REQ, 0});
 }
 
 void MainActions::allActuatorsOn() {

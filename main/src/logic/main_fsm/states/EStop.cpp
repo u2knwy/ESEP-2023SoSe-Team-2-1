@@ -18,8 +18,6 @@ MainState EStop::getCurrentState() { return MainState::ESTOP; };
 void EStop::entry() {
     Logger::info("Entered EStop mode");
     initSubStateEStop();
-    actions->master_sendMotorStopRequest(true);
-    actions->slave_sendMotorStopRequest(true);
     actions->setEStopMode();
     data->wpManager->reset_wpm();
 }
