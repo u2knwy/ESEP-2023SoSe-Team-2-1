@@ -16,7 +16,7 @@
 #define HM_CAL_MEASUREMENTS 10
 
 MainActions::MainActions(std::shared_ptr<IEventManager> mngr, IEventSender* eventSender) {
-    pusherMounted = Configuration::getInstance().pusherMounted();
+    this->pusherMounted = Configuration::getInstance().pusherMounted();
     this->eventManager = mngr;
     this->sender = eventSender;
     if (sender->connect(mngr)) {
@@ -29,6 +29,10 @@ MainActions::MainActions(std::shared_ptr<IEventManager> mngr, IEventSender* even
 MainActions::~MainActions() {
 	sender->disconnect();
 	delete sender;
+}
+
+void MainActions::setData(MainContextData* data) {
+	this->data = data;
 }
 
 void MainActions::master_sendMotorStopRequest(bool stop) {
@@ -109,9 +113,13 @@ void MainActions::redLampOn() {
 }
 
 void MainActions::setEStopMode() {
-    Event event;
-    event.type = EventType::MODE_ESTOP;
-    sender->sendEvent(event);
+    sender->sendEvent(Event{EventType::MODE_ESTOP});
+    sender->sendEvent(Event{EventType::MOTOR_M_STOP_REQ, 1});
+    sender->sendEvent(Event{EventType::MOTOR_M_RIGHT_REQ, 0});
+    sender->sendEvent(Event{EventType::MOTOR_M_SLOW_REQ, 0});
+    sender->sendEvent(Event{EventType::MOTOR_S_STOP_REQ, 1});
+    sender->sendEvent(Event{EventType::MOTOR_S_RIGHT_REQ, 0});
+    sender->sendEvent(Event{EventType::MOTOR_S_SLOW_REQ, 0});
 }
 
 void MainActions::allActuatorsOn() {
@@ -131,12 +139,25 @@ void MainActions::allActuatorsOn() {
     sender->sendEvent(Event{EventType::LED_S_Q1, (int) LampState::ON});
     sender->sendEvent(Event{EventType::LED_S_Q2, (int) LampState::ON});
 
-    if(pusherMounted) {
-    	// Pusher mounted -> sort out
-    	sender->sendEvent(Event{EventType::SORT_M_OUT, 1});
+    if(data != nullptr) {
+        if(data->master_pusherMounted) {
+        	// Pusher mounted -> sort out
+        	sender->sendEvent(Event{EventType::SORT_M_OUT, 1});
+        } else {
+        	// Switch mounted -> let pass
+        	sender->sendEvent(Event{EventType::SORT_M_OUT, 0});
+        }
+
+        if(data->slave_pusherMounted) {
+        	// Pusher mounted -> sort out
+        	sender->sendEvent(Event{EventType::SORT_S_OUT, 1});
+        } else {
+        	// Switch mounted -> let pass
+        	sender->sendEvent(Event{EventType::SORT_S_OUT, 0});
+        }
     } else {
-    	// Switch mounted -> let pass
-    	sender->sendEvent(Event{EventType::SORT_S_OUT, 0});
+    	sender->sendEvent(Event{EventType::SORT_M_OUT, 1});
+    	sender->sendEvent(Event{EventType::SORT_S_OUT, 1});
     }
 }
 
@@ -281,3 +302,4 @@ void MainActions::slave_manualSolvingErrorOccurred() {
     sender->sendEvent(Event{MOTOR_S_STOP});
     sender->sendEvent(Event{EventType::ERROR_S_MAN_SOLVABLE});
 }
+

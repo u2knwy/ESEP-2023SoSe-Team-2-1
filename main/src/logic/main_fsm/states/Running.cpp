@@ -20,21 +20,18 @@
 MainState Running::getCurrentState() {
 	return MainState::RUNNING;
 }
-;
 
 void Running::entry() {
 	Logger::info("Entered Running mode");
 	data->wpManager->printCurrentOrder();
 	Logger::user_info("Put new workpieces at start of FBM1 to start sorting");
 	actions->setRunningMode();
-	transferPending = false;
 	if (data->isRampFBM1Blocked()) {
 		setRampBlocked_M(true);
 	}
 	if (data->isRampFBM2Blocked()) {
 		setRampBlocked_S(true);
 	}
-	data->wpManager->reset_wpm();
 }
 
 void Running::exit() {
@@ -59,7 +56,6 @@ bool Running::master_LBA_Blocked() {
 		actions->master_sendMotorRightRequest(true);
 	}
 	Workpiece *wp = data->wpManager->addWorkpiece();   // addWorkpiece
-	Logger::info("Workpiece with id: " + std::to_string(wp->id) + " created and added to Area_A");
 	return true;
 }
 
@@ -241,14 +237,17 @@ bool Running::slave_metalDetected() {
 bool Running::slave_LBW_Blocked() {
 	if (!data->wpManager->isQueueempty(AreaType::AREA_D)) {
 		Workpiece *wp = data->wpManager->getHeadOfArea(AreaType::AREA_D);
+		Logger::info(data->wpManager->to_string_Workpiece_FBM2(wp));
+
 		WorkpieceType slave_type = wp->S_type;
 		WorkpieceType expected_type = data->wpManager->getNextWorkpieceType();
 
 		wp->sortOut = expected_type != slave_type;   // sortOut()
 
 		std::stringstream ss;
-		ss << "(FBM2) WS at switch -> Expected: " << WP_TYPE_TO_STRING(expected_type);
-		ss << ", Detected: " << WP_TYPE_TO_STRING(slave_type) << (wp->sortOut ? " -> sort out" : " -> go to End");
+		//ss << "(FBM2) WS at switch -> Expected: " << WP_TYPE_TO_STRING(expected_type);
+		//ss << ", Detected: " << WP_TYPE_TO_STRING(slave_type) << (wp->sortOut ? " -> sort out" : " -> go to End");
+		ss << data->wpManager->to_string_Workpiece_FBM2(wp);
 		Logger::info(ss.str());
 
 		if (wp->sortOut) {

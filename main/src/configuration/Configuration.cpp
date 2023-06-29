@@ -20,7 +20,7 @@ Configuration::Configuration() {
     this->cal = Calibration{.calOffset = ADC_DEFAULT_OFFSET,
                             .calRef = ADC_DEFAULT_HIGH};
     this->configFilePath = std::string(DEFAULT_CONFIG_FILE_PATH);
-    this->order = {WS_F, WS_OB, WS_BUM};
+    this->order = {WS_F, WS_BUM, WS_OB };
 }
 
 Configuration::~Configuration() {}
@@ -86,7 +86,7 @@ bool Configuration::readConfigFromFile() {
         Logger::warn("Please perform a calibration of the HeightSensor!");
         std::ofstream fileStream;
         fileStream.open(configFilePath);
-        fileStream << "ORDER=F,OB,BOM\n";
+        fileStream << "ORDER=F,BUM,OB\n";
         fileStream << "CAL_OFFSET=" << ADC_DEFAULT_OFFSET << "\n";
         fileStream << "CAL_REF=" << ADC_DEFAULT_HIGH << "\n";
         fileStream.close();
