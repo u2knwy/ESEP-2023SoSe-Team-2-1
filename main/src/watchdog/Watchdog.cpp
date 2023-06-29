@@ -66,7 +66,6 @@ void Watchdog::stop() {
 }
 
 void Watchdog::sendingThread() {
-	//std::this_thread::sleep_for(std::chrono::seconds(5));
     Logger::debug("[WD] Started sending heartbeats...");
     sendingRunning = true;
     while (sendingRunning) {
@@ -87,7 +86,6 @@ void Watchdog::sendHeartbeat() {
 
 void Watchdog::receivingThread() {
     using namespace std::chrono;
-	//std::this_thread::sleep_for(std::chrono::seconds(10));
     Logger::debug("[WD] Started receiving heartbeats...");
     receivingRunning = true;
     while (heartBeatreceived < WD_TIMEOUT_MILLIS) {
