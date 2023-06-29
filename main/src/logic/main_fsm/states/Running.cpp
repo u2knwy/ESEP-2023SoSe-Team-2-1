@@ -56,7 +56,6 @@ bool Running::master_LBA_Blocked() {
 		actions->master_sendMotorRightRequest(true);
 	}
 	Workpiece *wp = data->wpManager->addWorkpiece();   // addWorkpiece
-	Logger::info("Workpiece with id: " + std::to_string(wp->id) + " created and added to Area_A");
 	return true;
 }
 

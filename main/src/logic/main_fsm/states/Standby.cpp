@@ -85,10 +85,14 @@ bool Standby::slave_EStop_Pressed() {
 
 bool Standby::master_btnReset_PressedLong() {
 	data->wpManager->reset_wpm();
+	actions->master_sendMotorRightRequest(false);
+	actions->slave_sendMotorRightRequest(false);
 	return true;
 }
 
 bool Standby::slave_btnReset_PressedLong() {
 	data->wpManager->reset_wpm();
+	actions->master_sendMotorRightRequest(false);
+	actions->slave_sendMotorRightRequest(false);
 	return true;
 }
