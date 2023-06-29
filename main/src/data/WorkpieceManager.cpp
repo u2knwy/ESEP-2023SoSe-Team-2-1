@@ -219,6 +219,7 @@ std::string WorkpieceManager::to_string_Workpiece(Workpiece *wp) {
 }
 
 std::string WorkpieceManager::to_string_Workpiece_FBM2(Workpiece *wp) {
+    wp->flipped = wp->M_type != wp->S_type;
 	std::stringstream ss;
 	ss << "WS at FBM2 [id=" << wp->id;
 	ss << ", Type: " << WP_TYPE_TO_STRING(wp->S_type);

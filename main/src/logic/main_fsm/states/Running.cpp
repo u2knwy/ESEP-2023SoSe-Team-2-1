@@ -245,8 +245,9 @@ bool Running::slave_LBW_Blocked() {
 		wp->sortOut = expected_type != slave_type;   // sortOut()
 
 		std::stringstream ss;
-		ss << "(FBM2) WS at switch -> Expected: " << WP_TYPE_TO_STRING(expected_type);
-		ss << ", Detected: " << WP_TYPE_TO_STRING(slave_type) << (wp->sortOut ? " -> sort out" : " -> go to End");
+		//ss << "(FBM2) WS at switch -> Expected: " << WP_TYPE_TO_STRING(expected_type);
+		//ss << ", Detected: " << WP_TYPE_TO_STRING(slave_type) << (wp->sortOut ? " -> sort out" : " -> go to End");
+		ss << data->wpManager->to_string_Workpiece_FBM2(wp);
 		Logger::info(ss.str());
 
 		if (wp->sortOut) {
