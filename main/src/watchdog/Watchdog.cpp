@@ -50,6 +50,7 @@ void Watchdog::handleEvent(Event event) {
 
 void Watchdog::start() {
 	th_send = std::thread(&Watchdog::sendingThread, this);
+	std::this_thread::sleep_for(std::chrono::milliseconds(200));
     th_receive = std::thread(&Watchdog::receivingThread, this);
 }
 
@@ -65,7 +66,7 @@ void Watchdog::stop() {
 }
 
 void Watchdog::sendingThread() {
-	std::this_thread::sleep_for(std::chrono::seconds(5));
+	//std::this_thread::sleep_for(std::chrono::seconds(5));
     Logger::debug("[WD] Started sending heartbeats...");
     sendingRunning = true;
     while (sendingRunning) {
@@ -86,11 +87,10 @@ void Watchdog::sendHeartbeat() {
 
 void Watchdog::receivingThread() {
     using namespace std::chrono;
-	std::this_thread::sleep_for(std::chrono::seconds(10));
+	//std::this_thread::sleep_for(std::chrono::seconds(10));
     Logger::debug("[WD] Started receiving heartbeats...");
     receivingRunning = true;
     while (heartBeatreceived < WD_TIMEOUT_MILLIS) {
-
     	std::this_thread::sleep_for(std::chrono::milliseconds(WD_SEND_INTERVAL_MILLIS));
     	heartBeatreceived += 100;
     }
