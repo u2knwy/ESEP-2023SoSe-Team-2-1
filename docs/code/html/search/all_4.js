@@ -8,6 +8,8 @@ var searchData=
   ['eventinterruptdisable_5',['eventInterruptDisable',['../class_t_s_c_a_d_c.html#a13694855884c21c49cf7c0e7fb22fc68',1,'TSCADC']]],
   ['eventinterruptenable_6',['eventInterruptEnable',['../class_t_s_c_a_d_c.html#a5742422ed05c6d31f7b69352c6a59c5c',1,'TSCADC']]],
   ['eventmanager_7',['EventManager',['../class_event_manager.html',1,'']]],
-  ['eventsender_8',['EventSender',['../class_event_sender.html',1,'']]],
-  ['exception_9',['exception',['../classcxxopts_1_1exceptions_1_1exception.html',1,'cxxopts::exceptions']]]
+  ['eventmanagermock_8',['EventManagerMock',['../class_event_manager_mock.html',1,'']]],
+  ['eventsender_9',['EventSender',['../class_event_sender.html',1,'']]],
+  ['eventsendermock_10',['EventSenderMock',['../class_event_sender_mock.html',1,'']]],
+  ['exception_11',['exception',['../classcxxopts_1_1exceptions_1_1exception.html',1,'cxxopts::exceptions']]]
 ];

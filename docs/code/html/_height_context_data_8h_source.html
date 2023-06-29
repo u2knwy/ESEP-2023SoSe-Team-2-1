@@ -91,42 +91,45 @@ $(function() {
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;events/eventtypes_enum.h&quot;</span></div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &quot;hal/IHeightSensor.h&quot;</span></div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="struct_height_result.html">   16</a></span><span class="keyword">struct </span><a class="code hl_struct" href="struct_height_result.html">HeightResult</a> {</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>  WorkpieceType type{WorkpieceType::WS_UNKNOWN};</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>  <span class="keywordtype">float</span> average{0.0};</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>  <span class="keywordtype">float</span> max{0.0};</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>};</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno"><a class="line" href="class_height_context_data.html">   22</a></span><span class="keyword">class </span><a class="code hl_class" href="class_height_context_data.html">HeightContextData</a> {</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>  <a class="code hl_class" href="class_height_context_data.html">HeightContextData</a>();</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>  <span class="keyword">virtual</span> <a class="code hl_class" href="class_height_context_data.html">~HeightContextData</a>();</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_height_context_data.html#aae17528da0b875c2635fbeed8e74be4b">addValue</a>(<span class="keywordtype">float</span> value);</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>  <span class="keywordtype">float</span> <a class="code hl_function" href="class_height_context_data.html#a01414656e57f44980ae713fe783bdf6b">getAverageValue</a>();</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>  <span class="keywordtype">float</span> <a class="code hl_function" href="class_height_context_data.html#ae6de081ca1e8282b0de354de74738c62">getMaximumValue</a>();</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_height_context_data.html#a24f55f0d87042525754a85b229cacc98">resetMeasurement</a>();</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>  <a class="code hl_struct" href="struct_height_result.html">HeightResult</a> getCurrentResult();</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>  <span class="keyword">static</span> <span class="keywordtype">bool</span> isFlat(<span class="keywordtype">float</span> value);</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>  <span class="keyword">static</span> <span class="keywordtype">bool</span> isHigh(<span class="keywordtype">float</span> value);</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>  <span class="keyword">static</span> <span class="keywordtype">bool</span> isHole(<span class="keywordtype">float</span> value);</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>  <span class="keyword">static</span> <span class="keywordtype">bool</span> isUnknown(<span class="keywordtype">float</span> value);</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>  <span class="keywordtype">float</span> avgValue;</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>  <span class="keywordtype">float</span> maxValue;</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>  <span class="keywordtype">int</span> nMeasurements;</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>  std::vector&lt;float&gt; measurements;</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>};</div>
-<div class="ttc" id="aclass_height_context_data_html"><div class="ttname"><a href="class_height_context_data.html">HeightContextData</a></div><div class="ttdef"><b>Definition:</b> HeightContextData.h:22</div></div>
-<div class="ttc" id="aclass_height_context_data_html_a01414656e57f44980ae713fe783bdf6b"><div class="ttname"><a href="class_height_context_data.html#a01414656e57f44980ae713fe783bdf6b">HeightContextData::getAverageValue</a></div><div class="ttdeci">float getAverageValue()</div><div class="ttdef"><b>Definition:</b> HeightContextData.cpp:39</div></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="comment">// Number of allowed outliers of Height Measurement which should be ignored</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#define HM_ALLOWED_OUTLIERS 3</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno"><a class="line" href="struct_height_result.html">   19</a></span><span class="keyword">struct </span><a class="code hl_struct" href="struct_height_result.html">HeightResult</a> {</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    WorkpieceType type{WorkpieceType::WS_UNKNOWN};</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    <span class="keywordtype">float</span> average{0.0};</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <span class="keywordtype">float</span> max{0.0};</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>};</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="class_height_context_data.html">   25</a></span><span class="keyword">class </span><a class="code hl_class" href="class_height_context_data.html">HeightContextData</a> {</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>  <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    <a class="code hl_class" href="class_height_context_data.html">HeightContextData</a>();</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    <span class="keyword">virtual</span> <a class="code hl_class" href="class_height_context_data.html">~HeightContextData</a>();</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_height_context_data.html#aae17528da0b875c2635fbeed8e74be4b">addValue</a>(<span class="keywordtype">float</span> value);</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    <span class="keywordtype">float</span> <a class="code hl_function" href="class_height_context_data.html#a01414656e57f44980ae713fe783bdf6b">getAverageValue</a>();</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    <span class="keywordtype">float</span> <a class="code hl_function" href="class_height_context_data.html#ae6de081ca1e8282b0de354de74738c62">getMaximumValue</a>();</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_height_context_data.html#a24f55f0d87042525754a85b229cacc98">resetMeasurement</a>();</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    <a class="code hl_struct" href="struct_height_result.html">HeightResult</a> getCurrentResult();</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    <span class="keyword">static</span> <span class="keywordtype">bool</span> isFlat(<span class="keywordtype">float</span> value);</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    <span class="keyword">static</span> <span class="keywordtype">bool</span> isHigh(<span class="keywordtype">float</span> value);</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    <span class="keyword">static</span> <span class="keywordtype">bool</span> isHole(<span class="keywordtype">float</span> value);</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    <span class="keyword">static</span> <span class="keywordtype">bool</span> isUnknown(<span class="keywordtype">float</span> value);</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>  <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    <span class="keywordtype">float</span> avgValue;</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    <span class="keywordtype">float</span> maxValue;</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    <span class="keywordtype">int</span> nMeasurements;</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    std::vector&lt;float&gt; measurements;</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>};</div>
+<div class="ttc" id="aclass_height_context_data_html"><div class="ttname"><a href="class_height_context_data.html">HeightContextData</a></div><div class="ttdef"><b>Definition:</b> HeightContextData.h:25</div></div>
+<div class="ttc" id="aclass_height_context_data_html_a01414656e57f44980ae713fe783bdf6b"><div class="ttname"><a href="class_height_context_data.html#a01414656e57f44980ae713fe783bdf6b">HeightContextData::getAverageValue</a></div><div class="ttdeci">float getAverageValue()</div><div class="ttdef"><b>Definition:</b> HeightContextData.cpp:45</div></div>
 <div class="ttc" id="aclass_height_context_data_html_a24f55f0d87042525754a85b229cacc98"><div class="ttname"><a href="class_height_context_data.html#a24f55f0d87042525754a85b229cacc98">HeightContextData::resetMeasurement</a></div><div class="ttdeci">void resetMeasurement()</div><div class="ttdef"><b>Definition:</b> HeightContextData.cpp:20</div></div>
 <div class="ttc" id="aclass_height_context_data_html_aae17528da0b875c2635fbeed8e74be4b"><div class="ttname"><a href="class_height_context_data.html#aae17528da0b875c2635fbeed8e74be4b">HeightContextData::addValue</a></div><div class="ttdeci">void addValue(float value)</div><div class="ttdef"><b>Definition:</b> HeightContextData.cpp:27</div></div>
-<div class="ttc" id="aclass_height_context_data_html_ae6de081ca1e8282b0de354de74738c62"><div class="ttname"><a href="class_height_context_data.html#ae6de081ca1e8282b0de354de74738c62">HeightContextData::getMaximumValue</a></div><div class="ttdeci">float getMaximumValue()</div><div class="ttdef"><b>Definition:</b> HeightContextData.cpp:41</div></div>
-<div class="ttc" id="astruct_height_result_html"><div class="ttname"><a href="struct_height_result.html">HeightResult</a></div><div class="ttdef"><b>Definition:</b> HeightContextData.h:16</div></div>
+<div class="ttc" id="aclass_height_context_data_html_ae6de081ca1e8282b0de354de74738c62"><div class="ttname"><a href="class_height_context_data.html#ae6de081ca1e8282b0de354de74738c62">HeightContextData::getMaximumValue</a></div><div class="ttdeci">float getMaximumValue()</div><div class="ttdef"><b>Definition:</b> HeightContextData.cpp:47</div></div>
+<div class="ttc" id="astruct_height_result_html"><div class="ttname"><a href="struct_height_result.html">HeightResult</a></div><div class="ttdef"><b>Definition:</b> HeightContextData.h:19</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

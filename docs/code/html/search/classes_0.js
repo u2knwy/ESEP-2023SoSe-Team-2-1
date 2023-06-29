@@ -5,5 +5,6 @@ var searchData=
   ['actuatormock_2',['ActuatorMock',['../class_actuator_mock.html',1,'']]],
   ['actuators_3',['Actuators',['../class_actuators.html',1,'']]],
   ['adc_4',['ADC',['../class_a_d_c.html',1,'']]],
-  ['argudesc_5',['ArguDesc',['../structcxxopts_1_1values_1_1parser__tool_1_1_argu_desc.html',1,'cxxopts::values::parser_tool']]]
+  ['app_5fheader_5ft_5',['app_header_t',['../structapp__header__t.html',1,'']]],
+  ['argudesc_6',['ArguDesc',['../structcxxopts_1_1values_1_1parser__tool_1_1_argu_desc.html',1,'cxxopts::values::parser_tool']]]
 ];

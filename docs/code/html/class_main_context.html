@@ -71,6 +71,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="class_main_context-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">MainContext Class Reference</div></div>
 </div><!--header-->
@@ -87,9 +88,9 @@ Inheritance diagram for MainContext:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa7a7625d870cbd02f443c31dafd6ad38"><td class="memItemLeft" align="right" valign="top"><a id="aa7a7625d870cbd02f443c31dafd6ad38" name="aa7a7625d870cbd02f443c31dafd6ad38"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>MainContext</b> (std::shared_ptr&lt; <a class="el" href="class_event_manager.html">EventManager</a> &gt; mngr)</td></tr>
-<tr class="separator:aa7a7625d870cbd02f443c31dafd6ad38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac104b17987a6d58eaccc099978e6e0ee"><td class="memItemLeft" align="right" valign="top"><a id="ac104b17987a6d58eaccc099978e6e0ee" name="ac104b17987a6d58eaccc099978e6e0ee"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>MainContext</b> (<a class="el" href="class_main_actions.html">MainActions</a> *actions)</td></tr>
+<tr class="separator:ac104b17987a6d58eaccc099978e6e0ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac2983d63c665fe10d1777dcc077e1743"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_main_context.html#ac2983d63c665fe10d1777dcc077e1743">handleEvent</a> (<a class="el" href="struct_event.html">Event</a> event) override</td></tr>
 <tr class="separator:ac2983d63c665fe10d1777dcc077e1743"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3a2897269f547a760d806874e17530af"><td class="memItemLeft" align="right" valign="top"><a id="a3a2897269f547a760d806874e17530af" name="a3a2897269f547a760d806874e17530af"></a>
@@ -119,9 +120,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>master_LBR_Blocked</b
 <tr class="memitem:a6fac4f535b174bd4f9fdc4b6b7b36ac6"><td class="memItemLeft" align="right" valign="top"><a id="a6fac4f535b174bd4f9fdc4b6b7b36ac6" name="a6fac4f535b174bd4f9fdc4b6b7b36ac6"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>master_LBR_Unblocked</b> ()</td></tr>
 <tr class="separator:a6fac4f535b174bd4f9fdc4b6b7b36ac6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00501444dfe82267132e894bd4f13892"><td class="memItemLeft" align="right" valign="top"><a id="a00501444dfe82267132e894bd4f13892" name="a00501444dfe82267132e894bd4f13892"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>master_MetalDetected</b> ()</td></tr>
-<tr class="separator:a00501444dfe82267132e894bd4f13892"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a644dc50c664636fba890a5cab1d3efb9"><td class="memItemLeft" align="right" valign="top"><a id="a644dc50c664636fba890a5cab1d3efb9" name="a644dc50c664636fba890a5cab1d3efb9"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>master_heightResultReceived</b> (EventType event, float average)</td></tr>
+<tr class="separator:a644dc50c664636fba890a5cab1d3efb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd021f843cea65e4e3dfdddc41773e49"><td class="memItemLeft" align="right" valign="top"><a id="afd021f843cea65e4e3dfdddc41773e49" name="afd021f843cea65e4e3dfdddc41773e49"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>master_metalDetected</b> ()</td></tr>
+<tr class="separator:afd021f843cea65e4e3dfdddc41773e49"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9238ef4ae6df1241534ee471b16ecfb2"><td class="memItemLeft" align="right" valign="top"><a id="a9238ef4ae6df1241534ee471b16ecfb2" name="a9238ef4ae6df1241534ee471b16ecfb2"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>slave_LBA_Blocked</b> ()</td></tr>
 <tr class="separator:a9238ef4ae6df1241534ee471b16ecfb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -146,9 +150,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>slave_LBR_Blocked</b>
 <tr class="memitem:a058462ff3363c2acc3b7d26a7cc9f3fb"><td class="memItemLeft" align="right" valign="top"><a id="a058462ff3363c2acc3b7d26a7cc9f3fb" name="a058462ff3363c2acc3b7d26a7cc9f3fb"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>slave_LBR_Unblocked</b> ()</td></tr>
 <tr class="separator:a058462ff3363c2acc3b7d26a7cc9f3fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a578c57380fbfcc25f24c30cc9f3e6a33"><td class="memItemLeft" align="right" valign="top"><a id="a578c57380fbfcc25f24c30cc9f3e6a33" name="a578c57380fbfcc25f24c30cc9f3e6a33"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>slave_MetalDetected</b> ()</td></tr>
-<tr class="separator:a578c57380fbfcc25f24c30cc9f3e6a33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1c46276f1909e144ce09a1f6c2d3a07"><td class="memItemLeft" align="right" valign="top"><a id="ad1c46276f1909e144ce09a1f6c2d3a07" name="ad1c46276f1909e144ce09a1f6c2d3a07"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>slave_heightResultReceived</b> (EventType event, float average)</td></tr>
+<tr class="separator:ad1c46276f1909e144ce09a1f6c2d3a07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4cef4648efc0e1e16e864347b0a2b9f5"><td class="memItemLeft" align="right" valign="top"><a id="a4cef4648efc0e1e16e864347b0a2b9f5" name="a4cef4648efc0e1e16e864347b0a2b9f5"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>slave_metalDetected</b> ()</td></tr>
+<tr class="separator:a4cef4648efc0e1e16e864347b0a2b9f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeef5b9dbb9a098023f7880a02145a19e"><td class="memItemLeft" align="right" valign="top"><a id="aeef5b9dbb9a098023f7880a02145a19e" name="aeef5b9dbb9a098023f7880a02145a19e"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>master_btnStart_PressedShort</b> ()</td></tr>
 <tr class="separator:aeef5b9dbb9a098023f7880a02145a19e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -161,6 +168,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>master_btnStop_Presse
 <tr class="memitem:a266389b2aa4ecc124133a00d8133f10c"><td class="memItemLeft" align="right" valign="top"><a id="a266389b2aa4ecc124133a00d8133f10c" name="a266389b2aa4ecc124133a00d8133f10c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>master_btnReset_Pressed</b> ()</td></tr>
 <tr class="separator:a266389b2aa4ecc124133a00d8133f10c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0fa94d64c75f7fbaf1ccf7230e952d20"><td class="memItemLeft" align="right" valign="top"><a id="a0fa94d64c75f7fbaf1ccf7230e952d20" name="a0fa94d64c75f7fbaf1ccf7230e952d20"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>master_btnReset_PressedLong</b> ()</td></tr>
+<tr class="separator:a0fa94d64c75f7fbaf1ccf7230e952d20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abeb74861f56df66436afba61355ec8da"><td class="memItemLeft" align="right" valign="top"><a id="abeb74861f56df66436afba61355ec8da" name="abeb74861f56df66436afba61355ec8da"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>slave_btnStart_PressedShort</b> ()</td></tr>
 <tr class="separator:abeb74861f56df66436afba61355ec8da"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -173,6 +183,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>slave_btnStop_Pressed
 <tr class="memitem:a05ba9852f1b79bc6e2c734be29dd1104"><td class="memItemLeft" align="right" valign="top"><a id="a05ba9852f1b79bc6e2c734be29dd1104" name="a05ba9852f1b79bc6e2c734be29dd1104"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>slave_btnReset_Pressed</b> ()</td></tr>
 <tr class="separator:a05ba9852f1b79bc6e2c734be29dd1104"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac60297a8e47dd9413b6b2d0848308ba2"><td class="memItemLeft" align="right" valign="top"><a id="ac60297a8e47dd9413b6b2d0848308ba2" name="ac60297a8e47dd9413b6b2d0848308ba2"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>slave_btnReset_PressedLong</b> ()</td></tr>
+<tr class="separator:ac60297a8e47dd9413b6b2d0848308ba2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a934dc686ee67c2582f0582154a4a165a"><td class="memItemLeft" align="right" valign="top"><a id="a934dc686ee67c2582f0582154a4a165a" name="a934dc686ee67c2582f0582154a4a165a"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>master_EStop_Pressed</b> ()</td></tr>
 <tr class="separator:a934dc686ee67c2582f0582154a4a165a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -197,6 +210,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>nonSelfSolvableErrorO
 <tr class="memitem:a63c61e6208dacfac9efe636a60802267"><td class="memItemLeft" align="right" valign="top"><a id="a63c61e6208dacfac9efe636a60802267" name="a63c61e6208dacfac9efe636a60802267"></a>
 virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>handleEvent</b> (<a class="el" href="struct_event.html">Event</a> event)=0</td></tr>
 <tr class="separator:a63c61e6208dacfac9efe636a60802267"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:a1d46c82bb8fbf440c27cc1f033df344e"><td class="memItemLeft" align="right" valign="top"><a id="a1d46c82bb8fbf440c27cc1f033df344e" name="a1d46c82bb8fbf440c27cc1f033df344e"></a>
+<a class="el" href="class_main_context_data.html">MainContextData</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>data</b></td></tr>
+<tr class="separator:a1d46c82bb8fbf440c27cc1f033df344e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="ac2983d63c665fe10d1777dcc077e1743" name="ac2983d63c665fe10d1777dcc077e1743"></a>

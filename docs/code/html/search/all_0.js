@@ -8,6 +8,8 @@ var searchData=
   ['adc_2ecpp_5',['ADC.cpp',['../_a_d_c_8cpp.html',1,'']]],
   ['adc_2eh_6',['ADC.h',['../_a_d_c_8h.html',1,'']]],
   ['addvalue_7',['addValue',['../class_height_context_data.html#aae17528da0b875c2635fbeed8e74be4b',1,'HeightContextData']]],
-  ['argudesc_8',['ArguDesc',['../structcxxopts_1_1values_1_1parser__tool_1_1_argu_desc.html',1,'cxxopts::values::parser_tool']]],
-  ['avgheight_9',['avgHeight',['../struct_workpiece.html#a99588139f13149ae583d24919b4d2d73',1,'Workpiece']]]
+  ['app_5fheader_5ft_8',['app_header_t',['../structapp__header__t.html',1,'']]],
+  ['argudesc_9',['ArguDesc',['../structcxxopts_1_1values_1_1parser__tool_1_1_argu_desc.html',1,'cxxopts::values::parser_tool']]],
+  ['avgheight_10',['avgHeight',['../struct_workpiece.html#a99588139f13149ae583d24919b4d2d73',1,'Workpiece']]],
+  ['avgheightfbm2_11',['avgHeightFBM2',['../struct_workpiece.html#a97f96d6875f2d8be4ae3a159e86972d5',1,'Workpiece']]]
 ];

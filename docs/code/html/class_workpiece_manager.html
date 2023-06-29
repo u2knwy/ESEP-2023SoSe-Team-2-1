@@ -81,6 +81,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0f41dc24901cb5216804ff69587e953c"><td class="memItemLeft" align="right" valign="top"><a id="a0f41dc24901cb5216804ff69587e953c" name="a0f41dc24901cb5216804ff69587e953c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>rotateNextWorkpieces</b> ()</td></tr>
 <tr class="separator:a0f41dc24901cb5216804ff69587e953c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb41bffba76d7e9bd2fa05f2319709f2"><td class="memItemLeft" align="right" valign="top"><a id="acb41bffba76d7e9bd2fa05f2319709f2" name="acb41bffba76d7e9bd2fa05f2319709f2"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>revertNextWorkpiece</b> ()</td></tr>
+<tr class="separator:acb41bffba76d7e9bd2fa05f2319709f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee284eff9fcf03f7415f5003e78f0fb6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_workpiece_manager.html#aee284eff9fcf03f7415f5003e78f0fb6">printCurrentOrder</a> ()</td></tr>
+<tr class="separator:aee284eff9fcf03f7415f5003e78f0fb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f49c234f93df8049a150403dade256c"><td class="memItemLeft" align="right" valign="top"><a id="a5f49c234f93df8049a150403dade256c" name="a5f49c234f93df8049a150403dade256c"></a>
 WorkpieceType&#160;</td><td class="memItemRight" valign="bottom"><b>getNextWorkpieceType</b> ()</td></tr>
 <tr class="separator:a5f49c234f93df8049a150403dade256c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -117,28 +122,65 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setSortOut</b> (AreaT
 <tr class="memitem:aa4b3ac859c4c860c96243b37b5e13e30"><td class="memItemLeft" align="right" valign="top"><a id="aa4b3ac859c4c860c96243b37b5e13e30" name="aa4b3ac859c4c860c96243b37b5e13e30"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setFlipped</b> (AreaType area)</td></tr>
 <tr class="separator:aa4b3ac859c4c860c96243b37b5e13e30"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa336e681e853445a79462c2d2c939220"><td class="memItemLeft" align="right" valign="top"><a id="aa336e681e853445a79462c2d2c939220" name="aa336e681e853445a79462c2d2c939220"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setRamp_one</b> (bool input)</td></tr>
+<tr class="separator:aa336e681e853445a79462c2d2c939220"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ac619098687767ca9ce1fe6fc40f01c"><td class="memItemLeft" align="right" valign="top"><a id="a0ac619098687767ca9ce1fe6fc40f01c" name="a0ac619098687767ca9ce1fe6fc40f01c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setRamp_two</b> (bool input)</td></tr>
+<tr class="separator:a0ac619098687767ca9ce1fe6fc40f01c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1bc82367f44d45efd12b9a00031e2642"><td class="memItemLeft" align="right" valign="top"><a id="a1bc82367f44d45efd12b9a00031e2642" name="a1bc82367f44d45efd12b9a00031e2642"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>getSortOut</b> (AreaType area)</td></tr>
 <tr class="separator:a1bc82367f44d45efd12b9a00031e2642"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6bf11e6243dde1e9f6665d851c1dcc77"><td class="memItemLeft" align="right" valign="top"><a id="a6bf11e6243dde1e9f6665d851c1dcc77" name="a6bf11e6243dde1e9f6665d851c1dcc77"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>getFlipped</b> (AreaType area)</td></tr>
 <tr class="separator:a6bf11e6243dde1e9f6665d851c1dcc77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c59034d4f58e07ffb3782a7b9fbcf18"><td class="memItemLeft" align="right" valign="top"><a id="a6c59034d4f58e07ffb3782a7b9fbcf18" name="a6c59034d4f58e07ffb3782a7b9fbcf18"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>getRamp_one</b> ()</td></tr>
+<tr class="separator:a6c59034d4f58e07ffb3782a7b9fbcf18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af14fd4e10ef81dee7936ffa6a293bc53"><td class="memItemLeft" align="right" valign="top"><a id="af14fd4e10ef81dee7936ffa6a293bc53" name="af14fd4e10ef81dee7936ffa6a293bc53"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>getRamp_two</b> ()</td></tr>
+<tr class="separator:af14fd4e10ef81dee7936ffa6a293bc53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad5a68cd819d6f3ee7d60e27989b28451"><td class="memItemLeft" align="right" valign="top"><a id="ad5a68cd819d6f3ee7d60e27989b28451" name="ad5a68cd819d6f3ee7d60e27989b28451"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isFBM_MEmpty</b> ()</td></tr>
 <tr class="separator:ad5a68cd819d6f3ee7d60e27989b28451"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed45074c9f74f3bcdf61fcf8372b60d7"><td class="memItemLeft" align="right" valign="top"><a id="aed45074c9f74f3bcdf61fcf8372b60d7" name="aed45074c9f74f3bcdf61fcf8372b60d7"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isFBM_SOccupied</b> ()</td></tr>
-<tr class="separator:aed45074c9f74f3bcdf61fcf8372b60d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55963b2f08701f8c89ab09310adb5205"><td class="memItemLeft" align="right" valign="top"><a id="a55963b2f08701f8c89ab09310adb5205" name="a55963b2f08701f8c89ab09310adb5205"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>isFBM_SEmpty</b> ()</td></tr>
+<tr class="separator:a55963b2f08701f8c89ab09310adb5205"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a47cbcdcfa5465ba37cf19c07b248fe51"><td class="memItemLeft" align="right" valign="top"><a id="a47cbcdcfa5465ba37cf19c07b248fe51" name="a47cbcdcfa5465ba37cf19c07b248fe51"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isQueueempty</b> (AreaType area)</td></tr>
 <tr class="separator:a47cbcdcfa5465ba37cf19c07b248fe51"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1eb0e1d0d862cd12defc20e5371506e8"><td class="memItemLeft" align="right" valign="top"><a id="a1eb0e1d0d862cd12defc20e5371506e8" name="a1eb0e1d0d862cd12defc20e5371506e8"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>reset_wpm</b> ()</td></tr>
+<tr class="separator:a1eb0e1d0d862cd12defc20e5371506e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a15a850ff2a853d3eef41c25369ed08db"><td class="memItemLeft" align="right" valign="top"><a id="a15a850ff2a853d3eef41c25369ed08db" name="a15a850ff2a853d3eef41c25369ed08db"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>to_string_Workpiece</b> (<a class="el" href="struct_workpiece.html">Workpiece</a> *wp)</td></tr>
 <tr class="separator:a15a850ff2a853d3eef41c25369ed08db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4215d3b360883e084df4db03efcf17ec"><td class="memItemLeft" align="right" valign="top"><a id="a4215d3b360883e084df4db03efcf17ec" name="a4215d3b360883e084df4db03efcf17ec"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>to_string_Workpiece_FBM2</b> (<a class="el" href="struct_workpiece.html">Workpiece</a> *wp)</td></tr>
+<tr class="separator:a4215d3b360883e084df4db03efcf17ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9ac3ce4a73e75d8ea4f965bcbd34e74"><td class="memItemLeft" align="right" valign="top"><a id="af9ac3ce4a73e75d8ea4f965bcbd34e74" name="af9ac3ce4a73e75d8ea4f965bcbd34e74"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>testWorkpieceManager</b> ()</td></tr>
 <tr class="separator:af9ac3ce4a73e75d8ea4f965bcbd34e74"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="aee284eff9fcf03f7415f5003e78f0fb6" name="aee284eff9fcf03f7415f5003e78f0fb6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee284eff9fcf03f7415f5003e78f0fb6">&#9670;&#160;</a></span>printCurrentOrder()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void WorkpieceManager::printCurrentOrder </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Prints the current order in which workpieces should arrive at the end of FBM2. </p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>main/src/data/<a class="el" href="_workpiece_manager_8h_source.html">WorkpieceManager.h</a></li>
 <li>main/src/data/WorkpieceManager.cpp</li>

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['unknowndetected_0',['unknownDetected',['../class_height_basestate.html#a3c3d9d08d1e751cdd155aeeeb2add140',1,'HeightBasestate']]],
-  ['unsubscribe_1',['unsubscribe',['../class_event_manager.html#a2fda2833bdeb5927366d6a4aac9a889b',1,'EventManager']]]
+  ['unsubscribe_0',['unsubscribe',['../class_event_manager.html#a31788570753ddb39d75e08db2013304d',1,'EventManager::unsubscribe()'],['../class_i_event_manager.html#aa61537010e47d955686d41c094959555',1,'IEventManager::unsubscribe()'],['../class_event_manager_mock.html#adb279710ba7edc0a20f6b8f2bf085ded',1,'EventManagerMock::unsubscribe()']]]
 ];

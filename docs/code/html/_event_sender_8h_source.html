@@ -84,53 +84,56 @@ $(function() {
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment"> */</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;sys/neutrino.h&gt;</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;logger/logger.hpp&quot;</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &quot;events/EventManager.h&quot;</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="class_event_sender.html">   13</a></span><span class="keyword">class </span><a class="code hl_class" href="class_event_sender.html">EventSender</a> {</div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    <a class="code hl_class" href="class_event_sender.html">EventSender</a>() {</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>        coid = -1;</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    }</div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &quot;IEventSender.h&quot;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;events/IEventManager.h&quot;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &quot;events/events.h&quot;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;logger/logger.hpp&quot;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &lt;sys/neutrino.h&gt;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="class_event_sender.html">   15</a></span><span class="keyword">class </span><a class="code hl_class" href="class_event_sender.html">EventSender</a> : <span class="keyword">public</span> <a class="code hl_class" href="class_i_event_sender.html">IEventSender</a> {</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>  <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <a class="code hl_class" href="class_event_sender.html">EventSender</a>() { coid = -1; }</div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <span class="keyword">virtual</span> <a class="code hl_class" href="class_event_sender.html">~EventSender</a>() {</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    }</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="class_event_sender.html#a23710d42d4e586a6ce490d897a5e3eb7">   29</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="class_event_sender.html#a23710d42d4e586a6ce490d897a5e3eb7">connect</a>(std::shared_ptr&lt;EventManager&gt; evm) {</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        coid = evm-&gt;connectInternalClient();</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>        <span class="keywordflow">return</span> coid != -1;</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    }</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="class_event_sender.html#a243b26d7c37cccdc1e7b90399ec2e411">   39</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_event_sender.html#a243b26d7c37cccdc1e7b90399ec2e411">disconnect</a>() {</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        <span class="keywordtype">int</span> ret = ConnectDetach(this-&gt;coid);</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        <span class="keywordflow">if</span>(ret &lt; 0) {</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>            Logger::error(<span class="stringliteral">&quot;[EventSender] ConnectDetach failed&quot;</span>);</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        }</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    }</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno"><a class="line" href="class_event_sender.html#a7d22d11f7d34060ca7abecb5358e603d">   52</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="class_event_sender.html#a7d22d11f7d34060ca7abecb5358e603d">sendEvent</a>(<a class="code hl_struct" href="struct_event.html">Event</a> event) {</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        <span class="keywordflow">if</span>(coid == -1) {</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>            Logger::error(<span class="stringliteral">&quot;It was tried to send an internal event without being connected to the EventManager&quot;</span>);</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>        }</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>        <span class="keywordtype">int</span> res = MsgSendPulse(this-&gt;coid, -1, (<span class="keywordtype">int</span>) event.type, event.data);</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>        <span class="keywordflow">if</span> (res &lt; 0) {</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>            Logger::error(<span class="stringliteral">&quot;Failed to send pulse message to EventManager. errno = &quot;</span> + std::to_string(errno));</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <span class="keyword">virtual</span> <a class="code hl_class" href="class_event_sender.html">~EventSender</a>() {}</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="class_event_sender.html#a9189f60528c07a3b0611909175676e2f">   28</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="class_event_sender.html#a9189f60528c07a3b0611909175676e2f">connect</a>(std::shared_ptr&lt;IEventManager&gt; evm)<span class="keyword"> override </span>{</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        coid = evm-&gt;connectInternalClient();</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        <span class="keywordflow">return</span> coid != -1;</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    }</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno"><a class="line" href="class_event_sender.html#a2805c3317f6c93f0a9a4d8dad5fa28b4">   36</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_event_sender.html#a2805c3317f6c93f0a9a4d8dad5fa28b4">disconnect</a>()<span class="keyword"> override </span>{</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        <span class="keywordtype">int</span> ret = ConnectDetach(this-&gt;coid);</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        <span class="keywordflow">if</span> (ret &lt; 0) {</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>            Logger::error(<span class="stringliteral">&quot;[EventSender] ConnectDetach failed&quot;</span>);</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        }</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    }</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno"><a class="line" href="class_event_sender.html#ac5a4b05beef32228215d0f33a2f94249">   49</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="class_event_sender.html#ac5a4b05beef32228215d0f33a2f94249">sendEvent</a>(<a class="code hl_struct" href="struct_event.html">Event</a> event)<span class="keyword"> override </span>{</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        <span class="keywordflow">if</span> (coid == -1) {</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>            Logger::error(<span class="stringliteral">&quot;It was tried to send an internal event without &quot;</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>                          <span class="stringliteral">&quot;being connected to the EventManager&quot;</span>);</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        }</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>        <span class="keywordtype">int</span> res = MsgSendPulse(this-&gt;coid, -1, (<span class="keywordtype">int</span>) event.type, event.data);</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        <span class="keywordflow">if</span> (res &lt; 0) {</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>            Logger::error(</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>                <span class="stringliteral">&quot;Failed to send pulse message to EventManager. errno = &quot;</span> +</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>                std::to_string(errno));</div>
 <div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        }</div>
 <div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    }</div>
 <div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>  <span class="keyword">private</span>:</div>
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    <span class="keywordtype">int</span> coid;</div>
 <div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>};</div>
-<div class="ttc" id="aclass_event_sender_html"><div class="ttname"><a href="class_event_sender.html">EventSender</a></div><div class="ttdef"><b>Definition:</b> EventSender.h:13</div></div>
-<div class="ttc" id="aclass_event_sender_html_a23710d42d4e586a6ce490d897a5e3eb7"><div class="ttname"><a href="class_event_sender.html#a23710d42d4e586a6ce490d897a5e3eb7">EventSender::connect</a></div><div class="ttdeci">bool connect(std::shared_ptr&lt; EventManager &gt; evm)</div><div class="ttdef"><b>Definition:</b> EventSender.h:29</div></div>
-<div class="ttc" id="aclass_event_sender_html_a243b26d7c37cccdc1e7b90399ec2e411"><div class="ttname"><a href="class_event_sender.html#a243b26d7c37cccdc1e7b90399ec2e411">EventSender::disconnect</a></div><div class="ttdeci">void disconnect()</div><div class="ttdef"><b>Definition:</b> EventSender.h:39</div></div>
-<div class="ttc" id="aclass_event_sender_html_a7d22d11f7d34060ca7abecb5358e603d"><div class="ttname"><a href="class_event_sender.html#a7d22d11f7d34060ca7abecb5358e603d">EventSender::sendEvent</a></div><div class="ttdeci">bool sendEvent(Event event)</div><div class="ttdef"><b>Definition:</b> EventSender.h:52</div></div>
-<div class="ttc" id="astruct_event_html"><div class="ttname"><a href="struct_event.html">Event</a></div><div class="ttdef"><b>Definition:</b> IEventHandler.h:13</div></div>
+<div class="ttc" id="aclass_event_sender_html"><div class="ttname"><a href="class_event_sender.html">EventSender</a></div><div class="ttdef"><b>Definition:</b> EventSender.h:15</div></div>
+<div class="ttc" id="aclass_event_sender_html_a2805c3317f6c93f0a9a4d8dad5fa28b4"><div class="ttname"><a href="class_event_sender.html#a2805c3317f6c93f0a9a4d8dad5fa28b4">EventSender::disconnect</a></div><div class="ttdeci">void disconnect() override</div><div class="ttdef"><b>Definition:</b> EventSender.h:36</div></div>
+<div class="ttc" id="aclass_event_sender_html_a9189f60528c07a3b0611909175676e2f"><div class="ttname"><a href="class_event_sender.html#a9189f60528c07a3b0611909175676e2f">EventSender::connect</a></div><div class="ttdeci">bool connect(std::shared_ptr&lt; IEventManager &gt; evm) override</div><div class="ttdef"><b>Definition:</b> EventSender.h:28</div></div>
+<div class="ttc" id="aclass_event_sender_html_ac5a4b05beef32228215d0f33a2f94249"><div class="ttname"><a href="class_event_sender.html#ac5a4b05beef32228215d0f33a2f94249">EventSender::sendEvent</a></div><div class="ttdeci">bool sendEvent(Event event) override</div><div class="ttdef"><b>Definition:</b> EventSender.h:49</div></div>
+<div class="ttc" id="aclass_i_event_sender_html"><div class="ttname"><a href="class_i_event_sender.html">IEventSender</a></div><div class="ttdef"><b>Definition:</b> IEventSender.h:13</div></div>
+<div class="ttc" id="astruct_event_html"><div class="ttname"><a href="struct_event.html">Event</a></div><div class="ttdef"><b>Definition:</b> IEventHandler.h:17</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

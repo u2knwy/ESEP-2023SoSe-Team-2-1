@@ -89,9 +89,9 @@ Inheritance diagram for ActuatorMock:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a81341f31019871004b4d1aa53ed2ad83"><td class="memItemLeft" align="right" valign="top"><a id="a81341f31019871004b4d1aa53ed2ad83" name="a81341f31019871004b4d1aa53ed2ad83"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>ActuatorMock</b> (std::shared_ptr&lt; <a class="el" href="class_event_manager.html">EventManager</a> &gt; mngr)</td></tr>
-<tr class="separator:a81341f31019871004b4d1aa53ed2ad83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a13fa579beff2182c6a16f3b5fd739505"><td class="memItemLeft" align="right" valign="top"><a id="a13fa579beff2182c6a16f3b5fd739505" name="a13fa579beff2182c6a16f3b5fd739505"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>ActuatorMock</b> (std::shared_ptr&lt; <a class="el" href="class_i_event_manager.html">IEventManager</a> &gt; mngr)</td></tr>
+<tr class="separator:a13fa579beff2182c6a16f3b5fd739505"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a375de17662f49528727cf1c56c5a306b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actuator_mock.html#a375de17662f49528727cf1c56c5a306b">standbyMode</a> () override</td></tr>
 <tr class="separator:a375de17662f49528727cf1c56c5a306b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae21c0fa1aae5e93966ab610ce812582e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actuator_mock.html#ae21c0fa1aae5e93966ab610ce812582e">runningMode</a> () override</td></tr>
@@ -150,6 +150,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aea5045dc747e5537ce8f5711ff02246f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a74ba8b4bfaf274a50fe64a96bded39f8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actuator_mock.html#a74ba8b4bfaf274a50fe64a96bded39f8">letPass</a> () override</td></tr>
 <tr class="separator:a74ba8b4bfaf274a50fe64a96bded39f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4a5a7edc2a72c709c396c5bc1423fcb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actuator_mock.html#ae4a5a7edc2a72c709c396c5bc1423fcb">allOff</a> () override</td></tr>
+<tr class="separator:ae4a5a7edc2a72c709c396c5bc1423fcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21154e16409d3efe70f0659ff3280617"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_actuator_mock.html#a21154e16409d3efe70f0659ff3280617">connectionLost</a> () override</td></tr>
+<tr class="separator:a21154e16409d3efe70f0659ff3280617"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_i_actuators"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_i_actuators')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_i_actuators.html">IActuators</a></td></tr>
 <tr class="memitem:af51238bc1df28e7da51c1e7941250d27 inherit pub_methods_class_i_actuators"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_actuators.html#af51238bc1df28e7da51c1e7941250d27">standbyMode</a> ()=0</td></tr>
 <tr class="separator:af51238bc1df28e7da51c1e7941250d27 inherit pub_methods_class_i_actuators"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -209,6 +213,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a4e6953017f6b66225a4a878991eeeb49 inherit pub_methods_class_i_actuators"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abefa0ecaeef1fe1425338f1017c4f4bb inherit pub_methods_class_i_actuators"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_actuators.html#abefa0ecaeef1fe1425338f1017c4f4bb">letPass</a> ()=0</td></tr>
 <tr class="separator:abefa0ecaeef1fe1425338f1017c4f4bb inherit pub_methods_class_i_actuators"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af8854d77ae6e7507d7121f0d311ab0a7 inherit pub_methods_class_i_actuators"><td class="memItemLeft" align="right" valign="top"><a id="af8854d77ae6e7507d7121f0d311ab0a7" name="af8854d77ae6e7507d7121f0d311ab0a7"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>connectionLost</b> ()=0</td></tr>
+<tr class="separator:af8854d77ae6e7507d7121f0d311ab0a7 inherit pub_methods_class_i_actuators"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d9b4319042acc7d2427b3c82394c694 inherit pub_methods_class_i_actuators"><td class="memItemLeft" align="right" valign="top"><a id="a7d9b4319042acc7d2427b3c82394c694" name="a7d9b4319042acc7d2427b3c82394c694"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>allOff</b> ()=0</td></tr>
+<tr class="separator:a7d9b4319042acc7d2427b3c82394c694 inherit pub_methods_class_i_actuators"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aabfbb10bcb1eb63a7960f9984da88e76 inherit pub_methods_class_i_actuators"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_actuators.html#aabfbb10bcb1eb63a7960f9984da88e76">handleEvent</a> (<a class="el" href="struct_event.html">Event</a> event) override</td></tr>
 <tr class="separator:aabfbb10bcb1eb63a7960f9984da88e76 inherit pub_methods_class_i_actuators"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8fc4df1ace5168c962802a5e031ac64c inherit pub_methods_class_i_actuators"><td class="memItemLeft" align="right" valign="top"><a id="a8fc4df1ace5168c962802a5e031ac64c" name="a8fc4df1ace5168c962802a5e031ac64c"></a>
@@ -251,14 +261,41 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>switchOpen</b> {false
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pro_methods_class_i_actuators"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_class_i_actuators')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="class_i_actuators.html">IActuators</a></td></tr>
-<tr class="memitem:a86de60b4e96c0fdff8ed90f818b0c897 inherit pro_methods_class_i_actuators"><td class="memItemLeft" align="right" valign="top"><a id="a86de60b4e96c0fdff8ed90f818b0c897" name="a86de60b4e96c0fdff8ed90f818b0c897"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>IActuators</b> (std::shared_ptr&lt; <a class="el" href="class_event_manager.html">EventManager</a> &gt; mngr)</td></tr>
-<tr class="separator:a86de60b4e96c0fdff8ed90f818b0c897 inherit pro_methods_class_i_actuators"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a397f1ffbd9c1b984238d2b9c04e4b18a inherit pro_methods_class_i_actuators"><td class="memItemLeft" align="right" valign="top"><a id="a397f1ffbd9c1b984238d2b9c04e4b18a" name="a397f1ffbd9c1b984238d2b9c04e4b18a"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>IActuators</b> (std::shared_ptr&lt; <a class="el" href="class_i_event_manager.html">IEventManager</a> &gt; mngr)</td></tr>
+<tr class="separator:a397f1ffbd9c1b984238d2b9c04e4b18a inherit pro_methods_class_i_actuators"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af9b8119a25fbebb184e89345fae85d33 inherit pro_methods_class_i_actuators"><td class="memItemLeft" align="right" valign="top"><a id="af9b8119a25fbebb184e89345fae85d33" name="af9b8119a25fbebb184e89345fae85d33"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>subscribeToEvents</b> ()</td></tr>
 <tr class="separator:af9b8119a25fbebb184e89345fae85d33 inherit pro_methods_class_i_actuators"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="ae4a5a7edc2a72c709c396c5bc1423fcb" name="ae4a5a7edc2a72c709c396c5bc1423fcb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4a5a7edc2a72c709c396c5bc1423fcb">&#9670;&#160;</a></span>allOff()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ActuatorMock::allOff </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="class_i_actuators.html">IActuators</a>.</p>
+
+</div>
+</div>
 <a id="a181eec228a38fc59b6ac9a866e714ef9" name="a181eec228a38fc59b6ac9a866e714ef9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a181eec228a38fc59b6ac9a866e714ef9">&#9670;&#160;</a></span>closeSwitch()</h2>
 
@@ -284,6 +321,33 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>subscribeToEvents</b>
 <p>Closes the switch to let a workpiece fall into the slide. </p>
 
 <p>Implements <a class="el" href="class_i_actuators.html#a5fd2cd4100dee70bc24900f07da8e41c">IActuators</a>.</p>
+
+</div>
+</div>
+<a id="a21154e16409d3efe70f0659ff3280617" name="a21154e16409d3efe70f0659ff3280617"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a21154e16409d3efe70f0659ff3280617">&#9670;&#160;</a></span>connectionLost()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ActuatorMock::connectionLost </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="class_i_actuators.html">IActuators</a>.</p>
 
 </div>
 </div>
@@ -1115,8 +1179,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>subscribeToEvents</b>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>main/src/tests/hal/<a class="el" href="_actuator_mock_8h_source.html">ActuatorMock.h</a></li>
-<li>main/src/tests/hal/ActuatorMock.cpp</li>
+<li>main/src/tests/mocks/<a class="el" href="_actuator_mock_8h_source.html">ActuatorMock.h</a></li>
+<li>main/src/tests/mocks/ActuatorMock.cpp</li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
